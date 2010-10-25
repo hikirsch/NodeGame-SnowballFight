@@ -22,7 +22,6 @@
 		function tick() {
 			clearLog();
 			log( "Ogilvy Holiday Card 2010 - Snowball Fight" );
-			// _controller.tick();
 			_character.tick();
 		};
 		
@@ -34,7 +33,7 @@
 			if( _logger ) {
 				_logger.html(new Date().toString()); 
 			}
-		}
+		};
 		
 		function log( msg ) {
 			if( ! _logger ) { 
@@ -61,7 +60,7 @@
 			destroy: function() {
 				clearTimeout( _ticker );
 			}
-		}
+		};
 	}();
 	
 

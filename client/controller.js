@@ -1,5 +1,6 @@
 function Controller(game) {
 	this.keys = {};
+	this.keyPressed = 0;
 	this.keyCodes = { '37': 'left', '38': 'up', '39': 'right', '40': 'down' };
 	
 	this.attachEvents();
@@ -13,12 +14,15 @@ $.extend(Controller.prototype, {
 			keydown: function( e ) {
 				if( e.keyCode in that.keyCodes ) {
 					that.handler( e.keyCode, true );
+					that.keyPressed++;
 				};
 			},
 			keyup: function( e ) {
 				if( e.keyCode in that.keyCodes ) {
 					that.handler( e.keyCode, false );
+					that.keyPressed++;
 				};
+				
 			}
 		});
 	},
@@ -32,12 +36,7 @@ $.extend(Controller.prototype, {
 	},
 	
 	isKeyPressed: function() {
-		for( var keys in this.keys ) {
-			if( this.keys[ keys ] ) {
-				return true;
-			}
-		}
-		return false;
+		return this.keyPressed === 0;
 	},
 	
 	isLeft: function() { return this.keys['left']; },
