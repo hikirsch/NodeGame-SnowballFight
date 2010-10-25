@@ -23,7 +23,7 @@ function Character(game, controller) {
 	this.x = this.game.getField().width() * Math.random();
 	this.y = this.game.getField().height() * Math.random();
 	
-	// 8 Images representing direcitions
+	// 8 Images representing directions
 	this.spriteSheetType = 'smash-tv';
 	this.spriteSheet = {
 		NORTH		: 'img/characters/'+this.spriteSheetType+'/8wayrun/north.png',
@@ -36,7 +36,7 @@ function Character(game, controller) {
 		NORTHWEST	: 'img/characters/'+this.spriteSheetType+'/8wayrun/northwest.png',
 	};
 	
-	// our default position is north!
+	// our default position is north
 	this.currentSprite = this.spriteSheet.NORTH;
 };
 
@@ -50,9 +50,8 @@ $.extend( Character.prototype, {
 			.appendTo( this.game.getField() );
 	},
 	
-	
 	/**
-	 * A new frame has come into play, lets move our character!
+	 * A new frame has come into play, lets move our character.
 	 */
 	tick: function() {
 		this.move();
@@ -118,7 +117,6 @@ $.extend( Character.prototype, {
 				this.velocity.y += this.damping.y;
 			}
 		}
-	
 	},
 	
 	/**
@@ -163,7 +161,6 @@ $.extend( Character.prototype, {
 	 * Based on our rotation, we should show a different sprite.
 	 */
 	adjustSprite: function() {
-	
 		// TODO: Determin via angle using round, Math.round(A / B) * B
 		// Set it as the current sprite in case the user is not pressing anything
 		var view = null;
@@ -211,6 +208,7 @@ $.extend( Character.prototype, {
 		this.game.log( "Y: " + this.y );
 		this.game.log( "Current Angle: " + this.rotation );
 		this.game.log( "Current Sprite: " + this.currentSprite );
+		this.game.log( "Is Key Pressed: " + this.controller.isKeyPressed() );
 		//console.log( "InnerHTML: " + this.element.innerHTML );
 	}
 });

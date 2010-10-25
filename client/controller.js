@@ -1,12 +1,19 @@
+/**
+ * A helper class to detect the current state of the controls of the game. 
+ */
 function Controller(game) {
+	this.keyCodes = { '37': 'left', '38': 'up', '39': 'right', '40': 'down' };
 	this.keys = {};
 	this.keyPressed = 0;
-	this.keyCodes = { '37': 'left', '38': 'up', '39': 'right', '40': 'down' };
 	
 	this.attachEvents();
 };
 
 $.extend(Controller.prototype, {
+	/**
+	 * We don't care about a time clock here, we attach events, we only want
+	 * to know if something's happened.
+	 */
 	attachEvents: function() {
 		var that = this;
 	
@@ -20,25 +27,30 @@ $.extend(Controller.prototype, {
 			keyup: function( e ) {
 				if( e.keyCode in that.keyCodes ) {
 					that.handler( e.keyCode, false );
-					that.keyPressed++;
+					that.keyPressed--;
 				};
 				
 			}
 		});
 	},
 	
+	/** 
+	 * Map it to something useful so we know what it is
+	 */
 	handler: function( keyCode, enabled ) {
 		this.keys[ this.keyCodes[ keyCode] ] = enabled;
 	},
 	
-	getKeys: function() {
-		return this.keys;
-	},
-	
+	/**
+	 * Just figure out whether or not I have any keys currently pressed.
+	 */
 	isKeyPressed: function() {
-		return this.keyPressed === 0;
+		return this.keyPressed > 0;
 	},
 	
+	/**
+	 * Some helper methods to find out if we're going in a specific direction
+	 */
 	isLeft: function() { return this.keys['left']; },
 	isUp: function() { return this.keys['up']; },
 	isRight: function() { return this.keys['right']; },
