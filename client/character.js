@@ -7,8 +7,25 @@ function Character(game, controller) {
 	
 	this.speed = { x: 0, y: 0 };
 	this.acceleration = { x: .1, y: .1 };
-	this.resistance = { x: .05, y: .05 };
-	this.maxSpeed = { x: 2, y: 2 };
+	this.resistance = { x: .033, y: .033 };
+	this.maxSpeed = { x: 2.5, y: 2.5 };
+	
+	
+	// 8 Images representing direcitions
+	this.spriteSheetType = 'smash-tv';
+	this.spriteSheet = 
+	{
+		NORTH		: 'img/characters/'+this.spriteSheetType+'/8wayrun/north.png',
+		NORTHEAST	: 'img/characters/'+this.spriteSheetType+'/8wayrun/northeast.png',
+		EAST 		: 'img/characters/'+this.spriteSheetType+'/8wayrun/east.png',
+		SOUTHEAST 	: 'img/characters/'+this.spriteSheetType+'/8wayrun/southeast.png',
+		SOUTH 		: 'img/characters/'+this.spriteSheetType+'/8wayrun/south.png',
+		SOUTHWEST 	: 'img/characters/'+this.spriteSheetType+'/8wayrun/southwest.png',
+		WEST		: 'img/characters/'+this.spriteSheetType+'/8wayrun/west.png',
+		NORTHWEST	: 'img/characters/'+this.spriteSheetType+'/8wayrun/northwest.png',
+	};
+	
+	this.currentSprite = this.spriteSheet.NORTH;
 }
 
 $.extend( Character.prototype, {
@@ -42,6 +59,8 @@ $.extend( Character.prototype, {
 		this.game.log( "X: " + this.x );
 		this.game.log( "Y: " + this.y );
 		this.game.log( "Current Angle: " + this.rotation );
+		this.game.log( "Current Sprite: " + this.currentSprite );
+		//console.log( "InnerHTML: " + this.element.innerHTML );
 	},
 	
 	gravity: function() { 
@@ -76,12 +95,51 @@ $.extend( Character.prototype, {
 	},
 	
 	calculateRotation: function() {
-		if( this.controller.isKeyPressed() ) {
+		if( this.controller.isKeyPressed() )
+		{
 			this.rotation = Math.round( Math.abs( (180/Math.PI) * Math.atan2(this.speed.x,this.speed.y) - 180 ) );
 			// this.rotation = (180/Math.PI) * Math.atan2(this.speed.x,this.speed.y);
 		}
+		
+		this.adjustSprite();
 	},
 	
+	adjustSprite: function() {
+	
+		// TODO: Determin via angle using round, Math.round(A / B) * B
+		// Set it as the current sprite in case the user is not pressing anything
+		var view = undefined;
+					
+		// North, NorthEast, NorthWest
+		if (this.controller.isUp() ) // north
+		{
+			// Catch up-left/up-right;
+			if (this.controller.isRight()) view = this.spriteSheet.NORTHEAST;
+			else if (this.controller.isLeft()) view = this.spriteSheet.NORTHWEST;
+			else view = this.spriteSheet.NORTH
+		}
+		// South, SouthEast, SouthWest
+		if (this.controller.isDown() && view === undefined) // south
+		{
+			if (this.controller.isRight()) view = this.spriteSheet.SOUTHEAST;
+			else if (this.controller.isLeft()) view = this.spriteSheet.SOUTHWEST;
+			else view = this.spriteSheet.SOUTH;
+		}
+		
+		// East Only
+		if (this.controller.isRight() && view === undefined) // make sure it was not already set
+			view = this.spriteSheet.EAST;
+			
+		// West Only
+		if (this.controller.isLeft() && view === undefined) // make sure it was not already set
+			view = this.spriteSheet.WEST;
+			
+		// Set to View unless view has not bee set
+		this.currentSprite = (!view) ? this.currentSprite : view;
+		
+		// TODO: Use a sprite sheet
+		$(this.element).html('<img src="' + this.currentSprite + '" />');
+	},
 	createElement: function() {
 		return $('<div class="character"></div>')
 			.appendTo( this.game.getField() );

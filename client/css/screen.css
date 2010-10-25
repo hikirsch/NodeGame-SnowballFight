@@ -12,7 +12,7 @@ html, body { overflow: hidden; height: 100%; }
 
 .game-container .character { 
 	position: absolute; top: 200px; left: 200px; width: 16px; height: 16px;
-	background-image: url( ../img/smb_mario_sheet.png ); background-repeat: no-repeat; background-position: -210px 0;
+//	background-image: url( ../img/smb_mario_sheet.png ); background-repeat: no-repeat; background-position: -210px 0;
 }
 
 #logger { font-family: monospace; padding: 20px; position: absolute; left: 0; bottom: 0; height: 160px; width: 1000px; background-color: #000; color: #fff; }
