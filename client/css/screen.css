@@ -1,9 +1,24 @@
 @import url( reset.css );
+html, body { overflow: hidden; height: 100%; font-family: Arial; font-size: 12px; }
 
+.site-message { position: absolute; bottom: 200px; width: 100%; }
+.site-message .wrapper { 
+	width: 250px; margin: auto; padding: 10px; color: #fff;
+	border-radius: 20px; border: 3px solid #2F1DA3; background-color: #2F1DA3;
+}
 
-html, body { overflow: hidden; height: 100%; }
+.site-message p { padding-bottom: 10px; font-size: 16px; line-height: 20px; font-weight: bold; }
+.site-message label { display: block; padding: 0 5px; }
+.site-message input[type='text'] { font-size: 16px; padding: 5px; border-radius: 5px; width: 225px; margin-bottom: 10px; }
+.site-message input[type='submit'] { padding: 0 30px; background-color: #2F1DA3; 
+	border-style: solid; border-color: #AEABC4; border-radius: 5px; color: #fff; 
+	font-size: 16px; line-height: 20px;
+} 
+	
+.site-message input[type='button']:hover { background-color: #AEABC4; border-color: #AEABC4; color: #2F1DA3; }
+.site-message input[type='button']:active { background-color: #2F1DA3; border-color: #AEABC4; color: #fff; }
 
-.game-container  { height: 500px; margin: 0 100px; position: relative; overflow: hidden;}
+.game-container  { height: 600px; margin: 0; position: relative; overflow: hidden;}
 .game-container .background {  
 	position: absolute; top: 0; left: 0; 
 	background-color: #00f; opacity: 0.05;
@@ -11,8 +26,21 @@ html, body { overflow: hidden; height: 100%; }
 }
 
 .game-container .character { 
-	position: absolute; top: 200px; left: 200px; width: 16px; height: 16px;
-//	background-image: url( ../img/smb_mario_sheet.png ); background-repeat: no-repeat; background-position: -210px 0;
+	position: absolute; top: 200px; left: 200px; width: 26px; height: 26px;
+	background-repeat: no-repeat; background-position: 50% 50%; font-size: 10px; font-weight: bold;
+/*	background-image: url( ../img/smb_mario_sheet.png ); background-repeat: no-repeat; background-position: -210px 0; */
 }
+.game-container .character p {
+	position: absolute; bottom: -10px; left: 0;
+} 
+
+.game-container .character.smash-tv.rotation-0 { background-image: url( '../img/characters/smash-tv/8wayrun/north.png' ); }
+.game-container .character.smash-tv.rotation-45 { background-image: url( '../img/characters/smash-tv/8wayrun/northeast.png' ); }
+.game-container .character.smash-tv.rotation-90 { background-image: url( '../img/characters/smash-tv/8wayrun/east.png' ); }
+.game-container .character.smash-tv.rotation-135 { background-image: url( '../img/characters/smash-tv/8wayrun/southeast.png' ); }
+.game-container .character.smash-tv.rotation-180 { background-image: url( '../img/characters/smash-tv/8wayrun/south.png' ); }
+.game-container .character.smash-tv.rotation-225 { background-image: url( '../img/characters/smash-tv/8wayrun/southwest.png' ); }
+.game-container .character.smash-tv.rotation-270 { background-image: url( '../img/characters/smash-tv/8wayrun/west.png' ); }
+.game-container .character.smash-tv.rotation-315 { background-image: url( '../img/characters/smash-tv/8wayrun/northwest.png' ); }
 
 #logger { font-family: monospace; padding: 20px; position: absolute; left: 0; bottom: 0; height: 160px; width: 1000px; background-color: #000; color: #fff; }

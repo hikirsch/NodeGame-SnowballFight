@@ -11,7 +11,8 @@
 		<script src="flash/swfobject.js"></script>
 		<script src="flash/FABridge.js"></script>
 		<script src="flash/web_socket.js"></script> 
-        
+
+		<script src="config.js"></script>        
 		<script src="bison.js"></script>
 		<script src="jquery-1.4.3.min.js"></script>
       
@@ -20,5 +21,22 @@
 		<script src="game.js"></script>
 	</head>
 	
-	<body></body>
+	<body>
+		<div class="site-message" id="join-game" style="display: none;">
+			<div class="wrapper">
+				<form action="#">
+					<p>Join the fight!</p>
+					<label for="nickname">Nickname:</label>
+					<input autofocus type="text" name="nickname" id="nickname" />
+					<input type="submit" id="join" value="Join!" />
+				</form>
+			</div>
+		</div>
+		
+		<div class="site-message" id="no-server" style="display: none;">
+			<div class="wrapper">
+				<p>Sorry! No Server Found!</p>
+			</div>
+		</div>
+	</body>
 </html>

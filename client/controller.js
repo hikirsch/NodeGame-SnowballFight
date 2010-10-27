@@ -20,8 +20,10 @@ $.extend(Controller.prototype, {
 		$('html').live({
 			keydown: function( e ) {
 				if( e.keyCode in that.keyCodes ) {
+					if( ! that.keys[ that.keyCodes[ e.keyCode ] ] ) { 
+						that.keyPressed++;
+					}
 					that.handler( e.keyCode, true );
-					that.keyPressed++;
 				};
 			},
 			keyup: function( e ) {
@@ -54,5 +56,7 @@ $.extend(Controller.prototype, {
 	isLeft: function() { return this.keys['left']; },
 	isUp: function() { return this.keys['up']; },
 	isRight: function() { return this.keys['right']; },
-	isDown: function() { return this.keys['down']; }
+	isDown: function() { return this.keys['down']; },
+	isHorizontalKeyPressed: function() { return this.keys['left'] || this.keys['right']; },
+	isVerticalKeyPressed: function() { return this.keys['up'] || this.keys['down']; }
 });

@@ -2,7 +2,7 @@
  * A character is simply a participant. Someone who is on the board and is playing the game.
  * This is the player and their controls will affect what this character will do in the game.
  */
-function Character(game, controller) {
+function Character(game, controller, nickName ) {
 	// the game this character is taking place in, we run around this place.
 	this.game = game;
 	
@@ -16,6 +16,8 @@ function Character(game, controller) {
 	this.maxVelocity = { x: 2.5, y: 2.5 };  // the fastest i can go
 	this.rotation = 0; // we start pointing up, simply easy b/c of sprites right now
 	
+	this.nickName = nickName;
+	
 	// create our physical character
 	this.createElement();
 	
@@ -24,20 +26,10 @@ function Character(game, controller) {
 	this.y = this.game.getField().height() * Math.random();
 	
 	// 8 Images representing directions
-	this.spriteSheetType = 'smash-tv';
-	this.spriteSheet = {
-		NORTH		: 'img/characters/'+this.spriteSheetType+'/8wayrun/north.png',
-		NORTHEAST	: 'img/characters/'+this.spriteSheetType+'/8wayrun/northeast.png',
-		EAST 		: 'img/characters/'+this.spriteSheetType+'/8wayrun/east.png',
-		SOUTHEAST 	: 'img/characters/'+this.spriteSheetType+'/8wayrun/southeast.png',
-		SOUTH 		: 'img/characters/'+this.spriteSheetType+'/8wayrun/south.png',
-		SOUTHWEST 	: 'img/characters/'+this.spriteSheetType+'/8wayrun/southwest.png',
-		WEST		: 'img/characters/'+this.spriteSheetType+'/8wayrun/west.png',
-		NORTHWEST	: 'img/characters/'+this.spriteSheetType+'/8wayrun/northwest.png',
-	};
+	this.element.addClass( 'smash-tv' );
 	
 	// our default position is north
-	this.currentSprite = this.spriteSheet.NORTH;
+	this.currentSpriteClass = '0';
 };
 
 $.extend( Character.prototype, {
@@ -46,8 +38,12 @@ $.extend( Character.prototype, {
 	 * Create's the actual HTML element that is used for this game
 	 */
 	createElement: function() {
-		this.element =  $('<div class="character"></div>')
+		this.element =  $('<div class="character"><p>' + this.nickName + '</p></div>')
 			.appendTo( this.game.getField() );
+	},
+	
+	destroy: function() {
+		this.element.remove();
 	},
 	
 	/**
@@ -56,6 +52,14 @@ $.extend( Character.prototype, {
 	tick: function() {
 		this.move();
 		this.logStats();
+	},
+	
+	update: function( data ) {
+		this.x = data.x;
+		this.y = data.y;
+		this.rotation = data.rotation;
+		this.calculatePosition();
+		this.adjustSprite();
 	},
 	
 	/**
@@ -67,6 +71,7 @@ $.extend( Character.prototype, {
 		this.calculateRotation();
 		this.calculatePosition();
 		this.adjustSprite();
+		this.updateGame();
 	},
 	
 	/**
@@ -90,31 +95,35 @@ $.extend( Character.prototype, {
 	 * We need to slow down the character if they aren't actually moving anymore.
 	 */
 	calculateDamping: function() { 
-		if( this.velocity.x > 0 ) {
-			if( this.velocity.x < this.acceleration.x ) {
-				this.velocity.x = 0;
-			} else {
-				this.velocity.x -= this.damping.x;
-			}
-		} else if( this.velocity.x < 0 ) {
-			if( this.velocity.x > -this.acceleration.x ) {
-				this.velocity.x = 0;
-			} else {
-				this.velocity.x += this.damping.x;
+		if( ! this.controller.isHorizontalKeyPressed() ) {
+			if( this.velocity.x > 0 ) {
+				if( this.velocity.x < this.acceleration.x ) {
+					this.velocity.x = 0;
+				} else {
+					this.velocity.x -= this.damping.x;
+				}
+			} else if( this.velocity.x < 0 ) {
+				if( this.velocity.x > -this.acceleration.x ) {
+					this.velocity.x = 0;
+				} else {
+					this.velocity.x += this.damping.x;
+				}
 			}
 		}
 		
-		if( this.velocity.y > 0 ) {
-			if( this.velocity.y < this.acceleration.y )  {
-				this.velocity.y = 0;
-			} else { 
-				this.velocity.y -= this.damping.y;
-			}
-		} else if( this.velocity.y < 0 ) {
-			if( this.velocity.y > -this.acceleration.y ) {
-				this.velocity.y = 0;
-			} else {
-				this.velocity.y += this.damping.y;
+		if( ! this.controller.isVerticalKeyPressed() ) {
+			if( this.velocity.y > 0 ) {
+				if( this.velocity.y < this.acceleration.y )  {
+					this.velocity.y = 0;
+				} else { 
+					this.velocity.y -= this.damping.y;
+				}
+			} else if( this.velocity.y < 0 ) {
+				if( this.velocity.y > -this.acceleration.y ) {
+					this.velocity.y = 0;
+				} else {
+					this.velocity.y += this.damping.y;
+				}
 			}
 		}
 	},
@@ -136,6 +145,9 @@ $.extend( Character.prototype, {
 	 * this is based on their current velocity and the field size.
 	 */
 	calculatePosition: function() {
+		this.oldX = this.x;
+		this.oldY = this.y;
+		
 		this.x += this.velocity.x;
 		this.y += this.velocity.y;
 		
@@ -148,7 +160,7 @@ $.extend( Character.prototype, {
 		if( this.y < -this.element.height() ) {
 			this.y = this.game.getField().height();
 		} else if( this.y > this.game.getField().height() ) {
-			this.y = 0;
+			this.y = -this.element.height();
 		}
 		
 		this.element.css({
@@ -161,45 +173,26 @@ $.extend( Character.prototype, {
 	 * Based on our rotation, we should show a different sprite.
 	 */
 	adjustSprite: function() {
-		// TODO: Determin via angle using round, Math.round(A / B) * B
-		// Set it as the current sprite in case the user is not pressing anything
-		var view = null;
-					
-		// North, NorthEast, NorthWest
-		if (this.controller.isUp() ) // north
-		{
-			// Catch up-left/up-right;
-			if (this.controller.isRight()) view = this.spriteSheet.NORTHEAST;
-			else if (this.controller.isLeft()) view = this.spriteSheet.NORTHWEST;
-			else view = this.spriteSheet.NORTH
-		}
-		// South, SouthEast, SouthWest
-		if (this.controller.isDown() && view === null) // south
-		{
-			if (this.controller.isRight()) view = this.spriteSheet.SOUTHEAST;
-			else if (this.controller.isLeft()) view = this.spriteSheet.SOUTHWEST;
-			else view = this.spriteSheet.SOUTH;
-		}
-		
-		// East Only
-		if (this.controller.isRight() && view === null) // make sure it was not already set
-			view = this.spriteSheet.EAST;
+		var spriteRotation = Math.floor(this.rotation / 45) * 45;
+		$(this.element)
+			.removeClass( 'rotation-' + this.currentSpriteClass )
+			.addClass( 'rotation-' + spriteRotation );
 			
-		// West Only
-		if (this.controller.isLeft() && view === null) // make sure it was not already set
-			view = this.spriteSheet.WEST;
-			
-		// Set to View unless view has not been set
-		this.currentSprite = (!view) ? this.currentSprite : view;
-		
-		// TODO: Use a sprite sheet
-		$(this.element).html('<img src="' + this.currentSprite + '" />');
+		this.currentSpriteClass = spriteRotation;
+	},
+	
+	updateGame: function() {
+		// if we have moved
+		if( this.x != this.oldX || this.y != this.oldY ) {
+			this.game.characterUpdate( this );
+		}
 	},
 	
 	/**
 	 * i <3 helpers :-)
 	 */
 	logStats: function() {
+		this.game.log( "Nickname: " + this.game.getNickName() );
 		this.game.log( "Field Height: " + this.game.getField().height() );
 		this.game.log( "Field Width: " + this.game.getField().width() );
 		this.game.log( "X-Velocity: " + this.velocity.x );
@@ -207,7 +200,7 @@ $.extend( Character.prototype, {
 		this.game.log( "X: " + this.x );
 		this.game.log( "Y: " + this.y );
 		this.game.log( "Current Angle: " + this.rotation );
-		this.game.log( "Current Sprite: " + this.currentSprite );
+		this.game.log( "Current Sprite: " + this.currentSpriteClass );
 		this.game.log( "Is Key Pressed: " + this.controller.isKeyPressed() );
 		//console.log( "InnerHTML: " + this.element.innerHTML );
 	}
