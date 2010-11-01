@@ -44,11 +44,14 @@ function Server(options) {
     this.recordFile = options.recordFile || './record[date].js';
     this.recordData = [];
     
+    
     // Socket
 	var that = this;
-	this.$ = new ws.Server();
+	this.$ = new ws.Server(options.server || null);
 	
-	this.$.onConnect = function( conn ) { };
+	this.$.onConnect = function( conn ) {
+		console.log("conn "+conn);
+	};
 
     this.$.onMessage = function( conn, msg ) {
     

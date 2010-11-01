@@ -39,8 +39,10 @@
 		// our game
 		Game = function() {
 			function init(host, port) {
+				
 				var that = this;
 				_conn = new WebSocket('ws://' + host + ':' + port);
+				console.log(host, port, _conn);
 				_conn.onopen = function() {
 					_online = true;
 					$("#join-game").show();
@@ -54,6 +56,7 @@
 				};
 				
 				_conn.onmessage = function(e) {
+					console.log(e);
 					var decodedMessage = BISON.decode( e.data );
 					handleMessage( decodedMessage[0], decodedMessage[1] );
 				};

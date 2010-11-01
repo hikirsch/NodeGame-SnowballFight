@@ -8,6 +8,7 @@
 
 var http = require('http');
 var net = require('net');
+var sys = require('sys');
 var crypto = require('crypto');
 
 function pack(num) {
@@ -19,7 +20,6 @@ function pack(num) {
 
 
 function Connection($, req, socket, headers, upgradeHeader) {
-
     // Draft 76
     if ('sec-websocket-key1' in headers && 'sec-websocket-key2' in headers) {
         var data = 'HTTP/1.1 101 WebSocket Protocol Handshake\r\n'
@@ -158,13 +158,16 @@ function Connection($, req, socket, headers, upgradeHeader) {
 };
 
 
-function Server() {
+function Server(anHTTPServer) {
     var that = this;
     var $ = new http.Server();
     var connections = {};
     
+    console.log("Server $"+$);
     // WebSockets
     $.addListener('upgrade', function(req, socket, upgradeHeader) {
+        console.log("upgrade $"+$);
+    
         if (req.method === 'GET'
             && 'upgrade' in req.headers && 'connection' in req.headers
             && req.headers.upgrade.toLowerCase() === 'websocket'
@@ -194,9 +197,11 @@ function Server() {
     };
     
     this.onConnect = function(conn) {
+    	console.log("this.onConnect "+conn);
     };
     
     this.onMessage = function(conn, data) {
+    	console.log("this.onMessage "+conn);
     };
     
     this.onClose = function(conn) {
@@ -223,14 +228,20 @@ function Server() {
                 socket.end();
                 socket.destroy();
             
-            }).listen(843);
+            }).listen(12345);
         
         } catch (e) {
             
         }
+    
+    	// We created the server, start listening   
+//    if(anHTTPServer == undefined)
+		console.log(sys.inspect($, true, 3));
         $.listen(port);
     };
 };
 
 exports.Server = Server;
+
+
 
