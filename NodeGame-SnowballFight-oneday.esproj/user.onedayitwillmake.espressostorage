@@ -4,6 +4,28 @@
 <dict>
 	<key>ESProjectShowHiddenFilesKey</key>
 	<false/>
+	<key>ESProjectWindowState</key>
+	<dict>
+		<key>ContentSize</key>
+		<string>{1319, 892}</string>
+		<key>ProjectURL</key>
+		<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/NodeGame-SnowballFight-oneday.esproj/</string>
+		<key>StateType</key>
+		<string>ProjectWindow</string>
+		<key>TopLeftPoint</key>
+		<string>{242, 1028}</string>
+	</dict>
+	<key>com.macrabbit.Espresso.FileManager.DisclosureCollapsed</key>
+	<false/>
+	<key>com.macrabbit.Espresso.FileManager.FileControllerState</key>
+	<dict>
+		<key>ExpandedURLs</key>
+		<array>
+			<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/client</string>
+		</array>
+	</dict>
+	<key>com.macrabbit.Espresso.Publisher.DisclosureCollapsed</key>
+	<false/>
 	<key>com.macrabbit.Espresso.Workspace.Tabs</key>
 	<dict>
 		<key>Tabs</key>
@@ -46,11 +68,19 @@
 			</dict>
 			<dict>
 				<key>DocumentURL</key>
-				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/server/server.js</string>
+				<string>file://localhost/Users/onedayitwillmake/.Trash/server.js</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/client/NetChannel.js</string>
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>
 		</array>
 	</dict>
+	<key>com.macrabbit.Espresso.WorkspaceTabs.DisclosureCollapsed</key>
+	<false/>
 </dict>
 </plist>
