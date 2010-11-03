@@ -1,5 +1,5 @@
-define(['tools/Class'], function(Class)
-{		
+var init = function()
+{
 	return Class.extend({
 		init: function(options) 
 		{
@@ -13,23 +13,11 @@ define(['tools/Class'], function(Class)
 			this.entities = [];		// Everything else, e.g. trees, rocks, powerups
 			
 			// Loop
+			this.megaClockCounterThing = 0;
 			this.gameClock = new Date().getTime();
 			this.gameTick = setInterval(function(){that.tick()}, Math.ceil(1000/desiredFramerate));
-	//		
-			// Server
-	//		this.server = new Snowball.Server(this, {
-	//		    'port': Math.abs(ArgHelper.getArgumentByNameOrSetDefault('port', 28785)),
-	//		    'status': false,
-	//		    'recordFile': './../record[date].js',
-	//		    'record': false,
-	//		    'server': null
-	//		});
 		},
-	//	
-	//	ServerGameController.prototype.run = function()
-	//	{
-	//		this.server.run();
-	//	}
+		
 		tick: function()
 		{
 			this.gameClock = new Date().getTime();
@@ -46,6 +34,7 @@ define(['tools/Class'], function(Class)
 				anEntity.tick(this.gameClock);
 			};
 			
+			this.megaClockCounterThing++;
 		//	 Tick the objects that are interested
 		//	this.netChannel.tick(this.gameClock);
 		},
@@ -58,26 +47,14 @@ define(['tools/Class'], function(Class)
 		{
 			console.log('Adding new client to ServerGameController with ID:' + aClientID);
 			this.players[this.clientID] = new CharacterController(aClientID);
-		},
-		
-		/**
-		* These methods When netchannel recieves and validates a message
-		* Anything we receive we can assume is valid
-		**/
-		netChannelDidConnect: function ()
-		{
-	//		 Good to go! Do some view setup.
-			console.log("GameController.prototype.netChannelDidConnect");
-		},
-		
-		netChannelDidReceiveMessage: function (messageEvent)
-		{
-			console.log('GameController.prototype.netChannelDidReceiveMessage');
-		},
-		
-		netChannelDidDisconnect: function ()
-		{
-			console.log('GameController.prototype.netChannelDidDisconnect');
-		}			
+		}	
 	});
-});
+}
+
+if (typeof window === 'undefined') {
+	var sys = require("sys");
+	require('./tools/Class.js');
+	exports.AbstractClassController = init();
+} else {
+	define(['tools/Class'], init);
+}

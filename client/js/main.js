@@ -19,7 +19,7 @@ require(requiredModules, function(Class, GameController)
 	// Everything ready - start the game client
     require.ready(function() 
     {
-	   new GameController(HOST, PORT)
+	   var gameController = new GameController(HOST, PORT);
     })
 }, null, '/js/');
 //}, null, '/js/');
