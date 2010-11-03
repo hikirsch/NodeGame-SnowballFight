@@ -43,7 +43,7 @@ server = http.createServer(function(req, res)
 		res.end();
 	});
 	
-	console.log('(SimpleHTTPServer) Serving File:' + path);
+//	console.log('(SimpleHTTPServer) Serving File:' + path);
 });
 
 server.listen(12345);

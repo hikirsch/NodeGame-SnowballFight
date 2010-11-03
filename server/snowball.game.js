@@ -4,15 +4,18 @@ var fs= require('fs');
 var ws = require('./ws');
 var BISON = require('./bison');
 
-var MESSAGES = {
-	INIT: 1,
-	CHARACTER_UPDATE: 2,
-	SET_NICKNAME: 3,
-	ADD_FOREIGN_CHARACTER: 4,
-	REMOVE_FOREIGN_CHARACTER: 5
+// Right now this is copy-pasted, maybe on connect the client should be sent this info - 
+// Instead of letting the client determin these values on its own?
+var COMMANDS = {
+	PLAYER_CONNECT		: 0x01,	// When a new player has connected
+	SERVER_CONNECT		: 0x02, // When the server responds back on connect
+	PLAYER_DISCONNECT	: 0x04,
+	PLAYER_MOVE			: 0x08,
+	PLAYER_FIRE			: 0x16
 };
 
-function Server(options) {
+function Server(aDelegate, options) {
+	this.delegate = aDelegate;
 	this.maxChars = options.maxChars || 128;
     this.maxClients = options.maxClients || 64;
     this.port = options.port || 8000;
@@ -24,11 +27,9 @@ function Server(options) {
     this.logs = []; 
     
     // Client
-    this.client = {};
-    this.clientCount = 0;
     this.clients = {};
+    this.clientCount = 0;
     this.clientID = 0;
-    this.clientsChanged = false;
     
     // Actors
     this.actorCount = 0;
@@ -44,49 +45,78 @@ function Server(options) {
     this.recordFile = options.recordFile || './record[date].js';
     this.recordData = [];
     
+    // Map COMMAND values to functions to avoid a giant switch statement
+    this.COMMAND_TO_FUNCTION = [];
+    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_CONNECT] = this.onClientConnected;
+    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
+    this.COMMAND_TO_FUNCTION[COMMANDS.MOVE] = this.genericCommand;
+    this.COMMAND_TO_FUNCTION[COMMANDS.FIRE] = this.genericCommand;
     
     // Socket
 	var that = this;
 	this.$ = new ws.Server(options.server || null);
 	
 	this.$.onConnect = function( conn ) {
-		console.log("conn "+conn);
+		that.logs.push("(Server) UserConnected:", conn);
 	};
 
-    this.$.onMessage = function( conn, msg ) {
-    
+    this.$.onMessage = function( conn, encodedMessage ) {
 		try {
-			var msg = BISON.decode(msg);
-
-			// that.log( "got message: " + msg[0] );
-			// var data = msg.length > 1 ? msg[1] : {};
-
-			switch( msg[0] ) {
-				case MESSAGES.INIT: 
-					that.handleInit( conn );
-					break;
-				case MESSAGES.SET_NICKNAME:
-					that.setNickName( conn, msg[1] );
-					that.updateClient( conn.$clientID, msg[1] );
-					that.relayMessage( conn.$clientID, MESSAGES.ADD_FOREIGN_CHARACTER, {
-						x: that.clients[ conn.$clientID ].x,
-						y: that.clients[ conn.$clientID ].y,
-						rotation: that.clients[ conn.$clientID ].rotation,
-						nickname: that.clients[ conn.$clientID ].nickname
-					});
-					break;
-				case MESSAGES.CHARACTER_UPDATE: 
-					that.updateClient( conn.$clientID, msg[1] );
-					that.relayMessage( conn.$clientID, MESSAGES.CHARACTER_UPDATE, msg[1] );
-					break;
+			var decodedMessage = BISON.decode(encodedMessage);
+			console.log("(Server) MessageReceived:" + sys.inspect(decodedMessage) + " From " + conn);
+			
+			// On a browser instanceof causes problems, and is unreliable.
+			// We're not in a browser. This is reliable by design in V8 JS engine.
+			if(decodedMessage.cmds instanceof Array == false) {
+			// Call the mapped function, always pass the connection. Also pass data if available
+				that.COMMAND_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [conn, decodedMessage]);
+			} else { // An array of commands
+				for(var singleCommand in decodedMessage.cmds){
+					that.COMMAND_TO_FUNCTION[singleCommand.cmd](singleCommand.data);
+				};
 			}
-
+			return;
+			
+			// TODO: Place into loop
+			
+			var singleCommand = msg.msg[0];
+			switch( msg.msg[0] ){
+				case COMMAND.PLAYER_CONNECT: 
+					that.onClientConnected( conn );
+					break;
+//				case MESSAGES.SET_NICKNAME:
+//					that.setNickName( conn, msg.msg[1] );
+//					that.updateClient( conn.$clientID, msg.msg[1] );
+//					that.relayMessage( conn.$clientID, MESSAGES.ADD_FOREIGN_CHARACTER, {
+//						x: that.clients[ conn.$clientID ].x,
+//						y: that.clients[ conn.$clientID ].y,
+//						rotation: that.clients[ conn.$clientID ].rotation,
+//						nickname: that.clients[ conn.$clientID ].nickname
+//					});
+//					break;
+//				case MESSAGES.CHARACTER_UPDATE: 
+//					that.updateClient( conn.$clientID, msg.msg[1] );
+//					that.relayMessage( conn.$clientID, MESSAGES.CHARACTER_UPDATE, msg.msg[1] );
+//					break;
+			}
+			
+			//data.clientID = originClientID;
+			console.log('Encoded MSG', sys.inspect(msg));
+			for( var clientID in that.clients )
+			{
+				//if( clientID != originClientID ) {
+				
+				that.clients[clientID].sendMessage(msg);
+				//}
+			}
+			
 			if( msg[0] != MESSAGES.INIT && this.record ) {
 				this.recordData.push( conn.$clientID, msg );
 			}
 // */			
 		} catch (e) {
-			that.log('!! Error: ' + e);
+			console.log(e.stack);
+			that.logs.push('!! Error: ' + e);
 			conn.close();
 		}
     }
@@ -113,31 +143,42 @@ Server.prototype = {
 		client.rotation = data.rotation;
 	},
 	
-	handleInit: function( conn ) {
-		this.addClient(conn);
+	onClientConnected: function(conn, aDecodedMessage) {
 		
-		this.log( 'New connection started, clientID = ' + conn.$clientID );
+		var data = aDecodedMessage.cmds.data;
+		this.log( 'New connection started, clientID = ' + sys.inspect(data) );		
 		
-		var characters = {};
-
-		for( var clientID in this.clients ) {
-			if( clientID != conn.$clientID && this.clients[ clientID ].enabled ) { 
-				var client = this.clients[clientID];
-				characters[ client.conn.$clientID ] = {
-					x: client.x,
-					y: client.y,
-					rotation: client.rotation,
-					nickname: client.nickname
-				}
-			}
-		}
 		
-		this.sendData( conn, [ MESSAGES.INIT, { characters: characters } ] );
-	},
-
-	sendData: function(conn, msg ) {
-		var encodedMessage = BISON.encode( msg );
-		conn.send( encodedMessage );
+		var newClientID = this.addClient(conn);
+		aDecodedMessage.id = newClientID;
+		
+		// Tell everyone
+		conn.send( BISON.encode(aDecodedMessage) );		
+		this.broadcastMessage( newClientID, aDecodedMessage);
+//		
+//		/*characters[ client.conn.$clientID ] = {
+//			x: client.x,
+//			y: client.y,
+//			rotation: client.rotation,
+//			nickname: client.nickname
+//		}
+//		*/
+		// Make sure it's not already connected
+//		for( var aClientID in this.clients ) 
+//		{
+//			if( aClientID != conn.$clientID && this.clients[ aClientID ].enabled ) 
+//			{ 
+//				var client = this.clients[clientID];
+//				characters[ client.conn.$clientID ] = {
+//					x: client.x,
+//					y: client.y,
+//					rotation: client.rotation,
+//					nickname: client.nickname
+//				}
+//			}
+//		}
+//		
+//		this.sendData( conn, [ COMMANDS.PLAYER_CONNECT, { characters: characters } ] );
 	},
 	
 	run: function() {
@@ -147,11 +188,24 @@ Server.prototype = {
 	    });
 	},
 
-	relayMessage: function( originClientID, msg, data ) {
-		data.clientID = originClientID;
+	composeCommand: function(aCommandConstant, commandData)
+	{
+		// Create a command
+		var command = {};
+		// Fill in the data
+		command.cmd = aCommandConstant;
+		command.data = commandData || {};
+		return command;
+	},
+	
+	broadcastMessage:function( originalClientID, anUnencodedMessage ) {
+		var encodedMessage = BISON.encode(anUnencodedMessage);
+		console.log('anUnencodedMessage', anUnencodedMessage);
+		
+//		data.clientID = originalClientID;
 		for( var clientID in this.clients ) {
-			if( clientID != originClientID ) {
-				this.clients[clientID].sendMessage([ msg, data ]);
+			if( clientID != originalClientID ) {
+				this.clients[clientID].sendMessage(encodedMessage);
 			}
 		}
 	},
@@ -161,7 +215,7 @@ Server.prototype = {
 
 	    this.startTime = new Date().getTime();
 	    this.time = new Date().getTime();
-	    this.log('>> Server started');
+	    this.log('>> Server Started at: ' + this.time);
 		// this.$$.start();
 	    this.status();
 	
@@ -189,8 +243,11 @@ Server.prototype = {
 		this.clientID++;
 		this.clientCount++;
 		conn.$clientID = this.clientID;
-		this.clients[ this.clientID ] = new Client( this, conn, false );
-
+		var aNewClient = new Client( this, conn, false );
+		
+		this.clients[ this.clientID ] = aNewClient;
+		
+		this.delegate.shouldAddNewClientWithID(this.clientID);
 		return this.clientID;
 	},
 	
@@ -272,7 +329,7 @@ Server.prototype = {
 	    }
 	    sys.print('\x1b[H\x1b[J# NodeGame Server at port '
 	              + this.port + '\n' + stats + '\n\x1b[s\x1b[H');
-	    
+	                
 	    if (!end) {
 	        setTimeout(function() {that.status(false)}, 500);
 	    
@@ -290,10 +347,8 @@ function Client( server, conn, record ) {
 	this.$ = server;
 };
 
-
 Client.prototype.onMessage = function(msg) { }
 
-Client.prototype.sendMessage = function( msg ) {
-	var encodedMessage = BISON.encode( msg );
+Client.prototype.sendMessage = function( encodedMessage ) {
 	this.conn.send( encodedMessage );
 };

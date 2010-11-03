@@ -1,23 +1,21 @@
 // Init
 var sys 		= require('sys');
 var ArgHelper 	= require('./argHelper.js');
-var Snowball	= require('./snowball.game.js');
+//var AbstractGameController = require('./../client/js/AbstractGameController.js');
+require('./ServerGameController.js');
 
 /**
 * Optionally creates an HTTP server if dictated in args
 **/
 var createHttpServer = ArgHelper.getArgumentByNameOrSetDefault('createHttpServer', 'false');
-var httpServer = undefined;
-
 if(createHttpServer)
 	httpServer = require('./SimpleHTTPServer.js').setPrefix('../client');
-//	
-console.log(httpServer);
-Server = new Snowball.Server({
+
+var gameController = new ServerGameController({
     'port': Math.abs(ArgHelper.getArgumentByNameOrSetDefault('port', 28785)),
-    'status': true,
+    'status': false,
     'recordFile': './../record[date].js',
     'record': false,
-    'server': server
+    'server': null
 });
-Server.run();
+gameController.run();

@@ -236,7 +236,7 @@ function Server(anHTTPServer) {
     
     	// We created the server, start listening   
 //    if(anHTTPServer == undefined)
-		console.log(sys.inspect($, true, 3));
+//		console.log(sys.inspect($, true, 3));
         $.listen(port);
     };
 };

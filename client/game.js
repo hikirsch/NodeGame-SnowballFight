@@ -42,7 +42,7 @@
 				
 				var that = this;
 				_conn = new WebSocket('ws://' + host + ':' + port);
-				console.log(host, port, _conn);
+				console.log(sys.inspect(_conn));
 				_conn.onopen = function() {
 					_online = true;
 					$("#join-game").show();
@@ -100,6 +100,7 @@
 			}
 			
 			function sendMessage( msg ) {
+				console.log(sys.inspect(msg));
 				var encodedMsg = BISON.encode( msg );
 				_conn.send( encodedMsg );
 			}
