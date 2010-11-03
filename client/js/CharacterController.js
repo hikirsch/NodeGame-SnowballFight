@@ -1,5 +1,5 @@
-(function(){
-	
+var init = function()
+{
 	// some defaults we use
 	this.velocity = { x: 0, y: 0 }; // how fast i am going
 	this.acceleration = { x: .1, y: .1 }; // how much i accelerate per tick
@@ -10,7 +10,7 @@
 	
 	var CharacterController = this.CharacterController =  function(aClientID) {
 		this.clientID = aClientID;
-		console.log('Character Created!');
+		console.log('Character ID:', this.clientID);
 	};
 	
 	CharacterController.prototype.doSomething = function() {
@@ -19,4 +19,12 @@
 	}
 	
 	return CharacterController;
-})();
+};
+
+
+if (typeof window === 'undefined') {
+	var sys = require("sys");
+	exports.CharacterController = init();
+} else {
+	define(init);
+}

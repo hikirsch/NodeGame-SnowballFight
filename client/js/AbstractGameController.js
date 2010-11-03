@@ -3,7 +3,6 @@ var init = function()
 	return Class.extend({
 		init: function(options) 
 		{
-			console.log('(AbstractGameController) Instance created');
 			var that = this;
 			var desiredFramerate = 55;
 			
@@ -54,7 +53,8 @@ var init = function()
 if (typeof window === 'undefined') {
 	var sys = require("sys");
 	require('./tools/Class.js');
+	require('./CharacterController.js');
 	exports.AbstractClassController = init();
 } else {
-	define(['tools/Class'], init);
+	define(['tools/Class', 'CharacterController'], init);
 }

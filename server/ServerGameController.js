@@ -23,12 +23,10 @@ var sys = require('sys');
 var ArgHelper 	= require('./argHelper.js');
 var Snowball	= require('./snowball.game.js');
 var AbstractClassControllerClass = require('./../client/js/AbstractGameController.js').AbstractClassController;
-
 (function(){
 	this.ServerGameController = AbstractClassControllerClass.extend({
 		init: function(aHost, aPort)
 		{
-			console.log("Super:", this._super);
 			this._super(aHost, aPort);
 			this.super = this._super;
 			

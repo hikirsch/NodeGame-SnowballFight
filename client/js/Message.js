@@ -5,7 +5,7 @@
 * @param anEncodedMessage	The actualMessage that will be sent. Already encoded
 **/
 
-define('Message', function() {
+define(["Bison"], function() {
 	function Message(aSequenceNumber, isReliable, anUnencodedMessage)
 	{
 		// Info

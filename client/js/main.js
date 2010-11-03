@@ -1,7 +1,7 @@
 var requiredModules = [];
 
 requiredModules.push('tools/Class');
-requiredModules.push('GameController');
+requiredModules.push('ClientGameController');
 // WebSocket - Flash
 //requiredModules.push('./../flash/swfobject.js');
 //requiredModules.push('./../flash/FABridge.js');
@@ -14,12 +14,12 @@ requiredModules.push('./../config.js');
 //requiredModules.push('./../game.js');
 
 
-require(requiredModules, function(Class, GameController) 
+require(requiredModules, function(Class, ClientGameController) 
 {
 	// Everything ready - start the game client
     require.ready(function() 
     {
-	   var gameController = new GameController(HOST, PORT);
+	   var gameController = new ClientGameController(HOST, PORT);
     })
 }, null, '/js/');
 //}, null, '/js/');

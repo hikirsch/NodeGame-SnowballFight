@@ -17,7 +17,7 @@ Basic Usage:
 */
 
 define('NetChannel', ['Message'], function(Message) {
-
+	
 	function NetChannel(aHost, aPort, aController)
 	{		
 		var that = this; // Forclosures (haw haw)	
@@ -102,12 +102,8 @@ define('NetChannel', ['Message'], function(Message) {
 	NetChannel.prototype.onConnectionOpened = function ()
 	{
 		console.log("(NetChannel) Connected to server.");
-		console.log(this.connection);
 		// Create a new message with the PLAYER_CONNECT command
 		this.addMessageToQueue(true, this.composeCommand(COMMANDS.PLAYER_CONNECT, null) );
-		
-		// Allow the game to setup
-		this.controller.netChannelDidConnect();
 	};
 	
 	NetChannel.prototype.onServerMessage = function (messageEvent)
@@ -120,33 +116,48 @@ define('NetChannel', ['Message'], function(Message) {
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) 
 			return;
 		
+		// This is a special command after connecting and the server OK-ing us
+		if(serverMessage.cmds.cmd == COMMANDS.SERVER_CONNECT)
+			this.onServerWillCreatePlayer(serverMessage);
+			
 		// We sent this, clear our reliable buffer que
 		if(serverMessage.clientID == this.clientID) {
-			this.latency = this.realTime - message.messageTime;
+			this.latency = this.realTime - serverMessage.messageTime;
 			
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
 			
 			// Free up reliable buffer to allow for new message to be sent
-			if(reliableBuffer === message)
-				reliableBuffer = null;
+			if(this.reliableBuffer === message)
+				this.reliableBuffer = null;
 				
 			// Remove from memory
 			delete this.messageBuffer[messageIndex];
-			delete message;
+//			delete message;
 		} else {
 			// No fancy behavior for other peoples messages for now.
 			// 
 		}
-		
-		this.controller.netChannelDidReceiveMessage(serverMessage);
+			
+		// regular message
+		if(serverMessage.cmds.cmd != COMMANDS.SERVER_CONNECT)
+			this.controller.netChannelDidReceiveMessage(serverMessage);
+			
+//		delete serverMessage;
 	};
 	
-	NetChannel.prototype.onConnectionClosed = function ()
+	NetChannel.prototype.onConnectionClosed = function (serverMessage)
 	{
 		console.log('(NetChannel) onConnectionClosed');
 	};
 	
+	// onConnectionOpened is for the socket, this is what we get back when we were OK'ed and created by the server 
+	NetChannel.prototype.onServerWillCreatePlayer = function(serverMessage)
+	{
+		// Save our server creaed clientID. Allow the game to setup
+		this.clientID = serverMessage.id;
+		this.controller.netChannelDidConnect(serverMessage);
+	};
 	/**
 	* Sending Messages
 	*/
