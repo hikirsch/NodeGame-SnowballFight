@@ -52,9 +52,9 @@ var init = function()
 
 if (typeof window === 'undefined') {
 	var sys = require("sys");
-	require('./tools/Class.js');
-	require('./CharacterController.js');
-	exports.AbstractClassController = init();
+	require('./lib/Class.js');
+	CharacterController = require('./CharacterController.js').Class;
+	exports.Class= init();
 } else {
-	define(['tools/Class', 'CharacterController'], init);
+	define(['lib/Class', 'CharacterController'], init);
 }
