@@ -1,18 +1,7 @@
 var requiredModules = [];
-
-requiredModules.push('tools/Class');
+requiredModules.push('lib/Class');
 requiredModules.push('ClientGameController');
-// WebSocket - Flash
-//requiredModules.push('./../flash/swfobject.js');
-//requiredModules.push('./../flash/FABridge.js');
-//requiredModules.push('./../flash/web_socket.js');
-// Snowball Fight
-//requiredModules.push('./../bison.js');
-//requiredModules.push('./../character.js');
-requiredModules.push('./../config.js');
-//requiredModules.push('./../controller.js');
-//requiredModules.push('./../game.js');
-
+requiredModules.push('./config.js');
 
 require(requiredModules, function(Class, ClientGameController) 
 {
