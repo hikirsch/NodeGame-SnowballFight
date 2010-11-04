@@ -1,13 +1,13 @@
 // Init
 var sys 		= require('sys');
-var ArgHelper 	= require('./argHelper.js');
+var ArgHelper 	= require('./lib/ArgHelper.js');
 require('./ServerGameController.js');
 
 /**
 * Optionally creates an HTTP server if dictated in args
 **/
-var createHttpServer = ArgHelper.getArgumentByNameOrSetDefault('createHttpServer', 'false');
-if(createHttpServer)
+var createHTTPServer = ArgHelper.getArgumentByNameOrSetDefault('createHTTPServer', 'false');
+if(createHTTPServer)
 	httpServer = require('./SimpleHTTPServer.js').setPrefix('../client');
 
 
