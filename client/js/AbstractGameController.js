@@ -1,3 +1,17 @@
+/**
+File:
+	AbstractGameController
+Created By:
+	Mario Gonzalez
+Project	:
+	Ogilvy Holiday Card 2010
+Abstract:
+	This is the most basic version of the GameController.
+	It keeps track of the gameclock, and tells its objects to update
+	It is subclassed by ServerGameController and ClientGameController.
+Basic Usage: 
+	 See subclasses
+*/
 var init = function(CharacterController, Rectangle)
 {
 	return Class.extend({
@@ -44,7 +58,7 @@ var init = function(CharacterController, Rectangle)
 				anEntity.tick(this.gameClock);
 			};
 		},
-		
+		 
 		/**
 		* Adding and removing players
 		*/
@@ -53,7 +67,7 @@ var init = function(CharacterController, Rectangle)
 			var newCharacter = new CharacterController(aClientID, this.fieldRect);
 			this.players[aClientID] = newCharacter;
 			
-			console.log('Adding new client to AbstractGameController with ID:' + aClientID, newCharacter);
+			console.log('(AbstractGameController) adding player:' + aClientID, newCharacter);
 			return newCharacter;
 		}	
 	});
