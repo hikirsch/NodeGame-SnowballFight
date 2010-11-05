@@ -11,6 +11,8 @@ Abstract:
 	It is allowed to HOLD data transiently 
 	
 Basic Usage: 
+	this.view = new ClientGameView(this);
+	this.view.showJoinGame();
 */
 var init = function(Rectangle)
 {
