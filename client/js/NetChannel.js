@@ -130,7 +130,6 @@ define('NetChannel', ['Message'], function(Message) {
 			var message = this.messageBuffer[messageIndex];
 			
 			
-			console.log(this.reliableBuffer, message, this.reliableBuffer === message);
 			// Free up reliable buffer to allow for new message to be sent
 			if(this.reliableBuffer === message)
 				this.reliableBuffer = null;
