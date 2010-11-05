@@ -1,4 +1,11 @@
-#NodeGame: Snowball Fight#
+#NodeGame: Snowball Fight - Oneday Branch#
+
+This branch is a restructuring of all the code into modular pieces, and a reworking of the Client/Server communication
+to follow more standard Multiplayer game methodolgy. 
+
+Specifically it aims to mimic Quakeworld which relied on high latency low bandwidth connections.
+See article on the Quakeworld net code here:
+http://www.fabiensanglard.net/quakeSource/quakeSourceNetWork.php
 
 ##License##
 
