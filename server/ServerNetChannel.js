@@ -1,3 +1,27 @@
+/**
+File:
+	ServerNetChannel.js
+Created By:
+	Mario Gonzalez
+Project	:
+	Ogilvy Holiday Card 2010
+Abstract:
+	-> Clientside netchannel talks to this object
+	<--> This object talks to it's GameController
+ 	  <-- This object broadcast the message to all clients
+Basic Usage: 
+	var server = new ServerNetChannel(this,
+	{
+	    'port': Math.abs(ArgHelper.getArgumentByNameOrSetDefault('port', 28785)),
+	    'status': false,
+	    'recordFile': './../record[date].js',
+	    'record': false,
+	    'server': null
+	});
+	
+	server.run();
+*/
+
 var sys = require('sys');
 var ws = require('./lib/ws');
 var BISON = require('./lib/bison');
