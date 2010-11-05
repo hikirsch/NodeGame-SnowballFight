@@ -9,7 +9,7 @@ Abstract:
 	This class represents the client-side GameController.
 	It contains a NetChannel instead of a Server, as well as a ClientGameView 
 Basic Usage: 
-
+	 var gameController = new ClientGameController(HOST, PORT) 
 */
 var ClientGameController = function(AbstractGameController, NetChannel, ClientGameView)
 {
@@ -20,7 +20,8 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 			 
 			this.netChannel = new NetChannel(aHost, aPort, this);				
 			this.view = new ClientGameView(this);
-						
+			this.input = null;
+					
 			this.clientCharacter = null; // Special pointer to our own client character
 			this.nickName = null;
 			
@@ -35,6 +36,9 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 		{
 			this._super();
 			this.netChannel.tick(this.gameClock);
+			
+			if(this.joystick && this.clientCharacter)
+				this.clientCharacter.handleInput(this.joystick);
 		},
 		
 		
@@ -51,16 +55,15 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 		
 		onClientJoined: function(messageData)
 		{
-			console.log(messageData.id, this.netChannel.clientID);
-			
 			// Let our super class create the character			
 			var newCharacter = this.shouldAddNewClientWithID(messageData.id);
 			
 			// It's us!
-			if(messageData.id == this.netChannel.clientID) {
+			if(messageData.id == this.netChannel.clientID)
+			{
 				this.clientCharacter = newCharacter;
-				this.clientCharacter.initJoystick();
-				console.log();
+				this.joystick = new Joystick();
+				console.log("(ClientGameController)", this.joystick);
 			}
 			
 			// Grab the view from the character and add it to our GameView
