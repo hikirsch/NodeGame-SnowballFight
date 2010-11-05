@@ -8,12 +8,11 @@ Project	:
 Abstract:
 	Draws the character
 Basic Usage: 
-
+ 	
 */
 var init = function()
 {
-	console.log($);
-	return Class.extend({
+ 	return Class.extend({
 		init: function(aCharacterController) 
 		{
 			this.controller = aCharacterController;
