@@ -25,6 +25,7 @@ server = http.createServer(function(req, res)
 	var prefix = '/../client'; // move to class later
 	var path = prefix+url.parse(req.url).pathname;
 	
+	console.log("(SimpleHTTPServer) Serving page:" + path);
 	// determin the header, ugly double ternary here
 	res.writeHead(200, {'Content-Type': 
 	path.indexOf('js') > -1 

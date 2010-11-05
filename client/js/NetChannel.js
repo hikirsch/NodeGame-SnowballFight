@@ -80,9 +80,9 @@ define('NetChannel', ['Message'], function(Message) {
 		return isValid;
 	}
 	
-	NetChannel.prototype.tick = function(gameClockRealTime)
+	NetChannel.prototype.tick = function(gameClockTime)
 	{
-		this.realTime = gameClockRealTime;
+		this.realTime = gameClockTime;
 		
 		for (messageIndex in this.messageBuffer)
 		{
@@ -101,32 +101,36 @@ define('NetChannel', ['Message'], function(Message) {
 	**/
 	NetChannel.prototype.onConnectionOpened = function ()
 	{
-		console.log("(NetChannel) Connected to server.");
-		// Create a new message with the PLAYER_CONNECT command
-		this.addMessageToQueue(true, this.composeCommand(COMMANDS.PLAYER_CONNECT, null) );
+		// Create a new message with the SERVER_CONNECT command
+		this.addMessageToQueue(true, this.composeCommand(COMMANDS.SERVER_CONNECT, null) );
 	};
 	
 	NetChannel.prototype.onServerMessage = function (messageEvent)
-	{
-		console.log("(NetChannel) onServerMessage: ", messageEvent);
-		
+	{	
 		var serverMessage = BISON.decode(messageEvent.data);
+		
+		console.log("(NetChannel) onServerMessage: ", messageEvent, serverMessage);
 		
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) 
 			return;
-		
-		// This is a special command after connecting and the server OK-ing us
-		if(serverMessage.cmds.cmd == COMMANDS.SERVER_CONNECT)
-			this.onServerWillCreatePlayer(serverMessage);
 			
+		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
+		// So we have to put it here, because otherwise e don't actually have a true client ID yet so the code below will not work
+		if(serverMessage.cmds.cmd == COMMANDS.SERVER_CONNECT) {
+			this.onServerDidAcceptConnection(serverMessage);
+		}
+		
 		// We sent this, clear our reliable buffer que
-		if(serverMessage.clientID == this.clientID) {
+		if(serverMessage.id == this.clientID) 
+		{
 			this.latency = this.realTime - serverMessage.messageTime;
 			
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
 			
+			
+			console.log(this.reliableBuffer, message, this.reliableBuffer === message);
 			// Free up reliable buffer to allow for new message to be sent
 			if(this.reliableBuffer === message)
 				this.reliableBuffer = null;
@@ -139,10 +143,11 @@ define('NetChannel', ['Message'], function(Message) {
 			// 
 		}
 			
-		// regular message
-		if(serverMessage.cmds.cmd != COMMANDS.SERVER_CONNECT)
+		
+		// Every other server message
+		if(serverMessage.cmds.cmd != COMMANDS.SERVER_CONNECT) {
 			this.controller.netChannelDidReceiveMessage(serverMessage);
-			
+		}
 //		delete serverMessage;
 	};
 	
@@ -151,35 +156,17 @@ define('NetChannel', ['Message'], function(Message) {
 		console.log('(NetChannel) onConnectionClosed');
 	};
 	
-	// onConnectionOpened is for the socket, this is what we get back when we were OK'ed and created by the server 
-	NetChannel.prototype.onServerWillCreatePlayer = function(serverMessage)
+	// onConnectionOpened is for the WebSocket - however we still don't have a 'clientID', this is what we get back when we were OK'ed and created by the server 
+	NetChannel.prototype.onServerDidAcceptConnection = function(serverMessage)
 	{
-		// Save our server creaed clientID. Allow the game to setup
+		// Only the server can create client ID's - grab the one i returned for us;
 		this.clientID = serverMessage.id;
-		this.controller.netChannelDidConnect(serverMessage);
+		
+		console.log('(NetChannel) Setting clientID to', this.clientID);
+		
+		this.controller.netChannelDidConnect(serverMessage);		
+		
 	};
-	/**
-	* Sending Messages
-	*/
-	NetChannel.prototype.addMessageToQueue = function(isReliable, anUnencodedMessage)
-	{
-		this.outgoingSequence += 1;
-		var message = new Message(this.outgoingSequence, isReliable, anUnencodedMessage);
-			
-		// Add to array the queue
-		this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK] = message;
-		console.log('(NetChannel) Adding Message', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK]);
-	}
-	
-	NetChannel.prototype.sendMessage = function(aMessageInstance)
-	{
-		aMessageInstance.messageTime = this.realTime; // Store to determin latency
-		this.reliableBuffer = aMessageInstance; // Block new connections
-		
-		this.connection.send(aMessageInstance.encodedSelf());
-		
-		console.log('(NetChannel) Sending Message', BISON.decode(aMessageInstance.encodedSelf()));
-	}
 	
 	/**
 	* HELPER METHODS
@@ -197,6 +184,30 @@ define('NetChannel', ['Message'], function(Message) {
 		command.cmd = aCommandConstant;
 		command.data = commandData || {};
 		return command;
+	}
+	
+	/**
+	* Sending Messages
+	*/
+	NetChannel.prototype.addMessageToQueue = function(isReliable, anUnencodedMessage)
+	{
+		this.outgoingSequence += 1;
+		var message = new Message(this.outgoingSequence, isReliable, anUnencodedMessage);
+		message.clientID = this.clientID;
+		
+		// Add to array the queue
+		this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK] = message;
+		console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
+	}
+	
+	NetChannel.prototype.sendMessage = function(aMessageInstance)
+	{
+		aMessageInstance.messageTime = this.realTime; // Store to determin latency
+		this.reliableBuffer = aMessageInstance; // Block new connections
+		
+		this.connection.send(aMessageInstance.encodedSelf());
+		
+		console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
 	}
 	
 	return NetChannel;

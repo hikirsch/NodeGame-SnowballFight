@@ -1,7 +1,7 @@
 /**
  * A helper class to detect the current state of the controls of the game. 
  */
-function Controller(game) {
+function Joystick(game) {
 	this.keyCodes = { '37': 'left', '38': 'up', '39': 'right', '40': 'down' };
 	this.keys = {};
 	this.keyPressed = 0;
@@ -9,7 +9,7 @@ function Controller(game) {
 	this.attachEvents();
 };
 
-$.extend(Controller.prototype, {
+$.extend(Joystick.prototype, {
 	/**
 	 * We don't care about a time clock here, we attach events, we only want
 	 * to know if something's happened.

@@ -25,23 +25,24 @@ require('./Client');
 		    // Connections
 		    this.clients = {};		// Everyone connected
 		    this.clientCount = 0;	// Length of above
-		    this.clientID = 0;		// UUID for next client
+		    this.nextClientID = 0;		// UUID for next client
 		    
 		    // Recording
 		    this.record = options.record || false;
 		    this.recordFile = options.recordFile || './record[date].js';
 		    this.recordData = [];
 		    
-		    // Map COMMAND values to functions to avoid a giant switch statement
+		    // Map COMMAND values to functions to avoid a giant switch statement as this expands
 		    this.COMMAND_TO_FUNCTION = {};
-		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_CONNECT] = this.onClientConnected;
+		    this.COMMAND_TO_FUNCTION[COMMANDS.SERVER_CONNECT] = this.onClientConnected;
+		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onPlayerJoined;
 		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
 		    this.COMMAND_TO_FUNCTION[COMMANDS.MOVE] = this.genericCommand;
 		    this.COMMAND_TO_FUNCTION[COMMANDS.FIRE] = this.genericCommand;
 		
 		    this.initAndStartWebSocket(options);
 		}, 
-		   
+		
 		/**
 		* Initialize and start the websocket server.
 		* With this set up we should be abl to move to Socket.io easily if we need to
@@ -58,16 +59,17 @@ require('./Client');
 				that.logger.push("(ServerNetChannel) UserConnected:", connection);
 			};
 			
+			/**
+			* Received a message from a client/
+			* Messages can come as a single message, or grouped into an array of commands.
+			*/
 			this.$.onMessage = function(connection, encodedMessage )
 			{
-				console.log("(ServerNetChannel) MSG:",BISON.decode(encodedMessage));
 				try 
 				{
 					var decodedMessage = BISON.decode(encodedMessage);
 					console.log("(ServerNetChannel) MessageReceived:" + sys.inspect(decodedMessage) + " From " + connection);
 					
-					// On a browser instanceof causes problems, and is unreliable.
-					// We're not in a browser. This is reliable by design in V8 JS engine.
 					if(decodedMessage.cmds instanceof Array == false)
 					{
 						// Call the mapped function, always pass the connection. Also pass data if available
@@ -133,22 +135,6 @@ require('./Client');
 			}, 100);
 		},
 		
-		/**
-		*	Client Addition
-		*/
-		addClient: function(connection)
-		{
-			this.clientID++;
-			this.clientCount++;
-			
-			connection.$clientID = this.clientID;
-			var aNewClient = new Client(this, connection, false);
-			
-			// Add and tell the delegate
-			this.clients[this.clientID] = aNewClient;
-			this.delegate.shouldAddNewClientWithID(this.clientID);
-		},
-		
 		//Set the clients 'nickName' as defined by them
 		setClientPropertyNickName: function(connection, aDecodedMessage)
 		{
@@ -187,40 +173,74 @@ require('./Client');
 		},
 		
 		/**
-		*	Message Sending
-		*/
-		broadcastMessage: function(originalClientID, anUnencodedMessage)
-		{
-			var encodedMessage = BISON.encode(anUnencodedMessage);
-			this.logger.log('anUnencodedMessage', anUnencodedMessage);
-			
-		//	data.clientID = originalClientID;
-			for( var clientID in this.clients ) {
-				if( clientID != originalClientID ) {
-					this.clients[clientID].sendMessage(encodedMessage);
-				}
-			}
-		},
-		
-		/**
 		*	CONNECTION EVENTS
 		*/
 		// User has connected, give them an ID, tell them - then tell all clients
 		onClientConnected: function(connection, aDecodedMessage)
 		{
 			var data = aDecodedMessage.cmds.data;
-			this.logger.log('New connection started, clientID = ' + sys.inspect(aDecodedMessage) );		
 			
-			// Get new UUID for client
+//			 Get new UUID for client
 			var newClientID = this.addClient(connection);
 			aDecodedMessage.id = newClientID;
 			
-			// Send the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
-			aDecodedMessage.cmds.cmd = COMMANDS.SERVER_CONNECT;
+			console.log('(NetChannel) Adding new client to listeners with ID:', newClientID);
+
+//			 Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
 			connection.send( BISON.encode(aDecodedMessage) );
+		},
+		
+		/**
+		*	Client Addition - 
+		*/
+		// Added client to connected users - player is not in the game yet
+		addClient: function(connection)
+		{
 			
-			// Tell everyone
-			this.broadcastMessage(newClientID, aDecodedMessage);
+			var clientID = this.nextClientID++;
+			this.clientCount++;
+			
+			connection.$clientID = clientID;
+			var aNewClient = new Client(this, connection, false);
+			
+			// Add to our list of connected users
+			this.clients[clientID] = aNewClient;
+			
+
+			return clientID;
+		},
+		
+		// player is now in the game after this 
+		onPlayerJoined: function(connection, aDecodedMessage)
+		{
+			console.log('Player joined!');
+			this.delegate.shouldAddNewClientWithID(connection.$clientID);
+			
+			// Tell all the clients that a player has joined
+			this.broadcastMessage(connection.$clientID, aDecodedMessage);
+		},
+		/**
+		*	Message Sending
+		*	@param originalClient		The connectionID of the client this message originated from
+		*	@param anUnencodedMessage	Human readable message data
+		*	@param sendToOriginalClient	If true the client will receive the message it sent. This should be true for 'reliable' events such as joining the game
+		*/
+		broadcastMessage: function(originalClientID, anUnencodedMessage, sendToOriginalClient)
+		{
+			var encodedMessage = BISON.encode(anUnencodedMessage);
+			console.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
+			
+			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
+			for( var clientID in this.clients )
+			{
+				// Don't send to original client
+				if( sendToOriginalClient == false && clientID == originalClientID ) 
+					continue;
+				
+				this.clients[clientID].sendMessage(encodedMessage);
+			}
 		} // Close prototype object
 	});// Close .extend
 })(); // close init()
+
+

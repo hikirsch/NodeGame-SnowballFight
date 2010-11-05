@@ -4,7 +4,7 @@
  */
 // Inspired by base2 and Prototype
 
-var ClassClass = (function(){
+var init = (function(){
   var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
   // The base Class implementation (does nothing)
   this.Class = function(){};
@@ -67,5 +67,5 @@ if (typeof window === 'undefined') {
 	var sys = require("sys");
 	exports.Class = Class();
 } else {
-	define(ClassClass);
+	define('Class', init);
 }

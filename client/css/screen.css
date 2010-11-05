@@ -18,7 +18,7 @@ html, body { overflow: hidden; height: 100%; font-family: Arial; font-size: 12px
 .site-message input[type='button']:hover { background-color: #AEABC4; border-color: #AEABC4; color: #2F1DA3; }
 .site-message input[type='button']:active { background-color: #2F1DA3; border-color: #AEABC4; color: #fff; }
 
-.game-container  { height: 600px; margin: 0; position: relative; overflow: hidden;}
+.game-container  { width: 640; height: 480px; margin: 0; position: relative; overflow: hidden;}
 .game-container .background {  
 	position: absolute; top: 0; left: 0; 
 	background-color: #00f; opacity: 0.05;
@@ -28,7 +28,6 @@ html, body { overflow: hidden; height: 100%; font-family: Arial; font-size: 12px
 .game-container .character { 
 	position: absolute; top: 200px; left: 200px; width: 26px; height: 26px;
 	background-repeat: no-repeat; background-position: 50% 50%; font-size: 10px; font-weight: bold;
-/*	background-image: url( ../img/smb_mario_sheet.png ); background-repeat: no-repeat; background-position: -210px 0; */
 }
 .game-container .character p {
 	position: absolute; bottom: -10px; left: 0;

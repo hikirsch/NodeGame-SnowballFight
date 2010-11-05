@@ -198,7 +198,7 @@ var init = function()
 if (typeof window === 'undefined') {
 	require('./Class.js');
 	
-	exports.Class= init();
+	exports.Class = init();
 } else {
-	define(['Class', 'CharacterController'], init);
+	define(['lib/Class'], init);
 }

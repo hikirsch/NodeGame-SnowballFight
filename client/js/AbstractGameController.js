@@ -1,4 +1,4 @@
-var init = function()
+var init = function(CharacterController, Rectangle)
 {
 	return Class.extend({
 		init: function(options) 
@@ -6,10 +6,12 @@ var init = function()
 			var that = this;
 			var desiredFramerate = 55;
 			
+			this.fieldRect = new Rectangle(0, 0, 640, 480);
+			
 			// Things in the game
-			this.players = [];		// 
-			this.projectiles = [];	// Things fired
-			this.entities = [];		// Everything else, e.g. trees, rocks, powerups
+			this.players = {};		// 
+			this.projectiles = {};	// Things fired
+			this.entities = {};		// Everything else, e.g. trees, rocks, powerups, dogs, cats
 			
 			// Loop
 			this.megaClockCounterThing = 0;
@@ -17,44 +19,51 @@ var init = function()
 			this.gameTick = setInterval(function(){that.tick()}, Math.ceil(1000/desiredFramerate));
 		},
 		
+		/**
+		 * Tick tock, the clock is running! Make everyone do stuff.
+		 */
 		tick: function()
 		{
 			this.gameClock = new Date().getTime();
-		
-			for(var aProjectile in this.projectiles) {
-				aPlayer.tick(this.gameClock);
+			
+			var aProjectile;
+			for(var key in this.projectiles) {
+				aProjectile = this.projectiles[key];
+				aProjectile.tick(this.gameClock);
 			};
 				
-			for(var aPlayer in this.players) {
-				//aPlayer.tick(this.gameClock);
+			var aPlayer;
+			for(var key in this.players) {
+				aPlayer = this.players[key];
+				aPlayer.tick(this.gameClock);
 			};
 			
-			for(var anEntity in this.entities) {
+			var anEntity;
+			for(var key in this.entities) {
+				anEntity = this.entities[key];
 				anEntity.tick(this.gameClock);
 			};
-			
-			this.megaClockCounterThing++;
-		//	 Tick the objects that are interested
-		//	this.netChannel.tick(this.gameClock);
 		},
-		
 		
 		/**
 		* Adding and removing players
 		*/
 		shouldAddNewClientWithID: function(aClientID)
 		{
-			console.log('Adding new client to ServerGameController with ID:' + aClientID);
-			this.players[this.clientID] = new CharacterController(aClientID);
+			var newCharacter = new CharacterController(aClientID, this.fieldRect);
+			this.players[aClientID] = newCharacter;
+			
+			console.log('Adding new client to AbstractGameController with ID:' + aClientID, newCharacter);
+			return newCharacter;
 		}	
 	});
 }
 
 if (typeof window === 'undefined') {
-	var sys = require("sys");
-	require('./lib/Class.js');
-	CharacterController = require('./CharacterController.js').Class;
-	exports.Class= init();
+	var CharacterController  = require('./CharacterController.js').Class;
+	var Rectangle = require('./CharacterController.js').Class;
+	var COMMANDS = require('./config.js').COMMANDS;
+	exports.Class= init(CharacterController, Rectangle);
 } else {
-	define(['lib/Class', 'CharacterController'], init);
+	define(['CharacterController', 'lib/Rectangle'], init);
 }
