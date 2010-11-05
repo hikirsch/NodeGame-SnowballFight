@@ -1,22 +1,52 @@
+/**
+File:
+	Character Controller.js
+Created By:
+	Mario Gonzalez
+Project	:
+	Ogilvy Holiday Card 2010
+Abstract:
+	A generic character inside of our multiplayer game.
+	Anything too interesting should go in a subclass of this.
+	
+	Contains a view which is grabbed by the GameController and placed into 
+	the game controllers view
+Basic Usage: 
+		var newCharacter = new CharacterController(aClientID, this.fieldRect);
+		
+		// Is this the users character?
+		if(messageData.id == this.netChannel.clientID)
+		{
+			this.clientCharacter = newCharacter;
+			this.joystick = new Joystick();
+			console.log("(ClientGameController)", this.joystick);
+		}
+		
+		// Grab the view from the character and add it to our GameView
+		this.view.addCharacter(newCharacter.initView());
+*/
 var init = function(Vector, Rectangle, CharacterView)
 {
-	console.log(arguments);
 	return Class.extend({
 		init: function(aClientID, aFieldRectangle) 
 		{
 			this.fieldRect = aFieldRectangle;
 			
 			this.view = null;
-			this.joystick = null;
 			
 			// some defaults we use
-			this.position = new Vector();
+			this.position = new Vector(Math.random() * this.fieldRect.width, Math.random() * this.fieldRect.height);
 			this.prevPosition = new Vector();
 			
-			this.velocity = new Vector(0,0); // how fast i am going
-			this.acceleration = new Vector(0.1, 0.1); // how much i accelerate per tick
-			this.damping = new Vector(0.33,0.33); // how much of a slide there is, how much do i take away per frame if there's no positive movement
-			this.maxVelocity = new Vector(2.5, 2.5);  // the fastest i can go
+			// movement properties
+			this.velocity = new Vector(0,0); // rolling velocity
+			this.acceleration = new Vector(0, 0); // all combined forced. reset every tick
+			
+			// move constants
+			this.moveSpeed = 0.7; // Apply to acceleration if keys pressed
+			this.maxVelocity = 3.5;			// the fastest i can go
+			this.damping = 0.9; // Bring velocity to 0 ( or near zero anyway :) ) over time
+			
 			this.rotation = 0; // we start pointing up, simply easy b/c of sprites right now
 			this.clientID = aClientID;
 		},
@@ -30,17 +60,22 @@ var init = function(Vector, Rectangle, CharacterView)
 			return this.view;
 		},
 		
-		
-		initJoystick: function()
+		/*
+		*	Input
+		*/
+
+		handleInput:function(aJoystick)
 		{
-			this.joystick = new Joystick();
+			if(aJoystick.isHorizontalKeyPressed())
+				this.acceleration.x += (aJoystick.isLeft()) ? -this.moveSpeed : this.moveSpeed;
+				
+			if(aJoystick.isVerticalKeyPressed())
+				this.acceleration.y += (aJoystick.isUp()) ? -this.moveSpeed : this.moveSpeed;
+				
 		},
 		
 		tick: function(gameClockTime)
 		{
-			this.calculateVelocity();
-			this.calculateDamping();
-			this.calculateRotation();
 			this.updatePosition();
 
 			// if we have moved
@@ -52,103 +87,62 @@ var init = function(Vector, Rectangle, CharacterView)
 			}
 		},
 		
-		/*
-		*	Input
-		*/
-		/**
-		 * If there are keys currently pressed, we either add or subtract from our velocity.
-		 */
-		calculateVelocity: function() {
-			if( this.joystick.isLeft() && this.velocity.x > -this.maxVelocity.x ) {
-				this.velocity.x-=this.acceleration.x;
-			} else if( this.joystick.isRight() && this.velocity.x < this.maxVelocity.x ) {
-				this.velocity.x+=this.acceleration.x;
-			}
-			
-			if( this.joystick.isUp() && this.velocity.y > -this.maxVelocity.y ) {
-				this.velocity.y-=this.acceleration.y;
-			} else if( this.joystick.isDown() && this.velocity.y < this.maxVelocity.y ) {
-				this.velocity.y+=this.acceleration.y;
-			}
-			
-			console.log(this.velocity.x);
-		},
-		
-		/**
-		 * We need to slow down the character if they aren't actually moving anymore.
-		 */
-		calculateDamping: function() { 
-			if( ! this.joystick.isHorizontalKeyPressed() ) {
-				if( this.velocity.x > 0 ) {
-					if( this.velocity.x < this.acceleration.x ) {
-						this.velocity.x = 0;
-					} else {
-						this.velocity.x -= this.damping.x;
-					}
-				} else if( this.velocity.x < 0 ) {
-					if( this.velocity.x > -this.acceleration.x ) {
-						this.velocity.x = 0;
-					} else {
-						this.velocity.x += this.damping.x;
-					}
-				}
-			}
-			
-			if( ! this.joystick.isVerticalKeyPressed() ) {
-				if( this.velocity.y > 0 ) {
-					if( this.velocity.y < this.acceleration.y )  {
-						this.velocity.y = 0;
-					} else { 
-						this.velocity.y -= this.damping.y;
-					}
-				} else if( this.velocity.y < 0 ) {
-					if( this.velocity.y > -this.acceleration.y ) {
-						this.velocity.y = 0;
-					} else {
-						this.velocity.y += this.damping.y;
-					}
-				}
-			}
-		},
-		
+
 		/**
 		 * Based on the velocity that we're going at, we calculate the angle that we should be currently pointing at since
 		 * we calculate our X and Y velocities separately.
 		 */
-		calculateRotation: function() {
-			if( this.joystick.isKeyPressed() )
-			{
-				this.rotation = 57.2957795 * Math.atan2(this.velocity.x,this.velocity.y);
-				if(this.rotation < 0) this.rotation *= -1; // avoid slow abs call
-				this.rotation -= 180; // offset
-				this.rotation = 0;
-				// this.rotation = (180/Math.PI) * Math.atan2(this.velocity.x,this.velocity.y); // this is really exacto ;-)
-			}
+		calculateRotation: function() 
+		{
+			var combinedVelocity = this.velocity.x + this.velocity.y;
+			// no change
+			if(combinedVelocity > -0.1 && combinedVelocity < 0.1) return;
+			
+			this.rotation = 57.2957795 * Math.atan2(this.velocity.x,this.velocity.y) - 180;
+			if(this.rotation < 0) this.rotation *= -1;  //avoid slow math.abs call
+			
 		},
 	
 
 		updatePosition: function()
 		{
+		
+			// Store previous position
 			this.prevPosition.x = this.position.x;
 			this.prevPosition.y = this.position.y;
 			
+			// Add acceleration to velocity and velocity to the current position
+			this.velocity.add(this.acceleration);
 			this.position.add(this.velocity);
-		
+			
 			// Wrap horizontal
 			if(this.position.x > this.fieldRect.width) {
 				this.position.x = 0;
 			} else if(this.position.x < 0) { // use view width
 				this.position.x = this.fieldRect.width;
 			}
-			
 			// Wrap veritical
 			if(this.y > this.fieldRect.height) {
 				this.position.y = 0;
 			} else if(this.y < 0) {
 				this.position.y = this.fieldRect.height;
 			}
+			
+			this.velocity.limit(this.maxVelocity);
+			
+//			console.log(this.velocity.x, this.velocity.y);
+			// Apply damping force
+			this.velocity.x *= this.damping;
+			this.velocity.y *= this.damping;
+			
+			this.calculateRotation();
+			this.acceleration.x = this.acceleration.y = 0;
 		},
 		
+
+		/**
+		*	ClientGameView delegate
+		*/
 		/*
 		* Sets the rectangle of the field.
 		* Tells the view so it can adjust itself
