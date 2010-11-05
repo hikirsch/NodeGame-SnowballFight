@@ -160,6 +160,18 @@ var init = function()
 	       
 	   },
 	   
+	   limit: function(max)
+	   {
+	   		var aLenthSquared = this.lengthSquared()
+	   		// Check against max speed, avoid premature sqrt call - also avoid division by zero
+	   		if(aLenthSquared+0.01 > max*max)
+	   		{
+	   			var aLength = Math.sqrt(aLenthSquared);
+	   			this.x = (this.x/aLength) * max;
+	   			this.y = (this.y/aLength) * max;
+	   		}
+	   },
+	   
 	   length: function()
 	   {
 	       
