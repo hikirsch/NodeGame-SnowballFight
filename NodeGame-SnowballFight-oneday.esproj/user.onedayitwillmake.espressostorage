@@ -7,13 +7,13 @@
 	<key>ESProjectWindowState</key>
 	<dict>
 		<key>ContentSize</key>
-		<string>{1319, 892}</string>
+		<string>{1680, 947}</string>
 		<key>ProjectURL</key>
 		<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/NodeGame-SnowballFight-oneday.esproj/</string>
 		<key>StateType</key>
 		<string>ProjectWindow</string>
 		<key>TopLeftPoint</key>
-		<string>{242, 1028}</string>
+		<string>{0, 1028}</string>
 	</dict>
 	<key>com.macrabbit.Espresso.FileManager.DisclosureCollapsed</key>
 	<false/>
@@ -21,7 +21,8 @@
 	<dict>
 		<key>ExpandedURLs</key>
 		<array>
-			<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/client</string>
+			<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/client/js</string>
+			<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/server</string>
 		</array>
 	</dict>
 	<key>com.macrabbit.Espresso.Publisher.DisclosureCollapsed</key>
@@ -32,25 +33,7 @@
 		<array>
 			<dict>
 				<key>DocumentURL</key>
-				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/server/snowball.game.js</string>
-				<key>StateType</key>
-				<string>DefaultTab</string>
-			</dict>
-			<dict>
-				<key>DocumentURL</key>
-				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/server/ws.js</string>
-				<key>StateType</key>
-				<string>DefaultTab</string>
-			</dict>
-			<dict>
-				<key>DocumentURL</key>
 				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/server/game.js</string>
-				<key>StateType</key>
-				<string>DefaultTab</string>
-			</dict>
-			<dict>
-				<key>DocumentURL</key>
-				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/server/ArgHelper.js</string>
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>
@@ -68,13 +51,31 @@
 			</dict>
 			<dict>
 				<key>DocumentURL</key>
-				<string>file://localhost/Users/onedayitwillmake/.Trash/server.js</string>
+				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/client/js/NetChannel.js</string>
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>
 			<dict>
 				<key>DocumentURL</key>
-				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/client/NetChannel.js</string>
+				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/client/js/ClientGameController.js</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/server/ServerNetChannel.js</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/client/js/AbstractGameController.js</string>
+				<key>StateType</key>
+				<string>DefaultTab</string>
+			</dict>
+			<dict>
+				<key>DocumentURL</key>
+				<string>file://localhost/Users/onedayitwillmake/GIT/NodeGame-SnowballFight/server/ServerGameController.js</string>
 				<key>StateType</key>
 				<string>DefaultTab</string>
 			</dict>

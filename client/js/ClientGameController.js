@@ -28,8 +28,8 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 			this.COMMAND_TO_FUNCTION = {};
 			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onClientJoined;
 			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
-			this.COMMAND_TO_FUNCTION[COMMANDS.MOVE] = this.genericCommand; // Not implemented yet
-			this.COMMAND_TO_FUNCTION[COMMANDS.FIRE] = this.genericCommand;
+			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_MOVE] = this.onPlayerMoved; // Not implemented yet
+			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_FIRE] = this.genericCommand;
 		},
 		
 		tick: function()
@@ -37,10 +37,18 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 			this._super();
 			this.netChannel.tick(this.gameClock);
 			
-			if(this.joystick && this.clientCharacter)
+			if(this.clientCharacter) {
 				this.clientCharacter.handleInput(this.joystick);
+				
+				// create a message and send it off
+				this.netChannel.addMessageToQueue(false,
+				 this.netChannel.composeCommand(COMMANDS.PLAYER_MOVE,
+				  { x: this.clientCharacter.position.x, y: this.clientCharacter.position.y,
+				  	vx: this.clientCharacter.velocity.x, vy: this.clientCharacter.velocity.y,
+				  	r: this.clientCharacter.rotation
+				  }));
+			}
 		},
-		
 		
 		/**
 		*	ClientGameView delegate
@@ -61,8 +69,8 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 			// It's us!
 			if(messageData.id == this.netChannel.clientID)
 			{
-				this.clientCharacter = newCharacter;
 				this.joystick = new Joystick();
+				this.clientCharacter = newCharacter;
 				console.log("(ClientGameController)", this.joystick);
 			}
 			
@@ -72,6 +80,7 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 
 			return newCharacter
 		},
+		
 		/**
 		* These methods When netchannel recieves and validates a message
 		* Anything we receive we can assume is valid
@@ -79,7 +88,7 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 		**/
 		netChannelDidConnect: function (messageData)
 		{
-			console.log("ClientGameController.prototype.netChannelDidConnect ID:", this.netChannel.clientID, messageData);			
+//			console.log("ClientGameController.prototype.netChannelDidConnect ID:", this.netChannel.clientID, messageData);			
 			// Having some problems with the CSS for now - create the player automatically, instead of waiting for
 			// The view to tell us - this would be the same as if a user clicked 'Join'
 			if(this.clientCharacter == null)
@@ -88,12 +97,10 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 		
 		netChannelDidReceiveMessage: function (messageData)
 		{
-			console.log('ClientGameController.prototype.netChannelDidReceiveMessage', messageData);
+//			console.log('ClientGameController.prototype.netChannelDidReceiveMessage', messageData);
 			
 			// TODO: Handle array of 'cmds'
 			this.COMMAND_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData]);
-			// Call the mapped function, always pass the data.
-//			this.COMMAND_TO_FUNCTION[messageData.cmds.cmd](messageData).apply(this, [messageData]);
 		},
 		
 		netChannelDidDisconnect: function (messageData)

@@ -39,11 +39,12 @@ define('NetChannel', ['Message'], function(Message) {
 		this.latency = 1000; // lag right now
 		// 
 		this.realTime = -1;
-		this.lastRecievedTime = 0; // Last time we received a message
+		this.lastSentTime = -1;
+		this.lastRecievedTime = -1; // Last time we received a message
 		// When we  can send another message to prevent flooding - determined by 'rate' variable
-		this.clearTime = 0; // if realtime > nc->cleartime, free to go
+		this.clearTime = -1; // if realtime > nc->cleartime, free to go
 		
-		this.rate = 1000;	// seconds / byte
+		this.rate = 5;	// seconds / byte
 		
 		this.incomingSequence = 0;
 		this.outgoingSequence = 0;
@@ -84,16 +85,35 @@ define('NetChannel', ['Message'], function(Message) {
 	{
 		this.realTime = gameClockTime;
 		
+		if(this.reliableBuffer !== null) return; // Can't send new message, still waiting
+		
+		var hasReliableMessages = false;
+		var firstUnreliableMessageFound = null;
+		 
 		for (messageIndex in this.messageBuffer)
 		{
 			var message = this.messageBuffer[messageIndex];
-			// Still waiting for last message to be ok'ed	
-			if(message.isReliable && this.reliableBuffer === null)
+			
+			if(message.isReliable) // We have more important things to tend to sir.
 			{
+				hasReliableMessages = true;
 				this.sendMessage(message);
 				break;
+			} else {
+				firstUnreliableMessageFound = message;
 			}
 		}
+		
+		if(hasReliableMessages == false && firstUnreliableMessageFound != null && this.canSend() == true)
+			this.sendMessage(firstUnreliableMessageFound)
+	};
+	
+	/**
+	* Determins if it's ok for the client to send a unreliable new message yet
+	*/
+	NetChannel.prototype.canSend = function ()
+	{
+		return (this.realTime > this.lastSentTime+this.rate);
 	};
 	
 	/**
@@ -109,11 +129,13 @@ define('NetChannel', ['Message'], function(Message) {
 	{	
 		var serverMessage = BISON.decode(messageEvent.data);
 		
-		console.log("(NetChannel) onServerMessage: ", messageEvent, serverMessage);
-		
+//		console.log('(NetChannel) msg-received:', serverMessage);
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) 
 			return;
+		
+		this.lastReceivedTime = this.realTime;
+		this.adjustRate(serverMessage);
 			
 		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
 		// So we have to put it here, because otherwise e don't actually have a true client ID yet so the code below will not work
@@ -124,11 +146,10 @@ define('NetChannel', ['Message'], function(Message) {
 		// We sent this, clear our reliable buffer que
 		if(serverMessage.id == this.clientID) 
 		{
-			this.latency = this.realTime - serverMessage.messageTime;
-			
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
 			
+			this.latency = this.realTime - message.messageTime;
 			
 			// Free up reliable buffer to allow for new message to be sent
 			if(this.reliableBuffer === message)
@@ -136,10 +157,9 @@ define('NetChannel', ['Message'], function(Message) {
 				
 			// Remove from memory
 			delete this.messageBuffer[messageIndex];
-//			delete message;
+			delete message;
 		} else {
 			// No fancy behavior for other peoples messages for now.
-			// 
 		}
 			
 		
@@ -147,7 +167,8 @@ define('NetChannel', ['Message'], function(Message) {
 		if(serverMessage.cmds.cmd != COMMANDS.SERVER_CONNECT) {
 			this.controller.netChannelDidReceiveMessage(serverMessage);
 		}
-//		delete serverMessage;
+		
+		delete serverMessage;
 	};
 	
 	NetChannel.prototype.onConnectionClosed = function (serverMessage)
@@ -169,8 +190,23 @@ define('NetChannel', ['Message'], function(Message) {
 	
 	/**
 	* HELPER METHODS
-	**
-	
+	*/
+	NetChannel.prototype.adjustRate = function(serverMessage)
+	{
+	// nothing fancy yet
+		this.rate = 1;
+		
+//		var time = this.realTime - serverMessage.messageTime;
+//		time -= 0.1; // subtract 100ms
+//		
+//		if(time <= 0)
+//		{
+//			this.rate = 0.12; /* 60/1000*2 */
+//		}
+//		else
+//		{
+//		}
+	}
 	/**
 	* Simple convinience message to compose commands.
 	* Bison will encode this array for us when we send
@@ -196,17 +232,20 @@ define('NetChannel', ['Message'], function(Message) {
 		
 		// Add to array the queue
 		this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK] = message;
-		console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
+//		console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
 	}
 	
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
 	{
 		aMessageInstance.messageTime = this.realTime; // Store to determin latency
-		this.reliableBuffer = aMessageInstance; // Block new connections
+		
+		this.lastSentTime = this.realTime;
+		
+		if(aMessageInstance.isReliable)
+			this.reliableBuffer = aMessageInstance; // Block new connections
 		
 		this.connection.send(aMessageInstance.encodedSelf());
-		
-		console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
+//		console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
 	}
 	
 	return NetChannel;

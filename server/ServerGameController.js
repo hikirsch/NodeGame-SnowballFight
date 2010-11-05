@@ -25,6 +25,8 @@ Version:
 var sys = require('sys');
 var ArgHelper 	= require('./lib/ArgHelper.js');
 var AbstractClassController = require('./../client/js/AbstractGameController.js').Class;
+var COMMANDS = require('./../client/js/config.js').COMMANDS;
+
 require('./ServerNetChannel.js');
 
 (function(){
@@ -43,8 +45,19 @@ require('./ServerNetChannel.js');
 			    'record': false,
 			    'server': null
 			});
+			
+			this.COMMAND_TO_FUNCTION = {};
+//			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onClientJoined;
+//			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
+			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_MOVE] = this.onPlayerMoved;
+			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_FIRE] = this.genericCommand;
 		},
-
+		
+		onGenericPlayerCommand: function(clientID, aDecodedMessage)
+		{
+			this.COMMAND_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this,[aDecodedMessage]);
+		},
+		
 		run: function()
 		{
 			this.server.run();

@@ -61,8 +61,8 @@ require('./Client');
 		    this.COMMAND_TO_FUNCTION[COMMANDS.SERVER_CONNECT] = this.onClientConnected;
 		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onPlayerJoined;
 		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
-		    this.COMMAND_TO_FUNCTION[COMMANDS.MOVE] = this.genericCommand;
-		    this.COMMAND_TO_FUNCTION[COMMANDS.FIRE] = this.genericCommand;
+		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_MOVE] = this.onGenericPlayerCommand;
+		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_FIRE] = this.genericCommand;
 		
 		    this.initAndStartWebSocket(options);
 		}, 
@@ -92,7 +92,7 @@ require('./Client');
 				try 
 				{
 					var decodedMessage = BISON.decode(encodedMessage);
-					console.log("(ServerNetChannel) MessageReceived:" + sys.inspect(decodedMessage) + " From " + connection);
+//					console.log("(ServerNetChannel) MessageReceived:" + sys.inspect(decodedMessage) + " From " + connection);
 					
 					if(decodedMessage.cmds instanceof Array == false)
 					{
@@ -241,8 +241,18 @@ require('./Client');
 			this.delegate.shouldAddNewClientWithID(connection.$clientID);
 			
 			// Tell all the clients that a player has joined
-			this.broadcastMessage(connection.$clientID, aDecodedMessage);
+			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
 		},
+		
+		/**
+		* Send this to all clients, and let the gamecontroller do what it should with the message
+		*/
+		onGenericPlayerCommand: function(connection, aDecodedMessage)
+		{
+			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
+			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
+		},
+		
 		/**
 		*	Message Sending
 		*	@param originalClient		The connectionID of the client this message originated from
@@ -252,7 +262,7 @@ require('./Client');
 		broadcastMessage: function(originalClientID, anUnencodedMessage, sendToOriginalClient)
 		{
 			var encodedMessage = BISON.encode(anUnencodedMessage);
-			console.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
+//			console.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
 			
 			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
 			for( var clientID in this.clients )

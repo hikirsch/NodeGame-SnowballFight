@@ -50,6 +50,9 @@ var init = function(CharacterController, Rectangle)
 			for(var key in this.players) {
 				aPlayer = this.players[key];
 				aPlayer.tick(this.gameClock);
+				
+				if(aPlayer != this['clientCharacter'])
+					console.log(aPlayer.velocity.x, aPlayer.velocity.y);
 			};
 			
 			var anEntity;
@@ -67,9 +70,29 @@ var init = function(CharacterController, Rectangle)
 			var newCharacter = new CharacterController(aClientID, this.fieldRect);
 			this.players[aClientID] = newCharacter;
 			
-			console.log('(AbstractGameController) adding player:' + aClientID, newCharacter);
+//			console.log('(AbstractGameController) adding player:' + aClientID, newCharacter);
 			return newCharacter;
-		}	
+		},
+		
+		/**
+		*	Events from other players
+		*/
+		onPlayerMoved: function(messageData)
+		{
+			var targetCharacter = this.players[messageData.id];
+			var data = messageData.cmds.data;
+			
+			if(targetCharacter == null) return;
+			
+//			if(sys)
+//				console.log('v', sys.inspect(messageData));
+			
+			targetCharacter.position.x = data.x;
+			targetCharacter.position.y = data.y;
+			targetCharacter.velocity.x = data.vx;
+			targetCharacter.velocity.y = data.vy;
+			//console.log('(AbstractGameController) playerMove:', messageData.cmds.data, this.clientCharacter.position);
+		},
 	});
 }
 
@@ -77,6 +100,7 @@ if (typeof window === 'undefined') {
 	var CharacterController  = require('./CharacterController.js').Class;
 	var Rectangle = require('./CharacterController.js').Class;
 	var COMMANDS = require('./config.js').COMMANDS;
+	var sys = require('sys');
 	exports.Class= init(CharacterController, Rectangle);
 } else {
 	define(['CharacterController', 'lib/Rectangle'], init);
