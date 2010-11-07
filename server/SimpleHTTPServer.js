@@ -22,13 +22,11 @@ var sys		= require('sys');
 
 server = http.createServer(function(req, res)
 {
-	var prefix = '/../client'; // move to class later
-	var path = prefix+url.parse(req.url).pathname;
-	
-	console.log("(SimpleHTTPServer) Serving page:" + path);
-
+	var path = this.prefix+url.parse(req.url).pathname;
 	fs.readFile(__dirname + path, function(err, data)
 	{
+//		console.log("(SimpleHTTPServer) Serving page:" + path);
+		
 		if (err)
 		 return send404(err, res);
 		 
@@ -41,11 +39,7 @@ server = http.createServer(function(req, res)
 		res.write(data, 'utf8');
 		res.end();
 	});
-	
-	console.log('(SimpleHTTPServer) Serving File:' + path);
 });
-
-server.listen(12345);
 
 send404 = function(error, res)
 {
@@ -56,6 +50,11 @@ send404 = function(error, res)
 
 this.setPrefix = function(aPrefix)
 {
-	this.prefix = aPrefix;
+	server.prefix = aPrefix;
 	sys.inspect(this, true, 10);
 };
+
+this.listen = function(port)
+{
+	server.listen(port);
+}

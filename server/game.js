@@ -7,8 +7,12 @@ require('./ServerGameController.js');
 * Optionally creates an HTTP server if dictated in args
 **/
 var createHTTPServer = ArgHelper.getArgumentByNameOrSetDefault('createHTTPServer', 'false');
-if(createHTTPServer)
-	httpServer = require('./SimpleHTTPServer.js').setPrefix('../client');
+if(createHTTPServer) {
+	httpServer = require('./SimpleHTTPServer.js');
+	httpServer.setPrefix('/../client');
+	httpServer.listen(12345);
+	
+}
 
 
 var gameController = new ServerGameController({

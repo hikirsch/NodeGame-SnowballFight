@@ -18,19 +18,22 @@ var init = function(CharacterController, Rectangle)
 		init: function(options) 
 		{
 			var that = this;
-			var desiredFramerate = 55;
-			
 			this.fieldRect = new Rectangle(0, 0, 640, 480);
+			/**
+			* intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
+			* desiredFramerate, is usually 60 or 30 - it's the framerate the game is designed against 
+			*/
+			this.intervalFramerate = 60;	// Try to call our tick function this often
+			this.desiredFramerate = 60;		
 			
 			// Things in the game
-			this.players = {};		// 
-			this.projectiles = {};	// Things fired
-			this.entities = {};		// Everything else, e.g. trees, rocks, powerups, dogs, cats
+			this.players = new SortedLookupTable();			// Active players
+			this.projectiles = new SortedLookupTable();		// Things fired
+			this.entities = new SortedLookupTable();		// Everything else, e.g. trees, rocks, powerups, dogs, cats
 			
 			// Loop
-			this.megaClockCounterThing = 0;
 			this.gameClock = new Date().getTime();
-			this.gameTick = setInterval(function(){that.tick()}, Math.ceil(1000/desiredFramerate));
+			this.gameTick = setInterval(function(){that.tick()}, 1000/this.intervalFramerate);
 		},
 		
 		/**
@@ -38,28 +41,32 @@ var init = function(CharacterController, Rectangle)
 		 */
 		tick: function()
 		{
+			var oldTime = this.gameClock;
 			this.gameClock = new Date().getTime();
+			var delta = (this.gameClock - oldTime); // Note (var framerate = 1000/delta);
 			
-			var aProjectile;
-			for(var key in this.projectiles) {
-				aProjectile = this.projectiles[key];
-				aProjectile.tick(this.gameClock);
-			};
-				
-			var aPlayer;
-			for(var key in this.players) {
-				aPlayer = this.players[key];
-				aPlayer.tick(this.gameClock);
-				
-				if(aPlayer != this['clientCharacter'])
-					console.log(aPlayer.velocity.x, aPlayer.velocity.y);
-			};
+//			console.log('Num players:'+this.players.count());
 			
-			var anEntity;
-			for(var key in this.entities) {
-				anEntity = this.entities[key];
-				anEntity.tick(this.gameClock);
-			};
+			// Framerate independent motion
+			// Any movement should take this value into account, 
+			// otherwise faster machines which can update themselves more accurately will have an advantage
+			var speedFactor = delta / (1000/this.desiredFramerate);
+			if (speedFactor <= 0) speedfactor = 1;
+		 	
+			// Update players
+			this.players.forEach(function(key, player){ 
+				player.tick(speedFactor)
+			}, this);
+			
+			// Update projectiles
+			this.projectiles.forEach(function(key, projectile){ 
+				projectile.tick(speedFactor)
+			}, this);
+			
+			// Update entities
+			this.entities.forEach(function(key, entity){ 
+				entity.tick(speedFactor)
+			}, this);
 		},
 		 
 		/**
@@ -68,9 +75,8 @@ var init = function(CharacterController, Rectangle)
 		shouldAddNewClientWithID: function(aClientID)
 		{
 			var newCharacter = new CharacterController(aClientID, this.fieldRect);
-			this.players[aClientID] = newCharacter;
+			this.players.setObjectForKey(newCharacter, aClientID);
 			
-//			console.log('(AbstractGameController) adding player:' + aClientID, newCharacter);
 			return newCharacter;
 		},
 		
@@ -79,16 +85,22 @@ var init = function(CharacterController, Rectangle)
 		*/
 		onPlayerMoved: function(messageData)
 		{
-			var targetCharacter = this.players[messageData.id];
+			var targetCharacter = this.players._data[messageData.id];
 			var data = messageData.cmds.data;
 			
-			if(targetCharacter == null) return;
+			if(targetCharacter == null) {
+				
+				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(messageData) : data );
+				return;
+			};
+			
 			
 //			if(sys)
 //				console.log('v', sys.inspect(messageData));
-			
-			targetCharacter.position.x = data.x;
-			targetCharacter.position.y = data.y;
+	
+			console.log('b',targetCharacter.velocity.x);		
+//			targetCharacter.position.x -= (targetCharacter.position.x-data.x)*0.05;
+//			targetCharacter.position.y -= (targetCharacter.position.y-data.y)*0.05;
 			targetCharacter.velocity.x = data.vx;
 			targetCharacter.velocity.y = data.vy;
 			//console.log('(AbstractGameController) playerMove:', messageData.cmds.data, this.clientCharacter.position);
@@ -101,7 +113,9 @@ if (typeof window === 'undefined') {
 	var Rectangle = require('./CharacterController.js').Class;
 	var COMMANDS = require('./config.js').COMMANDS;
 	var sys = require('sys');
+	require('./lib/SortedLookupTable.js');
+	
 	exports.Class= init(CharacterController, Rectangle);
 } else {
-	define(['CharacterController', 'lib/Rectangle'], init);
+	define(['CharacterController', 'lib/Rectangle', 'lib/SortedLookupTable'], init);
 }

@@ -40,7 +40,7 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 			if(this.clientCharacter) {
 				this.clientCharacter.handleInput(this.joystick);
 				
-				// create a message and send it off
+				// create a message with our characters updated information and send it off
 				this.netChannel.addMessageToQueue(false,
 				 this.netChannel.composeCommand(COMMANDS.PLAYER_MOVE,
 				  { x: this.clientCharacter.position.x, y: this.clientCharacter.position.y,
@@ -97,8 +97,6 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 		
 		netChannelDidReceiveMessage: function (messageData)
 		{
-//			console.log('ClientGameController.prototype.netChannelDidReceiveMessage', messageData);
-			
 			// TODO: Handle array of 'cmds'
 			this.COMMAND_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData]);
 		},

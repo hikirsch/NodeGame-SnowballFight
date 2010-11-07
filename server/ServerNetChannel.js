@@ -92,7 +92,6 @@ require('./Client');
 				try 
 				{
 					var decodedMessage = BISON.decode(encodedMessage);
-//					console.log("(ServerNetChannel) MessageReceived:" + sys.inspect(decodedMessage) + " From " + connection);
 					
 					if(decodedMessage.cmds instanceof Array == false)
 					{

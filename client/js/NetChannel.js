@@ -104,7 +104,7 @@ define('NetChannel', ['Message'], function(Message) {
 			}
 		}
 		
-		if(hasReliableMessages == false && firstUnreliableMessageFound != null && this.canSend() == true)
+		if(hasReliableMessages == false && firstUnreliableMessageFound != null)
 			this.sendMessage(firstUnreliableMessageFound)
 	};
 	
@@ -194,7 +194,7 @@ define('NetChannel', ['Message'], function(Message) {
 	NetChannel.prototype.adjustRate = function(serverMessage)
 	{
 	// nothing fancy yet
-		this.rate = 1;
+		this.rate = 1;//Math.random()*10+50;
 		
 //		var time = this.realTime - serverMessage.messageTime;
 //		time -= 0.1; // subtract 100ms

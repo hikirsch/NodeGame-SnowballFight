@@ -33,6 +33,7 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.fieldRect = aFieldRectangle;
 			
 			this.view = null;
+			this.hasView = false;
 			
 			// some defaults we use
 			this.position = new Vector(Math.random() * this.fieldRect.width, Math.random() * this.fieldRect.height);
@@ -43,9 +44,10 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.acceleration = new Vector(0, 0); // all combined forced. reset every tick
 			
 			// move constants
-			this.moveSpeed = 0.7; // Apply to acceleration if keys pressed
-			this.maxVelocity = 3.5;			// the fastest i can go
-			this.damping = 0.9; // Bring velocity to 0 ( or near zero anyway :) ) over time
+			this.moveSpeed = 0.7; 		// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
+			
+			this.maxVelocity = 3.5;		// the fastest i can go
+			this.damping = 0.9;			// Bring velocity to 0 ( or near zero anyway :) ) over time
 			
 			this.rotation = 0; // we start pointing up, simply easy b/c of sprites right now
 			this.clientID = aClientID;
@@ -57,26 +59,31 @@ var init = function(Vector, Rectangle, CharacterView)
 		initView: function()
 		{
 			this.view = new CharacterView(this);
+			this.hasView = true;
 			return this.view;
 		},
 		
 		/*
-		*	Input
+		*	Handle keyboard Input
+		*	Note we allow the user to all keys at the same time 
 		*/
-
 		handleInput:function(aJoystick)
 		{
-			if(aJoystick.isHorizontalKeyPressed())
-				this.acceleration.x += (aJoystick.isLeft()) ? -this.moveSpeed : this.moveSpeed;
-				
-			if(aJoystick.isVerticalKeyPressed())
-				this.acceleration.y += (aJoystick.isUp()) ? -this.moveSpeed : this.moveSpeed;
-				
+			// Horizontal acceleration
+			if(aJoystick.isLeft()) this.acceleration.x -= this.moveSpeed;
+			if(aJoystick.isRight()) this.acceleration.x += this.moveSpeed;
+			
+			// Vertical movement
+			if(aJoystick.isUp()) this.acceleration.y -= this.moveSpeed;
+			if(aJoystick.isDown()) this.acceleration.y += this.moveSpeed;
 		},
 		
-		tick: function(gameClockTime)
+		/**
+		*	Update, use delta to create frame independent motion
+		*/
+		tick: function(speedFactor)
 		{
-			this.updatePosition();
+			this.updatePosition(speedFactor);
 
 			// if we have moved
 			var shouldUpdateView = this.position.x != this.prevPosition.oldX || this.position.y != this.prevPosition.oldY;
@@ -104,16 +111,20 @@ var init = function(Vector, Rectangle, CharacterView)
 		},
 	
 
-		updatePosition: function()
+		updatePosition: function(speedFactor)
 		{
-		
+			console.log('ClientID:'+this.clientID,'v:',Math.round(this.velocity.x*1000)/1000,'speedFactor:',Math.round(speedFactor*1000)/1000);
 			// Store previous position
 			this.prevPosition.x = this.position.x;
 			this.prevPosition.y = this.position.y;
 			
+			// Adjust to speedFactor
+			this.acceleration.mul(speedFactor);
+			
 			// Add acceleration to velocity and velocity to the current position
 			this.velocity.add(this.acceleration);
-			this.position.add(this.velocity);
+			this.position.x += this.velocity.x*speedFactor;
+			this.position.y += this.velocity.y*speedFactor;
 			
 			// Wrap horizontal
 			if(this.position.x > this.fieldRect.width) {
@@ -130,10 +141,9 @@ var init = function(Vector, Rectangle, CharacterView)
 			
 			this.velocity.limit(this.maxVelocity);
 			
-//			console.log(this.velocity.x, this.velocity.y);
 			// Apply damping force
-			this.velocity.x *= this.damping;
-			this.velocity.y *= this.damping;
+//			this.velocity.x *= this.damping;
+//			this.velocity.y *= this.damping;
 			
 			this.calculateRotation();
 			this.acceleration.x = this.acceleration.y = 0;
