@@ -17,7 +17,9 @@ Basic Usage:
 */
 
 define( 'NetChannel', ['Message'], function(Message) {
-	
+	/**
+	 * NetChannel!
+	 */
 	function NetChannel( aHost, aPort, aController )
 	{		
 		var that = this; // Forclosures (haw haw)	
@@ -58,12 +60,12 @@ define( 'NetChannel', ['Message'], function(Message) {
 		// When this is empty, then we can send whatever the next one is
 		this.reliableBuffer = null;  // store last sent message here
 		
+		this.clientID = -1;
 		this.connection = new WebSocket( 'ws://' + aHost + ':' + aPort );
 		this.connection.onopen = function() { that.onConnectionOpened(); };
-		this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
-		this.connection.onclose = function() { that.onConnectionClosed(); };
+		this.connection.onmessage = function(messageEvent) { console.log("MESSAGE"); that.onServerMessage(messageEvent); };
+		this.connection.onclose = function() { console.log("CLOSED"); that.onConnectionClosed(); };
 		
-		this.clientID = -1;
 		console.log("(NetChannel) Created with socket: ", this.connection);
 	}
 	
@@ -122,8 +124,8 @@ define( 'NetChannel', ['Message'], function(Message) {
 	};
 	
 	/**
-	* Messages from the FROM / SERVER
-	**/
+	 * Messages from the FROM / SERVER
+	 **/
 	NetChannel.prototype.onConnectionOpened = function ()
 	{
 		// Create a new message with the SERVER_CONNECT command
@@ -134,10 +136,9 @@ define( 'NetChannel', ['Message'], function(Message) {
 	{	
 		var serverMessage = BISON.decode(messageEvent.data);
 		
-//		console.log('(NetChannel) msg-received:', serverMessage);
+		// console.log('(NetChannel) msg-received:', serverMessage);
 		// Catch garbage
-		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) 
-			return;
+		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) return;
 		
 		this.lastReceivedTime = this.realTime;
 		this.adjustRate(serverMessage);
@@ -170,7 +171,6 @@ define( 'NetChannel', ['Message'], function(Message) {
 			// No fancy behavior for other peoples messages for now.
 		}
 			
-		
 		// Every other server message
 		if(serverMessage.cmds.cmd != COMMANDS.SERVER_CONNECT)
 		{
@@ -183,6 +183,7 @@ define( 'NetChannel', ['Message'], function(Message) {
 	NetChannel.prototype.onConnectionClosed = function (serverMessage)
 	{
 		console.log('(NetChannel) onConnectionClosed');
+		this.controller.netChannelDidDisconnect();
 	};
 	
 	// onConnectionOpened is for the WebSocket - however we still don't have a 'clientID', this is what we get back when we were OK'ed and created by the server 
@@ -201,19 +202,19 @@ define( 'NetChannel', ['Message'], function(Message) {
 	*/
 	NetChannel.prototype.adjustRate = function(serverMessage)
 	{
-	// nothing fancy yet
-		this.rate = 1;//Math.random()*10+50;
+		// nothing fancy yet
+		this.rate = 1; // Math.random()*10+50;
 		
-//		var time = this.realTime - serverMessage.messageTime;
-//		time -= 0.1; // subtract 100ms
-//		
-//		if(time <= 0)
-//		{
-//			this.rate = 0.12; /* 60/1000*2 */
-//		}
-//		else
-//		{
-//		}
+		// var time = this.realTime - serverMessage.messageTime;
+		// time -= 0.1; // subtract 100ms
+		// 
+		// if(time <= 0)
+		// {
+		// 	this.rate = 0.12; /* 60/1000*2 */
+		// }
+		// else
+		// {
+		// }
 	}
 	/**
 	* Simple convinience message to compose commands.
@@ -240,7 +241,7 @@ define( 'NetChannel', ['Message'], function(Message) {
 		
 		// Add to array the queue
 		this.messageBuffer[ this.outgoingSequence & this.MESSAGE_BUFFER_MASK ] = message;
-//		console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
+		// console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
 	}
 	
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
@@ -255,7 +256,7 @@ define( 'NetChannel', ['Message'], function(Message) {
 		}
 		
 		this.connection.send( aMessageInstance.encodedSelf() );
-//		console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
+		// console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
 	}
 	
 	return NetChannel;

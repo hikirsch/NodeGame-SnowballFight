@@ -237,7 +237,8 @@ require('./Client');
 		onPlayerJoined: function(connection, aDecodedMessage)
 		{
 			console.log('Player joined!');
-			this.delegate.shouldAddNewClientWithID(connection.$clientID);
+			console.log(aDecodedMessage);
+			this.delegate.addNewClientWithID(connection.$clientID);
 			
 			// Tell all the clients that a player has joined
 			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);

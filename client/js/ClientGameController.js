@@ -11,20 +11,18 @@ Abstract:
 Basic Usage: 
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
-define(['AbstractGameController', 'NetChannel', 'ClientGameView'], function(AbstractGameController, NetChannel, ClientGameView) {
-	return AbstractGameController.extend
-	
+define(['AbstractGameController', 'NetChannel', 'ClientGameView', 'Joystick' ], function(AbstractGameController, NetChannel, ClientGameView) {
+	return AbstractGameController.extend({
 		/**
 		 * init()
 		 */
 		init: function(aHost, aPort) 
 		{
 			this._super(aHost, aPort);
-
-			this.netChannel = new NetChannel(aHost, aPort, this);
+			
 			this.view = new ClientGameView(this);
+			this.netChannel = new NetChannel(aHost, aPort, this);
 			this.joystick = null;
-					
 			this.clientCharacter = null; // Special pointer to our own client character
 			this.nickName = null;
 			
@@ -63,8 +61,9 @@ define(['AbstractGameController', 'NetChannel', 'ClientGameView'], function(Abst
 		/**
 		 * ClientGameView delegate
 		 */
-		shouldJoinGame: function(aNickName)
+		joinGame: function(aNickName)
 		{
+			debugger;
 			this.nickName = aNickName;
 			
 			// Tell the server!
@@ -83,7 +82,7 @@ define(['AbstractGameController', 'NetChannel', 'ClientGameView'], function(Abst
 			// It's us!
 			if(messageData.id == this.netChannel.clientID)
 			{
-				this.joystick = new Joystick();
+				this.joystick = require('Joystick');
 				this.clientCharacter = newCharacter;
 			}
 
@@ -106,17 +105,19 @@ define(['AbstractGameController', 'NetChannel', 'ClientGameView'], function(Abst
 		 **/
 		netChannelDidConnect: function (messageData)
 		{
+			console.log("connected!");
 //			console.log("ClientGameController.prototype.netChannelDidConnect ID:", this.netChannel.clientID, messageData);			
 			// Having some problems with the CSS for now - create the player automatically, instead of waiting for
 			// the view to tell us - this would be the same as if a user clicked 'Join'
 			if(this.clientCharacter == null) 
 			{
-				this.view.joinGame();
+				this.view.showJoinGame();
 			}
 		},
 		
 		netChannelDidReceiveMessage: function (messageData)
 		{
+			console.log("message!");
 			// TODO: Handle array of 'cmds'
 			this.COMMAND_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData]);
 		},

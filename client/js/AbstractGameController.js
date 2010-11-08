@@ -15,9 +15,8 @@ Basic Usage:
 var init = function(CharacterController, Rectangle, Vector)
 {
 	return Class.extend({
-		init: function(options) 
+		init: function(aHost, aPort) 
 		{
-			var that = this;
 			this.fieldRect = new Rectangle(0, 0, 640, 480);
 			/**
 			* intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
@@ -33,6 +32,7 @@ var init = function(CharacterController, Rectangle, Vector)
 			
 			// Loop
 			this.gameClock = new Date().getTime();
+			var that = this;
 			this.gameTick = setInterval(function(){that.tick()}, 1000/this.intervalFramerate);
 		},
 		
@@ -44,8 +44,6 @@ var init = function(CharacterController, Rectangle, Vector)
 			var oldTime = this.gameClock;
 			this.gameClock = new Date().getTime();
 			var delta = (this.gameClock - oldTime); // Note (var framerate = 1000/delta);
-			
-//			console.log('Num players:'+this.players.count());
 			
 			// Framerate independent motion
 			// Any movement should take this value into account, 
@@ -118,7 +116,7 @@ var init = function(CharacterController, Rectangle, Vector)
 			//console.log('(AbstractGameController) playerMove:', messageData.cmds.data, this.clientCharacter.position);
 		}
 	});
-}
+};
 
 if (typeof window === 'undefined') {
 	var CharacterController  = require('./CharacterController.js').Class;

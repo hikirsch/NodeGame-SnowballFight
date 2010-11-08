@@ -14,14 +14,14 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( ['lib/Rectangle'], function(Rectangle) {
+define( [ 'lib/Rectangle', 'HtmlFactory' ], function( Rectangle, htmlFactory ) { 
 	return Class.extend({
 		init: function(aDelegate) 
 		{
 			this.delegate = aDelegate;
 			this.createField();
 		},
-		
+	
 		/**
 		 * Our players and game artifacts get placed into a field. The action is started right here.
 		 */
@@ -30,42 +30,51 @@ define( ['lib/Rectangle'], function(Rectangle) {
 			this.field = $('<div class="game-container"><div class="background"></div></div>')
 							.appendTo('body');
 		},
-		
+	
 		showJoinGame: function()
 		{
-			$("#join-game").show();
-			//$("#join").click(this.joinGame);
+			var that = this;
+			htmlFactory.joinGameDialog()
+				.appendTo("body")
+			
+			$("#join").click(function(e) { that.joinGame(e); });
 		},
-		
+	
 		serverOffline: function()
 		{
-			$("#no-server").show()
+			htmlFactory.serverUnavailableDialog()
+				.appendTo("body");
 		},
-		
-		joinGame: function() 
+	
+		joinGame: function(e) 
 		{
 			var nickname = $("#nickname").val();
-			
+		
 			if( nickname.length <= 0)
 			{
 				nickname = 'NoName';
 			}
-
+		
+			this.delegate.joinGame(nickname);
+			
 			$("#join-game").remove();
 			$("#join").remove();
-			this.delegate.shouldJoinGame(nickname);
+			e.preventDefault();
+			console.log(e);
+			
+			return false;
 		},
-		
+	
 		addCharacter: function(aCharacterView)
 		{
 			aCharacterView.element.appendTo(this.field);
 		},
-		
+	
 		getFieldRect: function()
 		{
 			return new Rectangle(0, 0, this.field.width(), this.field.height());
 		},
-		
+	
 		destroy: function() {
 			this.element.remove();
 		}

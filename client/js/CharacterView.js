@@ -10,25 +10,22 @@ Abstract:
 Basic Usage: 
  	
 */
-var init = function()
-{
+define(function() {
  	return Class.extend({
 		init: function(aCharacterController) 
 		{
 			this.controller = aCharacterController;
 			
-			console.log("(CharacterView)", this.controller);
-			this.createElement();
 			// 8 Images representing directions
-			this.element.addClass( 'smash-tv' );
+			this.createElement()
+				.addClass( 'smash-tv' );
 			
 			// our default position is north
 			this.currentSpriteClass = '45';
 		},
 		
 		createElement: function() {
-			this.nickName = 'nickname';
-			this.element =  $('<div class="character"><p>' + this.nickName + '</p></div>');
+			this.element =  $('<div class="character"><p>' + this.controller.nickName + '</p></div>');
 			return this.element;
 		},
 		
@@ -38,6 +35,7 @@ var init = function()
 				left: this.controller.position.x,
 				top: this.controller.position.y
 			});
+			
 			this.adjustSprite();
 		},
 		
@@ -46,6 +44,7 @@ var init = function()
 		 */
 		adjustSprite: function() {
 			var spriteRotation = Math.floor(this.controller.rotation / 45) * 45;
+			
 			$(this.element)
 				.removeClass( 'rotation-' + this.currentSpriteClass )
 				.addClass( 'rotation-' + spriteRotation );
@@ -57,6 +56,4 @@ var init = function()
 			this.element.remove();
 		},
 	});
-}
-
-define(init);
+});

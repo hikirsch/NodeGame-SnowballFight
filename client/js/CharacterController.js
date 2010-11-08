@@ -40,7 +40,6 @@ var init = function(Vector, Rectangle, CharacterView)
 			
 			this.serverPosition = new Vector(this.position.x, this.position.y);
 			
-			
 			// movement properties
 			this.velocity = new Vector(0,0); // rolling velocity
 			this.acceleration = new Vector(0, 0); // all combined forced. reset every tick
@@ -94,7 +93,6 @@ var init = function(Vector, Rectangle, CharacterView)
 				this.view.updatePositionAndRotation(); 
 			}
 		},
-		
 
 		/**
 		 * Based on the velocity that we're going at, we calculate the angle that we should be currently pointing at since
@@ -108,13 +106,11 @@ var init = function(Vector, Rectangle, CharacterView)
 			
 			this.rotation = 57.2957795 * Math.atan2(this.velocity.x,this.velocity.y) - 180;
 			if(this.rotation < 0) this.rotation *= -1;  //avoid slow math.abs call
-			
 		},
-	
 
 		updatePosition: function(speedFactor)
 		{
-//			console.log('ClientID:'+this.clientID,'v:',Math.round(this.velocity.x*1000)/1000,'speedFactor:',Math.round(speedFactor*1000)/1000);
+			// console.log('ClientID:'+this.clientID,'v:',Math.round(this.velocity.x*1000)/1000,'speedFactor:',Math.round(speedFactor*1000)/1000);
 			// Store previous position
 			this.prevPosition.x = this.position.x;
 			this.prevPosition.y = this.position.y;
@@ -124,20 +120,26 @@ var init = function(Vector, Rectangle, CharacterView)
 			
 			// Add acceleration to velocity and velocity to the current position
 			this.velocity.add(this.acceleration);
-			this.position.x += this.velocity.x*speedFactor;
-			this.position.y += this.velocity.y*speedFactor;
+			this.position.x += this.velocity.x * speedFactor;
+			this.position.y += this.velocity.y * speedFactor;
 			
 			// Wrap horizontal
-			if(this.position.x > this.fieldRect.width) {
+			if(this.position.x > this.fieldRect.width)
+			{
 				this.position.x = 0;
-			} else if(this.position.x < 0) { // use view width
+			}
+			else if(this.position.x < 0)
+			{ // use view width
 				this.position.x = this.fieldRect.width;
 			}
 			
 			// Wrap veritical
-			if(this.y > this.fieldRect.height) {
+			if(this.y > this.fieldRect.height)
+			{
 				this.position.y = 0;
-			} else if(this.y < 0) {
+			}
+			else if(this.y < 0)
+			{
 				this.position.y = this.fieldRect.height;
 			}
 			
@@ -150,11 +152,7 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.calculateRotation();
 			this.acceleration.x = this.acceleration.y = 0;
 		},
-		
 
-		/**
-		*	ClientGameView delegate
-		*/
 		/*
 		* Sets the rectangle of the field.
 		* Tells the view so it can adjust itself
