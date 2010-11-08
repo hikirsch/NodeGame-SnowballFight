@@ -39,6 +39,9 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.position = new Vector(Math.random() * this.fieldRect.width, Math.random() * this.fieldRect.height);
 			this.prevPosition = new Vector();
 			
+			this.serverPosition = new Vector(this.position.x, this.position.y);
+			
+			
 			// movement properties
 			this.velocity = new Vector(0,0); // rolling velocity
 			this.acceleration = new Vector(0, 0); // all combined forced. reset every tick
@@ -113,7 +116,7 @@ var init = function(Vector, Rectangle, CharacterView)
 
 		updatePosition: function(speedFactor)
 		{
-			console.log('ClientID:'+this.clientID,'v:',Math.round(this.velocity.x*1000)/1000,'speedFactor:',Math.round(speedFactor*1000)/1000);
+//			console.log('ClientID:'+this.clientID,'v:',Math.round(this.velocity.x*1000)/1000,'speedFactor:',Math.round(speedFactor*1000)/1000);
 			// Store previous position
 			this.prevPosition.x = this.position.x;
 			this.prevPosition.y = this.position.y;
