@@ -12,7 +12,7 @@ Abstract:
 Basic Usage: 
 	 See subclasses
 */
-var init = function(CharacterController, Rectangle)
+var init = function(CharacterController, Rectangle, Vector)
 {
 	return Class.extend({
 		init: function(options) 
@@ -95,12 +95,24 @@ var init = function(CharacterController, Rectangle)
 			};
 			
 			
+			
+			targetCharacter.serverPosition.x = data.x;
+			targetCharacter.serverPosition.y = data.y;
+			console.log(targetCharacter.serverPosition.x,targetCharacter.serverPosition.y);
+			if (Math.abs(targetCharacter.position.x - data.x) > 0.01 || Math.abs(targetCharacter.position.y - targetCharacter.serverPosition.y) > 0.01)
+			{
+				var difference = new Vector(targetCharacter.serverPosition.x-targetCharacter.position.x, targetCharacter.serverPosition.y-targetCharacter.position.y);
+				difference.mul(0.1);
+				
+			 	targetCharacter.position.add(difference);
+			}
+			
+			
 //			if(sys)
 //				console.log('v', sys.inspect(messageData));
 	
-			console.log('b',targetCharacter.velocity.x);		
-//			targetCharacter.position.x -= (targetCharacter.position.x-data.x)*0.05;
-//			targetCharacter.position.y -= (targetCharacter.position.y-data.y)*0.05;
+//			console.log('b',targetCharacter.velocity.x);		
+
 			targetCharacter.velocity.x = data.vx;
 			targetCharacter.velocity.y = data.vy;
 			//console.log('(AbstractGameController) playerMove:', messageData.cmds.data, this.clientCharacter.position);
@@ -111,11 +123,12 @@ var init = function(CharacterController, Rectangle)
 if (typeof window === 'undefined') {
 	var CharacterController  = require('./CharacterController.js').Class;
 	var Rectangle = require('./CharacterController.js').Class;
+	var Vector = require('./lib/Vector.js').Class
 	var COMMANDS = require('./config.js').COMMANDS;
 	var sys = require('sys');
 	require('./lib/SortedLookupTable.js');
 	
-	exports.Class= init(CharacterController, Rectangle);
+	exports.Class= init(CharacterController, Rectangle, Vector);
 } else {
-	define(['CharacterController', 'lib/Rectangle', 'lib/SortedLookupTable'], init);
+	define(['CharacterController', 'lib/Rectangle', 'lib/Vector', 'lib/SortedLookupTable'], init);
 }
