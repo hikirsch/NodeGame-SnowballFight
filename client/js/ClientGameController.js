@@ -16,9 +16,8 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 	return AbstractGameController.extend({
 		init: function(aHost, aPort) {
 			this._super(aHost, aPort);
-			this.superClass = this._super;
 			 
-			this.netChannel = new NetChannel(aHost, aPort, this);				
+			this.netChannel = new NetChannel(aHost, aPort, this);
 			this.view = new ClientGameView(this);
 			this.input = null;
 					

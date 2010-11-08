@@ -23,7 +23,7 @@ Version:
 */
 
 var sys = require('sys');
-var ArgHelper 	= require('./lib/ArgHelper.js');
+var ArgHelper = require('./lib/ArgHelper.js');
 var AbstractClassController = require('./../client/js/AbstractGameController.js').Class;
 var COMMANDS = require('./../client/js/config.js').COMMANDS;
 

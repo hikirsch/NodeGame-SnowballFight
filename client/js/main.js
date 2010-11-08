@@ -1,7 +1,7 @@
 var requiredModules = [];
 requiredModules.push('ClientGameController');
-requiredModules.push('./config.js');
-requiredModules.push('./Joystick.js');
+requiredModules.push('config');
+requiredModules.push('Joystick');
 
 
 require(requiredModules, function(ClientGameController) 
@@ -12,4 +12,4 @@ require(requiredModules, function(ClientGameController)
     {
 	   var gameController = new ClientGameController(HOST, PORT);
     })
-}, null, '/js/');
+});

@@ -10,8 +10,7 @@ var createHTTPServer = ArgHelper.getArgumentByNameOrSetDefault('createHTTPServer
 if(createHTTPServer) {
 	httpServer = require('./SimpleHTTPServer.js');
 	httpServer.setPrefix('/../client');
-	httpServer.listen(12345);
-	
+	httpServer.listen(12345);	
 }
 
 
