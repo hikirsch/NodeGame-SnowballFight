@@ -63,8 +63,8 @@ define( 'NetChannel', ['Message'], function(Message) {
 		this.clientID = -1;
 		this.connection = new WebSocket( 'ws://' + aHost + ':' + aPort );
 		this.connection.onopen = function() { that.onConnectionOpened(); };
-		this.connection.onmessage = function(messageEvent) { console.log("MESSAGE"); that.onServerMessage(messageEvent); };
-		this.connection.onclose = function() { console.log("CLOSED"); that.onConnectionClosed(); };
+		this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
+		this.connection.onclose = function() { that.onConnectionClosed(); };
 		
 		console.log("(NetChannel) Created with socket: ", this.connection);
 	}
@@ -160,7 +160,9 @@ define( 'NetChannel', ['Message'], function(Message) {
 			
 			// Free up reliable buffer to allow for new message to be sent
 			if(this.reliableBuffer === message)
+			{
 				this.reliableBuffer = null;
+			}
 				
 			// Remove from memory
 			delete this.messageBuffer[messageIndex];

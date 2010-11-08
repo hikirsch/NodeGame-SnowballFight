@@ -54,6 +54,11 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.clientID = aClientID;
 		},
 		
+		setNickName: function( aNickName ) 
+		{
+			this.nickName = aNickName;
+		},
+		
 		/**
 		* Only called by ClientGameController
 		*/

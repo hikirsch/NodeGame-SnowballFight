@@ -1,4 +1,5 @@
 @import url( reset.css );
+
 html, body { overflow: hidden; height: 100%; font-family: Arial; font-size: 12px; }
 
 .site-message { position: absolute; bottom: 200px; width: 100%; }

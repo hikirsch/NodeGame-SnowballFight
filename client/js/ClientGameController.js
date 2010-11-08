@@ -22,9 +22,9 @@ define(['AbstractGameController', 'NetChannel', 'ClientGameView', 'Joystick' ], 
 			
 			this.view = new ClientGameView(this);
 			this.netChannel = new NetChannel(aHost, aPort, this);
+			
 			this.joystick = null;
 			this.clientCharacter = null; // Special pointer to our own client character
-			this.nickName = null;
 			
 			this.COMMAND_TO_FUNCTION = {};
 			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onClientJoined;
@@ -54,7 +54,7 @@ define(['AbstractGameController', 'NetChannel', 'ClientGameView', 'Joystick' ], 
 				});
 				
 				// create a message with our characters updated information and send it off
-				this.netChannel.addMessageToQueue(false, newMessage );
+				this.netChannel.addMessageToQueue( false, newMessage );
 			}
 		},
 		
@@ -63,24 +63,25 @@ define(['AbstractGameController', 'NetChannel', 'ClientGameView', 'Joystick' ], 
 		 */
 		joinGame: function(aNickName)
 		{
-			debugger;
-			this.nickName = aNickName;
+			// the message to send to the server
+			var message = this.netChannel.composeCommand( COMMANDS.PLAYER_JOINED, { nickName: aNickName } );
 			
 			// Tell the server!
-			this.netChannel.addMessageToQueue(true, this.netChannel.composeCommand(COMMANDS.PLAYER_JOINED, null) );
+			this.netChannel.addMessageToQueue( true, message );
 		},
 		
-		onClientJoined: function(messageData)
+		onClientJoined: function(clientID, data)
 		{
 			// Let our super class create the character			
-			var newCharacter = this.addNewClientWithID(messageData.id);
+			var newCharacter = this.addNewClientWithID(clientID);
+			newCharacter.setNickName( data.nickName );
 			
 			// Grab the view from the character and add it to our GameView
 			var newCharacterView = newCharacter.initView();
 			this.view.addCharacter(newCharacterView);
 			
 			// It's us!
-			if(messageData.id == this.netChannel.clientID)
+			if(clientID == this.netChannel.clientID)
 			{
 				this.joystick = require('Joystick');
 				this.clientCharacter = newCharacter;
@@ -105,26 +106,19 @@ define(['AbstractGameController', 'NetChannel', 'ClientGameView', 'Joystick' ], 
 		 **/
 		netChannelDidConnect: function (messageData)
 		{
-			console.log("connected!");
-//			console.log("ClientGameController.prototype.netChannelDidConnect ID:", this.netChannel.clientID, messageData);			
-			// Having some problems with the CSS for now - create the player automatically, instead of waiting for
-			// the view to tell us - this would be the same as if a user clicked 'Join'
-			if(this.clientCharacter == null) 
-			{
-				this.view.showJoinGame();
-			}
+			this.view.showJoinGame();
 		},
 		
 		netChannelDidReceiveMessage: function (messageData)
 		{
-			console.log("message!");
+			console.log("received message: ", messageData);
 			// TODO: Handle array of 'cmds'
-			this.COMMAND_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData]);
+			// TODO: prep for cmds: send only the client ID and the message data
+			this.COMMAND_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData.id, messageData.cmds.data]);
 		},
 		
 		netChannelDidDisconnect: function (messageData)
 		{
-			console.log('ClientGameController.prototype.netChannelDidDisconnect', messageData);
 			this.view.serverOffline();
 		}
 	});

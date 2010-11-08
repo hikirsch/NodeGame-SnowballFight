@@ -48,21 +48,18 @@ define( [ 'lib/Rectangle', 'HtmlFactory' ], function( Rectangle, htmlFactory ) {
 	
 		joinGame: function(e) 
 		{
-			var nickname = $("#nickname").val();
+			var nickName = $("#nickname").val();
 		
-			if( nickname.length <= 0)
+			if( nickName.length <= 0)
 			{
-				nickname = 'NoName';
+				nickName = 'NoName';
 			}
 		
-			this.delegate.joinGame(nickname);
+			this.delegate.joinGame(nickName);
 			
 			$("#join-game").remove();
-			$("#join").remove();
-			e.preventDefault();
-			console.log(e);
 			
-			return false;
+			e.preventDefault();
 		},
 	
 		addCharacter: function(aCharacterView)

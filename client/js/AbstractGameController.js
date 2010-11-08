@@ -66,7 +66,7 @@ var init = function(CharacterController, Rectangle, Vector)
 				entity.tick(speedFactor)
 			}, this);
 		},
-		 
+		
 		/**
 		* Adding and removing players
 		*/
@@ -76,6 +76,11 @@ var init = function(CharacterController, Rectangle, Vector)
 			this.players.setObjectForKey(newCharacter, aClientID);
 			
 			return newCharacter;
+		},
+		
+		setNickNameForClientID: function(aNickName, aClientID) 
+		{
+			this.players.objectForKey(aClientID).setNickName(aNickName);
 		},
 		
 		/**
@@ -96,7 +101,7 @@ var init = function(CharacterController, Rectangle, Vector)
 			
 			targetCharacter.serverPosition.x = data.x;
 			targetCharacter.serverPosition.y = data.y;
-			console.log(targetCharacter.serverPosition.x,targetCharacter.serverPosition.y);
+			// console.log(targetCharacter.serverPosition.x,targetCharacter.serverPosition.y);
 			if (Math.abs(targetCharacter.position.x - data.x) > 0.01 || Math.abs(targetCharacter.position.y - targetCharacter.serverPosition.y) > 0.01)
 			{
 				var difference = new Vector(targetCharacter.serverPosition.x-targetCharacter.position.x, targetCharacter.serverPosition.y-targetCharacter.position.y);
