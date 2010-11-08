@@ -33,7 +33,6 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.fieldRect = aFieldRectangle;
 			
 			this.view = null;
-			this.hasView = false;
 			
 			// some defaults we use
 			this.position = new Vector(Math.random() * this.fieldRect.width, Math.random() * this.fieldRect.height);
@@ -47,7 +46,7 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.moveSpeed = 0.7; 		// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
 			
 			this.maxVelocity = 3.5;		// the fastest i can go
-			this.damping = 0.9;			// Bring velocity to 0 ( or near zero anyway :) ) over time
+			this.damping = 0.96;			// Bring velocity to 0 ( or near zero anyway :) ) over time
 			
 			this.rotation = 0; // we start pointing up, simply easy b/c of sprites right now
 			this.clientID = aClientID;
@@ -59,7 +58,6 @@ var init = function(Vector, Rectangle, CharacterView)
 		initView: function()
 		{
 			this.view = new CharacterView(this);
-			this.hasView = true;
 			return this.view;
 		},
 		
@@ -132,6 +130,7 @@ var init = function(Vector, Rectangle, CharacterView)
 			} else if(this.position.x < 0) { // use view width
 				this.position.x = this.fieldRect.width;
 			}
+			
 			// Wrap veritical
 			if(this.y > this.fieldRect.height) {
 				this.position.y = 0;
@@ -142,8 +141,8 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.velocity.limit(this.maxVelocity);
 			
 			// Apply damping force
-//			this.velocity.x *= this.damping;
-//			this.velocity.y *= this.damping;
+			this.velocity.x *= this.damping;
+			this.velocity.y *= this.damping;
 			
 			this.calculateRotation();
 			this.acceleration.x = this.acceleration.y = 0;

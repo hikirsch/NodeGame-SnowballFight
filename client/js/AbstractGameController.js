@@ -52,7 +52,7 @@ var init = function(CharacterController, Rectangle)
 			// otherwise faster machines which can update themselves more accurately will have an advantage
 			var speedFactor = delta / (1000/this.desiredFramerate);
 			if (speedFactor <= 0) speedfactor = 1;
-		 	
+
 			// Update players
 			this.players.forEach(function(key, player){ 
 				player.tick(speedFactor)
@@ -72,7 +72,7 @@ var init = function(CharacterController, Rectangle)
 		/**
 		* Adding and removing players
 		*/
-		shouldAddNewClientWithID: function(aClientID)
+		addNewClientWithID: function(aClientID)
 		{
 			var newCharacter = new CharacterController(aClientID, this.fieldRect);
 			this.players.setObjectForKey(newCharacter, aClientID);
@@ -88,8 +88,8 @@ var init = function(CharacterController, Rectangle)
 			var targetCharacter = this.players._data[messageData.id];
 			var data = messageData.cmds.data;
 			
-			if(targetCharacter == null) {
-				
+			if(targetCharacter == null) 
+			{
 				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(messageData) : data );
 				return;
 			};
@@ -104,7 +104,7 @@ var init = function(CharacterController, Rectangle)
 			targetCharacter.velocity.x = data.vx;
 			targetCharacter.velocity.y = data.vy;
 			//console.log('(AbstractGameController) playerMove:', messageData.cmds.data, this.clientCharacter.position);
-		},
+		}
 	});
 }
 

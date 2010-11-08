@@ -19,10 +19,11 @@ var init = function()
 			this.width = width;
 			this.height = height;
 		},
-	   toString: function()
-	   {
-	       return '[Rectangle(' + this.x + ', ' + this.y + ',' + this.width + ',' + this.height + ')]';
-	   }
+		
+		toString: function()
+		{
+		    return '[Rectangle(' + this.x + ', ' + this.y + ',' + this.width + ',' + this.height + ')]';
+		}
 	});
 }
 

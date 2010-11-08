@@ -11,47 +11,58 @@ Abstract:
 Basic Usage: 
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
-var ClientGameController = function(AbstractGameController, NetChannel, ClientGameView)
-{
-	return AbstractGameController.extend({
-		init: function(aHost, aPort) {
+define(['AbstractGameController', 'NetChannel', 'ClientGameView'], function(AbstractGameController, NetChannel, ClientGameView) {
+	return AbstractGameController.extend
+	
+		/**
+		 * init()
+		 */
+		init: function(aHost, aPort) 
+		{
 			this._super(aHost, aPort);
-			 
+
 			this.netChannel = new NetChannel(aHost, aPort, this);
 			this.view = new ClientGameView(this);
-			this.input = null;
+			this.joystick = null;
 					
 			this.clientCharacter = null; // Special pointer to our own client character
 			this.nickName = null;
 			
 			this.COMMAND_TO_FUNCTION = {};
 			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onClientJoined;
-			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
-			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_MOVE] = this.onPlayerMoved; // Not implemented yet
+			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.onRemoveClient;
+			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_FIRE] = this.genericCommand;
 		},
 		
+		/**
+		 * tick()
+		 */
 		tick: function()
 		{
 			this._super();
 			this.netChannel.tick(this.gameClock);
 			
-			if(this.clientCharacter) {
+			if(this.clientCharacter)
+			{
 				this.clientCharacter.handleInput(this.joystick);
 				
+				var newMessage = this.netChannel.composeCommand( COMMANDS.PLAYER_MOVE, { 
+					x: this.clientCharacter.position.x, 
+					y: this.clientCharacter.position.y,
+					vx: this.clientCharacter.velocity.x, 
+					vy: this.clientCharacter.velocity.y,
+					r: this.clientCharacter.rotation
+				});
+				
 				// create a message with our characters updated information and send it off
-				this.netChannel.addMessageToQueue(false,
-				 this.netChannel.composeCommand(COMMANDS.PLAYER_MOVE,
-				  { x: this.clientCharacter.position.x, y: this.clientCharacter.position.y,
-				  	vx: this.clientCharacter.velocity.x, vy: this.clientCharacter.velocity.y,
-				  	r: this.clientCharacter.rotation
-				  }));
+				this.netChannel.addMessageToQueue(false, newMessage );
 			}
 		},
 		
 		/**
-		*	ClientGameView delegate
-		*/
+		 * ClientGameView delegate
+		 */
 		shouldJoinGame: function(aNickName)
 		{
 			this.nickName = aNickName;
@@ -63,35 +74,45 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 		onClientJoined: function(messageData)
 		{
 			// Let our super class create the character			
-			var newCharacter = this.shouldAddNewClientWithID(messageData.id);
+			var newCharacter = this.addNewClientWithID(messageData.id);
+			
+			// Grab the view from the character and add it to our GameView
+			var newCharacterView = newCharacter.initView();
+			this.view.addCharacter(newCharacterView);
 			
 			// It's us!
 			if(messageData.id == this.netChannel.clientID)
 			{
 				this.joystick = new Joystick();
 				this.clientCharacter = newCharacter;
-				console.log("(ClientGameController)", this.joystick);
 			}
-			
-			// Grab the view from the character and add it to our GameView
-			var newCharacterView = newCharacter.initView();
-			this.view.addCharacter(newCharacterView);
 
-			return newCharacter
+			return newCharacter;
+		},
+		
+		onRemoveClient: function() 
+		{
+			console.log( "onRemoveClient: ", arguments );
+		},
+		
+		genericCommand: function() {
+			console.log('genericCommand: ', arguments)
 		},
 		
 		/**
-		* These methods When netchannel recieves and validates a message
-		* Anything we receive we can assume is valid
-		* This should be left more "low level" - so logic should not be added here other than mapping messages to functions
-		**/
+		 * These methods When netchannel recieves and validates a message
+		 * Anything we receive we can assume is valid
+		 * This should be left more "low level" - so logic should not be added here other than mapping messages to functions
+		 **/
 		netChannelDidConnect: function (messageData)
 		{
 //			console.log("ClientGameController.prototype.netChannelDidConnect ID:", this.netChannel.clientID, messageData);			
 			// Having some problems with the CSS for now - create the player automatically, instead of waiting for
-			// The view to tell us - this would be the same as if a user clicked 'Join'
-			if(this.clientCharacter == null)
+			// the view to tell us - this would be the same as if a user clicked 'Join'
+			if(this.clientCharacter == null) 
+			{
 				this.view.joinGame();
+			}
 		},
 		
 		netChannelDidReceiveMessage: function (messageData)
@@ -104,8 +125,6 @@ var ClientGameController = function(AbstractGameController, NetChannel, ClientGa
 		{
 			console.log('ClientGameController.prototype.netChannelDidDisconnect', messageData);
 			this.view.serverOffline();
-		},
+		}
 	});
-}
-// RequireJS
-define(['AbstractGameController', 'NetChannel', 'ClientGameView'], ClientGameController);
+});

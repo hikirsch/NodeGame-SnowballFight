@@ -16,15 +16,16 @@ Abstract:
 Basic Usage: 
 */
 
-define('NetChannel', ['Message'], function(Message) {
+define( 'NetChannel', ['Message'], function(Message) {
 	
-	function NetChannel(aHost, aPort, aController)
+	function NetChannel( aHost, aPort, aController )
 	{		
 		var that = this; // Forclosures (haw haw)	
 		
 		// Make sure this controller is valid before moving forward.
 		// Function itself
-		if(this.validateController(aController) == false) {
+		if( this.validateController(aController) === false ) 
+		{
 			console.log("(NetChannel) Controller " + aController + " is undefined or does not conform to the valid methods. Ignored."); 	 
 			return;
 		};
@@ -37,13 +38,13 @@ define('NetChannel', ['Message'], function(Message) {
 	
 		// Connection timings
 		this.latency = 1000; // lag right now
-		// 
+		//
 		this.realTime = -1;
 		this.lastSentTime = -1;
 		this.lastRecievedTime = -1; // Last time we received a message
+		
 		// When we  can send another message to prevent flooding - determined by 'rate' variable
 		this.clearTime = -1; // if realtime > nc->cleartime, free to go
-		
 		this.rate = 5;	// seconds / byte
 		
 		this.incomingSequence = 0;
@@ -57,7 +58,7 @@ define('NetChannel', ['Message'], function(Message) {
 		// When this is empty, then we can send whatever the next one is
 		this.reliableBuffer = null;  // store last sent message here
 		
-		this.connection = new WebSocket('ws://' + aHost + ':' + aPort);
+		this.connection = new WebSocket( 'ws://' + aHost + ':' + aPort );
 		this.connection.onopen = function() { that.onConnectionOpened(); };
 		this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
 		this.connection.onclose = function() { that.onConnectionClosed(); };
@@ -72,10 +73,10 @@ define('NetChannel', ['Message'], function(Message) {
 	*/
 	NetChannel.prototype.validateController = function(aController)
 	{
-		var isValid = true; // Assume true
-		if(aController &&  aController.netChannelDidConnect && aController.netChannelDidReceiveMessage && aController.netChannelDidDisconnect) {
-		} else {
-			isValid = false;
+		var isValid = false; // Assume false
+		if(aController &&  aController.netChannelDidConnect && aController.netChannelDidReceiveMessage && aController.netChannelDidDisconnect) 
+		{
+			isValid = true;
 		}
 		
 		return isValid;
@@ -99,21 +100,25 @@ define('NetChannel', ['Message'], function(Message) {
 				hasReliableMessages = true;
 				this.sendMessage(message);
 				break;
-			} else {
+			}
+			else 
+			{
 				firstUnreliableMessageFound = message;
 			}
 		}
 		
 		if(hasReliableMessages == false && firstUnreliableMessageFound != null)
+		{
 			this.sendMessage(firstUnreliableMessageFound)
+		}
 	};
 	
 	/**
-	* Determins if it's ok for the client to send a unreliable new message yet
+	* Determines if it's ok for the client to send a unreliable new message yet
 	*/
 	NetChannel.prototype.canSend = function ()
 	{
-		return (this.realTime > this.lastSentTime+this.rate);
+		return ( this.realTime > this.lastSentTime + this.rate );
 	};
 	
 	/**
@@ -139,7 +144,8 @@ define('NetChannel', ['Message'], function(Message) {
 			
 		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
 		// So we have to put it here, because otherwise e don't actually have a true client ID yet so the code below will not work
-		if(serverMessage.cmds.cmd == COMMANDS.SERVER_CONNECT) {
+		if(serverMessage.cmds.cmd == COMMANDS.SERVER_CONNECT)
+		{
 			this.onServerDidAcceptConnection(serverMessage);
 		}
 		
@@ -158,13 +164,16 @@ define('NetChannel', ['Message'], function(Message) {
 			// Remove from memory
 			delete this.messageBuffer[messageIndex];
 			delete message;
-		} else {
+		}
+		else
+		{
 			// No fancy behavior for other peoples messages for now.
 		}
 			
 		
 		// Every other server message
-		if(serverMessage.cmds.cmd != COMMANDS.SERVER_CONNECT) {
+		if(serverMessage.cmds.cmd != COMMANDS.SERVER_CONNECT)
+		{
 			this.controller.netChannelDidReceiveMessage(serverMessage);
 		}
 		
@@ -184,8 +193,7 @@ define('NetChannel', ['Message'], function(Message) {
 		
 		console.log('(NetChannel) Setting clientID to', this.clientID);
 		
-		this.controller.netChannelDidConnect(serverMessage);		
-		
+		this.controller.netChannelDidConnect(serverMessage);
 	};
 	
 	/**
@@ -224,14 +232,14 @@ define('NetChannel', ['Message'], function(Message) {
 	/**
 	* Sending Messages
 	*/
-	NetChannel.prototype.addMessageToQueue = function(isReliable, anUnencodedMessage)
+	NetChannel.prototype.addMessageToQueue = function( isReliable, anUnencodedMessage )
 	{
 		this.outgoingSequence += 1;
-		var message = new Message(this.outgoingSequence, isReliable, anUnencodedMessage);
+		var message = new Message( this.outgoingSequence, isReliable, anUnencodedMessage );
 		message.clientID = this.clientID;
 		
 		// Add to array the queue
-		this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK] = message;
+		this.messageBuffer[ this.outgoingSequence & this.MESSAGE_BUFFER_MASK ] = message;
 //		console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
 	}
 	
@@ -241,10 +249,12 @@ define('NetChannel', ['Message'], function(Message) {
 		
 		this.lastSentTime = this.realTime;
 		
-		if(aMessageInstance.isReliable)
+		if( aMessageInstance.isReliable )
+		{
 			this.reliableBuffer = aMessageInstance; // Block new connections
+		}
 		
-		this.connection.send(aMessageInstance.encodedSelf());
+		this.connection.send( aMessageInstance.encodedSelf() );
 //		console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
 	}
 	

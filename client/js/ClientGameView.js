@@ -14,15 +14,13 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-var init = function(Rectangle)
-{
+define( ['lib/Rectangle'], function(Rectangle) {
 	return Class.extend({
 		init: function(aDelegate) 
 		{
 			this.delegate = aDelegate;
 			this.createField();
 		},
-		
 		
 		/**
 		 * Our players and game artifacts get placed into a field. The action is started right here.
@@ -48,7 +46,8 @@ var init = function(Rectangle)
 		{
 			var nickname = $("#nickname").val();
 			
-			if( nickname.length <= 0) {
+			if( nickname.length <= 0)
+			{
 				nickname = 'NoName';
 			}
 
@@ -69,8 +68,6 @@ var init = function(Rectangle)
 		
 		destroy: function() {
 			this.element.remove();
-		},
+		}
 	});
-}
-
-define(['lib/Rectangle'], init);
+});
