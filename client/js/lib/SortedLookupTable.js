@@ -91,8 +91,7 @@ var init = (function(){
 	};
 	
 	return SortedLookupTable;
-})();
-
+});
 
 if (typeof window === 'undefined') { // Node.js
 	exports.Class = init();

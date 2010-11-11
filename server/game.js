@@ -13,7 +13,6 @@ if(createHTTPServer) {
 	httpServer.listen(12345);	
 }
 
-
 var gameController = new ServerGameController({
     'port': Math.abs(ArgHelper.getArgumentByNameOrSetDefault('port', 28785)),
     'status': false,

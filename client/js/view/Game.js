@@ -14,7 +14,7 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( [ 'lib/Rectangle', 'HtmlFactory' ], function( Rectangle, htmlFactory ) { 
+define( [ 'lib/Rectangle', 'factories/Html' ], function( Rectangle, htmlFactory ) { 
 	return Class.extend({
 		init: function(aDelegate) 
 		{
