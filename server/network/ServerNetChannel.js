@@ -23,54 +23,61 @@ Basic Usage:
 */
 
 var sys = require('sys');
-var ws = require('./lib/ws');
-var BISON = require('./lib/bison');
-var COMMANDS = require('./../client/js/config.js').COMMANDS;
-require('./lib/Logger');
-require('./Client');
+var ws = require('./ws.js');
+var BISON = require('../lib/bison.js');
+var Logger = require('../lib/Logger.js').Class;
+var Client = require('../model/Client.js').Class;
 
 (function(){
-	this.ServerNetChannel = Class.extend({
-		init: function(aDelegate, options) 
+	exports.Class = Class.extend({
+		init: function(options) 
 		{
+			// our configuration
+			var config = options.config;
+			
 			// Delegation pattern, should avoid subclassing
-			this.delegate = aDelegate;
+			this.delegate = options.delegate;
 			
 			// Connection options
-			this.maxChars = options.maxChars || 128;
-			this.maxClients = options.maxClients || 64;
-			this.port = options.port || 8000;
-			this.showStatus = options.status === false ? false : true;
-			
+			this.maxChars = config.maxChars || 128;
+			this.maxClients = config.maxClients || 64;
+			this.port = config.PORT || 8000;
+			this.showStatus = config.status === false ? false : true;
+
 			// Info
-			console.log(Logger);
-		    this.logger = new Logger(this);
-		    
+			this.logger = new Logger( options.serverConfig, this.delegate, this );
+
+			this.bytes = {
+				sent: 0,
+				received: 0
+			}
+
 		    // Connections
 		    this.clients = {};		// Everyone connected
 		    this.clientCount = 0;	// Length of above
 		    this.nextClientID = 0;		// UUID for next client
 		    
 		    // Recording
-		    this.record = options.record || false;
-		    this.recordFile = options.recordFile || './record[date].js';
+		    this.record = config.record || false;
+		    this.recordFile = config.recordFile || './record[date].js';
 		    this.recordData = [];
 		    
 		    // Map COMMAND values to functions to avoid a giant switch statement as this expands
 		    this.COMMAND_TO_FUNCTION = {};
-		    this.COMMAND_TO_FUNCTION[COMMANDS.SERVER_CONNECT] = this.onClientConnected;
-		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onPlayerJoined;
-		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
-		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_MOVE] = this.onGenericPlayerCommand;
-		    this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_FIRE] = this.genericCommand;
+
+		    this.COMMAND_TO_FUNCTION[config.COMMANDS.SERVER_CONNECT] = this.onClientConnected;
+		    this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_JOINED] = this.onPlayerJoined;
+		    this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
+		    this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_MOVE] = this.onGenericPlayerCommand;
+		    this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_FIRE] = this.genericCommand;
 		
-		    this.initAndStartWebSocket(options);
+		    this.initAndStartWebSocket(config);
 		}, 
 		
 		/**
-		* Initialize and start the websocket server.
-		* With this set up we should be abl to move to Socket.io easily if we need to
-		*/
+		 * Initialize and start the websocket server.
+		 * With this set up we should be abl to move to Socket.io easily if we need to
+		 */
 		initAndStartWebSocket: function(options)
 		{
 			// START THE WEB-SOCKET
@@ -79,8 +86,8 @@ require('./Client');
 			
 			this.$.onConnect = function(connection)
 			{
-				console.log("(ServerNetChannel) onConnect:",connection);
-				that.logger.push("(ServerNetChannel) UserConnected:", connection);
+				that.logger.log("(ServerNetChannel) onConnect:", connection);
+				that.logger.log("(ServerNetChannel) UserConnected:", connection);
 			};
 			
 			/**
@@ -91,6 +98,8 @@ require('./Client');
 			{
 				try 
 				{
+					that.bytes.received += encodedMessage.length;
+					
 					var decodedMessage = BISON.decode(encodedMessage);
 					
 					if(decodedMessage.cmds instanceof Array == false)
@@ -104,9 +113,11 @@ require('./Client');
 							that.COMMAND_TO_FUNCTION[singleCommand.cmd](singleCommand.data);
 						};
 					}	
-				} catch (e) { // If something went wrong, just remove this client and avoid crashign
-					console.log(e.stack);
-					that.logger.push('!! Error: ' + e);
+				} 
+				catch (e)
+				{ // If something went wrong, just remove this client and avoid crashign
+					that.logger.log(e.stack);
+					that.logger.log('!! Error: ' + e);
 					connection.close();
 				}
 			}
@@ -116,7 +127,7 @@ require('./Client');
 			};
 			
 			// Start listening
-			console.log('Listen ', this.$);
+			this.logger.log('(ServerNetChannel) Listening.');
 			this.$.listen(this.port);
 		},
 		
@@ -147,14 +158,15 @@ require('./Client');
 			// Tell all the clients then close
 			var that = this;
 			setTimeout(function() {
-			    for(var aClient in that.clients) {
-			        try { that.clients[aClient].close(); } catch( e ) { }
-			    }
+				for(var aClient in that.clients)
+				{
+					try { that.clients[aClient].close(); } catch( e ) { }
+				}
 			    
-			    // that.saveRecording();
-			    that.logger.log('>> Shutting down...');
-			    that.logger.status(true);
-			    process.exit(0);
+				// that.saveRecording();
+				that.logger.log('>> Shutting down...');
+				that.logger.status(true);
+				process.exit(0);
 			}, 100);
 		},
 		
@@ -173,7 +185,8 @@ require('./Client');
 			var clientID = connection.$clientID;
 			
 			// See if client is playing
-			if( clientID in this.clients == false) {
+			if( clientID in this.clients == false)
+			{
 				this.logger.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
 				return;
 			}
@@ -196,30 +209,29 @@ require('./Client');
 		},
 		
 		/**
-		*	CONNECTION EVENTS
-		*/
-		// User has connected, give them an ID, tell them - then tell all clients
+		 * CONNECTION EVENTS
+		 * User has connected, give them an ID, tell them - then tell all clients
+		 */
 		onClientConnected: function(connection, aDecodedMessage)
 		{
 			var data = aDecodedMessage.cmds.data;
 			
-//			 Get new UUID for client
+			// Get new UUID for client
 			var newClientID = this.addClient(connection);
 			aDecodedMessage.id = newClientID;
 			
-			console.log('(NetChannel) Adding new client to listeners with ID:', newClientID);
+			this.logger.log('(NetChannel) Adding new client to listeners with ID: ' + newClientID );
 
-//			 Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
+			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
 			connection.send( BISON.encode(aDecodedMessage) );
 		},
 		
 		/**
-		*	Client Addition - 
-		*/
-		// Added client to connected users - player is not in the game yet
+		 * Client Addition - 
+		 * Added client to connected users - player is not in the game yet
+		 */
 		addClient: function(connection)
 		{
-			
 			var clientID = this.nextClientID++;
 			this.clientCount++;
 			
@@ -229,24 +241,23 @@ require('./Client');
 			// Add to our list of connected users
 			this.clients[clientID] = aNewClient;
 			
-
 			return clientID;
 		},
 		
 		// player is now in the game after this 
 		onPlayerJoined: function(connection, aDecodedMessage)
 		{
-			console.log('Player joined!');
+			this.logger.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
 			this.delegate.addNewClientWithID(connection.$clientID);
 			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data, connection.$clientID);
-			console.log(aDecodedMessage);
+			
 			// Tell all the clients that a player has joined
 			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
 		},
 		
 		/**
-		* Send this to all clients, and let the gamecontroller do what it should with the message
-		*/
+		 * Send this to all clients, and let the gamecontroller do what it should with the message
+		 */
 		onGenericPlayerCommand: function(connection, aDecodedMessage)
 		{
 			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
@@ -254,15 +265,15 @@ require('./Client');
 		},
 		
 		/**
-		*	Message Sending
-		*	@param originalClient		The connectionID of the client this message originated from
-		*	@param anUnencodedMessage	Human readable message data
-		*	@param sendToOriginalClient	If true the client will receive the message it sent. This should be true for 'reliable' events such as joining the game
-		*/
+		 * Message Sending
+		 * @param originalClient		The connectionID of the client this message originated from
+		 * @param anUnencodedMessage	Human readable message data
+		 * @param sendToOriginalClient	If true the client will receive the message it sent. This should be true for 'reliable' events such as joining the game
+		 */
 		broadcastMessage: function(originalClientID, anUnencodedMessage, sendToOriginalClient)
 		{
 			var encodedMessage = BISON.encode(anUnencodedMessage);
-//			console.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
+			// this.logger.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
 			
 			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
 			for( var clientID in this.clients )
@@ -272,6 +283,7 @@ require('./Client');
 					continue;
 				
 				this.clients[clientID].sendMessage(encodedMessage);
+				this.bytes.sent += encodedMessage.length;
 			}
 		} // Close prototype object
 	});// Close .extend

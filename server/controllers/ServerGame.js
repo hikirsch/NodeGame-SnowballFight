@@ -21,36 +21,24 @@ Basic Usage:
 Version:
 	1.0
 */
-
-var sys = require('sys');
-var AbstractClassController = require('./../client/js/controllers/AbstractGame.js').Class;
-var ArgHelper = require('./lib/ArgHelper.js');
-var COMMANDS = require('./../client/js/config.js').COMMANDS;
-
-require('./ServerNetChannel.js');
+var AbstractClassController = require('../../client/js/controllers/AbstractGame.js').Class;
+var ServerNetChannel = require('../network/ServerNetChannel.js').Class;
+var ArgHelper = require('../lib/ArgHelper.js');
 
 (function(){
-	this.ServerGameController = AbstractClassController.extend({
-		init: function(aHost, aPort)
+	exports.Class = AbstractClassController.extend({
+		init: function( config, serverConfig )
 		{
-			this._super(aHost, aPort);
-			this.super = this._super;
+			this._super();
 
 			// Server
-			this.server = new ServerNetChannel(this,
-			{
-			    'port': Math.abs(ArgHelper.getArgumentByNameOrSetDefault('port', 28785)),
-			    'status': false,
-			    'recordFile': './../record[date].js',
-			    'record': false,
-			    'server': null
-			});
-			
+			this.$ = new ServerNetChannel({ serverConfig: serverConfig, config: config, delegate: this });
+
 			this.COMMAND_TO_FUNCTION = {};
 		//	this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onClientJoined;
 		//	this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.onRemoveClient;
-			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_MOVE] = this.onPlayerMoved;
-			this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_FIRE] = this.genericCommand;
+			this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_MOVE] = this.onPlayerMoved;
+			this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_FIRE] = this.genericCommand;
 		},
 		
 		onGenericPlayerCommand: function(clientID, aDecodedMessage)
@@ -60,7 +48,7 @@ require('./ServerNetChannel.js');
 		
 		run: function()
 		{
-			this.server.run();
+			this.$.run();
 		},
 		
 		tick: function()

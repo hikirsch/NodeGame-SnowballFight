@@ -16,7 +16,7 @@ Abstract:
 Basic Usage: 
 */
 
-define(['network/Message'], function(Message) {
+define(['network/Message', 'config'], function(Message, config) {
 	/**
 	 * NetChannel!
 	 */
@@ -129,7 +129,7 @@ define(['network/Message'], function(Message) {
 	NetChannel.prototype.onConnectionOpened = function ()
 	{
 		// Create a new message with the SERVER_CONNECT command
-		this.addMessageToQueue(true, this.composeCommand(COMMANDS.SERVER_CONNECT, null) );
+		this.addMessageToQueue(true, this.composeCommand(config.COMMANDS.SERVER_CONNECT, null) );
 	};
 	
 	NetChannel.prototype.onServerMessage = function (messageEvent)
@@ -145,7 +145,7 @@ define(['network/Message'], function(Message) {
 			
 		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
 		// So we have to put it here, because otherwise e don't actually have a true client ID yet so the code below will not work
-		if(serverMessage.cmds.cmd == COMMANDS.SERVER_CONNECT)
+		if(serverMessage.cmds.cmd == config.COMMANDS.SERVER_CONNECT)
 		{
 			this.onServerDidAcceptConnection(serverMessage);
 		}
@@ -174,7 +174,7 @@ define(['network/Message'], function(Message) {
 		}
 			
 		// Every other server message
-		if(serverMessage.cmds.cmd != COMMANDS.SERVER_CONNECT)
+		if(serverMessage.cmds.cmd != config.COMMANDS.SERVER_CONNECT)
 		{
 			this.controller.netChannelDidReceiveMessage(serverMessage);
 		}

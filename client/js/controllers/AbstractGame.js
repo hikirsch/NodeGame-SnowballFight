@@ -15,7 +15,7 @@ Basic Usage:
 var init = function(CharacterController, Rectangle, Vector, SortedLookupTable)
 {
 	return Class.extend({
-		init: function(aHost, aPort) 
+		init: function() 
 		{
 			this.fieldRect = new Rectangle(0, 0, 640, 480);
 			/**

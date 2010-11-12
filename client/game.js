@@ -100,7 +100,6 @@
 			}
 			
 			function sendMessage( msg ) {
-				console.log(sys.inspect(msg));
 				var encodedMsg = BISON.encode( msg );
 				_conn.send( encodedMsg );
 			}

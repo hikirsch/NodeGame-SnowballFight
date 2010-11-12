@@ -20,7 +20,7 @@ Basic Usage:
 	
 */
 (function(){
-	this.Client = Class.extend(
+	exports.Class = Class.extend(
 	{
 		init: function( aServer, aConnection, aRecord )
 		{

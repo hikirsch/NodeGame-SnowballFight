@@ -16,7 +16,7 @@ Abstract:
 Basic Usage: 
 */
 
-define( 'NetChannel', ['Message'], function(Message) {
+define( 'NetChannel', ['Message', 'config'], function(Message, config) {
 	/**
 	 * NetChannel!
 	 */
@@ -129,7 +129,7 @@ define( 'NetChannel', ['Message'], function(Message) {
 	NetChannel.prototype.onConnectionOpened = function ()
 	{
 		// Create a new message with the SERVER_CONNECT command
-		this.addMessageToQueue(true, this.composeCommand(COMMANDS.SERVER_CONNECT, null) );
+		this.addMessageToQueue(true, this.composeCommand(config.COMMANDS.SERVER_CONNECT, null) );
 	};
 	
 	NetChannel.prototype.onServerMessage = function (messageEvent)

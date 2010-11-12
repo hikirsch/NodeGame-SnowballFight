@@ -162,12 +162,9 @@ function Server(anHTTPServer) {
     var that = this;
     var $ = new http.Server();
     var connections = {};
-    
-    console.log("Server $"+$);
+
     // WebSockets
     $.addListener('upgrade', function(req, socket, upgradeHeader) {
-        console.log("upgrade $"+$);
-    
         if (req.method === 'GET'
             && 'upgrade' in req.headers && 'connection' in req.headers
             && req.headers.upgrade.toLowerCase() === 'websocket'
