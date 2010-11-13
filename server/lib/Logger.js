@@ -19,10 +19,9 @@ var BISON = require('./bison');
 
 (function(){
 	exports.Class = Class.extend({
-		init: function( options, game, netChannel )
+		init: function( options, game )
 		{
 			this.options = options || {};
-			this.netChannel = netChannel;
 			this.game = game;
 			this.logs = [];		
 		},
@@ -75,7 +74,7 @@ var BISON = require('./bison');
 	
 		toTime: function( time )
 		{
-			var t = Math.round( ( time - this.netChannel.startTime ) / 1000);
+			var t = Math.round( ( time - this.game.netChannel.startTime ) / 1000);
 			var m = Math.floor( t / 60 );
 			var s = t % 60;
 			return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
@@ -88,13 +87,13 @@ var BISON = require('./bison');
 			if( !this.options.showStatus ) { return; }
 		    
 		    var stats = '    Running ' + this.toTime( this.game.gameClock ) + ' | '
-						+ this.netChannel.clientCount + ' Client(s) | '
-						+ this.game.entities.count() + ' Entities(s) | '
-						+ this.toSize( this.netChannel.bytes.sent ) + ' sent | '
-						+ this.toSize( this.netChannel.bytes.received ) + ' received | '
-						+ this.toSize( this.netChannel.bytes.sent - this.netChannel.bytes.sentLast );
+						+ this.game.netChannel.clientCount + ' Client(s) | '
+						+ this.game.field.players.count() + ' Entities(s) | '
+						+ this.toSize( this.game.netChannel.bytes.sent ) + ' sent | '
+						+ this.toSize( this.game.netChannel.bytes.received ) + ' received | '
+						+ this.toSize( this.game.netChannel.bytes.sent - this.game.netChannel.bytes.sentLast );
 						
-			this.netChannel.bytes.sentLast = this.netChannel.bytes.sent;
+			this.game.netChannel.bytes.sentLast = this.game.netChannel.bytes.sent;
 			
 		    for(var i = this.logs.length - 1; i >= 0; i--) 
 			{

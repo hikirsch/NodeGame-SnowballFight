@@ -10,50 +10,73 @@ Abstract:
 Basic Usage: 
  	
 */
-define(function() {
- 	return Class.extend({
-		init: function(aCharacterController) 
+define(['factories/Html'], function( HtmlFactory) {
+	return Class.extend({
+		init: function(characterController, theme ) 
 		{
-			this.controller = aCharacterController;
-			
-			// 8 Images representing directions
-			this.createElement()
-				.addClass( 'smash-tv' );
+			this.controller = characterController;
+			this.theme = theme;
 			
 			// our default position is north
-			this.currentSpriteClass = '45';
+			this.currentRotation = 0;
+			
+			// 8 Images representing directions
+			this.createElement();
 		},
 		
-		createElement: function() {
-			this.element =  $('<div class="character"><p>' + this.controller.nickName + '</p></div>');
+		getElement: function() 
+		{
 			return this.element;
 		},
 		
-		updatePositionAndRotation: function()
+		refresh: function()
 		{
+			this.destroy();
+			this.createElement();
+		},
+		
+		createElement: function( theme )
+		{
+			var options = {
+				nickName: this.controller.getNickName(),
+				theme: this.theme
+			};
+			
+			this.element = HtmlFactory.character(options);
+			
+			// show the right default rotation and sprite class
+			this.adjustSprite();
+		},
+		
+		update: function()
+		{
+			// the position
 			this.element.css({
-				left: this.controller.position.x,
-				top: this.controller.position.y
+				left: this.controller.getPosition().x,
+				top: this.controller.getPosition().y
 			});
 			
+			// the sprite
 			this.adjustSprite();
 		},
 		
 		/**
 		 * Based on our rotation, we should show a different sprite.
 		 */
-		adjustSprite: function() {
-			var spriteRotation = Math.floor(this.controller.rotation / 45) * 45;
+		adjustSprite: function() 
+		{
+			var newRotation = this.controller.getRotationToTheNearest(45);
 			
 			$(this.element)
-				.removeClass( 'rotation-' + this.currentSpriteClass )
-				.addClass( 'rotation-' + spriteRotation );
+				.removeClass( 'rotation-' + this.currentRotation )
+				.addClass( 'rotation-' + newRotation );
 				
-			this.currentSpriteClass = spriteRotation;
+			this.currentRotation = newRotation;
 		},
 
-		destroy: function() {
+		destroy: function()
+		{
 			this.element.remove();
-		},
+		}
 	});
 });

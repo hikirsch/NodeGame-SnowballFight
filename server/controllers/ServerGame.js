@@ -23,7 +23,7 @@ Version:
 */
 var AbstractClassController = require('../../client/js/controllers/AbstractGame.js').Class;
 var ServerNetChannel = require('../network/ServerNetChannel.js').Class;
-var ArgHelper = require('../lib/ArgHelper.js');
+var Logger = require('../lib/Logger.js').Class;
 
 (function(){
 	exports.Class = AbstractClassController.extend({
@@ -31,12 +31,14 @@ var ArgHelper = require('../lib/ArgHelper.js');
 		{
 			this._super();
 
+			this.logger = new Logger( serverConfig, this );
+			
 			// Server
-			this.$ = new ServerNetChannel({ serverConfig: serverConfig, config: config, delegate: this });
+			this.netChannel = new ServerNetChannel({ serverConfig: serverConfig, config: config, delegate: this });
 
 			this.COMMAND_TO_FUNCTION = {};
-		//	this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onClientJoined;
-		//	this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.onRemoveClient;
+			// this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onClientJoined;
+			// this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_MOVE] = this.onPlayerMoved;
 			this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_FIRE] = this.genericCommand;
 		},
@@ -48,12 +50,23 @@ var ArgHelper = require('../lib/ArgHelper.js');
 		
 		run: function()
 		{
-			this.$.run();
+			this.netChannel.run();
 		},
 		
 		tick: function()
 		{
 			this._super();
 		},
+		
+		log: function(o)
+		{
+			console.log( o );
+			// this.logger.log( o );
+		},
+		
+		status: function()
+		{
+			// this.logger.status();
+		}
 	});
-})();
+}());

@@ -12,19 +12,22 @@ Basic Usage:
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
 define(['controllers/AbstractGame', 'network/NetChannel', 'view/Game', 'lib/joystick', 'config' ], 
-	function(AbstractGameController, NetChannel, ClientGameView, Joystick, config ) {
+	function(AbstractGameController, NetChannel, GameView, Joystick, config ) {
 		return AbstractGameController.extend({
 			/**
 			 * init()
 			 */
 			init: function() 
 			{
+				// we need to create our view first before we call our super constructor so that our 
+				// super class knows to create the view for anything else it needs, this is primarily 
+				// for the field controller since this element is being shared between client/server
+				this.view = new GameView(this);
+
 				this._super();
-			
-				this.view = new ClientGameView(this);
+				
 				this.netChannel = new NetChannel(config.HOST, config.PORT, this);
 			
-				this.joystick = null;
 				this.clientCharacter = null; // Special pointer to our own client character
 			
 				this.COMMAND_TO_FUNCTION = {};
@@ -33,30 +36,24 @@ define(['controllers/AbstractGame', 'network/NetChannel', 'view/Game', 'lib/joys
 				this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 				this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_FIRE] = this.genericCommand;
 			},
-		
+
 			/**
 			 * tick()
 			 */
 			tick: function()
 			{
 				this._super();
-				this.netChannel.tick(this.gameClock);
-			
-				if(this.clientCharacter)
+				
+				if( this.clientCharacter != null )
 				{
-					this.clientCharacter.handleInput(this.joystick);
-				
-					var newMessage = this.netChannel.composeCommand( config.COMMANDS.PLAYER_MOVE, { 
-						x: this.clientCharacter.position.x, 
-						y: this.clientCharacter.position.y,
-						vx: this.clientCharacter.velocity.x, 
-						vy: this.clientCharacter.velocity.y,
-						r: this.clientCharacter.rotation
-					});
-				
+					var characterStatus = this.clientCharacter.getStatus();
+					var newMessage = this.netChannel.composeCommand( config.COMMANDS.PLAYER_MOVE, characterStatus );
+
 					// create a message with our characters updated information and send it off
 					this.netChannel.addMessageToQueue( false, newMessage );
-				}
+				};
+				
+				this.netChannel.tick( this.gameClock );
 			},
 		
 			/**
@@ -73,31 +70,24 @@ define(['controllers/AbstractGame', 'network/NetChannel', 'view/Game', 'lib/joys
 		
 			onClientJoined: function(clientID, data)
 			{
-				// Let our super class create the character			
-				var newCharacter = this.addNewClientWithID(clientID);
-				newCharacter.setNickName( data.nickName );
-			
-				// Grab the view from the character and add it to our GameView
-				var newCharacterView = newCharacter.initView();
-				this.view.addCharacter(newCharacterView);
+				// Let our super class create the character
+				var newCharacter = this.addClient( clientID, data.nickName, true );
 			
 				// It's us!
 				if(clientID == this.netChannel.clientID)
 				{
-					this.joystick = Joystick;
-					this.clientCharacter = newCharacter;
+					newCharacter.setInput( Joystick );
 				}
-
-				return newCharacter;
 			},
 		
 			onRemoveClient: function() 
 			{
-				console.log( "onRemoveClient: ", arguments );
+				console.log( 'onRemoveClient: ', arguments );
 			},
 		
-			genericCommand: function() {
-				console.log('genericCommand: ', arguments)
+			genericCommand: function()
+			{
+				console.log( 'genericCommand: ', arguments );
 			},
 		
 			/**
@@ -112,7 +102,7 @@ define(['controllers/AbstractGame', 'network/NetChannel', 'view/Game', 'lib/joys
 		
 			netChannelDidReceiveMessage: function (messageData)
 			{
-				console.log("received message: ", messageData);
+				console.log( "received message: ", messageData );
 				// TODO: Handle array of 'cmds'
 				// TODO: prep for cmds: send only the client ID and the message data
 				this.COMMAND_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData.id, messageData.cmds.data]);
@@ -121,6 +111,11 @@ define(['controllers/AbstractGame', 'network/NetChannel', 'view/Game', 'lib/joys
 			netChannelDidDisconnect: function (messageData)
 			{
 				this.view.serverOffline();
+			},
+			
+			log: function(o)
+			{
+				console.log(o);
 			}
 		});
 	}

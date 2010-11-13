@@ -25,7 +25,6 @@ Basic Usage:
 var sys = require('sys');
 var ws = require('./ws.js');
 var BISON = require('../lib/bison.js');
-var Logger = require('../lib/Logger.js').Class;
 var Client = require('../model/Client.js').Class;
 
 (function(){
@@ -43,9 +42,6 @@ var Client = require('../model/Client.js').Class;
 			this.maxClients = config.maxClients || 64;
 			this.port = config.PORT || 8000;
 			this.showStatus = config.status === false ? false : true;
-
-			// Info
-			this.logger = new Logger( options.serverConfig, this.delegate, this );
 
 			this.bytes = {
 				sent: 0,
@@ -86,8 +82,8 @@ var Client = require('../model/Client.js').Class;
 			
 			this.$.onConnect = function(connection)
 			{
-				that.logger.log("(ServerNetChannel) onConnect:", connection);
-				that.logger.log("(ServerNetChannel) UserConnected:", connection);
+				that.delegate.log("(ServerNetChannel) onConnect:", connection);
+				that.delegate.log("(ServerNetChannel) UserConnected:", connection);
 			};
 			
 			/**
@@ -116,8 +112,8 @@ var Client = require('../model/Client.js').Class;
 				} 
 				catch (e)
 				{ // If something went wrong, just remove this client and avoid crashign
-					that.logger.log(e.stack);
-					that.logger.log('!! Error: ' + e);
+					that.delegate.log(e.stack);
+					that.delegate.log('!! Error: ' + e);
 					connection.close();
 				}
 			}
@@ -127,7 +123,7 @@ var Client = require('../model/Client.js').Class;
 			};
 			
 			// Start listening
-			this.logger.log('(ServerNetChannel) Listening.');
+			this.delegate.log('(ServerNetChannel) Listening.');
 			this.$.listen(this.port);
 		},
 		
@@ -146,7 +142,7 @@ var Client = require('../model/Client.js').Class;
 			var that = this;
 			this.startTime = new Date().getTime();
 			this.time = new Date().getTime();
-			this.logger.status();
+			this.delegate.status();
 			
 			// Listen for termination
 			process.addListener('SIGINT', function(){that.shutdown()});
@@ -164,8 +160,8 @@ var Client = require('../model/Client.js').Class;
 				}
 			    
 				// that.saveRecording();
-				that.logger.log('>> Shutting down...');
-				that.logger.status(true);
+				that.delegate.log('>> Shutting down...');
+				that.delegate.status(true);
 				process.exit(0);
 			}, 100);
 		},
@@ -175,7 +171,7 @@ var Client = require('../model/Client.js').Class;
 		{
 			var nickname = aDecodedMessage.cmds.data.nickname;
 			
-			this.logger.log('(ServerNetChannel) Setting nickname for ' + connection.$clientID + ' to ' +  nickname);
+			this.delegate.log('(ServerNetChannel) Setting nickname for ' + connection.$clientID + ' to ' +  nickname);
 			this.clients[connection.$clientID].enabled = true;
 			this.clients[connection.$clientID].nickname = nickname;
 		},
@@ -187,12 +183,12 @@ var Client = require('../model/Client.js').Class;
 			// See if client is playing
 			if( clientID in this.clients == false)
 			{
-				this.logger.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
+				this.delegate.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
 				return;
 			}
 			
 			
-			this.logger.log("(ServerNetChannel) Disconnecting client: " + clientID );
+			this.delegate.log("(ServerNetChannel) Disconnecting client: " + clientID );
 					
 			// if this client is mid game playing then we need to tell the other players to remove it
 			if( this.clients[ clientID ].enabled  )
@@ -220,7 +216,7 @@ var Client = require('../model/Client.js').Class;
 			var newClientID = this.addClient(connection);
 			aDecodedMessage.id = newClientID;
 			
-			this.logger.log('(NetChannel) Adding new client to listeners with ID: ' + newClientID );
+			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
 
 			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
 			connection.send( BISON.encode(aDecodedMessage) );
@@ -247,9 +243,9 @@ var Client = require('../model/Client.js').Class;
 		// player is now in the game after this 
 		onPlayerJoined: function(connection, aDecodedMessage)
 		{
-			this.logger.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
-			this.delegate.addNewClientWithID(connection.$clientID);
-			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data, connection.$clientID);
+			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
+			this.delegate.addClient(connection.$clientID);
+			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data.nickName, connection.$clientID);
 			
 			// Tell all the clients that a player has joined
 			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
@@ -273,7 +269,7 @@ var Client = require('../model/Client.js').Class;
 		broadcastMessage: function(originalClientID, anUnencodedMessage, sendToOriginalClient)
 		{
 			var encodedMessage = BISON.encode(anUnencodedMessage);
-			// this.logger.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
+			// this.delegate.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
 			
 			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
 			for( var clientID in this.clients )

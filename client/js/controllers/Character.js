@@ -28,59 +28,91 @@ Basic Usage:
 var init = function(Vector, Rectangle, CharacterView)
 {
 	return Class.extend({
-		init: function(aClientID, aFieldRectangle) 
+		init: function(aClientID, controller, initView) 
 		{
-			this.fieldRect = aFieldRectangle;
-			
-			this.view = null;
-			
-			// some defaults we use
-			this.position = new Vector(Math.random() * this.fieldRect.width, Math.random() * this.fieldRect.height);
-			this.prevPosition = new Vector();
-			
-			this.serverPosition = new Vector(this.position.x, this.position.y);
+			this.fieldController = controller;
+			this.clientID = aClientID;
+
+			// some defaults we use for position
+			this.position = new Vector( Math.random() * this.fieldController.getWidth(), Math.random() * this.fieldController.getHeight() );
+			this.serverPosition = new Vector( this.position.x, this.position.y );
 			
 			// movement properties
-			this.velocity = new Vector(0,0); // rolling velocity
-			this.acceleration = new Vector(0, 0); // all combined forced. reset every tick
+			this.velocity = new Vector( 0, 0 ); // rolling velocity
+			this.acceleration = new Vector( 0, 0 ); // all combined forced. reset every tick
 			
 			// move constants
-			this.moveSpeed = 0.7; 		// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
+			// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
+			this.moveSpeed = 0.7; 
 			
-			this.maxVelocity = 3.5;		// the fastest i can go
-			this.damping = 0.96;			// Bring velocity to 0 ( or near zero anyway :) ) over time
+			// the fastest i can go
+			this.maxVelocity = 3.5;
 			
-			this.rotation = 0; // we start pointing up, simply easy b/c of sprites right now
-			this.clientID = aClientID;
+			// Bring velocity to 0 ( or near zero anyway :) ) over time
+			this.damping = 0.96; 
+			
+			// we start pointing up, simply easy b/c of sprites right now
+			this.rotation = 0; 
+			
+			// if the field we're being placed in has a field, then we'll go into it
+			if( this.fieldController.view )
+			{
+				// init the view, pass ourselves as the controller
+				this.view = new CharacterView( this, 'smash-tv' );
+			};
 		},
 		
-		setNickName: function( aNickName ) 
+		getNickName: function() 
 		{
-			this.nickName = aNickName;
+			return this.nickName;
+		},
+		
+		setNickName: function( newNickName ) 
+		{
+			this.nickName = newNickName;
+			this.view.refresh();
+		},
+		
+		getRotation: function() 
+		{
+			return this.rotation;
+		},
+		
+		getPosition: function() {
+			return this.position;
+		},
+		
+		getStatus: function() {
+			return { 
+				x: this.position.x, 
+				y: this.position.y,
+				vx: this.velocity.x, 
+				vy: this.velocity.y,
+				r: this.rotation
+			}
+		},
+		
+		setInput: function( input ) 
+		{
+			this.input = input;
 		},
 		
 		/**
-		* Only called by ClientGameController
-		*/
-		initView: function()
+		 * Handle keyboard Input
+		 * Note we allow the user to all keys at the same time 
+		 */
+		handleInput: function()
 		{
-			this.view = new CharacterView(this);
-			return this.view;
-		},
-		
-		/*
-		*	Handle keyboard Input
-		*	Note we allow the user to all keys at the same time 
-		*/
-		handleInput:function(aJoystick)
-		{
-			// Horizontal acceleration
-			if(aJoystick.isLeft()) this.acceleration.x -= this.moveSpeed;
-			if(aJoystick.isRight()) this.acceleration.x += this.moveSpeed;
+			if( this.input ) 
+			{
+				// Horizontal acceleration
+				if( this.input.isLeft() ) this.acceleration.x -= this.moveSpeed;
+				if( this.input.isRight() ) this.acceleration.x += this.moveSpeed;
 			
-			// Vertical movement
-			if(aJoystick.isUp()) this.acceleration.y -= this.moveSpeed;
-			if(aJoystick.isDown()) this.acceleration.y += this.moveSpeed;
+				// Vertical movement
+				if( this.input.isUp() ) this.acceleration.y -= this.moveSpeed;
+				if( this.input.isDown() ) this.acceleration.y += this.moveSpeed;
+			}
 		},
 		
 		/**
@@ -88,15 +120,22 @@ var init = function(Vector, Rectangle, CharacterView)
 		*/
 		tick: function(speedFactor)
 		{
-			this.updatePosition(speedFactor);
-
-			// if we have moved
-			var shouldUpdateView = this.position.x != this.prevPosition.oldX || this.position.y != this.prevPosition.oldY;
-			shouldUpdateView = true; // for now always
-			
-			if(shouldUpdateView && this.view) {
-				this.view.updatePositionAndRotation(); 
+			if( this.input )
+			{
+				this.handleInput();
 			}
+			
+			var didMove = this.calcuatePosition(speedFactor);
+			
+			if(didMove && this.view)
+			{
+				this.view.update();
+			}
+		},
+		
+		getRotationToTheNearest: function( degrees ) 
+		{
+			return Math.floor(this.rotation / degrees) * degrees;
 		},
 
 		/**
@@ -109,16 +148,18 @@ var init = function(Vector, Rectangle, CharacterView)
 			// no change
 			if(combinedVelocity > -0.1 && combinedVelocity < 0.1) return;
 			
-			this.rotation = 57.2957795 * Math.atan2(this.velocity.x,this.velocity.y) - 180;
+			this.rotation = 57.2957795 * Math.atan2(this.velocity.x, this.velocity.y) - 180;
 			if(this.rotation < 0) this.rotation *= -1;  //avoid slow math.abs call
 		},
 
-		updatePosition: function(speedFactor)
+		calcuatePosition: function(speedFactor)
 		{
 			// console.log('ClientID:'+this.clientID,'v:',Math.round(this.velocity.x*1000)/1000,'speedFactor:',Math.round(speedFactor*1000)/1000);
 			// Store previous position
-			this.prevPosition.x = this.position.x;
-			this.prevPosition.y = this.position.y;
+			var prevPosition = {
+				x: this.position.x,
+				y: this.position.y
+			};
 			
 			// Adjust to speedFactor
 			this.acceleration.mul(speedFactor);
@@ -129,23 +170,23 @@ var init = function(Vector, Rectangle, CharacterView)
 			this.position.y += this.velocity.y * speedFactor;
 			
 			// Wrap horizontal
-			if(this.position.x > this.fieldRect.width)
+			if(this.position.x > this.fieldController.getWidth())
 			{
 				this.position.x = 0;
 			}
 			else if(this.position.x < 0)
 			{ // use view width
-				this.position.x = this.fieldRect.width;
+				this.position.x = this.fieldController.getWidth();
 			}
 			
 			// Wrap veritical
-			if(this.y > this.fieldRect.height)
+			if(this.position.y > this.fieldController.getHeight())
 			{
 				this.position.y = 0;
 			}
-			else if(this.y < 0)
+			else if(this.position.y < 0)
 			{
-				this.position.y = this.fieldRect.height;
+				this.position.y = this.fieldController.getHeight();
 			}
 			
 			this.velocity.limit(this.maxVelocity);
@@ -156,27 +197,22 @@ var init = function(Vector, Rectangle, CharacterView)
 			
 			this.calculateRotation();
 			this.acceleration.x = this.acceleration.y = 0;
-		},
-
-		/*
-		* Sets the rectangle of the field.
-		* Tells the view so it can adjust itself
-		* @param aRectangle A rectangle containing the fields rectangle
-		*/
-		setFieldRect: function(aRectangle)
-		{
-			this.fieldRect = aRectangle;
+			
+			return ( this.position.x != prevPosition.x ) || ( this.position.y != prevPosition.y );
 		}
 	});
 }
 
-if (typeof window === 'undefined') {
+if (typeof window === 'undefined')
+{
 	// We're in node!
 	var Rectangle = require('../lib/Rectangle').Class;
 	var Vector = require('../lib/Vector').Class;
 
-	exports.Class = init(Vector, Rectangle);
-} else {
+	exports.Class = init(Vector, Rectangle );
+}
+else
+{
 	// We're on the browser. 
 	// Require.js will use this file's name (CharacterController.js), to create a new  
 	define(['lib/Vector', 'lib/Rectangle', 'view/Character'], init);

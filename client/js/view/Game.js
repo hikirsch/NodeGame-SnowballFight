@@ -14,35 +14,25 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( [ 'lib/Rectangle', 'factories/Html' ], function( Rectangle, htmlFactory ) { 
+define( [ 'lib/Rectangle', 'factories/Html', 'view/Field' ], function( Rectangle, HtmlFactory, FieldView ) { 
 	return Class.extend({
-		init: function(aDelegate) 
+		init: function(controller) 
 		{
-			this.delegate = aDelegate;
-			this.createField();
+			this.gameController = controller;
 		},
-	
-		/**
-		 * Our players and game artifacts get placed into a field. The action is started right here.
-		 */
-		createField: function()
-		{
-			this.field = $('<div class="game-container"><div class="background"></div></div>')
-							.appendTo('body');
-		},
-	
+
 		showJoinGame: function()
 		{
 			var that = this;
-			htmlFactory.joinGameDialog()
+			HtmlFactory.joinGameDialog()
 				.appendTo("body")
 			
-			$("#join").click(function(e) { that.joinGame(e); });
+			$("#join").click( this.joinGame.bind( this ) );
 		},
 	
 		serverOffline: function()
 		{
-			htmlFactory.serverUnavailableDialog()
+			HtmlFactory.serverUnavailableDialog()
 				.appendTo("body");
 		},
 	
@@ -52,10 +42,10 @@ define( [ 'lib/Rectangle', 'factories/Html' ], function( Rectangle, htmlFactory 
 		
 			if( nickName.length <= 0)
 			{
-				nickName = 'NoName';
+				nickName = 'NoName' + Math.floor( Math.random() * 1000 );
 			}
 		
-			this.delegate.joinGame(nickName);
+			this.gameController.joinGame(nickName);
 			
 			$("#join-game").remove();
 			
@@ -64,7 +54,7 @@ define( [ 'lib/Rectangle', 'factories/Html' ], function( Rectangle, htmlFactory 
 	
 		addCharacter: function(aCharacterView)
 		{
-			aCharacterView.element.appendTo(this.field);
+			aCharacterView.element.appendTo(this.field.getElement());
 		},
 	
 		getFieldRect: function()

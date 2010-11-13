@@ -12,28 +12,23 @@ Abstract:
 Basic Usage: 
 	 See subclasses
 */
-var init = function(CharacterController, Rectangle, Vector, SortedLookupTable)
+var init = function(CharacterController, FieldController, Rectangle, Vector, SortedLookupTable)
 {
 	return Class.extend({
 		init: function() 
-		{
-			this.fieldRect = new Rectangle(0, 0, 640, 480);
-			/**
-			* intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
-			* desiredFramerate, is usually 60 or 30 - it's the framerate the game is designed against 
-			*/
-			this.intervalFramerate = 60;	// Try to call our tick function this often
-			this.desiredFramerate = 60;		
+		{ 
+			// our game takes place in a field
+			this.field = new FieldController(this);
 			
-			// Things in the game
-			this.players = new SortedLookupTable();			// Active players
-			this.projectiles = new SortedLookupTable();		// Things fired
-			this.entities = new SortedLookupTable();		// Everything else, e.g. trees, rocks, powerups, dogs, cats
+			// intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
+			// desiredFramerate, is usually 60 or 30 - it's the framerate the game is designed against 
+			
+			this.intervalFramerate = 60; // Try to call our tick function this often
+			this.desiredFramerate = 60;
 			
 			// Loop
 			this.gameClock = new Date().getTime();
-			var that = this;
-			this.gameTick = setInterval(function(){that.tick()}, 1000/this.intervalFramerate);
+			this.gameTick = setInterval( this.tick.bind( this ) , 1000 / this.intervalFramerate );
 		},
 		
 		/**
@@ -43,53 +38,42 @@ var init = function(CharacterController, Rectangle, Vector, SortedLookupTable)
 		{
 			var oldTime = this.gameClock;
 			this.gameClock = new Date().getTime();
-			var delta = (this.gameClock - oldTime); // Note (var framerate = 1000/delta);
+			var delta = ( this.gameClock - oldTime ); // Note (var framerate = 1000/delta);
 			
 			// Framerate independent motion
 			// Any movement should take this value into account, 
 			// otherwise faster machines which can update themselves more accurately will have an advantage
-			var speedFactor = delta / (1000/this.desiredFramerate);
+			var speedFactor = delta / ( 1000 / this.desiredFramerate );
 			if (speedFactor <= 0) speedfactor = 1;
 
-			// Update players
-			this.players.forEach(function(key, player){ 
-				player.tick(speedFactor)
-			}, this);
-			
-			// Update projectiles
-			this.projectiles.forEach(function(key, projectile){ 
-				projectile.tick(speedFactor)
-			}, this);
-			
-			// Update entities
-			this.entities.forEach(function(key, entity){ 
-				entity.tick(speedFactor)
-			}, this);
+			this.field.tick(speedFactor);
 		},
 		
 		/**
 		* Adding and removing players
 		*/
-		addNewClientWithID: function(aClientID)
+		addClient: function( aClientID, nickName, initView )
 		{
-			var newCharacter = new CharacterController(aClientID, this.fieldRect);
-			this.players.setObjectForKey(newCharacter, aClientID);
+			var newCharacter = new CharacterController( aClientID, this.field, initView );
+			newCharacter.setNickName( nickName );
+			
+			this.field.addPlayer( newCharacter );
 			
 			return newCharacter;
 		},
 		
 		setNickNameForClientID: function(aNickName, aClientID) 
 		{
-			this.players.objectForKey(aClientID).setNickName(aNickName);
+			this.log( '(AbstractGame) setting client nickname to: ' + aNickName + ' for clientID: ' + aClientID );
+			this.field.players.objectForKey(aClientID).setNickName(aNickName);
 		},
 		
 		/**
-		*	Events from other players
-		*/
-		onPlayerMoved: function(messageData)
+		 * Events from other players
+		 */
+		onPlayerMoved: function(data)
 		{
-			var targetCharacter = this.players._data[messageData.id];
-			var data = messageData.cmds.data;
+			var targetCharacter = this.players.get(messageData.id);
 			
 			if(targetCharacter == null) 
 			{
@@ -105,7 +89,7 @@ var init = function(CharacterController, Rectangle, Vector, SortedLookupTable)
 				var difference = new Vector(targetCharacter.serverPosition.x-targetCharacter.position.x, targetCharacter.serverPosition.y-targetCharacter.position.y);
 				difference.mul(0.1);
 				
-			 	targetCharacter.position.add(difference);
+				targetCharacter.position.add(difference);
 			}
 
 			targetCharacter.velocity.x = data.vx;
@@ -114,13 +98,17 @@ var init = function(CharacterController, Rectangle, Vector, SortedLookupTable)
 	});
 };
 
-if (typeof window === 'undefined') {
-	var CharacterController  = require('./Character.js').Class;
+if (typeof window === 'undefined') 
+{
+	var CharacterController = require('./Character.js').Class;
+	var FieldController = require('./Field.js').Class;
 	var Rectangle = require('../lib/Rectangle.js').Class;
 	var Vector = require('../lib/Vector.js').Class;
 	var SortedLookupTable = require('../lib/SortedLookupTable.js').Class;
 	
-	exports.Class = init( CharacterController, Rectangle, Vector, SortedLookupTable );
-} else {
-	define(['controllers/Character', 'lib/Rectangle', 'lib/Vector', 'lib/SortedLookupTable'], init);
+	exports.Class = init( CharacterController, FieldController, Rectangle, Vector, SortedLookupTable );
+} 
+else 
+{
+	define(['controllers/Character', 'controllers/Field', 'lib/Rectangle', 'lib/Vector', 'lib/SortedLookupTable' ], init);
 }
