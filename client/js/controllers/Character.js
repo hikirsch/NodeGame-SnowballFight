@@ -59,7 +59,7 @@ var init = function(Vector, Rectangle, CharacterView)
 			{
 				// init the view, pass ourselves as the controller
 				this.view = new CharacterView( this, 'smash-tv' );
-			};
+			}
 		},
 		
 		getNickName: function() 
@@ -70,7 +70,9 @@ var init = function(Vector, Rectangle, CharacterView)
 		setNickName: function( newNickName ) 
 		{
 			this.nickName = newNickName;
-			this.view.refresh();
+
+			if(this.view)
+				this.view.refresh();
 		},
 		
 		getRotation: function() 
@@ -114,21 +116,21 @@ var init = function(Vector, Rectangle, CharacterView)
 				if( this.input.isDown() ) this.acceleration.y += this.moveSpeed;
 			}
 		},
-		
+
+
 		/**
-		*	Update, use delta to create frame independent motion
-		*/
+		 * Update, use delta to create frame independent motion
+		 * @param speedFactor	A normalized value our ACTUAL framerate vs our desired framerate. 1.0 means exactly correct, 0.5 means we're running at half speed 
+		 */
 		tick: function(speedFactor)
 		{
-			if( this.input )
-			{
+			if( this.input ) {
 				this.handleInput();
 			}
 			
 			var didMove = this.calcuatePosition(speedFactor);
 			
-			if(didMove && this.view)
-			{
+			if(didMove && this.view) {
 				this.view.update();
 			}
 		},

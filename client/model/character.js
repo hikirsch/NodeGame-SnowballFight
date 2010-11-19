@@ -135,7 +135,10 @@ $.extend( Character.prototype, {
 	calculateRotation: function() {
 		if( this.controller.isKeyPressed() )
 		{
-			this.rotation = Math.round( Math.abs( (180/Math.PI) * Math.atan2(this.velocity.x,this.velocity.y) - 180 ) );
+			var rotationFloat = (180/Math.PI) * Math.atan2(this.velocity.x,this.velocity.y) - 180
+			if(rotationFloat < 0) rotationFloat = -rotationFloat;
+
+			this.rotation = rotationFloat << 0;
 			// this.rotation = (180/Math.PI) * Math.atan2(this.velocity.x,this.velocity.y); // this is really exacto ;-)
 		}
 	},

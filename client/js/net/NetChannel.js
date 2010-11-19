@@ -23,7 +23,7 @@ define( 'NetChannel', ['Message', 'config'], function(Message, config) {
 	function NetChannel( aHost, aPort, aController )
 	{		
 		var that = this; // Forclosures (haw haw)	
-		
+
 		// Make sure this controller is valid before moving forward.
 		// Function itself
 		if( this.validateController(aController) === false ) 

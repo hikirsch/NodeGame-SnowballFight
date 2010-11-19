@@ -2,7 +2,7 @@
 File:
 	Logger.js
 Created By:
-	Adamn Kirsch
+	Adam Kirsch
 Project:
 	Ogilvy Holiday Card 2010
 Abstract:

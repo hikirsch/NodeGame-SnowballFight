@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="NodeGame-SnowballFight-oneday:war exploded">
+    <output-path>$PROJECT_DIR$/out/artifacts/NodeGame_SnowballFight_oneday_war_exploded</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="NodeGame-SnowballFight-oneday/web/Web" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="NodeGame-SnowballFight-oneday" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>
