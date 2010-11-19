@@ -1,6 +1,6 @@
 @import url( reset.css );
 
-html, body { overflow: hidden; height: 100%; font-family: Arial; font-size: 12px; }
+html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-serif; font-size: 12px; }
 
 .site-message { position: absolute; bottom: 200px; width: 100%; }
 .site-message .wrapper { 
@@ -11,7 +11,7 @@ html, body { overflow: hidden; height: 100%; font-family: Arial; font-size: 12px
 .site-message p { padding-bottom: 10px; font-size: 16px; line-height: 20px; font-weight: bold; }
 .site-message label { display: block; padding: 0 5px; }
 .site-message input[type='text'] { font-size: 16px; padding: 5px; border-radius: 5px; width: 225px; margin-bottom: 10px; }
-.site-message input[type='submit'] { padding: 0 30px; background-color: #2F1DA3; 
+.site-message input[type='submit'] { padding: 0 30px; background-color: #2F1DA3;
 	border-style: solid; border-color: #AEABC4; border-radius: 5px; color: #fff; 
 	font-size: 16px; line-height: 20px;
 } 
@@ -19,7 +19,7 @@ html, body { overflow: hidden; height: 100%; font-family: Arial; font-size: 12px
 .site-message input[type='button']:hover { background-color: #AEABC4; border-color: #AEABC4; color: #2F1DA3; }
 .site-message input[type='button']:active { background-color: #2F1DA3; border-color: #AEABC4; color: #fff; }
 
-.game-container  { width: 640; height: 480px; margin: 0; position: relative; overflow: hidden;}
+.game-container  { width: 640px; height: 480px; margin: 0; position: relative; overflow: hidden;}
 .game-container .background {  
 	position: absolute; top: 0; left: 0; 
 	background-color: #00f; opacity: 0.05;

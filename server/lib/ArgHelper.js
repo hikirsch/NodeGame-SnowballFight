@@ -17,7 +17,7 @@ Basic Usage:
 Version:
 	1.0
 */
-// Make argument name value pairs, and defualts globally accessable
+// Make argument name value pairs, and defaults globally accessible
 if(global.__ARGHELPER == undefined)
 {
 	global.__ARGHELPER = this;

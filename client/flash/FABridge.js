@@ -51,11 +51,11 @@ FABridge.addToUserTypes = function()
 	for (var i = 0; i < arguments.length; i++)
 	{
 		FABridge.userTypes[arguments[i]] = {
-			'typeName': arguments[i], 
+			'typeName': arguments[i],
 			'enriched': false
 		};
 	}
-}
+};
 
 FABridge.argsToArray = function(args)
 {

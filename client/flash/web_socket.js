@@ -21,18 +21,21 @@
       "Open the page via Web server i.e. http://...");
   }
 
-  WebSocket = function(url, protocol, proxyHost, proxyPort, headers) {
-    var self = this;
-    self.readyState = WebSocket.CONNECTING;
-    self.bufferedAmount = 0;
-    // Uses setTimeout() to make sure __createFlash() runs after the caller sets ws.onopen etc.
-    // Otherwise, when onopen fires immediately, onopen is called before it is set.
-    setTimeout(function() {
-      WebSocket.__addTask(function() {
-        self.__createFlash(url, protocol, proxyHost, proxyPort, headers);
-      });
-    }, 1);
-  }
+  WebSocket = function(url, protocol, proxyHost, proxyPort, headers)
+  {
+	  var self = this;
+	  self.readyState = WebSocket.CONNECTING;
+	  self.bufferedAmount = 0;
+	  // Uses setTimeout() to make sure __createFlash() runs after the caller sets ws.onopen etc.
+	  // Otherwise, when onopen fires immediately, onopen is called before it is set.
+	  setTimeout(function()
+	  {
+		  WebSocket.__addTask(function()
+		  {
+			  self.__createFlash(url, protocol, proxyHost, proxyPort, headers);
+		  });
+	  }, 1);
+  };
   
   WebSocket.prototype.__createFlash = function(url, protocol, proxyHost, proxyPort, headers) {
     var self = this;
@@ -227,17 +230,20 @@
    * @param {object} object
    * @param {string} type
    */
-  WebSocket.prototype.__createEventHandler = function(object, type) {
-    return function(data) {
-      var event = new WebSocketEvent();
-      event.initEvent(type, true, true);
-      event.target = event.currentTarget = object;
-      for (var key in data) {
-        event[key] = data[key];
-      }
-      object.dispatchEvent(event, arguments);
-    };
-  }
+  WebSocket.prototype.__createEventHandler = function(object, type)
+  {
+	  return function(data)
+	  {
+		  var event = new WebSocketEvent();
+		  event.initEvent(type, true, true);
+		  event.target = event.currentTarget = object;
+		  for (var key in data)
+		  {
+			  event[key] = data[key];
+		  }
+		  object.dispatchEvent(event, arguments);
+	  };
+  };
 
   /**
    * Basic implementation of {@link <a href="http://www.w3.org/TR/DOM-Level-2-Events/events.html#Events-interface">DOM 2 EventInterface</a>}

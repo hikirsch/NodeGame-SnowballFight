@@ -181,6 +181,7 @@ var Client = require('../model/Client.js').Class;
 			var clientID = connection.$clientID;
 			
 			// See if client is playing
+			//noinspection PointlessBooleanExpressionJS,PointlessBooleanExpressionJS
 			if( clientID in this.clients == false)
 			{
 				this.delegate.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
@@ -232,10 +233,8 @@ var Client = require('../model/Client.js').Class;
 			this.clientCount++;
 			
 			connection.$clientID = clientID;
-			var aNewClient = new Client(this, connection, false);
-			
 			// Add to our list of connected users
-			this.clients[clientID] = aNewClient;
+			this.clients[clientID] = new Client(this, connection, false);
 			
 			return clientID;
 		},

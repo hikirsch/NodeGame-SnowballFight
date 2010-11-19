@@ -51,7 +51,7 @@ define(['controllers/AbstractGame', 'network/NetChannel', 'view/Game', 'lib/joys
 
 					// create a message with our characters updated information and send it off
 					this.netChannel.addMessageToQueue( false, newMessage );
-				};
+				}
 				
 				this.netChannel.tick( this.gameClock );
 			},
