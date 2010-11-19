@@ -76,13 +76,13 @@ define(['network/Message', 'config'], function(Message, config) {
 	NetChannel.prototype.validateController = function(aController)
 	{
 		var isValid = false; // Assume false
-		if(aController &&  aController.netChannelDidConnect && aController.netChannelDidReceiveMessage && aController.netChannelDidDisconnect) 
+		if(aController &&  aController.netChannelDidConnect && aController.netChannelDidReceiveMessage && aController.netChannelDidDisconnect)
 		{
 			isValid = true;
 		}
-		
+
 		return isValid;
-	}
+	};
 	
 	NetChannel.prototype.tick = function(gameClockTime)
 	{
@@ -206,10 +206,10 @@ define(['network/Message', 'config'], function(Message, config) {
 	{
 		// nothing fancy yet
 		this.rate = 1; // Math.random()*10+50;
-		
+
 		// var time = this.realTime - serverMessage.messageTime;
 		// time -= 0.1; // subtract 100ms
-		// 
+		//
 		// if(time <= 0)
 		// {
 		// 	this.rate = 0.12; /* 60/1000*2 */
@@ -217,7 +217,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		// else
 		// {
 		// }
-	}
+	};
 	/**
 	* Simple convinience message to compose commands.
 	* Bison will encode this array for us when we send
@@ -230,7 +230,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		command.cmd = aCommandConstant;
 		command.data = commandData || {};
 		return command;
-	}
+	};
 	
 	/**
 	* Sending Messages
@@ -240,26 +240,26 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.outgoingSequence += 1;
 		var message = new Message( this.outgoingSequence, isReliable, anUnencodedMessage );
 		message.clientID = this.clientID;
-		
+
 		// Add to array the queue
 		this.messageBuffer[ this.outgoingSequence & this.MESSAGE_BUFFER_MASK ] = message;
 		// console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
-	}
+	};
 	
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
 	{
 		aMessageInstance.messageTime = this.realTime; // Store to determin latency
-		
+
 		this.lastSentTime = this.realTime;
-		
+
 		if( aMessageInstance.isReliable )
 		{
 			this.reliableBuffer = aMessageInstance; // Block new connections
 		}
-		
+
 		this.connection.send( aMessageInstance.encodedSelf() );
 		// console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
-	}
+	};
 	
 	return NetChannel;
 });

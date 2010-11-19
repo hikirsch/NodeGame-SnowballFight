@@ -35,7 +35,7 @@ server = http.createServer(function(req, res)
 		if(path.indexOf('js') > -1) type = 'text/javascript';
 		else if(path.indexOf('css') > -1) type = 'text/css';
 		
-		res.writeHead(200, {'Content-Type':type})
+		res.writeHead(200, {'Content-Type':type});
 		res.write(data, 'utf8');
 		res.end();
 	});
@@ -57,4 +57,4 @@ this.setPrefix = function(aPrefix)
 this.listen = function(port)
 {
 	server.listen(port);
-}
+};

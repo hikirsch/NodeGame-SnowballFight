@@ -46,7 +46,7 @@ var Client = require('../model/Client.js').Class;
 			this.bytes = {
 				sent: 0,
 				received: 0
-			}
+			};
 
 		    // Connections
 		    this.clients = {};		// Everyone connected
@@ -92,31 +92,31 @@ var Client = require('../model/Client.js').Class;
 			*/
 			this.$.onMessage = function(connection, encodedMessage )
 			{
-				try 
+				try
 				{
 					that.bytes.received += encodedMessage.length;
-					
+
 					var decodedMessage = BISON.decode(encodedMessage);
-					
+
 					if(decodedMessage.cmds instanceof Array == false)
 					{
 						// Call the mapped function, always pass the connection. Also pass data if available
 						that.COMMAND_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [connection, decodedMessage]);
-					} 
+					}
 					else // An array of commands
 					{
 						for(var singleCommand in decodedMessage.cmds){
 							that.COMMAND_TO_FUNCTION[singleCommand.cmd](singleCommand.data);
 						};
-					}	
-				} 
+					}
+				}
 				catch (e)
 				{ // If something went wrong, just remove this client and avoid crashign
 					that.delegate.log(e.stack);
 					that.delegate.log('!! Error: ' + e);
 					connection.close();
 				}
-			}
+			};
 			
 			this.$.onClose = function(connection) {     
 				that.removeClient(connection);

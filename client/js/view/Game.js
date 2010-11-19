@@ -25,7 +25,7 @@ define( [ 'lib/Rectangle', 'factories/Html', 'view/Field' ], function( Rectangle
 		{
 			var that = this;
 			HtmlFactory.joinGameDialog()
-				.appendTo("body")
+					.appendTo("body");
 			
 			$("#join").click( this.joinGame.bind( this ) );
 		},

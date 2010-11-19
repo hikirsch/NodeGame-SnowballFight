@@ -5,7 +5,8 @@
 // Inspired by base2 and Prototype
 
 var init = (function(){
-	var initializing = false, fnTest = /xyz/.test(function(){xyz;}) ? /\b_super\b/ : /.*/;
+	var initializing = false, fnTest = /xyz/.test(function()//noinspection BadExpressionStatementJS,BadExpressionStatementJS,BadExpressionStatementJS,BadExpressionStatementJS
+	{xyz;}) ? /\b_super\b/ : /.*/;
 	// The base Class implementation (does nothing)
 	this.Class = function(){};
 	

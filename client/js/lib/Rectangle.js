@@ -25,7 +25,7 @@ var init = function()
 		    return '[Rectangle(' + this.x + ', ' + this.y + ',' + this.width + ',' + this.height + ')]';
 		}
 	});
-}
+};
 
 if (typeof window === 'undefined') {
 	require('./Class.js');

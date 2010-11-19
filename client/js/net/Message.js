@@ -26,6 +26,7 @@ Basic Usage:
 */
 
 var init = function()
+	//noinspection UnterminatedStatementJS
 {
 	return Class.extend(
 	{

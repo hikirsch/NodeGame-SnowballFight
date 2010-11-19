@@ -35,7 +35,7 @@ function Character(game, controller, nickName ) {
 $.extend( Character.prototype, {
 	
 	/**
-	 * Create's the actual HTML element that is used for this game
+	 * Creates the actual HTML element that is used for this game
 	 */
 	createElement: function() {
 		this.element =  $('<div class="character"><p>' + this.nickName + '</p></div>')
@@ -135,7 +135,7 @@ $.extend( Character.prototype, {
 	calculateRotation: function() {
 		if( this.controller.isKeyPressed() )
 		{
-			var rotationFloat = (180/Math.PI) * Math.atan2(this.velocity.x,this.velocity.y) - 180
+			var rotationFloat = (180/Math.PI) * Math.atan2(this.velocity.x,this.velocity.y) - 180;
 			if(rotationFloat < 0) rotationFloat = -rotationFloat;
 
 			this.rotation = rotationFloat << 0;
