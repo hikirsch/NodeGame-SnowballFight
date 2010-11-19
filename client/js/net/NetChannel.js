@@ -109,7 +109,7 @@ define( 'NetChannel', ['Message', 'config'], function(Message, config) {
 			}
 		}
 		
-		if(hasReliableMessages == false && firstUnreliableMessageFound != null)
+		if(!hasReliableMessages && firstUnreliableMessageFound != null)
 		{
 			this.sendMessage(firstUnreliableMessageFound)
 		}
