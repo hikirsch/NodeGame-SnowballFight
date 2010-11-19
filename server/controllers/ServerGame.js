@@ -21,36 +21,34 @@ Basic Usage:
 Version:
 	1.0
 */
-var AbstractClassController = require('../../client/js/controllers/AbstractGame.js').Class;
+var AbstractGameController = require('../../client/js/controllers/AbstractGame.js').Class;
 var ServerNetChannel = require('../network/ServerNetChannel.js').Class;
 var Logger = require('../lib/Logger.js').Class;
 
 (function(){
-	exports.Class = AbstractClassController.extend({
-		init: function( config, serverConfig )
+	exports.Class = AbstractGameController.extend({
+		init: function( serverController )
 		{
 			this._super();
 
-			this.logger = new Logger( serverConfig, this );
-			
-			// Server
-			this.netChannel = new ServerNetChannel({ serverConfig: serverConfig, config: config, delegate: this });
+			// the server controller has access to all the games and our logger
+			// amongst other things that the entire server would need
+			this.controller = serverController;
 
-			this.COMMAND_TO_FUNCTION = {};
-			// this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_JOINED] = this.onClientJoined;
-			// this.COMMAND_TO_FUNCTION[COMMANDS.PLAYER_DISCONNECT] = this.onRemoveClient;
-			this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_MOVE] = this.onPlayerMoved;
-			this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_FIRE] = this.genericCommand;
+			// Server, the net channel should only care about this controller as well as the
+			// port that it shuold run as, ask our main controller which port to use
+			this.netChannel = new ServerNetChannel( this, this.controller.getNextAvailablePort() );
 		},
 		
-		onGenericPlayerCommand: function(clientID, aDecodedMessage)
+		onGenericCommand: function(clientID, aDecodedMessage)
 		{
 			this.COMMAND_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this,[aDecodedMessage]);
 		},
-		
-		run: function()
+
+		// start our game;
+		start: function()
 		{
-			this.netChannel.run();
+			this.netChannel.start();
 		},
 		
 		tick: function()
@@ -60,8 +58,8 @@ var Logger = require('../lib/Logger.js').Class;
 		
 		log: function(o)
 		{
-			console.log( o );
-			// this.logger.log( o );
+			// console.log( o );
+			this.controller.log( o );
 		},
 		
 		status: function()

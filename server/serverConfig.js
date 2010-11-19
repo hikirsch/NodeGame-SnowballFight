@@ -4,7 +4,8 @@ var init = function()
 	    showStatus: true,
 	    recordFile: './../record[date].js',
 	    record: false,
-	    server: null
+	    server: null,
+		port: 43587
 	};
 };
 
