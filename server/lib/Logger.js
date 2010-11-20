@@ -17,9 +17,11 @@ Version:
 var sys = require('sys');
 var BISON = require('./bison');
 
-(function(){
-	exports.Class = Class.extend({
-		init: function( options, game )
+Logger = (function()
+{
+	return new JS.Class(
+	{
+		initialize: function( options, game )
 		{
 			this.options = options || {};
 			this.game = game;

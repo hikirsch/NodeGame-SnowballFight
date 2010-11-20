@@ -48,13 +48,13 @@ send404 = function(error, res)
 	res.end();
 };
 
-this.setPrefix = function(aPrefix)
+exports.setPrefix = function(aPrefix)
 {
 	server.prefix = aPrefix;
 	sys.inspect(this, true, 10);
 };
 
-this.listen = function(port)
+exports.listen = function(port)
 {
 	server.listen(port);
 };

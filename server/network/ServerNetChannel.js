@@ -6,37 +6,49 @@ Created By:
 Project	:
 	Ogilvy Holiday Card 2010
 Abstract:
-	-> Clientside netchannel talks to this object
+	-> Clientside NetChannel talks to this object
 	<--> This object talks to it's GameController
  	  <-- This object broadcast the message to all clients
-Basic Usage: 
-	var server = new ServerNetChannel(this,
-	{
-	    'port': Math.abs(ArgHelper.getArgumentByNameOrSetDefault('port', 28785)),
-	    'status': false,
-	    'recordFile': './../record[date].js',
-	    'record': false,
-	    'server': null
-	});
-	
-	server.run();
+Basic Usage:
+
+ 	var netChannelOptions = {};
+	netChannelOptions.HOST = 'localhost';
+	netChannelOptions.PORT = 28785;
+	netChannelOptions.DEBUG_MODE = true;
+
+ 	// These are the 'CMDS' the player sends to the server, and the server sends.
+	netChannelOptions.CMDS = {};
+ 	netChannelOptions.CMDS.SERVER_CONNECT: 2;
+ 	netChannelOptions.CMDS.PLAYER_JOINED: 1;
+ 	netChannelOptions.CMDS.PLAYER_DISCONNECT: 4;
+	netChannelOptions.CMDS.PLAYER_MOVE: 8;
+	netChannelOptions.CMDS.PLAYER_FIRE: 22;
+
+ 	// Create the NetChannel, pass this game instance as the delegate - (which we will defer to when messages are received, and confirmed)
+	var netChannel = new ServerNetChannel(this, netChannelOptions);
+ 
+    // Alright everything went well, start the net channel which will create the websocket and start listening
+	netChannel.start();
 */
 
 var sys = require('sys');
 var ws = require('./ws.js');
 var BISON = require('../lib/bison.js');
-var Client = require('../model/Client.js').Class;
 
-(function(){
-	exports.Class = Class.extend({
-		init: function(options) 
+require('../../client/js/lib/jsclass/core.js');
+require('../model/Client.js');
+
+ServerNetChannel = (function()
+{
+	return new JS.Class(
+	{
+		initialize: function(aDelegate, config)
 		{
-			// our configuration
-			var config = options.config;
+			console.log('(ServerGame)::init');
 			
-			// Delegation pattern, should avoid subclassing
-			this.delegate = options.delegate;
-			
+			// Delegation pattern, avoid subclassing ServerNetChannel
+			this.delegate = aDelegate;
+
 			// Connection options
 			this.maxChars = config.maxChars || 128;
 			this.maxClients = config.maxClients || 64;
@@ -57,41 +69,42 @@ var Client = require('../model/Client.js').Class;
 		    this.record = config.record || false;
 		    this.recordFile = config.recordFile || './record[date].js';
 		    this.recordData = [];
-		    
-		    // Map COMMAND values to functions to avoid a giant switch statement as this expands
-		    this.COMMAND_TO_FUNCTION = {};
 
-		    this.COMMAND_TO_FUNCTION[config.COMMANDS.SERVER_CONNECT] = this.onClientConnected;
-		    this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_JOINED] = this.onPlayerJoined;
-		    this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_DISCONNECT] = this.removeClient;
-		    this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_MOVE] = this.onGenericPlayerCommand;
-		    this.COMMAND_TO_FUNCTION[config.COMMANDS.PLAYER_FIRE] = this.genericCommand;
-		
+
+		    // Map CMD values to functions to avoid a giant switch statement as this expands
+		    this.CMD_TO_FUNCTION = {};
+
+		    this.CMD_TO_FUNCTION[config.CMDS.SERVER_CONNECT] = this.onClientConnected;
+		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onPlayerJoined;
+		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.removeClient;
+		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.onGenericPlayerCommand;
+		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
+		      
 		    this.initAndStartWebSocket(config);
 		}, 
 		
 		/**
-		 * Initialize and start the websocket server.
+		 * Initialize and start the WebSocket server.
 		 * With this set up we should be abl to move to Socket.io easily if we need to
 		 */
 		initAndStartWebSocket: function(options)
 		{
 			// START THE WEB-SOCKET
 			var that = this;
-			this.$ = new ws.Server(options.server || null);
+			var aWebSocket = this.$ = new ws.Server( null);
 			
-			this.$.onConnect = function(connection)
+			aWebSocket.onConnect = function(connection)
 			{
-				that.delegate.log("(ServerNetChannel) onConnect:", connection);
-				that.delegate.log("(ServerNetChannel) UserConnected:", connection);
+				//that.delegate.log("(ServerNetChannel) UserConnected:", sys.inspect(arguments[0]) );
 			};
 			
 			/**
 			* Received a message from a client/
 			* Messages can come as a single message, or grouped into an array of commands.
 			*/
-			this.$.onMessage = function(connection, encodedMessage )
+			aWebSocket.onMessage = function(connection, encodedMessage )
 			{
+				that.delegate.log( '(ServerNetChannel) : onMessage', connection, BISON.decode(encodedMessage) );
 				try
 				{
 					that.bytes.received += encodedMessage.length;
@@ -101,30 +114,27 @@ var Client = require('../model/Client.js').Class;
 					if(decodedMessage.cmds instanceof Array == false)
 					{
 						// Call the mapped function, always pass the connection. Also pass data if available
-						that.COMMAND_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [connection, decodedMessage]);
+						that.CMD_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [connection, decodedMessage]);
 					}
 					else // An array of commands
 					{
 						for(var singleCommand in decodedMessage.cmds){
-							that.COMMAND_TO_FUNCTION[singleCommand.cmd](singleCommand.data);
+							that.CMD_TO_FUNCTION[singleCommand.cmd](singleCommand.data);
 						};
 					}
 				}
 				catch (e)
 				{ // If something went wrong, just remove this client and avoid crashign
+
 					that.delegate.log(e.stack);
 					that.delegate.log('!! Error: ' + e);
 					connection.close();
 				}
 			};
 			
-			this.$.onClose = function(connection) {     
+			aWebSocket.onClose = function(connection) {
 				that.removeClient(connection);
 			};
-			
-			// Start listening
-			this.delegate.log('(ServerNetChannel) Listening.');
-			this.$.listen(this.port);
 		},
 		
 		// Create a callback to call 'start' on the next event loop
@@ -141,10 +151,14 @@ var Client = require('../model/Client.js').Class;
 		{
 			var that = this;
 			this.startTime = new Date().getTime();
-			this.time = new Date().getTime();
+			this.time = this.startTime;
 			this.delegate.status();
-			
-			// Listen for termination
+
+			// Start the websocket
+			this.delegate.log('(ServerNetChannel) Started listening...');
+			this.$.listen(this.port);
+
+			// Listen for process termination
 			process.addListener('SIGINT', function(){that.shutdown()});
 		},
 		
@@ -261,7 +275,7 @@ var Client = require('../model/Client.js').Class;
 		
 		/**
 		 * Message Sending
-		 * @param originalClient		The connectionID of the client this message originated from
+		 * @param originalClientID		The connectionID of the client this message originated from
 		 * @param anUnencodedMessage	Human readable message data
 		 * @param sendToOriginalClient	If true the client will receive the message it sent. This should be true for 'reliable' events such as joining the game
 		 */

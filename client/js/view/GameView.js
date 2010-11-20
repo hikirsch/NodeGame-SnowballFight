@@ -14,9 +14,11 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( [ 'lib/Rectangle', 'factories/Html', 'view/Field' ], function( Rectangle, HtmlFactory, FieldView ) { 
-	return Class.extend({
-		init: function(controller) 
+define( ['lib/Rectangle', 'factories/HTMLFactory', 'view/FieldView', 'lib/jsclass/core'], function(Rectangle, HTMLFactory, FieldView)
+{
+	return new JS.Class(
+	{
+		initialize: function(controller)
 		{
 			this.gameController = controller;
 		},
@@ -24,22 +26,25 @@ define( [ 'lib/Rectangle', 'factories/Html', 'view/Field' ], function( Rectangle
 		showJoinGame: function()
 		{
 			var that = this;
-			HtmlFactory.joinGameDialog()
+			HTMLFactory.joinGameDialog()
 					.appendTo("body");
-			
-			$("#join").click( this.joinGame.bind( this ) );
+
+
+
+			$("#join").click( function(e) { that.joinGame() } );
 		},
 	
 		serverOffline: function()
 		{
-			HtmlFactory.serverUnavailableDialog()
+			HTMLFactory.serverUnavailableDialog()
 				.appendTo("body");
 		},
 	
 		joinGame: function(e) 
 		{
 			var nickName = $("#nickname").val();
-		
+
+			console.log( "HELLO!" );
 			if( nickName.length <= 0)
 			{
 				nickName = 'NoName' + Math.floor( Math.random() * 1000 );

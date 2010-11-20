@@ -15,8 +15,18 @@ if( createHTTPServer )
  * Start the actual node server.
  */
 var sys = require('sys');
-var ServerController = require('./controllers/ServerGame.js').Class;
 var config = require('../client/js/config.js').Config;
 var serverConfig = require('./serverConfig.js').Config;
 
-new ServerController(config, serverConfig).start();
+
+require('../client/js/scratchpad/Animal.js');
+require('./controllers/Server.js');
+var serverInstance = new Server(config, serverConfig);
+
+
+// Testing JS.Class
+var animal = new Animal('Rex');
+console.log('Animal', animal.speak("YELLING!!!") ); // Should output: Animal My name is Max and I like BARKING!!!
+
+
+

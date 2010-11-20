@@ -1,7 +1,12 @@
-var init = function(Class, Rectangle, FieldView) {
-	return Class.extend({
-		init: function( game )
+var init = function(Rectangle, FieldView)
+{
+	return new JS.Class(
+	{
+		initialize: function(game) 
 		{
+
+//			console.log('(FieldController)::initialize');
+
 			this.gameController = game;
 
 			this.rectangle = new Rectangle(0, 0, 640, 480);
@@ -12,11 +17,12 @@ var init = function(Class, Rectangle, FieldView) {
 			this.entities = new SortedLookupTable(); // Everything else, e.g. trees, rocks, powerups, dogs, cats
 			
 			// if our game has a view, then create one
-			console.log('the game controllers view exists: ' + this.gameController.view );
+			
+//			console.log('the game controllers view exists: ' + this.gameController.view );
 			if( this.gameController.view )
 			{
 				this.view = new FieldView(this);
-			};
+			}
 		},
 		
 		getWidth: function()
@@ -53,21 +59,19 @@ var init = function(Class, Rectangle, FieldView) {
 			}, this );
 
 			// Update entities
-			this.entities.forEach( function(key, entity){ 
-				entity.tick(speedFactor)
-			}, this );
-		}
+			this.entities.forEach( function(key, entity){entity.tick(speedFactor) }, this );
+			}
 	});
 };
 
 if (typeof window === 'undefined')
 {
-	var Class = require('../lib/Class.js').Class;
-	var Rectangle = require('../lib/Rectangle.js').Class;
-	
-	exports.Class = init(Class, Rectangle);
+	require('../lib/jsclass/core.js');
+	require('../lib/Rectangle.js');
+	require('../view/FieldView.js');
+	FieldController = init(Rectangle, FieldView);
 }
 else
 {
-	define(['lib/Class', 'lib/Rectangle', 'view/Field'], init);
+	define(['lib/Rectangle', 'view/FieldView', 'lib/jsclass/core'], init);
 }

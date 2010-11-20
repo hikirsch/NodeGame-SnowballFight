@@ -4,7 +4,7 @@ var init = function()
 		HOST: 'localhost',
 		PORT: 28785,
 		DEBUG_MODE: true,
-		COMMANDS: { 
+		CMDS: { 
 			SERVER_CONNECT: 0x02,
 			PLAYER_JOINED: 0x01,
 			PLAYER_DISCONNECT: 0x04,

@@ -25,10 +25,12 @@ Basic Usage:
 		// Grab the view from the character and add it to our GameView
 		this.view.addCharacter(newCharacter.initView());
 */
-var init = function(Vector, Rectangle, CharacterView)
+
+var init = function()
 {
-	return Class.extend({
-		init: function(aClientID, controller, initView)
+	return new JS.Class(
+	{
+		initialize: function(aClientID, controller, initView)
 		{
 			this.fieldController = controller;
 			this.clientID = aClientID;
@@ -208,14 +210,14 @@ var init = function(Vector, Rectangle, CharacterView)
 if (typeof window === 'undefined')
 {
 	// We're in node!
-	var Rectangle = require('../lib/Rectangle').Class;
-	var Vector = require('../lib/Vector').Class;
-
-	exports.Class = init(Vector, Rectangle );
+	require('../lib/jsclass/core.js');	
+	require('../lib/Rectangle');
+	require('../lib/Vector');
+	Character = init();
 }
 else
 {
 	// We're on the browser. 
 	// Require.js will use this file's name (CharacterController.js), to create a new  
-	define(['lib/Vector', 'lib/Rectangle', 'view/Character'], init);
+	define(['lib/jsclass/core', 'lib/Vector', 'lib/Rectangle', 'view/CharacterView'], init);
 }

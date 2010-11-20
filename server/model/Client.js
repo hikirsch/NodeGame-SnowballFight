@@ -19,10 +19,11 @@ Basic Usage:
 	}
 	
 */
-(function(){
-	exports.Class = Class.extend(
+var init = function()
+{
+	return new JS.Class(
 	{
-		init: function( aServer, aConnection, aRecord )
+		initialize: function( aServer, aConnection, aRecord )
 		{
 			this.conn = aConnection;
 			this.record = aRecord;
@@ -35,4 +36,12 @@ Basic Usage:
 			this.conn.send( anEncodedMessage );
 		}
 	}); // close extend
-})(); // close anon function
+}; // close anon function
+
+// Handle Node.JS and browser
+if (typeof window === 'undefined') {
+	require('../../client/js/lib/jsclass/core.js');
+	Client = init();
+}
+
+	

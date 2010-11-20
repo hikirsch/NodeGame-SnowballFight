@@ -27,9 +27,8 @@ Basic Usage:
 
 var init = function()
 {
-	return Class.extend(
+	return new JS.Class(
 	{
-
 		/**
 		* A message is a small value-object wrapper
 		* @param aSequenceNumber 	Ties us to an array by the owning class
@@ -37,7 +36,7 @@ var init = function()
 		  messages (for example moving is unreliable, because once it's outdates its worthless if new information exist)
 		* @param anEncodedMessage	The actualMessage that will be sent. Already encoded
 		**/
-		init: function(aSequenceNumber, isReliable, anUnencodedMessage)
+		initialize: function(aSequenceNumber, isReliable, anUnencodedMessage)
 		{
 			// Info
 			this.sequenceNumber = aSequenceNumber;
@@ -70,7 +69,8 @@ var init = function()
 
 if (typeof window === 'undefined') {
 	require('./lib/bison.js');
-	exports.Class = init();
+	Message = init();
 } else {
-	define(['lib/Class','lib/bison'], init);
+
+	define(['lib/jsclass/core', 'lib/bison'], init);
 }

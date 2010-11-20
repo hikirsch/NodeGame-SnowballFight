@@ -10,9 +10,12 @@ Abstract:
 Basic Usage: 
  	
 */
-define(['factories/Html'], function( HtmlFactory) {
-	return Class.extend({
-		init: function(characterController, theme ) 
+
+define(['lib/jsclass/core', 'factories/HTMLFactory'], function()
+{
+	return new JS.Class(
+	{
+		initialize: function(characterController, theme ) 
 		{
 			this.controller = characterController;
 			this.theme = theme;

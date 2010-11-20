@@ -42,7 +42,6 @@
 				
 				var that = this;
 				_conn = new WebSocket('ws://' + host + ':' + port);
-				console.log(sys.inspect(_conn));
 				_conn.onopen = function() {
 					_online = true;
 					$("#join-game").show();

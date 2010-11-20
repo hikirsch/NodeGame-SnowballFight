@@ -1,3 +1,4 @@
+
 /**
 File:
 	AbstractGameController
@@ -12,23 +13,30 @@ Abstract:
 Basic Usage: 
 	 See subclasses
 */
-var init = function(CharacterController, FieldController, Rectangle, Vector, SortedLookupTable)
+
+var init = function(FieldController,Rectangle,Vector, SortedLookupTable, Character)
 {
-	return Class.extend({
-		init: function() 
-		{ 
+	console.log( 'arguments ', arguments)
+	return new JS.Class(
+	{
+		initialize: function()
+		{
+			console.log('(AbstractGame)::initialize') ;
+
 			// our game takes place in a field
-			this.field = new FieldController(this);
+			this.fieldController = new FieldController( this );
+			this.fieldController.tick();
 			
 			// intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
 			// desiredFramerate, is usually 60 or 30 - it's the framerate the game is designed against 
-			
 			this.intervalFramerate = 60; // Try to call our tick function this often
 			this.desiredFramerate = 60;
 			
 			// Loop
 			this.gameClock = new Date().getTime();
-			this.gameTick = setInterval( this.tick.bind( this ) , 1000 / this.intervalFramerate );
+			
+			var that = this; // Temporarily got rid of bind (had some bug with it), feel free to add back in -
+			this.gameTick = setInterval(function(){that.tick()}, 1000/this.intervalFramerate);
 		},
 		
 		/**
@@ -39,14 +47,14 @@ var init = function(CharacterController, FieldController, Rectangle, Vector, Sor
 			var oldTime = this.gameClock;
 			this.gameClock = new Date().getTime();
 			var delta = ( this.gameClock - oldTime ); // Note (var framerate = 1000/delta);
-			
+
 			// Framerate independent motion
-			// Any movement should take this value into account, 
+			// Any movement should take this value into account,
 			// otherwise faster machines which can update themselves more accurately will have an advantage
 			var speedFactor = delta / ( 1000 / this.desiredFramerate );
-			if (speedFactor <= 0) speedfactor = 1;
+			if (speedFactor <= 0) speedFactor = 1;
 
-			this.field.tick(speedFactor);
+			this.fieldController.tick(speedFactor);
 		},
 		
 		/**
@@ -54,10 +62,10 @@ var init = function(CharacterController, FieldController, Rectangle, Vector, Sor
 		*/
 		addClient: function( aClientID, nickName, initView )
 		{
-			var newCharacter = new CharacterController( aClientID, this.field, initView );
+			var newCharacter = new Character( aClientID, this.fieldController, initView );
 			newCharacter.setNickName( nickName );
 			
-			this.field.addPlayer( newCharacter );
+			this.fieldController.addPlayer( newCharacter );
 			
 			return newCharacter;
 		},
@@ -65,7 +73,7 @@ var init = function(CharacterController, FieldController, Rectangle, Vector, Sor
 		setNickNameForClientID: function(aNickName, aClientID) 
 		{
 			this.log( '(AbstractGame) setting client nickname to: ' + aNickName + ' for clientID: ' + aClientID );
-			this.field.players.objectForKey(aClientID).setNickName(aNickName);
+			this.fieldController.players.objectForKey(aClientID).setNickName(aNickName);
 		},
 		
 		/**
@@ -73,11 +81,11 @@ var init = function(CharacterController, FieldController, Rectangle, Vector, Sor
 		 */
 		onPlayerMoved: function(data)
 		{
-			var targetCharacter = this.players.get(messageData.id);
+			var targetCharacter = this.players.get(data.id);
 			
 			if(targetCharacter == null) 
 			{
-				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(messageData) : data );
+				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(data) : data );
 				return;
 			};
 			
@@ -100,15 +108,15 @@ var init = function(CharacterController, FieldController, Rectangle, Vector, Sor
 
 if (typeof window === 'undefined') 
 {
-	var CharacterController = require('./Character.js').Class;
-	var FieldController = require('./Field.js').Class;
-	var Rectangle = require('../lib/Rectangle.js').Class;
-	var Vector = require('../lib/Vector.js').Class;
-	var SortedLookupTable = require('../lib/SortedLookupTable.js').Class;
+	require('../lib/jsclass/core.js');
+	require('./FieldController.js');
+	require('../lib/Rectangle.js');
+	require('../lib/Vector.js');
+	require('../lib/SortedLookupTable.js');
 	
-	exports.Class = init( CharacterController, FieldController, Rectangle, Vector, SortedLookupTable );
-} 
+	AbstractGame = init(FieldController, Rectangle, Vector, SortedLookupTable);
+}
 else 
 {
-	define(['controllers/Character', 'controllers/Field', 'lib/Rectangle', 'lib/Vector', 'lib/SortedLookupTable' ], init);
+	define(['controllers/FieldController', 'lib/Rectangle', 'lib/Vector', 'lib/SortedLookupTable', 'controllers/Character', 'lib/jsclass/core'], init);
 }

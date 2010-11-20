@@ -8,8 +8,9 @@
 
 var init = function()
 {
-	return Class.extend({
-		init: function(x, y)
+	return new JS.Class(
+	{
+		initialize: function(x, y)
 		{
 		    if (typeof x == 'Object') {
 		        this.x = x.x;
@@ -208,9 +209,8 @@ var init = function()
 };
 
 if (typeof window === 'undefined') {
-	require('./Class.js');
-	
-	exports.Class = init();
+	require('./jsclass/core.js');
+	Vector = init();
 } else {
-	define(['lib/Class'], init);
+	define(['lib/jsclass/core'], init);
 }

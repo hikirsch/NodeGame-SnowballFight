@@ -21,28 +21,33 @@ Basic Usage:
 Version:
 	1.0
 */
-var AbstractGameController = require('../../client/js/controllers/AbstractGame.js').Class;
-var ServerNetChannel = require('../network/ServerNetChannel.js').Class;
-var Logger = require('../lib/Logger.js').Class;
 
-(function(){
-	exports.Class = AbstractGameController.extend({
-		init: function( serverController )
+var sys = require('sys');
+
+require('../../client/js/lib/jsclass/core.js');
+require('../../client/js/controllers/AbstractGame.js');
+require('../network/ServerNetChannel.js');
+require('../lib/Logger.js');
+
+ServerGame = (function()
+{
+	return new JS.Class(AbstractGame, {
+		initialize: function(aServer)
 		{
-			this._super();
-
+			console.log('(ServerGame)::init');
+			
 			// the server controller has access to all the games and our logger
 			// amongst other things that the entire server would need
-			this.controller = serverController;
+			this.server = aServer;
 
-			// Server, the net channel should only care about this controller as well as the
-			// port that it shuold run as, ask our main controller which port to use
-			this.netChannel = new ServerNetChannel( this, this.controller.getNextAvailablePort() );
+
+			// ServerGameInstance - Each ServerNetChannel is owned by one ServerGameInstance
+			this.netChannel = new ServerNetChannel(this, this.server.gameConfig);
 		},
-		
+
 		onGenericCommand: function(clientID, aDecodedMessage)
 		{
-			this.COMMAND_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this,[aDecodedMessage]);
+			this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
 		},
 
 		// start our game;
@@ -50,21 +55,21 @@ var Logger = require('../lib/Logger.js').Class;
 		{
 			this.netChannel.start();
 		},
-		
+
 		tick: function()
 		{
 			this._super();
 		},
-		
+
 		log: function(o)
 		{
 			// console.log( o );
-			this.controller.log( o );
+			this.server.log(o);
 		},
-		
+
 		status: function()
 		{
-			// this.logger.status();
+			//this.logger.status();
 		}
 	});
-}());
+})();

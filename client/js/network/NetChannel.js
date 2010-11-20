@@ -23,14 +23,17 @@ define(['network/Message', 'config'], function(Message, config) {
 	function NetChannel( aHost, aPort, aController )
 	{		
 		var that = this; // Forclosures (haw haw)	
-		
+
+		 
+		this.verboseMode = true;
+
 		// Make sure this controller is valid before moving forward.
 		// Function itself
 		if( this.validateController(aController) === false ) 
 		{
 			console.log("(NetChannel) Controller " + aController + " is undefined or does not conform to the valid methods. Ignored."); 	 
 			return;
-		};
+		}
 		
 		this.controller = aController;	// For callbacks once messages are validated
 		
@@ -65,7 +68,8 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.connection.onopen = function() { that.onConnectionOpened(); };
 		this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
 		this.connection.onclose = function() { that.onConnectionClosed(); };
-		
+
+
 		console.log("(NetChannel) Created with socket: ", this.connection);
 	}
 	
@@ -78,6 +82,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		var isValid = false; // Assume false
 		if(aController &&  aController.netChannelDidConnect && aController.netChannelDidReceiveMessage && aController.netChannelDidDisconnect)
 		{
+
 			isValid = true;
 		}
 
@@ -87,7 +92,9 @@ define(['network/Message', 'config'], function(Message, config) {
 	NetChannel.prototype.tick = function(gameClockTime)
 	{
 		this.realTime = gameClockTime;
-		
+
+//		if( this.verboseMode ) console.log("(NetChannel) tick", gameClockTime);
+
 		if(this.reliableBuffer !== null) return; // Can't send new message, still waiting
 		
 		var hasReliableMessages = false;
@@ -128,15 +135,18 @@ define(['network/Message', 'config'], function(Message, config) {
 	 **/
 	NetChannel.prototype.onConnectionOpened = function ()
 	{
+		if( this.verboseMode ) console.log("(NetChannel) onConnectionOpened");
+
 		// Create a new message with the SERVER_CONNECT command
-		this.addMessageToQueue(true, this.composeCommand(config.COMMANDS.SERVER_CONNECT, null) );
+		this.addMessageToQueue(true, this.composeCommand(config.CMDS.SERVER_CONNECT, null) );
 	};
 	
 	NetChannel.prototype.onServerMessage = function (messageEvent)
 	{	
 		var serverMessage = BISON.decode(messageEvent.data);
+
+		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", serverMessage);
 		
-		// console.log('(NetChannel) msg-received:', serverMessage);
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) return;
 		
@@ -145,7 +155,7 @@ define(['network/Message', 'config'], function(Message, config) {
 			
 		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
 		// So we have to put it here, because otherwise e don't actually have a true client ID yet so the code below will not work
-		if(serverMessage.cmds.cmd == config.COMMANDS.SERVER_CONNECT)
+		if(serverMessage.cmds.cmd == config.CMDS.SERVER_CONNECT)
 		{
 			this.onServerDidAcceptConnection(serverMessage);
 		}
@@ -174,7 +184,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		}
 			
 		// Every other server message
-		if(serverMessage.cmds.cmd != config.COMMANDS.SERVER_CONNECT)
+		if(serverMessage.cmds.cmd != config.CMDS.SERVER_CONNECT)
 		{
 			this.controller.netChannelDidReceiveMessage(serverMessage);
 		}
@@ -184,13 +194,16 @@ define(['network/Message', 'config'], function(Message, config) {
 	
 	NetChannel.prototype.onConnectionClosed = function (serverMessage)
 	{
-		console.log('(NetChannel) onConnectionClosed');
+
+		console.log('(NetChannel) onConnectionClosed', serverMessage);
 		this.controller.netChannelDidDisconnect();
 	};
 	
 	// onConnectionOpened is for the WebSocket - however we still don't have a 'clientID', this is what we get back when we were OK'ed and created by the server 
 	NetChannel.prototype.onServerDidAcceptConnection = function(serverMessage)
 	{
+		if( this.verboseMode ) console.log("(NetChannel) onServerDidAcceptConnection", serverMessage);
+
 		// Only the server can create client ID's - grab the one i returned for us;
 		this.clientID = serverMessage.id;
 		
@@ -219,7 +232,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		// }
 	};
 	/**
-	* Simple convinience message to compose commands.
+	* Simple convinience message to compose CMDS.
 	* Bison will encode this array for us when we send
 	*/
 	NetChannel.prototype.composeCommand = function(aCommandConstant, commandData)
@@ -243,7 +256,7 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		// Add to array the queue
 		this.messageBuffer[ this.outgoingSequence & this.MESSAGE_BUFFER_MASK ] = message;
-		// console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
+		if( this.verboseMode ) console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
 	};
 	
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
@@ -258,7 +271,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		}
 
 		this.connection.send( aMessageInstance.encodedSelf() );
-		// console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
+		if(this.verboseMode) console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
 	};
 	
 	return NetChannel;
