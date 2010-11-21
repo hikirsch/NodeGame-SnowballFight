@@ -43,7 +43,9 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 		tick: function()
 		{
 			this.callSuper();
+			this.netChannel.tick( this.clockGame );
 
+			// Continuesly store information about this character
 			if( this.clientCharacter != null )
 			{
 				var characterStatus = this.clientCharacter.getStatus();
@@ -52,8 +54,6 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				// create a message with our characters updated information and send it off
 				this.netChannel.addMessageToQueue( false, newMessage );
 			}
-
-			this.netChannel.tick( this.gameClock );
 		},
 
 		shouldAddPlayer: function (anObjectID, aClientID, playerType)
