@@ -66,7 +66,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		// Connection timings
 		this.latency = 1000; // lag right now
 		//
-		this.realTime = -1;
+		this.gameClock = -1;
 		this.lastSentTime = -1;
 		this.lastRecievedTime = -1; // Last time we received a message
 		
@@ -74,8 +74,8 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.clearTime = -1; // if realtime > nc->cleartime, free to go
 		this.rate = 5;	// seconds / byte
 		
-		this.incomingSequence = 0;
-		this.outgoingSequence = 0;
+		this.incomingSequenceNumber = 0;
+		this.outgoingSequenceNumber = 0;
 		
 		// array of the last 31 messages sent
 		this.messageBuffer = [];
@@ -113,7 +113,7 @@ define(['network/Message', 'config'], function(Message, config) {
 	
 	NetChannel.prototype.tick = function(gameClockTime)
 	{
-		this.realTime = gameClockTime;
+		this.gameClock = gameClockTime;
 
 //		if( this.verboseMode ) console.log("(NetChannel) tick", gameClockTime);
 
@@ -143,15 +143,15 @@ define(['network/Message', 'config'], function(Message, config) {
 			this.sendMessage(firstUnreliableMessageFound)
 		}
 	};
-	
+
 	/**
 	* Determines if it's ok for the client to send a unreliable new message yet
 	*/
 	NetChannel.prototype.canSend = function ()
 	{
-		return ( this.realTime > this.lastSentTime + this.rate );
+		return ( this.gameClock > this.lastSentTime + this.rate );
 	};
-	
+
 	/**
 	 * Messages from the FROM / SERVER
 	 **/
@@ -172,7 +172,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) return;
 		
-		this.lastReceivedTime = this.realTime;
+		this.lastReceivedTime = this.gameClock;
 		this.adjustRate(serverMessage);
 			
 		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
@@ -188,7 +188,7 @@ define(['network/Message', 'config'], function(Message, config) {
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
 			
-			this.latency = this.realTime - message.messageTime;
+			this.latency = this.gameClock - message.messageTime;
 			
 			// Free up reliable buffer to allow for new message to be sent
 			if(this.reliableBuffer === message)
@@ -242,7 +242,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		// nothing fancy yet
 		this.rate = 1; // Math.random()*10+50;
 
-		// var time = this.realTime - serverMessage.messageTime;
+		// var time = this.gameClock - serverMessage.messageTime;
 		// time -= 0.1; // subtract 100ms
 		//
 		// if(time <= 0)
@@ -272,20 +272,20 @@ define(['network/Message', 'config'], function(Message, config) {
 	*/
 	NetChannel.prototype.addMessageToQueue = function( isReliable, anUnencodedMessage )
 	{
-		this.outgoingSequence += 1;
-		var message = new Message( this.outgoingSequence, isReliable, anUnencodedMessage );
+		this.outgoingSequenceNumber += 1;
+		var message = new Message( this.outgoingSequenceNumber, isReliable, anUnencodedMessage );
 		message.clientID = this.clientID;
 
 		// Add to array the queue
-		this.messageBuffer[ this.outgoingSequence & this.MESSAGE_BUFFER_MASK ] = message;
-		if( this.verboseMode ) console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequence & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
+		this.messageBuffer[ this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK ] = message;
+		if( this.verboseMode ) console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
 	};
 	
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
 	{
-		aMessageInstance.messageTime = this.realTime; // Store to determin latency
+		aMessageInstance.messageTime = this.gameClock; // Store to determin latency
 
-		this.lastSentTime = this.realTime;
+		this.lastSentTime = this.gameClock;
 
 		if( aMessageInstance.isReliable )
 		{
