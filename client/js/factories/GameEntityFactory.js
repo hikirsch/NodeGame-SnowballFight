@@ -38,7 +38,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 
 		createCharacter: function(anObjectID, aClientID, aCharacterType, aFieldController)
 		{
-			console.log("(GameEntityFactory)::createCharacter", sys.inspect(arguments));
+//			console.log("(GameEntityFactory)::createCharacter", sys.inspect(arguments));
 			var characterClass = this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
 			return new characterClass(anObjectID, aClientID, aFieldController);
 		}
