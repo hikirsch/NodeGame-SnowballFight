@@ -134,6 +134,27 @@ var init = function(Vector, Rectangle, FieldController)
 		},
 
 		/**
+		 * Net
+		 */
+		constructEntityDescription: function()
+		{
+			return {
+				objectID: this.objectID,
+				clientID: this.clientID,
+				x: this.position.x,
+				y: this.position.y,
+				vx: this.velocity.x,
+				vy: this.velocity.y,
+				r: this.rotation
+			}
+		},
+
+		deconstructFromEntityDescription: function(anEntityDescription)
+		{
+//			throw("All GameEntity subclasses must override this method.");
+		},
+
+		/**
 		 * Accessors
 		 */
 		getRotation: function()
@@ -145,8 +166,11 @@ var init = function(Vector, Rectangle, FieldController)
 			return this.position;
 		},
 
-		getStatus: function() {
+		constructEntityDescription: function()
+		{
 			return {
+				objectID: this.objectID,
+				clientID: this.clientID,
 				x: this.position.x,
 				y: this.position.y,
 				vx: this.velocity.x,

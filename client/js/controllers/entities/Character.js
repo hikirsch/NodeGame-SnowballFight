@@ -80,6 +80,16 @@ var init = function(Vector, Rectangle, GameEntity)
 			this.callSuper();
 		},
 
+//		/**
+//		 * Net
+//		 */
+
+//
+//		deconstructFromEntityDescription: function(anEntityDescription)
+//		{
+//			throw("All GameEntity subclasses must override this method.");
+//		},
+
 		/**
 		 * Accessors
 		 */
