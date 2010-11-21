@@ -37,7 +37,8 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			this.desiredFramerate = 60;
 			
 			// Loop
-			this.gameClock = new Date().getTime();
+			this.clockActualTime = new Date().getTime();
+			this.clockGame = 0;									// Our game clock is relative
 			
 			var that = this; // Temporarily got rid of bind (had some bug with it), feel free to add back in -
 			this.gameTick = setInterval(function(){that.tick()}, 1000/this.intervalFramerate);
@@ -48,10 +49,14 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 		 */
 		tick: function()
 		{
-			var oldTime = this.gameClock;
-			this.gameClock = new Date().getTime();
-			var delta = ( this.gameClock - oldTime ); // Note (var framerate = 1000/delta);
+			// Store the previous clockTime, then set it to whatever it is no, and compare time
+			var oldTime = this.clockActualTime;
+			var now = this.clockActualTime = new Date().getTime();
+			var delta = ( now - oldTime );			// Note (var framerate = 1000/delta);
 
+			// Our clock is zero based, so if for example it says 10,000 - that means the game started 10 seconds ago 
+			this.clockGame += delta;
+			
 			// Framerate independent motion
 			// Any movement should take this value into account,
 			// otherwise faster machines which can update themselves more accurately will have an advantage
@@ -92,20 +97,20 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			
 			if(targetCharacter == null) 
 			{
-				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(data) : data );
+//				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(data) : data );
 				return;
 			}
 			
-			targetCharacter.serverPosition.x = data.x;
-			targetCharacter.serverPosition.y = data.y;
-			
-			if (Math.abs(targetCharacter.position.x - data.x) > 0.01 || Math.abs(targetCharacter.position.y - targetCharacter.serverPosition.y) > 0.01)
-			{
-				var difference = new Vector(targetCharacter.serverPosition.x-targetCharacter.position.x, targetCharacter.serverPosition.y-targetCharacter.position.y);
-				difference.mul(0.1);
-				
-				targetCharacter.position.add(difference);
-			}
+//			targetCharacter.serverPosition.x = data.x;
+//			targetCharacter.serverPosition.y = data.y;
+//
+//			if (Math.abs(targetCharacter.position.x - data.x) > 0.01 || Math.abs(targetCharacter.position.y - targetCharacter.serverPosition.y) > 0.01)
+//			{
+//				var difference = new Vector(targetCharacter.serverPosition.x-targetCharacter.position.x, targetCharacter.serverPosition.y-targetCharacter.position.y);
+//				difference.mul(0.1);
+//
+//				targetCharacter.position.add(difference);
+//			}
 
 			targetCharacter.velocity.x = data.vx;
 			targetCharacter.velocity.y = data.vy;
