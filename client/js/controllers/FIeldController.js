@@ -37,13 +37,14 @@ var init = function(Rectangle, FieldView)
 		
 		addPlayer: function( newPlayer )
 		{
+			console.log( "Adding new player", newPlayer);
 			this.players.setObjectForKey( newPlayer, newPlayer.clientID );
 			
 			// if we have a view, then add the player to it
 			if( this.view )
 			{
 				this.view.addPlayer( newPlayer.view );
-			};
+			}
 		},
 		
 		tick: function(speedFactor)

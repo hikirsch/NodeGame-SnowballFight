@@ -36,6 +36,7 @@ var ws = require('./ws.js');
 var BISON = require('../lib/bison.js');
 
 require('../../client/js/lib/jsclass/core.js');
+require('../../client/js/lib/SortedLookupTable.js');
 require('../model/Client.js');
 
 ServerNetChannel = (function()
@@ -48,6 +49,7 @@ ServerNetChannel = (function()
 			
 			// Delegation pattern, avoid subclassing ServerNetChannel
 			this.delegate = aDelegate;
+			this.config = config;
 
 			// Connection options
 			this.maxChars = config.maxChars || 128;
@@ -61,7 +63,7 @@ ServerNetChannel = (function()
 			};
 
 		    // Connections
-		    this.clients = {};		// Everyone connected
+		    this.clients = new SortedLookupTable();		// Everyone connected
 		    this.clientCount = 0;	// Length of above
 		    this.nextClientID = 1;		// UUID for next client - ZERO IS RESERVED FOR THE SERVER
 		    
@@ -152,7 +154,7 @@ ServerNetChannel = (function()
 		start: function()
 		{
 			var that = this;
-			this.startTime = new Date().getTime();
+			this.startTime = this.delegate.gameClock;
 			this.time = this.startTime;
 			this.delegate.status();
 
@@ -188,16 +190,20 @@ ServerNetChannel = (function()
 			var nickname = aDecodedMessage.cmds.data.nickname;
 			
 			this.delegate.log('(ServerNetChannel) Setting nickname for ' + connection.$clientID + ' to ' +  nickname);
-			this.clients[connection.$clientID].enabled = true;
-			this.clients[connection.$clientID].nickname = nickname;
+
+//			var client = this.clients.objectForKey( connection.$clientID );
+//
+//			this.clients[connection.$clientID].enabled = true;
+//			this.clients[connection.$clientID].nickname = nickname;
 		},
 		
 		removeClient: function(connection)
 		{
 			var clientID = connection.$clientID;
-			
-			// See if client is playing
-			if( clientID in this.clients == false)
+			var aClient = this.clients.objectForKey(clientID);
+
+			// This client is not in our client-list. Throw warning, something has probably gone wrong.
+			if(aClient == undefined)
 			{
 				this.delegate.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
 				return;
@@ -207,16 +213,14 @@ ServerNetChannel = (function()
 			this.delegate.log("(ServerNetChannel) Disconnecting client: " + clientID );
 					
 			// if this client is mid game playing then we need to tell the other players to remove it
-			if( this.clients[ clientID ].enabled  )
+			if(aClient.enabled)
 			{
 				// before we actually remove this guy, make tell everyone else
-				this.relayMessage(connection.$clientID, MESSAGES.REMOVE_FOREIGN_CHARACTER, { clientID: connection.$clientID });
+//				this.relayMessage(connection.$clientID, MESSAGES.REMOVE_FOREIGN_CHARACTER, { clientID: connection.$clientID });
 			}
 			
 			// Free the slot
-			this.clients[ clientID ] = null;
-			delete this.clients[ clientID ];
-			
+			this.clients.remove(clientID);
 			this.clientCount--;
 		},
 		
@@ -228,13 +232,14 @@ ServerNetChannel = (function()
 		{
 			var data = aDecodedMessage.cmds.data;
 
-			// Get new UUID for client
+			// Create a new client, note UUID is incremented 
 			var newClientID = this.addClient(connection);
 			aDecodedMessage.id = newClientID;
 			
 			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
 
 			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
+			// console.log( aDecodedMessage );
 			connection.send( BISON.encode(aDecodedMessage) );
 		},
 		
@@ -248,8 +253,9 @@ ServerNetChannel = (function()
 			this.clientCount++;
 			
 			connection.$clientID = clientID;
+			var aClient = new Client(this, connection, this.config);
 			// Add to our list of connected users
-			this.clients[clientID] = new Client(this, connection, false);
+			this.clients.setObjectForKey( aClient, clientID);
 			
 			return clientID;
 		},
@@ -265,7 +271,7 @@ ServerNetChannel = (function()
 //			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data.nickName, connection.$clientID);
 			
 			// Tell all the clients that a player has joined
-			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
+//			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
 		},
 		
 		/**
@@ -273,11 +279,36 @@ ServerNetChannel = (function()
 		 */
 		onGenericPlayerCommand: function(connection, aDecodedMessage)
 		{
-			throw("ERROR");
+			throw("ERROR"); // This is deprecated
 //			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
 //			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
 		},
-		
+
+		/**
+		 * Checks all the clients to see if its ready for a new message.
+		 * If they are, have the client perform delta-compression on the worldDescription and send it off.
+		 * @param gameClock		   The current (zero-based) game clock
+		 * @param worldDescription A description of all the entities currently in the world
+		 */
+		tick: function( gameClock, worldDescription )
+		{
+			this.gameClock = gameClock;
+
+//			console.log( worldDescription );
+			// Send client the current world info
+			this.clients.forEach( function(key, client)
+			{
+				if (client.shouldSendMessage(gameClock) == false) return; // Too soon to send again
+
+				// The client wants a new message
+				// Pass the current world description to the client
+				// Have the Client delta-compresion (remove changes that are not different from the last sent update
+				// Have the Client send the delta-compressed world update to its connection
+				var deltaCompressedWorldUpdate = client.compressDelta( worldDescription );
+				client.sendMessage( deltaCompressedWorldUpdate, gameClock );
+				
+			}, this );
+		},
 		/**
 		 * Message Sending
 		 * @param originalClientID		The connectionID of the client this message originated from
@@ -296,7 +327,7 @@ ServerNetChannel = (function()
 				if( sendToOriginalClient == false && clientID == originalClientID ) 
 					continue;
 				
-				this.clients[clientID].sendMessage(encodedMessage);
+				this.clients.objectForKey([clientID]).sendMessage(encodedMessage);
 				this.bytes.sent += encodedMessage.length;
 			}
 		} // Close prototype object

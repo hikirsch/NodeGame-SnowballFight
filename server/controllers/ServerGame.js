@@ -27,6 +27,7 @@ var sys = require('sys');
 
 require('../../client/js/controllers/AbstractGame.js');
 require('../network/ServerNetChannel.js');
+require('../model/WorldEntityDescription.js');
 require('../lib/Logger.js');
 
 ServerGame = (function()
@@ -60,7 +61,7 @@ ServerGame = (function()
 			this.callSuper(anEntityID, aClientID, 'Character');
 		},
 
-		// start our game;
+		// start our game
 		start: function()
 		{
 			this.netChannel.start();
@@ -69,6 +70,9 @@ ServerGame = (function()
 		tick: function()
 		{
 			this.callSuper();
+
+			var worldEntityDescription = new WorldEntityDescription( this );
+			this.netChannel.tick( this.clockGame, worldEntityDescription );
 		},
 
 		log: function(o)

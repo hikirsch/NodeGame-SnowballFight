@@ -8,10 +8,12 @@ Created By:
 Project	:
 	Ogilvy Holiday Card 2010
 Abstract:
+
 	A sorted LookupTable is a data structure that provides us a way to iterate thru objects at a speed
 	comparable to reverse while, but also have named keys as we would if we used an object (which provides very slow iteration)
 	It also gives us O(log n) removal of objects.
-Basic Usage: 
+Basic Usage:
+
 	http://blog.jcoglan.com/2010/10/18/i-am-a-fast-loop/
 */
 var init = (function() {
@@ -24,10 +26,6 @@ var init = (function() {
 		this._data = {};
 	};
 
-	LookupTable.prototype.get = function(key)
-	{
-		return this._data[key];
-	};
 
 	LookupTable.prototype.setObjectForKey = function(value, key)
 	{
@@ -113,7 +111,7 @@ var init = (function() {
 if (typeof window === 'undefined')
 {
 	// Node.js
-	exports.Class = init();
+	SortedLookupTable = init();
 }
 else
 {

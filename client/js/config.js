@@ -33,7 +33,7 @@ var init = function()
 			extrapolate:	true,
 			extrapolate_amount: 0.25,		// If the connection is suffering, and we dont get an update fast enough - extrapolate positions until after this point. Then drop.
 
-			fakelag: 0
+			fakelag: 0						
 		},
 		SERVER_SETTING: {
 			tickrate: 1000/66,				// The server runs the game at this FPS - Recommended to not modify,

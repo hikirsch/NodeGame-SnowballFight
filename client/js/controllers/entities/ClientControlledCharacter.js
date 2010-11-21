@@ -13,6 +13,10 @@
 
 var init = function(Vector, Rectangle, GameEntity, Character, CharacterView)
 {
+	/**
+	 * This is the clients character.
+	 * It's exactly like character, except it has an input - and possibly other things later
+	 */
 	return new JS.Class(
 	{
 		initialize: function(anObjectID, aClientID, aFieldController)
