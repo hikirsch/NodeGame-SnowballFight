@@ -19,7 +19,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 	{
 		initialize: function(config)
 		{
-			this.callSuper(config);
+			this.callSuper();
 
 			// we need to create our view first before we call our super constructor so that our
 			// super class knows to create the view for anything else it needs, this is primarily
@@ -56,13 +56,20 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			this.netChannel.tick( this.gameClock );
 		},
 
+		shouldAddPlayer: function (anObjectID, aClientID, playerType)
+		{
+			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
+			playerType = (aClientID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character'; 
+			this.callSuper(anObjectID, aClientID, playerType);
+		},
+
 		/**
 		 * ClientGameView delegate
 		 */
 		joinGame: function(aNickName)
 		{
 			// the message to send to the server
-			var message = this.netChannel.composeCommand( config.CMDS.PLAYER_JOINED, { nickName: aNickName } );
+			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { nickName: aNickName } );
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );

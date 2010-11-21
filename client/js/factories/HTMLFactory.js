@@ -21,12 +21,12 @@ var init = function( $, serverUnavailable, joinGame, character, field  ) {
 		};
 	}
 
-define([
-	'jquery',
-	'text!html/server-unavailable.html', 'text!html/join-game.html',
-	'text!html/character.html',
-	'text!html/field.html',
-	'plugins/jquery.tmpl.min' /** this should be last **/
+define(
+		['jquery',
+		'text!html/server-unavailable.html', 'text!html/join-game.html',
+		'text!html/character.html',
+		'text!html/field.html',
+		'plugins/jquery.tmpl.min' /** this should be last **/
 ], init);
 
 if (typeof window === 'undefined')

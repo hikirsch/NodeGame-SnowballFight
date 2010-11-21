@@ -13,8 +13,30 @@ Abstract:
 	     --> the server talks to this object
 		  --> this object talks to the client --^
 	  			 	 
-Basic Usage: 
-*/
+Basic Usage:
+
+ 		 /*
+		 	// Interpolation time on client
+	short		lerp_msec;
+	// Duration in ms of command
+	byte		msec;
+	// Command view angles.
+	vec3_t	viewangles;
+	// intended velocities
+	// Forward velocity.
+	float		forwardmove;
+	// Sideways velocity.
+	float		sidemove;
+	// Upward velocity.
+	float		upmove;
+	// Attack buttons
+	unsigned short buttons;
+	//
+	// Additional fields omitted...
+	//
+} usercmd_t;
+		  */
+
 
 define(['network/Message', 'config'], function(Message, config) {
 	/**

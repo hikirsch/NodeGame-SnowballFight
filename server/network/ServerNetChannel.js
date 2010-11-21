@@ -63,7 +63,7 @@ ServerNetChannel = (function()
 		    // Connections
 		    this.clients = {};		// Everyone connected
 		    this.clientCount = 0;	// Length of above
-		    this.nextClientID = 0;		// UUID for next client
+		    this.nextClientID = 1;		// UUID for next client - ZERO IS RESERVED FOR THE SERVER
 		    
 		    // Recording
 		    this.record = config.record || false;
@@ -105,11 +105,13 @@ ServerNetChannel = (function()
 			aWebSocket.onMessage = function(connection, encodedMessage )
 			{
 				that.delegate.log( '(ServerNetChannel) : onMessage', connection, BISON.decode(encodedMessage) );
+
 				try
 				{
 					that.bytes.received += encodedMessage.length;
 
 					var decodedMessage = BISON.decode(encodedMessage);
+					
 
 					if(decodedMessage.cmds instanceof Array == false)
 					{
@@ -118,9 +120,9 @@ ServerNetChannel = (function()
 					}
 					else // An array of commands
 					{
-						for(var singleCommand in decodedMessage.cmds){
-							that.CMD_TO_FUNCTION[singleCommand.cmd](singleCommand.data);
-						};
+//						for(var singleCommand in decodedMessage.cmds){
+//							that.CMD_TO_FUNCTION[singleCommand.cmd].apply(that, singleCommand.data);
+//						}
 					}
 				}
 				catch (e)
@@ -195,7 +197,6 @@ ServerNetChannel = (function()
 			var clientID = connection.$clientID;
 			
 			// See if client is playing
-			//noinspection PointlessBooleanExpressionJS,PointlessBooleanExpressionJS
 			if( clientID in this.clients == false)
 			{
 				this.delegate.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
@@ -226,7 +227,7 @@ ServerNetChannel = (function()
 		onClientConnected: function(connection, aDecodedMessage)
 		{
 			var data = aDecodedMessage.cmds.data;
-			
+
 			// Get new UUID for client
 			var newClientID = this.addClient(connection);
 			aDecodedMessage.id = newClientID;
@@ -256,9 +257,12 @@ ServerNetChannel = (function()
 		// player is now in the game after this 
 		onPlayerJoined: function(connection, aDecodedMessage)
 		{
+			//console.log( sys.inspect(decodedMessage) );
 			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
-			this.delegate.addClient(connection.$clientID);
-			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data.nickName, connection.$clientID);
+
+			var entityID = this.delegate.getNextEntityID();
+			this.delegate.shouldAddPlayer(entityID, connection.$clientID)
+//			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data.nickName, connection.$clientID);
 			
 			// Tell all the clients that a player has joined
 			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
@@ -269,8 +273,9 @@ ServerNetChannel = (function()
 		 */
 		onGenericPlayerCommand: function(connection, aDecodedMessage)
 		{
-			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
-			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
+			throw("ERROR");
+//			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
+//			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
 		},
 		
 		/**

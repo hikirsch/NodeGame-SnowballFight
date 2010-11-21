@@ -19,19 +19,16 @@ define( ['lib/Rectangle', 'factories/HTMLFactory', 'view/FieldView', 'lib/jsclas
 	return new JS.Class(
 	{
 		initialize: function(controller)
-		{
+		{                                  
 			this.gameController = controller;
 		},
 
 		showJoinGame: function()
 		{
 			var that = this;
-			HTMLFactory.joinGameDialog()
-					.appendTo("body");
-
-
-
-			$("#join").click( function(e) { that.joinGame() } );
+			var joinGameDialog = HTMLFactory.joinGameDialog();
+			joinGameDialog.appendTo("body");
+			$(joinGameDialog).click( function(e){ that.joinGame(e); });  // Had bug with bind, feel free to remove this and re-add bind
 		},
 	
 		serverOffline: function()
@@ -40,21 +37,19 @@ define( ['lib/Rectangle', 'factories/HTMLFactory', 'view/FieldView', 'lib/jsclas
 				.appendTo("body");
 		},
 	
-		joinGame: function(e) 
+		joinGame: function(e)
 		{
+			e.preventDefault();
 			var nickName = $("#nickname").val();
-
-			console.log( "HELLO!" );
+			
 			if( nickName.length <= 0)
 			{
 				nickName = 'NoName' + Math.floor( Math.random() * 1000 );
 			}
-		
+
 			this.gameController.joinGame(nickName);
-			
 			$("#join-game").remove();
-			
-			e.preventDefault();
+
 		},
 	
 		addCharacter: function(aCharacterView)

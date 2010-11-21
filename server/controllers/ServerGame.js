@@ -24,7 +24,7 @@ Version:
 
 var sys = require('sys');
 
-require('../../client/js/lib/jsclass/core.js');
+
 require('../../client/js/controllers/AbstractGame.js');
 require('../network/ServerNetChannel.js');
 require('../lib/Logger.js');
@@ -34,20 +34,30 @@ ServerGame = (function()
 	return new JS.Class(AbstractGame, {
 		initialize: function(aServer)
 		{
+			this.callSuper();
 			console.log('(ServerGame)::init');
-			
-			// the server controller has access to all the games and our logger
+
+			// Each time we create an entity we increment this
+			this.nextEntityID = 1;
+
+			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
 			this.server = aServer;
 
-
-			// ServerGameInstance - Each ServerNetChannel is owned by one ServerGameInstance
+			// Each ServerNetChannel is owned by a single ServerGameInstance
 			this.netChannel = new ServerNetChannel(this, this.server.gameConfig);
 		},
 
 		onGenericCommand: function(clientID, aDecodedMessage)
 		{
 			this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
+		},
+
+
+		shouldAddPlayer: function (anEntityID, aClientID, playerType)
+		{
+			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
+			this.callSuper(anEntityID, aClientID, 'Character');
 		},
 
 		// start our game;
@@ -58,7 +68,7 @@ ServerGame = (function()
 
 		tick: function()
 		{
-			this._super();
+			this.callSuper();
 		},
 
 		log: function(o)
@@ -70,6 +80,14 @@ ServerGame = (function()
 		status: function()
 		{
 			//this.logger.status();
+		},
+
+		/**
+		 * Accessors
+		 */
+		getNextEntityID: function()
+		{
+			return this.nextEntityID++;
 		}
 	});
 })();

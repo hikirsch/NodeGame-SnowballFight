@@ -14,19 +14,23 @@ Basic Usage:
 	 See subclasses
 */
 
-var init = function(FieldController,Rectangle,Vector, SortedLookupTable, Character)
+var init = function( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter)
 {
-	console.log( 'arguments ', arguments)
 	return new JS.Class(
 	{
-		initialize: function()
+		include: JS.StackTrace,
+		
+		initialize: function(config)
 		{
-			console.log('(AbstractGame)::initialize') ;
+			this.config = config;
 
 			// our game takes place in a field
 			this.fieldController = new FieldController( this );
 			this.fieldController.tick();
-			
+
+			// This is the Factory that will create all the entities for us
+			this.entityFactory = new GameEntityFactory(this.fieldController);
+
 			// intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
 			// desiredFramerate, is usually 60 or 30 - it's the framerate the game is designed against 
 			this.intervalFramerate = 60; // Try to call our tick function this often
@@ -60,20 +64,23 @@ var init = function(FieldController,Rectangle,Vector, SortedLookupTable, Charact
 		/**
 		* Adding and removing players
 		*/
-		addClient: function( aClientID, nickName, initView )
+		addClient: function( aClientID, nickName )
 		{
-			var newCharacter = new Character( aClientID, this.fieldController, initView );
-			newCharacter.setNickName( nickName );
-			
-			this.fieldController.addPlayer( newCharacter );
-			
-			return newCharacter;
+
 		},
 		
 		setNickNameForClientID: function(aNickName, aClientID) 
 		{
 			this.log( '(AbstractGame) setting client nickname to: ' + aNickName + ' for clientID: ' + aClientID );
 			this.fieldController.players.objectForKey(aClientID).setNickName(aNickName);
+		},
+
+
+		shouldAddPlayer: function (anObjectID, aClientID, playerType)
+		{
+			var aNewCharacter = this.entityFactory.createCharacter(anObjectID, aClientID, playerType, this.fieldController);
+			this.fieldController.addPlayer( aNewCharacter );
+			return aNewCharacter;
 		},
 		
 		/**
@@ -87,7 +94,7 @@ var init = function(FieldController,Rectangle,Vector, SortedLookupTable, Charact
 			{
 				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(data) : data );
 				return;
-			};
+			}
 			
 			targetCharacter.serverPosition.x = data.x;
 			targetCharacter.serverPosition.y = data.y;
@@ -108,15 +115,27 @@ var init = function(FieldController,Rectangle,Vector, SortedLookupTable, Charact
 
 if (typeof window === 'undefined') 
 {
-	require('../lib/jsclass/core.js');
-	require('./FieldController.js');
-	require('../lib/Rectangle.js');
 	require('../lib/Vector.js');
+	require('../lib/Rectangle.js');
 	require('../lib/SortedLookupTable.js');
-	
-	AbstractGame = init(FieldController, Rectangle, Vector, SortedLookupTable);
+	require('./FieldController.js');
+	require('../factories/GameEntityFactory');
+	require('./entities/GameEntity');
+	require('./entities/Character');
+	require('./entities/ClientControlledCharacter');
+	require('../lib/jsclass/core.js');
+	var sys = require("sys");
+	AbstractGame = init( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter);
 }
 else 
 {
-	define(['controllers/FieldController', 'lib/Rectangle', 'lib/Vector', 'lib/SortedLookupTable', 'controllers/Character', 'lib/jsclass/core'], init);
+	define(['lib/Vector',
+		'lib/Rectangle',
+		'lib/SortedLookupTable',
+		'controllers/FieldController',
+		'factories/GameEntityFactory',
+		'controllers/entities/GameEntity',
+		'controllers/entities/Character',
+		'controllers/entities/ClientControlledCharacter',
+		'lib/jsclass/core'], init);
 }
