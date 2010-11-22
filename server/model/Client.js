@@ -41,22 +41,18 @@ var init = function()
 			this.outgoingSequenceNumber = 0;
 
 			// array of the last 31 messages sent/received
-			this.MESSAGE_BUFFER_MASK = 31; // This is used in the messageBuffer bitmask - It's the sequence number
+			this.MESSAGE_BUFFER_MASK = 31; // This is used in the messageBuffer bitmask - It's the sequence number - store
 			this.outgoingMessageBuffer = [];
 			this.incommingMessageBuffer = [];
+
+
+			// Every tick store the queued commands here, every CLIENT_CONFIG.updateRate, send the queue
+			this.cmdBuffer = [];
 
 			// This is used to see if we should send a client a new world state, or should accept a msg from the client (prevent flooding)
 			// Note both are set to -updaterate so next tick garantees a msg send
 			this.lastSentMessageTime = -this.updaterate;
 			this.lastReceivedMessageTime = -this.updaterate;
-		},
-
-		/**
-		 * Returns true if its ok to send this client a new message
-		 * @param gameClock
-		 */
-		shouldSendMessage: function( gameClock ) {
-			return (gameClock - this.lastSentMessageTime) > this.updaterate;
 		},
 
 		onMessage: function( anEncodedMessage ) 
@@ -84,11 +80,34 @@ var init = function()
 
 
 		/**
+		 * Sends the current cmdBuffer
+		 */
+		sendQueuedCommands: function( gameClock )
+		{
+			var encodedMessage = MBISON.encode(this.cmdBuffer);
+			this.sendMessage(encodedMessage, gameClock);
+
+			this.cmdBuffer = [];
+		},
+
+		/**
 		 * Compares the worldDescription to the last one we sent - removes unchanged values
 		 * @param worldDescription A description of all the entities currently in the world
+		 * @param gameClock		   The current (zero-based) game clock
 		 */
-		compressDelta: function( worldDescription ) {
+		compressDeltaAndQueueMessage: function( worldDescription, gameClock ) {
+
+			console.log(worldDescription.entityDescription);
+			this.cmdBuffer.push( worldDescription.entityDescription )
 			return worldDescription;
+		},
+
+		/**
+		 * Returns true if its ok to send this client a new message
+		 * @param gameClock
+		 */
+		shouldSendMessage: function( gameClock ) {
+			return (gameClock - this.lastSentMessageTime) > this.updaterate;
 		}
 
 	}); // close extend
@@ -97,6 +116,7 @@ var init = function()
 // Handle Node.JS and browser
 if (typeof window === 'undefined') {
 	require('../../client/js/lib/jsclass/core.js');
+	require('../lib/bison.js');
 	Client = init();
 }
 

@@ -22,7 +22,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, CharacterView)
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
 			this.callSuper();
-
+			this.entityType = 'ClientControlledCharacter';
 
 			// if the field we're being placed in has a field, then we'll go into it
 			if( this.fieldController.view )

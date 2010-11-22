@@ -14,7 +14,7 @@ if( createHTTPServer )
 /**
  * Start the actual node server.
  */
-var sys = require('sys');
+SYS = require('sys');
 var config = require('../client/js/config.js').Config;
 var serverConfig = require('./serverConfig.js').Config;
 

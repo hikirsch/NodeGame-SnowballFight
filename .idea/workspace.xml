@@ -15,25 +15,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="c8bb4bd1-398f-4329-8ecb-0f126e791b96" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/lib/SortedLookupTable.js" afterPath="$PROJECT_DIR$/client/js/lib/SortedLookupTable.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/config.js" afterPath="$PROJECT_DIR$/client/js/config.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/lib/bison.js" afterPath="$PROJECT_DIR$/server/lib/bison.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/network/ServerNetChannel.js" afterPath="$PROJECT_DIR$/server/network/ServerNetChannel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" afterPath="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js" afterPath="$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/lib/Logger.js" afterPath="$PROJECT_DIR$/server/lib/Logger.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/dictionaries/onedayitwillmake.xml" afterPath="$PROJECT_DIR$/.idea/dictionaries/onedayitwillmake.xml" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/server/model/WorldEntityDescription.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/html/join-game.html" afterPath="$PROJECT_DIR$/client/js/html/join-game.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/network/NetChannel.js" afterPath="$PROJECT_DIR$/client/js/network/NetChannel.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/FIeldController.js" afterPath="$PROJECT_DIR$/client/js/controllers/FIeldController.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/factories/GameEntityFactory.js" afterPath="$PROJECT_DIR$/client/js/factories/GameEntityFactory.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/ClientGame.js" afterPath="$PROJECT_DIR$/client/js/controllers/ClientGame.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" afterPath="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/game.js" afterPath="$PROJECT_DIR$/server/game.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js" afterPath="$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/model/Client.js" afterPath="$PROJECT_DIR$/server/model/Client.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/entities/Character.js" afterPath="$PROJECT_DIR$/client/js/controllers/entities/Character.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/model/WorldEntityDescription.js" afterPath="$PROJECT_DIR$/server/model/WorldEntityDescription.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/controllers/ServerGame.js" afterPath="$PROJECT_DIR$/server/controllers/ServerGame.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/entities/GameEntity.js" afterPath="$PROJECT_DIR$/client/js/controllers/entities/GameEntity.js" />
     </list>
     <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="$USER_HOME_GRAILS$/" />
@@ -96,25 +88,7 @@
       <file leaf-file-name="ServerNetChannel.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/network/ServerNetChannel.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="265" column="72" selection-start="8040" selection-end="8040" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="join-game.html" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/js/html/join-game.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="3" column="29" selection-start="105" selection-end="105" vertical-scroll-proportion="-1.9090909">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WorldEntityDescription.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/model/WorldEntityDescription.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="26" column="42" selection-start="641" selection-end="641" vertical-scroll-proportion="0.0">
+            <state line="306" column="55" selection-start="9656" selection-end="9656" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -123,7 +97,16 @@
       <file leaf-file-name="Client.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/model/Client.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="98" column="29" selection-start="2804" selection-end="2821" vertical-scroll-proportion="0.0">
+            <state line="99" column="54" selection-start="2923" selection-end="2923" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/js/config.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="19" column="30" selection-start="732" selection-end="733" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -132,34 +115,16 @@
       <file leaf-file-name="ServerGame.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/controllers/ServerGame.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="30" selection-start="889" selection-end="889" vertical-scroll-proportion="0.0">
+            <state line="70" column="55" selection-start="1910" selection-end="1910" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="AbstractGame.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/js/controllers/AbstractGame.js">
+      <file leaf-file-name="WorldEntityDescription.js" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/server/model/WorldEntityDescription.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="86" column="35" selection-start="2920" selection-end="2920" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FIeldController.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/js/controllers/FIeldController.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="57" selection-start="946" selection-end="946" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="config.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/client/js/config.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="21" column="90" selection-start="940" selection-end="940" vertical-scroll-proportion="0.47882736">
+            <state line="2" column="167" selection-start="32" selection-end="32" vertical-scroll-proportion="0.032">
               <folding />
             </state>
           </provider>
@@ -179,22 +144,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/client/js/config.js" />
-        <option value="$PROJECT_DIR$/server/lib/Logger.js" />
-        <option value="$PROJECT_DIR$/client/js/lib/SortedLookupTable.js" />
         <option value="$PROJECT_DIR$/client/js/network/NetChannel.js" />
-        <option value="$PROJECT_DIR$/server/model/Client.js" />
         <option value="$PROJECT_DIR$/client/js/factories/GameEntityFactory.js" />
-        <option value="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" />
         <option value="$PROJECT_DIR$/client/js/controllers/ClientGame.js" />
-        <option value="$PROJECT_DIR$/client/js/controllers/entities/Character.js" />
         <option value="$PROJECT_DIR$/client/js/controllers/entities/GameEntity.js" />
-        <option value="$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js" />
-        <option value="$PROJECT_DIR$/server/controllers/ServerGame.js" />
-        <option value="$PROJECT_DIR$/client/js/controllers/FIeldController.js" />
-        <option value="$PROJECT_DIR$/server/model/WorldEntityDescription.js" />
-        <option value="$PROJECT_DIR$/server/network/ServerNetChannel.js" />
         <option value="$PROJECT_DIR$/client/js/html/join-game.html" />
+        <option value="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" />
+        <option value="$PROJECT_DIR$/server/lib/bison.js" />
+        <option value="$PROJECT_DIR$/client/js/config.js" />
+        <option value="$PROJECT_DIR$/server/game.js" />
+        <option value="$PROJECT_DIR$/server/controllers/ServerGame.js" />
+        <option value="$PROJECT_DIR$/server/network/ServerNetChannel.js" />
+        <option value="$PROJECT_DIR$/client/js/controllers/entities/Character.js" />
+        <option value="$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js" />
+        <option value="$PROJECT_DIR$/client/js/controllers/FIeldController.js" />
+        <option value="$PROJECT_DIR$/server/model/Client.js" />
+        <option value="$PROJECT_DIR$/server/model/WorldEntityDescription.js" />
       </list>
     </option>
   </component>
@@ -549,7 +514,6 @@
       <sortByType />
     </navigator>
     <panes>
-      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -908,6 +872,7 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="PackagesPane" />
       <pane id="Favorites" />
       <pane id="Scope" />
     </panes>
@@ -918,6 +883,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="237" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="recentsLimit" value="5" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="188" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
     <property name="MemberChooser.sorted" value="false" />
@@ -1115,7 +1081,6 @@
     <option name="UNLOCK_ON_CHECKIN" value="false" />
   </component>
   <component name="StructureViewFactory">
-    <option name="AUTOSCROLL_MODE" value="false" />
     <option name="AUTOSCROLL_FROM_SOURCE" value="true" />
     <option name="ACTIVE_ACTIONS" value="SHOW_INHERITED,ALPHA_COMPARATOR,SHOW_CLASSES" />
   </component>
@@ -1150,7 +1115,7 @@
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.28097346" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.28097346" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1158,10 +1123,10 @@
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32853982" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27730063" sideWeight="0.31526548" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27730063" sideWeight="0.21681416" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27730063" sideWeight="0.38827434" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27730063" sideWeight="0.7754425" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1241,114 +1206,112 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/GameEntity.js">
+    <entry file="file://$PROJECT_DIR$/client/js/html/join-game.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="179" column="9" selection-start="4860" selection-end="4860" vertical-scroll-proportion="0.0">
+        <state line="3" column="29" selection-start="105" selection-end="105" vertical-scroll-proportion="0.049237985" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/require-jquery-1.4.3.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="4" selection-start="553" selection-end="553" vertical-scroll-proportion="0.42211056">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/Logs/flashlog.txt">
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/ClientGame.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="11" column="26" selection-start="277" selection-end="277" vertical-scroll-proportion="0.36150235">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/lib/ArgHelper.js">
+    <entry file="file://$PROJECT_DIR$/server/game.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="17" column="161" selection-start="559" selection-end="559" vertical-scroll-proportion="0.35735735">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/lib/bison.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+        <state line="260" column="17" selection-start="7740" selection-end="7740" vertical-scroll-proportion="0.7357357">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/server/network/SimpleHTTPServer.js">
+    <entry file="file://$PROJECT_DIR$/client/js/lib/SortedLookupTable.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/lib/Logger.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/controllers/Server.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="36" column="50" selection-start="813" selection-end="813" vertical-scroll-proportion="0.3615635">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/model/Client.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="98" column="29" selection-start="2804" selection-end="2821" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/model/WorldEntityDescription.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="26" column="42" selection-start="641" selection-end="641" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/controllers/FIeldController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="57" selection-start="946" selection-end="946" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/controllers/AbstractGame.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="86" column="35" selection-start="2920" selection-end="2920" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/controllers/ServerGame.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="30" selection-start="889" selection-end="889" vertical-scroll-proportion="0.0">
+        <state line="63" column="4" selection-start="1249" selection-end="1249" vertical-scroll-proportion="2.2282283">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/server/network/ServerNetChannel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="265" column="72" selection-start="8040" selection-end="8040" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/html/join-game.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="3" column="29" selection-start="105" selection-end="105" vertical-scroll-proportion="-1.9090909">
+        <state line="306" column="55" selection-start="9656" selection-end="9656" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/js/config.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="90" selection-start="940" selection-end="940" vertical-scroll-proportion="0.47882736">
+        <state line="19" column="30" selection-start="732" selection-end="733" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/controllers/ServerGame.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="70" column="55" selection-start="1910" selection-end="1910" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/AbstractGame.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="65" column="0" selection-start="2335" selection-end="2335" vertical-scroll-proportion="-0.41813898">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="24" column="56" selection-start="580" selection-end="580" vertical-scroll-proportion="0.384">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/Character.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="35" column="12" selection-start="942" selection-end="972" vertical-scroll-proportion="0.16">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/controllers/Server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="30" column="85" selection-start="783" selection-end="783" vertical-scroll-proportion="0.328">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/FIeldController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="56" selection-start="1146" selection-end="1146" vertical-scroll-proportion="0.752">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/model/Client.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="99" column="54" selection-start="2923" selection-end="2923" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/model/WorldEntityDescription.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="167" selection-start="32" selection-end="32" vertical-scroll-proportion="0.032">
           <folding />
         </state>
       </provider>

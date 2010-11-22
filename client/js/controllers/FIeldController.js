@@ -4,21 +4,17 @@ var init = function(Rectangle, FieldView)
 	{
 		initialize: function(game) 
 		{
-
-//			console.log('(FieldController)::initialize');
+			console.log('(FieldController)::initialize');
 
 			this.gameController = game;
-
 			this.rectangle = new Rectangle(0, 0, 640, 480);
-			
+
 			// Things in the game
 			this.players = new SortedLookupTable(); // Active players
 			this.projectiles = new SortedLookupTable(); // Things fired
 			this.entities = new SortedLookupTable(); // Everything else, e.g. trees, rocks, powerups, dogs, cats
 			
 			// if our game has a view, then create one
-			
-//			console.log('the game controllers view exists: ' + this.gameController.view );
 			if( this.gameController.view )
 			{
 				this.view = new FieldView(this);
@@ -37,12 +33,11 @@ var init = function(Rectangle, FieldView)
 		
 		addPlayer: function( newPlayer )
 		{
-			console.log( "Adding new player", newPlayer);
 			this.players.setObjectForKey( newPlayer, newPlayer.clientID );
-			
+
+			console.log( SYS.inspect(this.players ) ) ;
 			// if we have a view, then add the player to it
-			if( this.view )
-			{
+			if( this.view ){
 				this.view.addPlayer( newPlayer.view );
 			}
 		},

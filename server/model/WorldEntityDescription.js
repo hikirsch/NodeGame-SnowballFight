@@ -21,29 +21,27 @@ var init = function()
 	{
 		initialize: function( aGameInstance )
 		{
-			var entityDescription = new SortedLookupTable();
 			var fieldController = aGameInstance.fieldController;
+			this.entityDescription = new SortedLookupTable();
 
-//			console.log( aGameInstance.fieldController );
 			// Construct players
 			fieldController.players.forEach( function(key, player)
 			{
-				entityDescription.setObjectForKey( player.constructEntityDescription(), player.objectID );
+				this.entityDescription.setObjectForKey( player.constructEntityDescription(), player.objectID );
+				this.entityDescription.setObjectForKey( player.constructEntityDescription(), player.objectID+1 );
 			}, this );
 
 			// Construct projectiles
 			fieldController.projectiles.forEach( function(key, projectile)
 			{
-				entityDescription.setObjectForKey( projectile.constructEntityDescription(), projectile.objectID );
+				this.entityDescription.setObjectForKey( projectile.constructEntityDescription(), projectile.objectID );
 			}, this );
 
 			// Construct entities
 			fieldController.entities.forEach( function(key, entity)
 			{
-				entityDescription.setObjectForKey( entity.constructEntityDescription(), entity.objectID );
+				this.entityDescription.setObjectForKey( entity.constructEntityDescription(), entity.objectID );
 			}, this );
-
-			return entityDescription;
 		}
 	});
 };

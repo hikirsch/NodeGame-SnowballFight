@@ -45,7 +45,7 @@ ServerNetChannel = (function()
 	{
 		initialize: function(aDelegate, config)
 		{
-			console.log('(ServerGame)::init');
+			console.log('(ServerNetChannel)::init');
 			
 			// Delegation pattern, avoid subclassing ServerNetChannel
 			this.delegate = aDelegate;
@@ -61,6 +61,8 @@ ServerNetChannel = (function()
 				sent: 0,
 				received: 0
 			};
+
+
 
 		    // Connections
 		    this.clients = new SortedLookupTable();		// Everyone connected
@@ -294,19 +296,16 @@ ServerNetChannel = (function()
 		{
 			this.gameClock = gameClock;
 
-//			console.log( worldDescription );
 			// Send client the current world info
 			this.clients.forEach( function(key, client)
 			{
-				if (client.shouldSendMessage(gameClock) == false) return; // Too soon to send again
+				// Collapse delta - store the world state
+				var deltaCompressedWorldUpdate = client.compressDeltaAndQueueMessage( worldDescription, gameClock );
 
-				// The client wants a new message
-				// Pass the current world description to the client
-				// Have the Client delta-compresion (remove changes that are not different from the last sent update
-				// Have the Client send the delta-compressed world update to its connection
-				var deltaCompressedWorldUpdate = client.compressDelta( worldDescription );
-				client.sendMessage( deltaCompressedWorldUpdate, gameClock );
-				
+				// Ask if enough time passed
+				if ( client.shouldSendMessage(gameClock) )
+					client.sendQueuedCommands(gameClock);
+
 			}, this );
 		},
 		/**

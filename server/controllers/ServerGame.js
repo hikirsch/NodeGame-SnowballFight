@@ -22,9 +22,6 @@ Version:
 	1.0
 */
 
-var sys = require('sys');
-
-
 require('../../client/js/controllers/AbstractGame.js');
 require('../network/ServerNetChannel.js');
 require('../model/WorldEntityDescription.js');
@@ -44,7 +41,7 @@ ServerGame = (function()
 			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
 			this.server = aServer;
-
+			                          
 			// Each ServerNetChannel is owned by a single ServerGameInstance
 			this.netChannel = new ServerNetChannel(this, this.server.gameConfig);
 		},

@@ -33,12 +33,11 @@ var init = function(Vector, Rectangle, GameEntity)
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
 			this.callSuper();
-
+			this.entityType = 'Character';
 		  	
-			if(typeof window === 'undefined')
-				console.log("(Character)", sys.inspect( this ) );
+//			if(typeof window === 'undefined')
+//				console.log("(Character)", sys.inspect( this ) );
 
-			return;
 			// some defaults we use for position
 			this.position = new Vector( Math.random() * this.fieldController.getWidth(), Math.random() * this.fieldController.getHeight() );
 
