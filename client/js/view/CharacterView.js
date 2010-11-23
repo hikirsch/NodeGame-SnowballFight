@@ -46,12 +46,10 @@ define(['factories/HTMLFactory', 'lib/jsclass/core'], function(HTMLFactory)
 			};
 
 
-			console.log('HTMLFactory.character(options)', HTMLFactory.character(options) )
 			this.element = HTMLFactory.character(options);
-			
+
 			// show the right default rotation and sprite class
 			this.adjustSprite();
-			console.log( ("(CharacterView) CreatingView: Should be visible now");
 		},
 		
 		update: function()

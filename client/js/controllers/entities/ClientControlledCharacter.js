@@ -29,7 +29,15 @@ var init = function(Vector, Rectangle, FieldController, Character, CharacterView
 			{
 				// init the view, pass ourselves as the controller
 				this.view = new CharacterView( this, 'smash-tv' );
+				this.fieldController.addPlayer( this )
 			}
+		},
+
+		tick: function( speedFactor )
+		{
+//			if( this.input )
+				this.handleInput();
+			this.callSuper();
 		}
 	});
 };

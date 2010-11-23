@@ -81,7 +81,7 @@ ServerNetChannel = (function()
 		    this.CMD_TO_FUNCTION[config.CMDS.SERVER_CONNECT] = this.onClientConnected;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onPlayerJoined;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.removeClient;
-		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.onGenericPlayerCommand;
+		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.onPlayerMoveCommand;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 		      
 		    this.initAndStartWebSocket(config);
@@ -108,7 +108,7 @@ ServerNetChannel = (function()
 			*/
 			aWebSocket.onMessage = function(connection, encodedMessage )
 			{
-				that.delegate.log( '(ServerNetChannel) : onMessage', connection, BISON.decode(encodedMessage) );
+//				that.delegate.log( '(ServerNetChannel) : onMessage', connection, BISON.decode(encodedMessage) );
 
 				try
 				{
@@ -237,6 +237,7 @@ ServerNetChannel = (function()
 			// Create a new client, note UUID is incremented 
 			var newClientID = this.addClient(connection);
 			aDecodedMessage.id = newClientID;
+			aDecodedMessage.gameClock = this.delegate.gameClock;
 			
 			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
 
@@ -281,9 +282,14 @@ ServerNetChannel = (function()
 		 */
 		onGenericPlayerCommand: function(connection, aDecodedMessage)
 		{
+//			console.log(aDecodedMessage) ;
 			throw("ERROR"); // This is deprecated
 //			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
 //			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
+		},
+
+		onPlayerMoveCommand: function(connection, aDecodedMessage) {
+			  this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
 		},
 
 		/**

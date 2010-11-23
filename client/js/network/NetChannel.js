@@ -58,6 +58,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		}
 		
 		this.controller = aController;	// For callbacks once messages are validated
+		this.isConnected = false;
 		
 		// connection info
 		this.frameLatency = 0; 	// lag over time
@@ -73,14 +74,18 @@ define(['network/Message', 'config'], function(Message, config) {
 		// When we  can send another message to prevent flooding - determined by 'rate' variable
 		this.clearTime = -1; // if realtime > nc->cleartime, free to go
 		this.rate = 5;	// seconds / byte
-		
-		this.incomingSequenceNumber = 0;
-		this.outgoingSequenceNumber = 0;
-		
+
 		// array of the last 31 messages sent
 		this.messageBuffer = [];
-		this.cmdBuffer = new SortedLookupTable();
 		this.MESSAGE_BUFFER_MASK = 31; // This is used in the messageBuffer bitmask - It's the sequence number
+
+		this.incomingSequenceNumber = 0;
+		this.incommingCmdBuffer = new SortedLookupTable();
+
+		// We will send these out as controlled by the config
+		this.outgoingSequenceNumber = 0;
+		this.outgoingCmdBuffer = new SortedLookupTable();
+
 		
 		// We send this, and we wait for the server to send back matching seq.number before we empty this. 
 		// When this is empty, then we can send whatever the next one is
@@ -122,26 +127,28 @@ define(['network/Message', 'config'], function(Message, config) {
 		
 		var hasReliableMessages = false;
 		var firstUnreliableMessageFound = null;
-		 
-		for (messageIndex in this.messageBuffer)
+
+		var len = this.messageBuffer.length;
+		var i = 0;
+		for (var aMessageIndex in this.messageBuffer)
 		{
-			var message = this.messageBuffer[messageIndex];
-			
+			var message = this.messageBuffer[aMessageIndex];
 			if(message.isReliable) // We have more important things to tend to sir.
 			{
 				hasReliableMessages = true;
 				this.sendMessage(message);
 				break;
 			}
-			else 
-			{
-				firstUnreliableMessageFound = message;
-			}
+//			else
+//			{
+//				console.log("MessageIndex:", aMessageIndex);
+//				firstUnreliableMessageFound = message;
+//			}
 		}
-		
-		if(!hasReliableMessages && firstUnreliableMessageFound != null)
+
+		if(!hasReliableMessages && this.nextUnreliable != null)
 		{
-			this.sendMessage(firstUnreliableMessageFound)
+//			this.sendMessage(firstUnreliableMessageFound)
 		}
 	};
 
@@ -161,6 +168,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		if( this.verboseMode ) console.log("(NetChannel) onConnectionOpened");
 
 		// Create a new message with the SERVER_CONNECT command
+		this.isConnected = true;
 		this.addMessageToQueue(true, this.composeCommand(config.CMDS.SERVER_CONNECT, null) );
 	};
 	
@@ -208,7 +216,7 @@ define(['network/Message', 'config'], function(Message, config) {
 			while(--len) {
 				var singleWorldUpdate = serverMessage.data[len];
 				var timeStamp = singleWorldUpdate.gameTick;
-				this.cmdBuffer.setObjectForKey( singleWorldUpdate, singleWorldUpdate.gameTick & this.MESSAGE_BUFFER_MASK );
+				this.incommingCmdBuffer.setObjectForKey( singleWorldUpdate, singleWorldUpdate.gameTick & this.MESSAGE_BUFFER_MASK );
 			}
 		}
 		else // Server wants to tell the gameclient something, not just a regular world update
@@ -223,6 +231,7 @@ define(['network/Message', 'config'], function(Message, config) {
 	NetChannel.prototype.onConnectionClosed = function (serverMessage)
 	{
 		console.log('(NetChannel) onConnectionClosed', serverMessage);
+		this.isConnected = false;
 		this.controller.netChannelDidDisconnect();
 	};
 	
@@ -233,9 +242,8 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		// Only the server can create client ID's - grab the one i returned for us;
 		this.clientID = serverMessage.id;
-		
 		console.log('(NetChannel) Setting clientID to', this.clientID);
-		
+
 		this.controller.netChannelDidConnect(serverMessage);
 	};
 	
@@ -258,6 +266,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		// {
 		// }
 	};
+	
 	/**
 	* Simple convinience message to compose CMDS.
 	* Bison will encode this array for us when we send
@@ -283,12 +292,21 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		// Add to array the queue
 		this.messageBuffer[ this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK ] = message;
-		if( this.verboseMode ) console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
+
+		if(this.isReliable == false) {
+			this.nextUnreliable = anUnencodedMessage;
+		}
+//		if( this.verboseMode ) console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
 	};
-	
+
+
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
 	{
-		aMessageInstance.messageTime = this.gameClock; // Store to determin latency
+		if(!this.isConnected) {
+			//some error here
+			return;
+		}
+		aMessageInstance.messageTime = this.gameClock; // Store to determine latency
 
 		this.lastSentTime = this.gameClock;
 
@@ -298,7 +316,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		}
 
 		this.connection.send( aMessageInstance.encodedSelf() );
-		if(this.verboseMode) console.log('(NetChannel) Sending Message ', BISON.decode(aMessageInstance.encodedSelf()));
+		if(this.verboseMode) console.log('(NetChannel) Sending Message, isReliable', aMessageInstance.isReliable, BISON.decode(aMessageInstance.encodedSelf()));
 	};
 	
 	return NetChannel;

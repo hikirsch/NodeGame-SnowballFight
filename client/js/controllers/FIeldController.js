@@ -13,6 +13,9 @@ var init = function(Rectangle, FieldView)
 			this.players = new SortedLookupTable(); // Active players
 			this.projectiles = new SortedLookupTable(); // Things fired
 			this.entities = new SortedLookupTable(); // Everything else, e.g. trees, rocks, powerups, dogs, cats
+
+			// Might do away with different types of entities
+			this.allEntities = new SortedLookupTable();
 		},
 
 
@@ -29,6 +32,7 @@ var init = function(Rectangle, FieldView)
 		addPlayer: function( newPlayer )
 		{
 			this.players.setObjectForKey( newPlayer, newPlayer.clientID );
+			this.allEntities.setObjectForKey( newPlayer, newPlayer.objectID );
 
 			// if we have a view, then add the player to it
 			if( this.view ){

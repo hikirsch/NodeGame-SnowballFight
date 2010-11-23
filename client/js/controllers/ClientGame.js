@@ -47,21 +47,21 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			this.callSuper();
 			this.netChannel.tick( this.gameClock );
 			this.renderAtTime(this.gameClock - this.config.CLIENT_SETTING.interp)
-			
-			// Continuesly store information about this character
+
+			// Continuously store information about this character
 			if( this.clientCharacter != null )
 			{
-				var characterStatus = this.clientCharacter.getStatus();
+				var characterStatus = this.clientCharacter.constructEntityDescription();
 				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
-
-				// create a message with our characters updated information and send it off
+//
+//				create a message with our characters updated information and send it off
 				this.netChannel.addMessageToQueue( false, newMessage );
 			}
 		},
 
 		renderAtTime: function(renderTime)
 		{
-			var cmdBuffer = this.netChannel.cmdBuffer;
+			var cmdBuffer = this.netChannel.incommingCmdBuffer;
 
 			var len = cmdBuffer.count();
 			if( len < 2 ) return false; // Nothing to do!
@@ -69,13 +69,22 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			var nextAfterTime = null;
 			var previousBeforeTime = null;
 
+
 			// Loop thru the points, until we find the first one that has a timeValue which is greater than our renderTime
 			// Knowing that then we know that the combined with the one before it - that passed our just check - we know we want to render ourselves somehwere between these two points
-			cmdBuffer.forEach( function(key, worldEntityDescription) {
+			var shouldBreak = false;
+			cmdBuffer.forEach( function(key, worldEntityDescription)
+			{
+				if(shouldBreak) return; // Hacky fake 'break' for forEach
+
 				if( worldEntityDescription.gameClock >= renderTime ) {
-					previousBeforeTime = cmdBuffer.objectForKey(key - 1);
+//					console.log('Rendertime:', renderTime, 'worldEntityDescription.gameClock', worldEntityDescription.gameClock);
+//					previousBeforeTime = cmdBuffer.objectForKey(key - 1);
 					nextAfterTime = worldEntityDescription;
+					shouldBreak = true;
 				}
+
+				previousBeforeTime = worldEntityDescription;
 			}, this );
 
 
@@ -85,13 +94,22 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			}
 
 
+			if(this.clientCharacter != null && nextAfterTime['1'])
+			{
+//				this.clientCharacter.position.x = nextAfterTime['1'].x;//nextAfterTime['1'].x;
+//				this.clientCharacter.position.y = nextAfterTime['1'].y;
+			}
+//			console.log(  );
 			//for(var entity in previousBeforeTime.en)
 //			for(var i = 1; i < 1; i++) {
 //
 //			}
 			// Now to do something with the data
 			// No interpolation for now - just place where it says
-//			console.log( nextAfterTime );
+//			if(nextAfterTime['1'] == undefined)
+//			      this.clientCharacter.position
+//			this.clientCharacter.
+//			console.log( nextAfterTime['1'] );
 //			console.log('RenderTime', renderTime, 'WorldEntityDescription.gameClock:', nextAfterTime.gameClock)
 		},
 
@@ -111,11 +129,10 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { nickName: aNickName } );
 
 			// Tell the server!
-			this.netChannel.addMessageToQueue( true, message );
-
-			// justcreate for now
-//			this.fieldController.addPlayer( );
-			this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
+			this.netChannel.addMessageToQueue( false, message );
+			// just create for now
+			this.clientCharacter = this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
+			this.clientCharacter.setInput( Joystick );
 		},
 
 		onClientJoined: function(clientID, data)
@@ -126,7 +143,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			// It's us!
 			if(clientID == this.netChannel.clientID)
 			{
-				newCharacter.setInput( Joystick );
+				 // Special things here
 			}
 		},
 
@@ -147,6 +164,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 		 **/
 		netChannelDidConnect: function (messageData)
 		{
+			this.gameClock = messageData.gameClock;
 			this.view.showJoinGame();
 		},
 

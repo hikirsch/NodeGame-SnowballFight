@@ -7,7 +7,7 @@ html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-
 
 .site-message { position: absolute; bottom: 200px; width: 100%; }
 .site-message .wrapper { 
-	width: 250px; margin: auto; padding: 11px; color: #7eabba;
+	width: 250px; margin: auto; padding: 11px; color: #7eabba;                             a
 	border-radius: 20px; border: 3px solid #ff8e8e; background-color: #f3fcff;
 }
 
@@ -26,7 +26,7 @@ html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-
 .game-container  { width: 640px; height: 480px; margin: 0; position: relative; overflow: hidden;}
 .game-container .background {  
 	position: absolute; top: 0; left: 0; 
-	background-color: #dddddd; opacity: 0.05;
+	background-color: #ffffff; opacity: 1;
 	height: 100%; width: 100%; 
 }
 

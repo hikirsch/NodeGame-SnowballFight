@@ -36,9 +36,7 @@ var init = function(Vector, Rectangle, FieldController)
 			console.log("(GameEntity)::initialize");
 			
 			this.fieldController = aFieldController;
-			debugger
 
-			console.log( this.fieldController );
 			// Meta information
 			this.entityType = 'GameEntity';			// Override in subclasses to
 			this.clientID = aClientID;				// Client who created this object, 0 means it has no owner or the owner is the server
@@ -122,12 +120,13 @@ var init = function(Vector, Rectangle, FieldController)
 		 */
 		tick: function(speedFactor)
 		{
-
-
 			var didMove = this.calcuatePosition(speedFactor);
-			if(didMove && this.view) {
+			if(this.view) {
 				this.view.update();
 			}
+//			if(didMove && this.view) {
+//				this.view.update();
+//			}
 		},
 
 		getRotationToTheNearest: function( degrees )
@@ -166,19 +165,6 @@ var init = function(Vector, Rectangle, FieldController)
 
 		getPosition: function() {
 			return this.position;
-		},
-
-		constructEntityDescription: function()
-		{
-			return {
-				objectID: this.objectID,
-				clientID: this.clientID,
-				x: this.position.x,
-				y: this.position.y,
-				vx: this.velocity.x,
-				vy: this.velocity.y,
-				r: this.rotation
-			}
 		}
 	});
 };

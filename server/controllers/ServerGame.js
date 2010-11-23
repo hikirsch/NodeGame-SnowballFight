@@ -51,6 +51,43 @@ ServerGame = (function()
 			this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
 		},
 
+		onPlayerMoveCommand: function(clientID, aDecodedMessage)
+		{
+			/**
+			 * }
+(ServerNetChannel) : onMessage
+{ id: 1
+, seq: 415
+, cmds:
+   { cmd: 9
+   , data:
+      { objectID: 1
+      , clientID: 1
+      , x: 573.5
+      , y: 151.44
+      , vx: 0
+      , vy: 0
+      , r: 0
+      }
+   }
+, t: 12659
+}
+
+
+			 */
+			var cmdData = aDecodedMessage.cmds.data;
+
+			var playerEntity = this.fieldController.allEntities.objectForKey(cmdData.objectID);
+			playerEntity.position.x = cmdData.x;
+			playerEntity.position.y = cmdData.y;
+
+//			console.log('this.fieldController.allEntities', SYS.inspect(this.fieldController.allEntities));
+//			console.log( ' a', aDecodedMessage.cmds.data.objectID);
+			console.log('player', playerEntity.position.x, playerEntity.position.y);
+//			console.log('hello', playerEntity, aDecodedMessage.cmds.data.x);
+			//this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
+		},
+
 
 		shouldAddPlayer: function (anEntityID, aClientID, playerType)
 		{

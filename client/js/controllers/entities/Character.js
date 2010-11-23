@@ -70,13 +70,10 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 		 * Update, use delta to create frame independent motion
 		 * @param speedFactor	A normalized value our ACTUAL framerate vs our desired framerate. 1.0 means exactly correct, 0.5 means we're running at half speed
 		 */
-		tick: function(speedFactor)
-		{
-			if( this.input )
-				this.handleInput();
-
-			this.callSuper();
-		},
+//		tick: function(speedFactor)
+//		{
+//			this.callSuper();
+//		},
 
 //		/**
 //		 * Net
