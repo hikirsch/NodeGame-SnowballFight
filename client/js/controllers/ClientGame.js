@@ -129,7 +129,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { nickName: aNickName } );
 
 			// Tell the server!
-			this.netChannel.addMessageToQueue( false, message );
+			this.netChannel.addMessageToQueue( true, message );
 			// just create for now
 			this.clientCharacter = this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
 			this.clientCharacter.setInput( Joystick );

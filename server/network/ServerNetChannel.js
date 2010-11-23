@@ -270,7 +270,10 @@ ServerNetChannel = (function()
 			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
 
 			var entityID = this.delegate.getNextEntityID();
-			this.delegate.shouldAddPlayer(entityID, connection.$clientID)
+			this.delegate.shouldAddPlayer(entityID, connection.$clientID);
+
+			console.log("Sending:",BISON.encode(aDecodedMessage));
+			connection.send( BISON.encode(aDecodedMessage) );
 //			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data.nickName, connection.$clientID);
 			
 			// Tell all the clients that a player has joined

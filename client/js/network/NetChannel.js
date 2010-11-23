@@ -47,7 +47,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		var that = this; // Forclosures (haw haw)	
 
 		 
-		this.verboseMode = true;
+		this.verboseMode = false;
 
 		// Make sure this controller is valid before moving forward.
 		// Function itself
@@ -148,7 +148,8 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		if(!hasReliableMessages && this.nextUnreliable != null)
 		{
-//			this.sendMessage(firstUnreliableMessageFound)
+//			console.log('SendUnreliable!');
+			this.sendMessage( this.nextUnreliable )
 		}
 	};
 
@@ -190,10 +191,11 @@ define(['network/Message', 'config'], function(Message, config) {
 		{
 			this.onServerDidAcceptConnection(serverMessage);
 		}
-		
+
 		// We sent this, clear our reliable buffer que
 		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.fullupdate) 
 		{
+//			 console.log("(NetChannel) onServerMessage", serverMessage);
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
 			
@@ -293,25 +295,26 @@ define(['network/Message', 'config'], function(Message, config) {
 		// Add to array the queue
 		this.messageBuffer[ this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK ] = message;
 
-		if(this.isReliable == false) {
-			this.nextUnreliable = anUnencodedMessage;
+		if(isReliable) {
+			this.messageBuffer[ this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK ] = message;
+		} else {
+			this.nextUnreliable = message;
 		}
-//		if( this.verboseMode ) console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
+
+		if( this.verboseMode ) console.log('(NetChannel) Adding Message to que', this.messageBuffer[this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK], " ReliableBuffer currently contains: ", this.reliableBuffer);
 	};
 
 
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
 	{
 		if(!this.isConnected) {
-			//some error here
-			return;
+			return;      //some error here
 		}
 		aMessageInstance.messageTime = this.gameClock; // Store to determine latency
 
 		this.lastSentTime = this.gameClock;
 
-		if( aMessageInstance.isReliable )
-		{
+		if( aMessageInstance.isReliable ) {
 			this.reliableBuffer = aMessageInstance; // Block new connections
 		}
 
