@@ -32,6 +32,7 @@ var init = function()
 //			this.record = aRecord;
 			this.$ = aServer;
 
+			this.commandTypes = config.CMDS;
 			this.updaterate = config.CLIENT_SETTING.updaterate;
 			this.cmdrate =  config.CLIENT_SETTING.cmdrate;
 			this.rate =  config.CLIENT_SETTING.rate;
@@ -84,7 +85,9 @@ var init = function()
 		 */
 		sendQueuedCommands: function( gameClock )
 		{
-			var encodedMessage = MBISON.encode(this.cmdBuffer);
+			var messageContent = {id:1, seq: this.outgoingSequenceNumber, cmds:{ cmd:this.commandTypes.fullupdate}, data:this.cmdBuffer};
+			var encodedMessage = MBISON.encode(messageContent);
+
 			this.sendMessage(encodedMessage, gameClock);
 
 			this.cmdBuffer = [];
@@ -95,10 +98,13 @@ var init = function()
 		 * @param worldDescription A description of all the entities currently in the world
 		 * @param gameClock		   The current (zero-based) game clock
 		 */
-		compressDeltaAndQueueMessage: function( worldDescription, gameClock ) {
+		compressDeltaAndQueueMessage: function( worldDescription, gameClock )
+		{
+			var entityDescriptionObject = worldDescription.entities._data;
+			entityDescriptionObject.gameClock = worldDescription.gameClock;
+			entityDescriptionObject.gameTick = worldDescription.gameTick;
 
-			console.log(worldDescription.entityDescription);
-			this.cmdBuffer.push( worldDescription.entityDescription )
+			this.cmdBuffer.push( entityDescriptionObject )
 			return worldDescription;
 		},
 

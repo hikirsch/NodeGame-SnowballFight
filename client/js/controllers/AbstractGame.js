@@ -38,10 +38,11 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 
 			// Loop
 			this.clockActualTime = new Date().getTime();
-			this.clockGame = 0;									// Our game clock is relative
+			this.gameClock = 0;									// Our game clock is relative
+			this.gameTick = 0;
 			
 			var that = this; // Temporarily got rid of bind (had some bug with it), feel free to add back in -
-			this.gameTick = setInterval(function(){that.tick()}, this.targetDelta);
+			this.gameTickInterval = setInterval(function(){that.tick()}, this.targetDelta);
 		},
 		
 		/**
@@ -55,7 +56,8 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			var delta = ( now - oldTime );			// Note (var framerate = 1000/delta);
 
 			// Our clock is zero based, so if for example it says 10,000 - that means the game started 10 seconds ago 
-			this.clockGame += delta;
+			this.gameClock += delta;
+			this.gameTick++;
 			
 			// Framerate independent motion
 			// Any movement should take this value into account,

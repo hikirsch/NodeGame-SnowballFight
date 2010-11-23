@@ -43,17 +43,49 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 		tick: function()
 		{
 			this.callSuper();
-			this.netChannel.tick( this.clockGame );
+			this.netChannel.tick( this.gameClock );
 
+			this.renderAtTime(this.gameClock - this.config.CLIENT_SETTING.interp)
 			// Continuesly store information about this character
 			if( this.clientCharacter != null )
 			{
 				var characterStatus = this.clientCharacter.getStatus();
-				var newMessage = this.netChannel.composeCommand( config.CMDS.PLAYER_MOVE, characterStatus );
+				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
 
 				// create a message with our characters updated information and send it off
 				this.netChannel.addMessageToQueue( false, newMessage );
 			}
+		},
+
+		renderAtTime: function(renderTime)
+		{
+			var cmdBuffer = this.netChannel.cmdBuffer;
+
+			var len = cmdBuffer.count();
+			if( len < 2 ) return false; // Nothing to do!
+
+			var nextAfterTime = null;
+			var previousBeforeTime = null;
+
+			// Loop thru the points, until we find the first one that has a timeValue which is greater than our renderTime
+			// Knowing that then we know that the combined with the one before it - that passed our just check - we know we want to render ourselves somehwere between these two points
+			cmdBuffer.forEach( function(key, worldEntityDescription) {
+				if( worldEntityDescription.gameClock >= renderTime ) {
+					previousBeforeTime = cmdBuffer.objectForKey(key - 1);
+					nextAfterTime = worldEntityDescription;
+				}
+			}, this );
+
+
+			// Could not find two points to render between
+			if(nextAfterTime == null || previousBeforeTime == null) {
+				return false;
+			}
+
+			// Now to do something with the data
+			// No interpolation for now - just place where it says
+			console.log( previousBeforeTime);
+			console.log('RenderTime', renderTime, 'WorldEntityDescription.gameClock:', nextAfterTime.gameClock)
 		},
 
 		shouldAddPlayer: function (anObjectID, aClientID, playerType)
@@ -113,6 +145,14 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			// TODO: Handle array of 'cmds'
 			// TODO: prep for cmds: send only the client ID and the message data
 			this.CMD_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData.id, messageData.cmds.data]);
+		},
+
+		netChannelDidReceiveWorldUpdate: function (messageData)
+		{
+//			console.log( "netChannelDidReceiveWorldUpdate", messageData );
+			// TODO: Handle array of 'cmds'
+			// TODO: prep for cmds: send only the client ID and the message data
+//			this.CMD_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData.id, messageData.cmds.data]);
 		},
 
 		netChannelDidDisconnect: function (messageData)

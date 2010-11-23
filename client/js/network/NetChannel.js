@@ -79,6 +79,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		
 		// array of the last 31 messages sent
 		this.messageBuffer = [];
+		this.cmdBuffer = new SortedLookupTable();
 		this.MESSAGE_BUFFER_MASK = 31; // This is used in the messageBuffer bitmask - It's the sequence number
 		
 		// We send this, and we wait for the server to send back matching seq.number before we empty this. 
@@ -183,7 +184,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		}
 		
 		// We sent this, clear our reliable buffer que
-		if(serverMessage.id == this.clientID) 
+		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.fullupdate) 
 		{
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
@@ -200,17 +201,22 @@ define(['network/Message', 'config'], function(Message, config) {
 			delete this.messageBuffer[messageIndex];
 			delete message;
 		}
-		else
+		else if (serverMessage.cmds.cmd == config.CMDS.fullupdate) // World update!
 		{
-			// No fancy behavior for other peoples messages for now.
+			var len = serverMessage.data.length;
+			// Store all world updates contained in the message.
+			while(--len) {
+				var singleWorldUpdate = serverMessage.data[len];
+				var timeStamp = singleWorldUpdate.gameTick;
+				this.cmdBuffer.setObjectForKey( singleWorldUpdate, singleWorldUpdate.gameTick & this.MESSAGE_BUFFER_MASK );
+			}
 		}
-			
-		// Every other server message
-		if(serverMessage.cmds.cmd != config.CMDS.SERVER_CONNECT)
+		else // Server wants to tell the gameclient something, not just a regular world update
 		{
 			this.controller.netChannelDidReceiveMessage(serverMessage);
+
 		}
-		
+
 		delete serverMessage;
 	};
 	

@@ -50,7 +50,7 @@ Logger = (function()
 		{
 			if ( this.options.showStatus )
 			{
-				this.logs.push([this.game.clockGame, str]);
+				this.logs.push([this.game.gameClock, str]);
 				if (this.logs.length > 20)
 				{
 					this.logs.shift();
@@ -88,7 +88,7 @@ Logger = (function()
 		
 			if( !this.options.showStatus ) { return; }
 		    
-		    var stats = '    Running ' + this.toTime( this.game.clockGame ) + ' | '
+		    var stats = '    Running ' + this.toTime( this.game.gameClock ) + ' | '
 						+ this.game.netChannel.clientCount + ' Client(s) | '
 						+ this.game.field.players.count() + ' Entities(s) | '
 						+ this.toSize( this.game.netChannel.bytes.sent ) + ' sent | '

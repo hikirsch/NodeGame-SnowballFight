@@ -69,7 +69,7 @@ ServerGame = (function()
 			this.callSuper();
 
 			var worldEntityDescription = new WorldEntityDescription( this );
-			this.netChannel.tick( this.clockGame, worldEntityDescription );
+			this.netChannel.tick( this.gameClock, worldEntityDescription );
 		},
 
 		log: function(o)

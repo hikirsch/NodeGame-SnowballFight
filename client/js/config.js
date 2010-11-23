@@ -29,7 +29,7 @@ var init = function()
 
 			// Lag compensation
 			interp_ratio: 2,
-			interp: 0.05,			   		// How far back (in seconds), to offset the clienttime to from the actual tick, in order to interpolate between the deltas
+			interp: 100,			   		// How far back (in seconds), to offset the clienttime to from the actual tick, in order to interpolate between the deltas
 			extrapolate:	true,
 			extrapolate_amount: 0.25,		// If the connection is suffering, and we dont get an update fast enough - extrapolate positions until after this point. Then drop.
 

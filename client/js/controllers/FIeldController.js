@@ -35,7 +35,6 @@ var init = function(Rectangle, FieldView)
 		{
 			this.players.setObjectForKey( newPlayer, newPlayer.clientID );
 
-			console.log( SYS.inspect(this.players ) ) ;
 			// if we have a view, then add the player to it
 			if( this.view ){
 				this.view.addPlayer( newPlayer.view );
