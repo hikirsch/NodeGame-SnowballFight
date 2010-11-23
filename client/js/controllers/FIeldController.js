@@ -13,14 +13,9 @@ var init = function(Rectangle, FieldView)
 			this.players = new SortedLookupTable(); // Active players
 			this.projectiles = new SortedLookupTable(); // Things fired
 			this.entities = new SortedLookupTable(); // Everything else, e.g. trees, rocks, powerups, dogs, cats
-			
-			// if our game has a view, then create one
-			if( this.gameController.view )
-			{
-				this.view = new FieldView(this);
-			}
 		},
-		
+
+
 		getWidth: function()
 		{
 			return this.rectangle.width;
@@ -55,7 +50,16 @@ var init = function(Rectangle, FieldView)
 
 			// Update entities
 			this.entities.forEach( function(key, entity){entity.tick(speedFactor) }, this );
+		},
+
+		createView: function(aGameView)
+		{
+			// if our game has a view, then create one
+			if( this.gameController.view )
+			{
+				this.view = new FieldView(this);
 			}
+		}
 	});
 };
 

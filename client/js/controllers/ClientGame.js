@@ -25,6 +25,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			// super class knows to create the view for anything else it needs, this is primarily
 			// for the field controller since this element is being shared between client/server
 			this.view = new GameView(this);
+			this.fieldController.createView();
 
 			this.netChannel = new NetChannel(config.HOST, config.PORT, this);
 
@@ -35,6 +36,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
+
 		},
 
 		/**
@@ -44,8 +46,8 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 		{
 			this.callSuper();
 			this.netChannel.tick( this.gameClock );
-
 			this.renderAtTime(this.gameClock - this.config.CLIENT_SETTING.interp)
+			
 			// Continuesly store information about this character
 			if( this.clientCharacter != null )
 			{
@@ -82,10 +84,15 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				return false;
 			}
 
+
+			//for(var entity in previousBeforeTime.en)
+//			for(var i = 1; i < 1; i++) {
+//
+//			}
 			// Now to do something with the data
 			// No interpolation for now - just place where it says
-			console.log( previousBeforeTime);
-			console.log('RenderTime', renderTime, 'WorldEntityDescription.gameClock:', nextAfterTime.gameClock)
+//			console.log( nextAfterTime );
+//			console.log('RenderTime', renderTime, 'WorldEntityDescription.gameClock:', nextAfterTime.gameClock)
 		},
 
 		shouldAddPlayer: function (anObjectID, aClientID, playerType)
@@ -105,6 +112,10 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );
+
+			// justcreate for now
+//			this.fieldController.addPlayer( );
+			this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
 		},
 
 		onClientJoined: function(clientID, data)

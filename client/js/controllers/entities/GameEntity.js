@@ -36,7 +36,9 @@ var init = function(Vector, Rectangle, FieldController)
 			console.log("(GameEntity)::initialize");
 			
 			this.fieldController = aFieldController;
+			debugger
 
+			console.log( this.fieldController );
 			// Meta information
 			this.entityType = 'GameEntity';			// Override in subclasses to
 			this.clientID = aClientID;				// Client who created this object, 0 means it has no owner or the owner is the server

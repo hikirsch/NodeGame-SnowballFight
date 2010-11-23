@@ -11,7 +11,7 @@ Basic Usage:
  	
 */
 
-define(['lib/jsclass/core', 'factories/HTMLFactory'], function()
+define(['factories/HTMLFactory', 'lib/jsclass/core'], function(HTMLFactory)
 {
 	return new JS.Class(
 	{
@@ -45,7 +45,7 @@ define(['lib/jsclass/core', 'factories/HTMLFactory'], function()
 				theme: this.theme
 			};
 			
-			this.element = HtmlFactory.character(options);
+			this.element = HTMLFactory.character(options);
 			
 			// show the right default rotation and sprite class
 			this.adjustSprite();

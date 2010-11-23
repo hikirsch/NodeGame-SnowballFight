@@ -26,7 +26,7 @@ Basic Usage:
 		this.view.addCharacter(newCharacter.initView());
 */
 
-var init = function(Vector, Rectangle, GameEntity)
+var init = function(Vector, Rectangle, FieldController, GameEntity)
 {
 	return new JS.Class(GameEntity,
 	{
@@ -34,9 +34,8 @@ var init = function(Vector, Rectangle, GameEntity)
 		{
 			this.callSuper();
 			this.entityType = 'Character';
-		  	
-//			if(typeof window === 'undefined')
-//				console.log("(Character)", sys.inspect( this ) );
+
+			console.log("(Character)", this);
 
 			// some defaults we use for position
 			this.position = new Vector( Math.random() * this.fieldController.getWidth(), Math.random() * this.fieldController.getHeight() );
@@ -123,11 +122,13 @@ if (typeof window === 'undefined')
 	require('./GameEntity')
 
 	var sys = require('sys');
-	Character = init(Vector, Rectangle, GameEntity, FieldController);
+	Character = init(Vector, Rectangle, FieldController, GameEntity);
 }
 else
 {
 	// We're on the browser. 
-	// Require.js will use this file's name (CharacterController.js), to create a new  
+	// Require.js will use this file's name (CharacterController.js), to create a new
+	//	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'view/CharacterView', 'lib/jsclass/core'], init);
+
 	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'view/CharacterView', 'lib/jsclass/core'], init);
 }

@@ -1,4 +1,4 @@
-var init = function()
+var init = function(HTMLFactory)
 {
 	return new JS.Class(
 	{
@@ -33,6 +33,6 @@ if (typeof window === 'undefined')
 	require('../lib/jsclass/core.js');
 	FieldView = init();
 } else {
-	define(['lib/jsclass/core', 'factories/HTMLFactory'], init);
+	define(['factories/HTMLFactory', 'lib/jsclass/core'], init);
 }
 

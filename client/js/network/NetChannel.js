@@ -168,7 +168,7 @@ define(['network/Message', 'config'], function(Message, config) {
 	{	
 		var serverMessage = BISON.decode(messageEvent.data);
 
-		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", serverMessage);
+//		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", serverMessage);
 		
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) return;
@@ -222,7 +222,6 @@ define(['network/Message', 'config'], function(Message, config) {
 	
 	NetChannel.prototype.onConnectionClosed = function (serverMessage)
 	{
-
 		console.log('(NetChannel) onConnectionClosed', serverMessage);
 		this.controller.netChannelDidDisconnect();
 	};

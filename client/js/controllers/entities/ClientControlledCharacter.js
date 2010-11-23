@@ -11,13 +11,13 @@
  // TODO: FILL OUT
  */
 
-var init = function(Vector, Rectangle, GameEntity, Character, CharacterView)
+var init = function(Vector, Rectangle, FieldController, Character, CharacterView)
 {
 	/**
 	 * This is the clients character.
 	 * It's exactly like character, except it has an input - and possibly other things later
 	 */
-	return new JS.Class(
+	return new JS.Class(Character,
 	{
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
@@ -50,10 +50,6 @@ else
 {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/Vector',
-		'lib/Rectangle',
-		'controllers/entities/GameEntity',
-		'controllers/entities/Character',
-		'view/CharacterView',
-		'lib/jsclass/core'], init);
+
+	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/Character', 'view/CharacterView', 'lib/jsclass/core'], init);
 }
