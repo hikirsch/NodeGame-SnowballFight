@@ -33,9 +33,10 @@ var init = function()
 			this.$ = aServer;
 
 			this.commandTypes = config.CMDS;
-			this.updaterate = config.CLIENT_SETTING.updaterate;
-			this.cmdrate =  config.CLIENT_SETTING.cmdrate;
-			this.rate =  config.CLIENT_SETTING.rate;
+
+			this.updaterate = config.CLIENT_SETTING.updaterate; 	// Send user info this ofte
+			this.cmdrate =  config.CLIENT_SETTING.cmdrate;			// Receive user info this often
+			this.rate =  config.CLIENT_SETTING.rate;				// Cap bandwidth/sec 
 
 			//
 			this.incomingSequenceNumber = 0;
@@ -85,7 +86,7 @@ var init = function()
 		 */
 		sendQueuedCommands: function( gameClock )
 		{
-			var messageContent = {id:1, seq: this.outgoingSequenceNumber, cmds:{ cmd:this.commandTypes.fullupdate}, data:this.cmdBuffer};
+			var messageContent = {gameClock: gameClock, id:1, seq: this.outgoingSequenceNumber, cmds:{cmd:this.commandTypes.fullupdate}, data:this.cmdBuffer};
 			var encodedMessage = MBISON.encode(messageContent);
 
 			this.sendMessage(encodedMessage, gameClock);

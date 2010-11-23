@@ -15,65 +15,41 @@ Abstract:
 	  			 	 
 Basic Usage:
 
- 		 /*
-		 	// Interpolation time on client
-	short		lerp_msec;
-	// Duration in ms of command
-	byte		msec;
-	// Command view angles.
-	vec3_t	viewangles;
-	// intended velocities
-	// Forward velocity.
-	float		forwardmove;
-	// Sideways velocity.
-	float		sidemove;
-	// Upward velocity.
-	float		upmove;
-	// Attack buttons
-	unsigned short buttons;
-	//
-	// Additional fields omitted...
-	//
-} usercmd_t;
-		  */
+ */
 
 
 define(['network/Message', 'config'], function(Message, config) {
 	/**
 	 * NetChannel!
 	 */
-	function NetChannel( aHost, aPort, aController )
+	function NetChannel( config, aController )
 	{		
 		var that = this; // Forclosures (haw haw)	
+		this.controller = aController;	// For callbacks once messages are validated
+		this.config = config;
 
-		 
+		// Dev flag, turning this on will output tons information to the console
 		this.verboseMode = false;
 
-		// Make sure this controller is valid before moving forward.
-		// Function itself
-		if( this.validateController(aController) === false ) 
+		// Make sure this controller is valid before moving forward, the controller must contain certain methods we can rely on being callable
+		if( this.validateController(aController) === false )
 		{
 			console.log("(NetChannel) Controller " + aController + " is undefined or does not conform to the valid methods. Ignored."); 	 
 			return;
 		}
 		
-		this.controller = aController;	// For callbacks once messages are validated
-		this.isConnected = false;
-		
 		// connection info
 		this.frameLatency = 0; 	// lag over time
-		this.frameRate = 0;		
-	
-		// Connection timings
 		this.latency = 1000; // lag right now
+
 		//
 		this.gameClock = -1;
 		this.lastSentTime = -1;
 		this.lastRecievedTime = -1; // Last time we received a message
 		
 		// When we  can send another message to prevent flooding - determined by 'rate' variable
-		this.clearTime = -1; // if realtime > nc->cleartime, free to go
-		this.rate = 5;	// seconds / byte
+		this.clearTime = -1; // if realtime > cleartime, free to go
+		this.cmdrate = this.config.CLIENT_SETTING.cmdrate;	// (SEND) messages/sec
 
 		// array of the last 31 messages sent
 		this.messageBuffer = [];
@@ -86,17 +62,15 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.outgoingSequenceNumber = 0;
 		this.outgoingCmdBuffer = new SortedLookupTable();
 
-		
 		// We send this, and we wait for the server to send back matching seq.number before we empty this. 
 		// When this is empty, then we can send whatever the next one is
 		this.reliableBuffer = null;  // store last sent message here
-		
+
 		this.clientID = -1;
-		this.connection = new WebSocket( 'ws://' + aHost + ':' + aPort );
+		this.connection = new WebSocket( 'ws://' + config.HOST + ':' + config.PORT );
 		this.connection.onopen = function() { that.onConnectionOpened(); };
 		this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
 		this.connection.onclose = function() { that.onConnectionClosed(); };
-
 
 		console.log("(NetChannel) Created with socket: ", this.connection);
 	}
@@ -124,7 +98,7 @@ define(['network/Message', 'config'], function(Message, config) {
 //		if( this.verboseMode ) console.log("(NetChannel) tick", gameClockTime);
 
 		if(this.reliableBuffer !== null) return; // Can't send new message, still waiting
-		
+
 		var hasReliableMessages = false;
 		var firstUnreliableMessageFound = null;
 
@@ -146,20 +120,15 @@ define(['network/Message', 'config'], function(Message, config) {
 //			}
 		}
 
-		if(!hasReliableMessages && this.nextUnreliable != null)
+		// No reliable messages waiting, enough time has passed to send an update
+		if(!hasReliableMessages && this.canSend() && this.nextUnreliable != null)
 		{
 //			console.log('SendUnreliable!');
 			this.sendMessage( this.nextUnreliable )
 		}
 	};
 
-	/**
-	* Determines if it's ok for the client to send a unreliable new message yet
-	*/
-	NetChannel.prototype.canSend = function ()
-	{
-		return ( this.gameClock > this.lastSentTime + this.rate );
-	};
+
 
 	/**
 	 * Messages from the FROM / SERVER
@@ -169,7 +138,6 @@ define(['network/Message', 'config'], function(Message, config) {
 		if( this.verboseMode ) console.log("(NetChannel) onConnectionOpened");
 
 		// Create a new message with the SERVER_CONNECT command
-		this.isConnected = true;
 		this.addMessageToQueue(true, this.composeCommand(config.CMDS.SERVER_CONNECT, null) );
 	};
 	
@@ -195,15 +163,11 @@ define(['network/Message', 'config'], function(Message, config) {
 		// We sent this, clear our reliable buffer que
 		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.fullupdate) 
 		{
-//			 console.log("(NetChannel) onServerMessage", serverMessage);
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
 			
-			this.latency = this.gameClock - message.messageTime;
-			
 			// Free up reliable buffer to allow for new message to be sent
-			if(this.reliableBuffer === message)
-			{
+			if(this.reliableBuffer === message) {
 				this.reliableBuffer = null;
 			}
 				
@@ -233,11 +197,16 @@ define(['network/Message', 'config'], function(Message, config) {
 	NetChannel.prototype.onConnectionClosed = function (serverMessage)
 	{
 		console.log('(NetChannel) onConnectionClosed', serverMessage);
-		this.isConnected = false;
 		this.controller.netChannelDidDisconnect();
 	};
 	
-	// onConnectionOpened is for the WebSocket - however we still don't have a 'clientID', this is what we get back when we were OK'ed and created by the server 
+	/**
+	 * An WS connection hand-shake has occured. We still do not have a clientID.
+	 * Once we receive our first message from the server, it will contain our clientID
+	 *
+	 * @CalledFrom	onConnectionOpened
+	 * @param serverMessage
+	 */
 	NetChannel.prototype.onServerDidAcceptConnection = function(serverMessage)
 	{
 		if( this.verboseMode ) console.log("(NetChannel) onServerDidAcceptConnection", serverMessage);
@@ -248,41 +217,7 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		this.controller.netChannelDidConnect(serverMessage);
 	};
-	
-	/**
-	* HELPER METHODS
-	*/
-	NetChannel.prototype.adjustRate = function(serverMessage)
-	{
-		// nothing fancy yet
-		this.rate = 1; // Math.random()*10+50;
 
-		// var time = this.gameClock - serverMessage.messageTime;
-		// time -= 0.1; // subtract 100ms
-		//
-		// if(time <= 0)
-		// {
-		// 	this.rate = 0.12; /* 60/1000*2 */
-		// }
-		// else
-		// {
-		// }
-	};
-	
-	/**
-	* Simple convinience message to compose CMDS.
-	* Bison will encode this array for us when we send
-	*/
-	NetChannel.prototype.composeCommand = function(aCommandConstant, commandData)
-	{
-		// Create a command
-		var command = {};
-		// Fill in the data
-		command.cmd = aCommandConstant;
-		command.data = commandData || {};
-		return command;
-	};
-	
 	/**
 	* Sending Messages
 	*/
@@ -307,7 +242,7 @@ define(['network/Message', 'config'], function(Message, config) {
 
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
 	{
-		if(!this.isConnected) {
+		if(this.connection.readyState == WebSocket.CLOSED) {
 			return;      //some error here
 		}
 		aMessageInstance.messageTime = this.gameClock; // Store to determine latency
@@ -321,6 +256,57 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.connection.send( aMessageInstance.encodedSelf() );
 		if(this.verboseMode) console.log('(NetChannel) Sending Message, isReliable', aMessageInstance.isReliable, BISON.decode(aMessageInstance.encodedSelf()));
 	};
-	
+
+
+	/**
+	 * Adjust the cmd rate based on the current server latency.
+	 * @param serverMessage	A full server message containing client info
+	 */
+	NetChannel.prototype.adjustRate = function(serverMessage)
+	{
+		this.cmdrate = this.config.CLIENT_SETTING.cmdrate;
+	   	var deltaTime = this.gameClock - serverMessage.gameClock;
+		this.latency = deltaTime;
+
+//		time -= 100; // Subtract 100ms
+//		if(this.)
+//		console.log('Time:', time)
+		// time -= 0.1; // subtract 100ms
+		//
+		// if(time <= 0)
+		// {
+		// 	this.rate = 0.12; /* 60/1000*2 */
+		// }
+		// else
+		// {
+		// }
+	};
+
+
+	/**
+	* Simple convinience message to compose CMDS.
+	* Bison will encode this array for us when we send
+	*/
+	NetChannel.prototype.composeCommand = function(aCommandConstant, commandData)
+	{
+		// Create a command
+		var command = {};
+		// Fill in the data
+		command.cmd = aCommandConstant;
+		command.data = commandData || {};
+		return command;
+	};
+
+	/**
+	* Determines if it's ok for the client to send a unreliable new message yet
+	*/
+	NetChannel.prototype.canSend = function ()
+	{
+//		console.log( this.gameClock , this.lastSentTime , this.cmdrate );
+		//console.log( canSend );
+		var ready = this.gameClock > this.lastSentTime + this.cmdrate;
+		return ready;
+	};
+
 	return NetChannel;
 });

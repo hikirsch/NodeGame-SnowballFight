@@ -46,7 +46,7 @@ ServerNetChannel = (function()
 		initialize: function(aDelegate, config)
 		{
 			console.log('(ServerNetChannel)::init');
-			
+
 			// Delegation pattern, avoid subclassing ServerNetChannel
 			this.delegate = aDelegate;
 			this.config = config;
@@ -68,7 +68,7 @@ ServerNetChannel = (function()
 		    this.clients = new SortedLookupTable();		// Everyone connected
 		    this.clientCount = 0;	// Length of above
 		    this.nextClientID = 1;		// UUID for next client - ZERO IS RESERVED FOR THE SERVER
-		    
+
 		    // Recording
 		    this.record = config.record || false;
 		    this.recordFile = config.recordFile || './record[date].js';
@@ -83,10 +83,10 @@ ServerNetChannel = (function()
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.removeClient;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.onPlayerMoveCommand;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
-		      
+
 		    this.initAndStartWebSocket(config);
-		}, 
-		
+		},
+
 		/**
 		 * Initialize and start the WebSocket server.
 		 * With this set up we should be abl to move to Socket.io easily if we need to
@@ -96,12 +96,12 @@ ServerNetChannel = (function()
 			// START THE WEB-SOCKET
 			var that = this;
 			var aWebSocket = this.$ = new ws.Server( null);
-			
+
 			aWebSocket.onConnect = function(connection)
 			{
 				//that.delegate.log("(ServerNetChannel) UserConnected:", sys.inspect(arguments[0]) );
 			};
-			
+
 			/**
 			* Received a message from a client/
 			* Messages can come as a single message, or grouped into an array of commands.
@@ -109,13 +109,12 @@ ServerNetChannel = (function()
 			aWebSocket.onMessage = function(connection, encodedMessage )
 			{
 //				that.delegate.log( '(ServerNetChannel) : onMessage', connection, BISON.decode(encodedMessage) );
-
 				try
 				{
 					that.bytes.received += encodedMessage.length;
 
 					var decodedMessage = BISON.decode(encodedMessage);
-					
+
 
 					if(decodedMessage.cmds instanceof Array == false)
 					{
@@ -137,23 +136,23 @@ ServerNetChannel = (function()
 					connection.close();
 				}
 			};
-			
+
 			aWebSocket.onClose = function(connection) {
 				that.removeClient(connection);
 			};
 		},
-		
+
 		// Create a callback to call 'start' on the next event loop
-		run: function()
+		start: function()
 		{
 			var that = this;
 			process.nextTick(function() {
-				that.start();
+				that.startInternal();
 			});
 		},
-		
+
 		// Start the server
-		start: function()
+		startInternal: function()
 		{
 			var that = this;
 			this.startTime = this.delegate.gameClock;
@@ -166,133 +165,6 @@ ServerNetChannel = (function()
 
 			// Listen for process termination
 			process.addListener('SIGINT', function(){that.shutdown()});
-		},
-		
-		// Shut down the server
-		shutdown: function()
-		{
-			// Tell all the clients then close
-			var that = this;
-			setTimeout(function() {
-				for(var aClient in that.clients)
-				{
-					try { that.clients[aClient].close(); } catch( e ) { }
-				}
-			    
-				// that.saveRecording();
-				that.delegate.log('>> Shutting down...');
-				that.delegate.status(true);
-				process.exit(0);
-			}, 100);
-		},
-		
-		//Set the clients 'nickName' as defined by them
-		setClientPropertyNickName: function(connection, aDecodedMessage)
-		{
-			var nickname = aDecodedMessage.cmds.data.nickname;
-			
-			this.delegate.log('(ServerNetChannel) Setting nickname for ' + connection.$clientID + ' to ' +  nickname);
-
-//			var client = this.clients.objectForKey( connection.$clientID );
-//
-//			this.clients[connection.$clientID].enabled = true;
-//			this.clients[connection.$clientID].nickname = nickname;
-		},
-		
-		removeClient: function(connection)
-		{
-			var clientID = connection.$clientID;
-			var aClient = this.clients.objectForKey(clientID);
-
-			// This client is not in our client-list. Throw warning, something has probably gone wrong.
-			if(aClient == undefined)
-			{
-				this.delegate.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
-				return;
-			}
-			
-			
-			this.delegate.log("(ServerNetChannel) Disconnecting client: " + clientID );
-					
-			// if this client is mid game playing then we need to tell the other players to remove it
-			if(aClient.enabled)
-			{
-				// before we actually remove this guy, make tell everyone else
-//				this.relayMessage(connection.$clientID, MESSAGES.REMOVE_FOREIGN_CHARACTER, { clientID: connection.$clientID });
-			}
-			
-			// Free the slot
-			this.clients.remove(clientID);
-			this.clientCount--;
-		},
-		
-		/**
-		 * CONNECTION EVENTS
-		 * User has connected, give them an ID, tell them - then tell all clients
-		 */
-		onClientConnected: function(connection, aDecodedMessage)
-		{
-			var data = aDecodedMessage.cmds.data;
-
-			// Create a new client, note UUID is incremented 
-			var newClientID = this.addClient(connection);
-			aDecodedMessage.id = newClientID;
-			aDecodedMessage.gameClock = this.delegate.gameClock;
-			
-			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
-
-			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
-			// console.log( aDecodedMessage );
-			connection.send( BISON.encode(aDecodedMessage) );
-		},
-		
-		/**
-		 * Client Addition - 
-		 * Added client to connected users - player is not in the game yet
-		 */
-		addClient: function(connection)
-		{
-			var clientID = this.nextClientID++;
-			this.clientCount++;
-			
-			connection.$clientID = clientID;
-			var aClient = new Client(this, connection, this.config);
-			// Add to our list of connected users
-			this.clients.setObjectForKey( aClient, clientID);
-			
-			return clientID;
-		},
-		
-		// player is now in the game after this 
-		onPlayerJoined: function(connection, aDecodedMessage)
-		{
-			//console.log( sys.inspect(decodedMessage) );
-			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
-
-			var entityID = this.delegate.getNextEntityID();
-			this.delegate.shouldAddPlayer(entityID, connection.$clientID);
-
-			console.log("Sending:",BISON.encode(aDecodedMessage));
-			connection.send( BISON.encode(aDecodedMessage) );
-//			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data.nickName, connection.$clientID);
-			
-			// Tell all the clients that a player has joined
-//			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
-		},
-		
-		/**
-		 * Send this to all clients, and let the gamecontroller do what it should with the message
-		 */
-		onGenericPlayerCommand: function(connection, aDecodedMessage)
-		{
-//			console.log(aDecodedMessage) ;
-			throw("ERROR"); // This is deprecated
-//			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
-//			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
-		},
-
-		onPlayerMoveCommand: function(connection, aDecodedMessage) {
-			  this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
 		},
 
 		/**
@@ -317,6 +189,7 @@ ServerNetChannel = (function()
 
 			}, this );
 		},
+
 		/**
 		 * Message Sending
 		 * @param originalClientID		The connectionID of the client this message originated from
@@ -327,18 +200,169 @@ ServerNetChannel = (function()
 		{
 			var encodedMessage = BISON.encode(anUnencodedMessage);
 			// this.delegate.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
-			
+
 			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
 			for( var clientID in this.clients )
 			{
 				// Don't send to original client
-				if( sendToOriginalClient == false && clientID == originalClientID ) 
+				if( sendToOriginalClient == false && clientID == originalClientID )
 					continue;
-				
+
 				this.clients.objectForKey([clientID]).sendMessage(encodedMessage);
 				this.bytes.sent += encodedMessage.length;
 			}
-		} // Close prototype object
+		},
+
+		// Shut down the server
+		shutdown: function()
+		{
+			// Tell all the clients then close
+			var that = this;
+			setTimeout(function() {
+				for(var aClient in that.clients)
+				{
+					try { that.clients[aClient].close(); } catch( e ) { }
+				}
+
+				// that.saveRecording();
+				that.delegate.log('>> Shutting down...');
+				that.delegate.status(true);
+				process.exit(0);
+			}, 100);
+		},
+
+		removeClient: function(connection)
+		{
+			var clientID = connection.$clientID;
+			var aClient = this.clients.objectForKey(clientID);
+
+			// This client is not in our client-list. Throw warning, something has probably gone wrong.
+			if(aClient == undefined)
+			{
+				this.delegate.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
+				return;
+			}
+
+
+			this.delegate.log("(ServerNetChannel) Disconnecting client: " + clientID );
+
+			// if this client is mid game playing then we need to tell the other players to remove it
+			if(aClient.enabled)
+			{
+				// before we actually remove this guy, make tell everyone else
+//				this.relayMessage(connection.$clientID, MESSAGES.REMOVE_FOREIGN_CHARACTER, { clientID: connection.$clientID });
+			}
+
+			// Free the slot
+			this.clients.remove(clientID);
+			this.clientCount--;
+		},
+
+		/**
+		 * Client Addition -
+		 * Added client to connected users - player is not in the game yet
+		 */
+		addClient: function(connection)
+		{
+			var clientID = this.nextClientID++;
+			this.clientCount++;
+
+			connection.$clientID = clientID;
+			var aClient = new Client(this, connection, this.config);
+			// Add to our list of connected users
+			this.clients.setObjectForKey( aClient, clientID);
+
+			return clientID;
+		},
+		// player is now in the game after this
+
+		onPlayerJoined: function(connection, aDecodedMessage)
+		{
+			//console.log( sys.inspect(decodedMessage) );
+			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
+
+			var entityID = this.delegate.getNextEntityID();
+			this.delegate.shouldAddPlayer(entityID, connection.$clientID);
+
+			console.log("Sending:",BISON.encode(aDecodedMessage));
+			connection.send( BISON.encode(aDecodedMessage) );
+//			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data.nickName, connection.$clientID);
+
+			// Tell all the clients that a player has joined
+//			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
+		},
+
+				/**
+		 * CONNECTION EVENTS
+		 * User has connected, give them an ID, tell them - then tell all clients
+		 */
+		onClientConnected: function(connection, aDecodedMessage)
+		{
+			var data = aDecodedMessage.cmds.data;
+
+			// Create a new client, note UUID is incremented
+			var newClientID = this.addClient(connection);
+			aDecodedMessage.id = newClientID;
+			aDecodedMessage.gameClock = this.delegate.gameClock;
+
+			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
+
+			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
+			// console.log( aDecodedMessage );
+			connection.send( BISON.encode(aDecodedMessage) );
+		},
+
+		/**
+		 * CONNECTION EVENTS
+		 * User has connected, give them an ID, tell them - then tell all clients
+		 */
+		onClientConnected: function(connection, aDecodedMessage)
+		{
+			var data = aDecodedMessage.cmds.data;
+
+			// Create a new client, note UUID is incremented
+			var newClientID = this.addClient(connection);
+			aDecodedMessage.id = newClientID;
+			aDecodedMessage.gameClock = this.delegate.gameClock;
+
+			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
+
+			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
+			// console.log( aDecodedMessage );
+			connection.send( BISON.encode(aDecodedMessage) );
+		},
+
+		/**
+		 * Send this to all clients, and let the gamecontroller do what it should with the message
+		 */
+		onGenericPlayerCommand: function(connection, aDecodedMessage)
+		{
+			throw("ERROR"); // This is deprecated
+//			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
+//			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
+		},
+
+		onPlayerMoveCommand: function(connection, aDecodedMessage) {
+			  this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
+		},
+
+
+		/**
+		 * SETTING CLIENT PROPERTIES
+		 * Called by clients to modify a property, if the server accepts the change (it is within bounds, name contains valid string, etc)
+		 * The clients property is updated
+		 */
+		//Set the clients 'nickName' as defined by them
+		setClientPropertyNickName: function(connection, aDecodedMessage)
+		{
+			var nickname = aDecodedMessage.cmds.data.nickname;
+			this.delegate.log('(ServerNetChannel) Setting nickname for ' + connection.$clientID + ' to ' +  nickname);
+//			var client = this.clients.objectForKey( connection.$clientID );
+//			this.clients[connection.$clientID].enabled = true;
+//			this.clients[connection.$clientID].nickname = nickname;
+		}
+
+		// Close prototype object
 	});// Close .extend
 })(); // close init()
 
