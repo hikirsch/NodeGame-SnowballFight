@@ -27,9 +27,8 @@ Basic Usage:
 
 var init = function()
 {
-	return Class.extend(
+	return new JS.Class(
 	{
-	
 		/**
 		* A message is a small value-object wrapper
 		* @param aSequenceNumber 	Ties us to an array by the owning class
@@ -37,15 +36,15 @@ var init = function()
 		  messages (for example moving is unreliable, because once it's outdates its worthless if new information exist)
 		* @param anEncodedMessage	The actualMessage that will be sent. Already encoded
 		**/
-		init: function(aSequenceNumber, isReliable, anUnencodedMessage)
+		initialize: function(aSequenceNumber, isReliable, anUnencodedMessage)
 		{
 			// Info
 			this.sequenceNumber = aSequenceNumber;
 			this.clientID = -1; // Some kind of hash value returned to the NetChannel from the server on connect
-			
+
 			// Data
 			this.unencodedMessage = anUnencodedMessage;
-			
+
 			// State
 			this.messageTime = -1;
 			this.isReliable = isReliable;
@@ -58,19 +57,20 @@ var init = function()
 			if(this.clientID == -1) {
 				console.log("(Message) Sending message without clientID. Note this is ok, if it's the first message to the server.");
 			};
-			
+
 			if(this.messageTime == -1) {
 				console.log("(Message) Sending message without messageTime. Expected result is undefined");
 			}
-			
+
 			return BISON.encode({id:this.clientID, seq:this.sequenceNumber, cmds:this.unencodedMessage, t:this.messageTime});
-		}	
+		}
 	});
-}
+};
 
 if (typeof window === 'undefined') {
 	require('./lib/bison.js');
-	exports.Class = init();
+	Message = init();
 } else {
-	define(['lib/Class','lib/bison'], init);
+
+	define(['lib/jsclass/core', 'lib/bison'], init);
 }

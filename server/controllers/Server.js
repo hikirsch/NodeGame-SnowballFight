@@ -21,27 +21,28 @@ Basic Usage:
 Version:
 	1.0
 */
-var Class = require('../../client/js/lib/Class.js').Class;
-var ServerGameController = require('../controllers/ServerGame.js').Class;
-var ServerNetChannel = require('../network/ServerNetChannel.js').Class;
-var Logger = require('../lib/Logger.js').Class;
 
-(function(){
-	exports.Class = Class.extend({
-		init: function( config, serverConfig )
+var init = function()
+{
+	return new JS.Class(
+	{
+		initialize: function( gameConfig, serverConfig )
 		{
-			this._super();
-
 			this.logger = new Logger( serverConfig, this );
+			this.gameConfig = gameConfig;
+			this.serverConfig = serverConfig;
+
+			var loggerOptions = {};
+			this.logger = new Logger( loggerOptions, this );
 			this.games = {};
 
 			for( var i = 0; i < 1; i += 1 )
 			{
 				// create our game
-				this.games[ i ] = new ServerGameController( this );
-
+				var aGameInstance = new ServerGame( this );
 				// start the game
-				this.games[ i ].start();
+				aGameInstance.start();
+				this.games[ i ] = aGameInstance;
 			}
 		},
 
@@ -53,6 +54,14 @@ var Logger = require('../lib/Logger.js').Class;
 		log: function( o )
 		{
 			this.logger.log( o );
-		}
-	});
-}());
+		} // Close prototype object
+	}); // Close .extend
+}; // close init()
+
+
+require('../controllers/ServerGame.js');
+require('../network/ServerNetChannel.js');
+require('../lib/Logger.js');
+require('../../client/js/lib/jsclass/core.js');
+var sys = require('sys');
+Server = init();

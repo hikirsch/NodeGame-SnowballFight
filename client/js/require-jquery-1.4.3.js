@@ -238,6 +238,7 @@ var require, define;
 
         //Allow for anonymous functions
         if (typeof name !== 'string') {
+
             //Adjust args appropriately
             contextName = callback;
             callback = deps;
@@ -247,14 +248,17 @@ var require, define;
 
         //This module may not have dependencies
         if (!req.isArray(deps)) {
+
             contextName = callback;
             callback = deps;
             deps = [];
         }
 
+
         //If no name, and callback is a function, then figure out if it a
         //CommonJS thing with dependencies.
         if (!name && !deps.length && req.isFunction(callback)) {
+
             //Remove comments from the callback string,
             //look for require calls, and pull them into the dependencies.
             callback
@@ -700,6 +704,7 @@ var require, define;
      */
     req.completeLoad = function (moduleName, context) {
 		console.log('module name:', moduleName );
+//		debugger;
         //If there is a waiting require.def call
         var args;
         while (defQueue.length) {
@@ -1074,9 +1079,13 @@ var require, define;
             url = syms.join("/") + (ext || ".js");
             url = (url.charAt(0) === '/' || url.match(/^\w+:/) ? "" : config.baseUrl) + url;
         }
-        return config.urlArgs ? url +
+
+		var finalURL = config.urlArgs ? url +
                                 ((url.indexOf('?') === -1 ? '?' : '&') +
                                  config.urlArgs) : url;
+
+		finalURL += "?preventCache="+new Date().getTime();
+		return finalURL;
     };
 
     /**
@@ -2974,7 +2983,7 @@ jQuery.extend({
 		}
 	},
 
-	// See test/unit/core.js for details concerning isFunction.
+	// See test/unit/JS.js for details concerning isFunction.
 	// Since version 1.3, DOM methods and functions like alert
 	// aren't supported. They return false on IE (#2968).
 	isFunction: function( obj ) {

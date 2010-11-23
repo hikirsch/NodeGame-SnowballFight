@@ -1,3 +1,4 @@
+
 /**
 File:
 	AbstractGameController
@@ -12,23 +13,36 @@ Abstract:
 Basic Usage: 
 	 See subclasses
 */
-var init = function(CharacterController, FieldController, Rectangle, Vector, SortedLookupTable)
+
+var init = function( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter)
 {
-	return Class.extend({
-		init: function() 
-		{ 
+	return new JS.Class(
+	{
+		include: JS.StackTrace,
+		
+		initialize: function(config)
+		{
+			this.config = config;
+
 			// our game takes place in a field
-			this.field = new FieldController(this);
-			
+			this.fieldController = new FieldController( this );
+			this.fieldController.tick();
+
+			// This is the Factory that will create all the entities for us
+			this.entityFactory = new GameEntityFactory(this.fieldController);
+
 			// intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
-			// desiredFramerate, is usually 60 or 30 - it's the framerate the game is designed against 
-			
+			// this.targetDelta, Milliseconds between frames 16ms means 60FPS - it's the framerate the game is designed against
 			this.intervalFramerate = 60; // Try to call our tick function this often
-			this.desiredFramerate = 60;
-			
+			this.targetDelta = Math.floor( 1000/this.intervalFramerate );
+
 			// Loop
-			this.gameClock = new Date().getTime();
-			this.gameTick = setInterval( this.tick.bind( this ) , 1000 / this.intervalFramerate );
+			this.clockActualTime = new Date().getTime();
+			this.gameClock = 0;									// Our game clock is relative
+			this.gameTick = 0;
+			
+			var that = this; // Temporarily got rid of bind (had some bug with it), feel free to add back in -
+			this.gameTickInterval = setInterval(function(){that.tick()}, this.targetDelta);
 		},
 		
 		/**
@@ -36,36 +50,44 @@ var init = function(CharacterController, FieldController, Rectangle, Vector, Sor
 		 */
 		tick: function()
 		{
-			var oldTime = this.gameClock;
-			this.gameClock = new Date().getTime();
-			var delta = ( this.gameClock - oldTime ); // Note (var framerate = 1000/delta);
+			// Store the previous clockTime, then set it to whatever it is no, and compare time
+			var oldTime = this.clockActualTime;
+			var now = this.clockActualTime = new Date().getTime();
+			var delta = ( now - oldTime );			// Note (var framerate = 1000/delta);
+
+			// Our clock is zero based, so if for example it says 10,000 - that means the game started 10 seconds ago 
+			this.gameClock += delta;
+			this.gameTick++;
 			
 			// Framerate independent motion
-			// Any movement should take this value into account, 
+			// Any movement should take this value into account,
 			// otherwise faster machines which can update themselves more accurately will have an advantage
-			var speedFactor = delta / ( 1000 / this.desiredFramerate );
-			if (speedFactor <= 0) speedfactor = 1;
+			var speedFactor = delta / ( this.targetDelta );
+			if (speedFactor <= 0) speedFactor = 1;
 
-			this.field.tick(speedFactor);
+			this.fieldController.tick(speedFactor);
 		},
 		
 		/**
 		* Adding and removing players
 		*/
-		addClient: function( aClientID, nickName, initView )
+		addClient: function( aClientID, nickName )
 		{
-			var newCharacter = new CharacterController( aClientID, this.field, initView );
-			newCharacter.setNickName( nickName );
-			
-			this.field.addPlayer( newCharacter );
-			
-			return newCharacter;
+
 		},
 		
 		setNickNameForClientID: function(aNickName, aClientID) 
 		{
 			this.log( '(AbstractGame) setting client nickname to: ' + aNickName + ' for clientID: ' + aClientID );
-			this.field.players.objectForKey(aClientID).setNickName(aNickName);
+			this.fieldController.players.objectForKey(aClientID).setNickName(aNickName);
+		},
+
+
+		shouldAddPlayer: function (anObjectID, aClientID, playerType)
+		{
+			var aNewCharacter = this.entityFactory.createCharacter(anObjectID, aClientID, playerType, this.fieldController);
+			this.fieldController.addPlayer( aNewCharacter );
+			return aNewCharacter;
 		},
 		
 		/**
@@ -73,24 +95,24 @@ var init = function(CharacterController, FieldController, Rectangle, Vector, Sor
 		 */
 		onPlayerMoved: function(data)
 		{
-			var targetCharacter = this.players.get(messageData.id);
+			var targetCharacter = this.players.get(data.id);
 			
 			if(targetCharacter == null) 
 			{
-				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(messageData) : data );
+//				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(data) : data );
 				return;
-			};
-			
-			targetCharacter.serverPosition.x = data.x;
-			targetCharacter.serverPosition.y = data.y;
-			
-			if (Math.abs(targetCharacter.position.x - data.x) > 0.01 || Math.abs(targetCharacter.position.y - targetCharacter.serverPosition.y) > 0.01)
-			{
-				var difference = new Vector(targetCharacter.serverPosition.x-targetCharacter.position.x, targetCharacter.serverPosition.y-targetCharacter.position.y);
-				difference.mul(0.1);
-				
-				targetCharacter.position.add(difference);
 			}
+			
+//			targetCharacter.serverPosition.x = data.x;
+//			targetCharacter.serverPosition.y = data.y;
+//
+//			if (Math.abs(targetCharacter.position.x - data.x) > 0.01 || Math.abs(targetCharacter.position.y - targetCharacter.serverPosition.y) > 0.01)
+//			{
+//				var difference = new Vector(targetCharacter.serverPosition.x-targetCharacter.position.x, targetCharacter.serverPosition.y-targetCharacter.position.y);
+//				difference.mul(0.1);
+//
+//				targetCharacter.position.add(difference);
+//			}
 
 			targetCharacter.velocity.x = data.vx;
 			targetCharacter.velocity.y = data.vy;
@@ -100,15 +122,27 @@ var init = function(CharacterController, FieldController, Rectangle, Vector, Sor
 
 if (typeof window === 'undefined') 
 {
-	var CharacterController = require('./Character.js').Class;
-	var FieldController = require('./Field.js').Class;
-	var Rectangle = require('../lib/Rectangle.js').Class;
-	var Vector = require('../lib/Vector.js').Class;
-	var SortedLookupTable = require('../lib/SortedLookupTable.js').Class;
-	
-	exports.Class = init( CharacterController, FieldController, Rectangle, Vector, SortedLookupTable );
-} 
+	require('../lib/Vector.js');
+	require('../lib/Rectangle.js');
+	require('../lib/SortedLookupTable.js');
+	require('./FieldController.js');
+	require('../factories/GameEntityFactory');
+	require('./entities/GameEntity');
+	require('./entities/Character');
+	require('./entities/ClientControlledCharacter');
+	require('../lib/jsclass/core.js');
+	var sys = require("sys");
+	AbstractGame = init( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter);
+}
 else 
 {
-	define(['controllers/Character', 'controllers/Field', 'lib/Rectangle', 'lib/Vector', 'lib/SortedLookupTable' ], init);
+	define(['lib/Vector',
+		'lib/Rectangle',
+		'lib/SortedLookupTable',
+		'controllers/FieldController',
+		'factories/GameEntityFactory',
+		'controllers/entities/GameEntity',
+		'controllers/entities/Character',
+		'controllers/entities/ClientControlledCharacter',
+		'lib/jsclass/core'], init);
 }

@@ -51,13 +51,14 @@ FABridge.addToUserTypes = function()
 	for (var i = 0; i < arguments.length; i++)
 	{
 		FABridge.userTypes[arguments[i]] = {
-			'typeName': arguments[i], 
+			'typeName': arguments[i],
 			'enriched': false
 		};
 	}
-}
+};
 
 FABridge.argsToArray = function(args)
+	//noinspection UnterminatedStatementJS,UnterminatedStatementJS,UnterminatedStatementJS,UnterminatedStatementJS
 {
     var result = [];
     for (var i = 0; i < args.length; i++)
@@ -84,6 +85,7 @@ function FABridge__invokeJSFunction(args)
 }
 
 FABridge.addInitializationCallback = function(bridgeName, callback)
+	//noinspection UnterminatedStatementJS,UnterminatedStatementJS,UnterminatedStatementJS
 {
     var inst = FABridge.instances[bridgeName];
     if (inst != undefined)

@@ -11,8 +11,9 @@ Basic Usage:
 */
 var init = function()
 {
-	return Class.extend({
-		init: function(x, y, width, height)
+	return new JS.Class(
+	{
+		initialize: function(x, y, width, height)
 		{
 			this.x = x;
 			this.y = y;
@@ -25,11 +26,11 @@ var init = function()
 		    return '[Rectangle(' + this.x + ', ' + this.y + ',' + this.width + ',' + this.height + ')]';
 		}
 	});
-}
+};
 
 if (typeof window === 'undefined') {
-	require('./Class.js');
-	exports.Class = init();
+	require('../lib/jsclass/core.js');
+	Rectangle = init();
 } else {
-	define(['lib/Class'], init);
+	define(['lib/jsclass/core'], init);
 }

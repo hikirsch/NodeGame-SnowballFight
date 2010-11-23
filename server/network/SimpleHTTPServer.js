@@ -35,7 +35,7 @@ server = http.createServer(function(req, res)
 		if(path.indexOf('js') > -1) type = 'text/javascript';
 		else if(path.indexOf('css') > -1) type = 'text/css';
 		
-		res.writeHead(200, {'Content-Type':type})
+		res.writeHead(200, {'Content-Type':type});
 		res.write(data, 'utf8');
 		res.end();
 	});
@@ -48,13 +48,13 @@ send404 = function(error, res)
 	res.end();
 };
 
-this.setPrefix = function(aPrefix)
+exports.setPrefix = function(aPrefix)
 {
 	server.prefix = aPrefix;
 	sys.inspect(this, true, 10);
 };
 
-this.listen = function(port)
+exports.listen = function(port)
 {
 	server.listen(port);
-}
+};

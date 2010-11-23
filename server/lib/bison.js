@@ -256,6 +256,10 @@ if (typeof window === 'undefined') {
     exports.encode = encode;
     exports.decode = decode;
 
+	MBISON = {
+		'encode':encode,
+		'decode': decode
+	}
 } else {
     window['BISON'] = {
         'encode': encode,

@@ -21,50 +21,111 @@ Basic Usage:
 Version:
 	1.0
 */
-var AbstractGameController = require('../../client/js/controllers/AbstractGame.js').Class;
-var ServerNetChannel = require('../network/ServerNetChannel.js').Class;
-var Logger = require('../lib/Logger.js').Class;
 
-(function(){
-	exports.Class = AbstractGameController.extend({
-		init: function( serverController )
+require('../../client/js/controllers/AbstractGame.js');
+require('../network/ServerNetChannel.js');
+require('../model/WorldEntityDescription.js');
+require('../lib/Logger.js');
+
+ServerGame = (function()
+{
+	return new JS.Class(AbstractGame, {
+		initialize: function(aServer)
 		{
-			this._super();
+			this.callSuper();
+			console.log('(ServerGame)::init');
 
-			// the server controller has access to all the games and our logger
+			// Each time we create an entity we increment this
+			this.nextEntityID = 1;
+
+			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
-			this.controller = serverController;
-
-			// Server, the net channel should only care about this controller as well as the
-			// port that it shuold run as, ask our main controller which port to use
-			this.netChannel = new ServerNetChannel( this, this.controller.getNextAvailablePort() );
+			this.server = aServer;
+			                          
+			// Each ServerNetChannel is owned by a single ServerGameInstance
+			this.netChannel = new ServerNetChannel(this, this.server.gameConfig);
 		},
-		
+
 		onGenericCommand: function(clientID, aDecodedMessage)
 		{
-			this.COMMAND_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this,[aDecodedMessage]);
+			this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
 		},
 
-		// start our game;
+		onPlayerMoveCommand: function(clientID, aDecodedMessage)
+		{
+			/**
+			 * }
+(ServerNetChannel) : onMessage
+{ id: 1
+, seq: 415
+, cmds:
+   { cmd: 9
+   , data:
+      { objectID: 1
+      , clientID: 1
+      , x: 573.5
+      , y: 151.44
+      , vx: 0
+      , vy: 0
+      , r: 0
+      }
+   }
+, t: 12659
+}
+
+
+			 */
+			var cmdData = aDecodedMessage.cmds.data;
+
+			var playerEntity = this.fieldController.allEntities.objectForKey(cmdData.objectID);
+			playerEntity.position.x = cmdData.x;
+			playerEntity.position.y = cmdData.y;
+
+//			console.log('this.fieldController.allEntities', SYS.inspect(this.fieldController.allEntities));
+//			console.log( ' a', aDecodedMessage.cmds.data.objectID);
+			console.log('player', playerEntity.position.x, playerEntity.position.y);
+//			console.log('hello', playerEntity, aDecodedMessage.cmds.data.x);
+			//this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
+		},
+
+
+		shouldAddPlayer: function (anEntityID, aClientID, playerType)
+		{
+			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
+			this.callSuper(anEntityID, aClientID, 'Character');
+		},
+
+		// start our game
 		start: function()
 		{
 			this.netChannel.start();
 		},
-		
+
 		tick: function()
 		{
-			this._super();
+			this.callSuper();
+
+			var worldEntityDescription = new WorldEntityDescription( this );
+			this.netChannel.tick( this.gameClock, worldEntityDescription );
 		},
-		
+
 		log: function(o)
 		{
 			// console.log( o );
-			this.controller.log( o );
+			this.server.log(o);
 		},
-		
+
 		status: function()
 		{
-			// this.logger.status();
+			//this.logger.status();
+		},
+
+		/**
+		 * Accessors
+		 */
+		getNextEntityID: function()
+		{
+			return this.nextEntityID++;
 		}
 	});
-}());
+})();
