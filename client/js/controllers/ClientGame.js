@@ -27,7 +27,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			this.view = new GameView(this);
 			this.fieldController.createView();
 
-			this.netChannel = new NetChannel(config.HOST, config.PORT, this);
+			this.netChannel = new NetChannel(config, this);
 
 			this.clientCharacter = null; // Special pointer to our own client character
 
