@@ -105,7 +105,7 @@ ServerGame = (function()
 			var aNewCharacter = this.callSuper(anEntityID, aClientID, 'Character');
 			aNewCharacter.setInput(new Joystick() )
 
-			console.log("Charinput", aNewCharacter.input);
+//			console.log("Charinput", aNewCharacter.input);
 			return aNewCharacter;
 		},
 

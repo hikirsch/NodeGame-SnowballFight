@@ -56,7 +56,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.MESSAGE_BUFFER_MASK = 31; // This is used in the messageBuffer bitmask - It's the sequence number
 
 		this.incomingSequenceNumber = 0;
-		this.incommingCmdBuffer = new SortedLookupTable();
+		this.incommingCmdBuffer = [];
 
 		// We will send these out as controlled by the config
 		this.outgoingSequenceNumber = 0;
@@ -178,12 +178,26 @@ define(['network/Message', 'config'], function(Message, config) {
 		else if (serverMessage.cmds.cmd == config.CMDS.fullupdate) // World update!
 		{
 			var len = serverMessage.data.length;
+			var i = -1;
+
 			// Store all world updates contained in the message.
-			while(--len) {
-				var singleWorldUpdate = serverMessage.data[len];
+			while(++i < len)
+			{
+				var singleWorldUpdate = serverMessage.data[i];
 				var timeStamp = singleWorldUpdate.gameTick;
-				this.incommingCmdBuffer.setObjectForKey( singleWorldUpdate, singleWorldUpdate.gameTick & this.MESSAGE_BUFFER_MASK );
+				var key = this.incomingSequenceNumber++ & this.MESSAGE_BUFFER_MASK;
+				this.incommingCmdBuffer.push(singleWorldUpdate);
+
+				if(this.incommingCmdBuffer.length > this.MESSAGE_BUFFER_MASK)
+					this.incommingCmdBuffer.shift();
+
+//				console.log('singleWorldUpdate', singleWorldUpdate.gameTick, singleWorldUpdate.gameClock );
 			}
+
+
+//			this.incomingSequenceNumber++;
+			// Sort them
+//			this.incomingSequenceNumber.so
 		}
 		else // Server wants to tell the gameclient something, not just a regular world update
 		{

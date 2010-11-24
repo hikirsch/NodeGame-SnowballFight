@@ -46,7 +46,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 		{
 			this.callSuper();
 			this.netChannel.tick( this.gameClock );
-			this.renderAtTime(this.gameClock - this.config.CLIENT_SETTING.interp)
+			this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
 
 			// Continuously store information about this character
 			if( this.clientCharacter != null )
@@ -59,11 +59,15 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			}
 		},
 
+		/**
+		 * Renders back in time between two previously received messages allowing for packet-loss, and a smooth simulation
+		 * @param renderTime
+		 */
 		renderAtTime: function(renderTime)
 		{
 			var cmdBuffer = this.netChannel.incommingCmdBuffer;
 
-			var len = cmdBuffer.count();
+			var len = cmdBuffer.length;
 			if( len < 2 ) return false; // Nothing to do!
 
 			var nextAfterTime = null;
@@ -72,18 +76,18 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 			// Loop thru the points, until we find the first one that has a timeValue which is greater than our renderTime
 			// Knowing that then we know that the combined with the one before it - that passed our just check - we know we want to render ourselves somehwere between these two points
-			var shouldBreak = false;
-			cmdBuffer.forEach( function(key, worldEntityDescription)
+			var i = 0;
+			while(++i < len)
 			{
-				if(shouldBreak) return; // Hacky fake 'break' for forEach
+				var currentWorldEntityDescription = cmdBuffer[i];
 
-				if( worldEntityDescription.gameClock >= renderTime ) {
-					nextAfterTime = worldEntityDescription;
-					shouldBreak = true;
+				// We fall between this "currentWorldEntityDescription", and the last one we just checked
+				if( currentWorldEntityDescription.gameClock >= renderTime ) {
+					previousBeforeTime = cmdBuffer[i-1];
+					nextAfterTime = currentWorldEntityDescription;
+					break;
 				}
-
-				previousBeforeTime = worldEntityDescription;
-			}, this );
+			}
 
 
 			// Could not find two points to render between
@@ -91,25 +95,40 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				return false;
 			}
 
+			if(previousBeforeTime['1'] == undefined || nextAfterTime['1'] == undefined) return;
 
-			if(this.clientCharacter != null && nextAfterTime['1'])
-			{
-				this.clientCharacter.position.x = nextAfterTime['1'].x;
-				this.clientCharacter.position.y = nextAfterTime['1'].y;
-			}
-//			console.log(nextAfterTime['1'].x)
-//			console.log(  );
-			//for(var entity in previousBeforeTime.en)
-//			for(var i = 1; i < 1; i++) {
-//
-//			}
-			// Now to do something with the data
-			// No interpolation for now - just place where it says
-//			if(nextAfterTime['1'] == undefined)
-//			      this.clientCharacter.position
-//			this.clientCharacter.
-//			console.log( nextAfterTime['1'] );
-//			console.log('RenderTime', renderTime, 'WorldEntityDescription.gameClock:', nextAfterTime.gameClock)
+			/**
+			 * More info: http://www.learningiphone.com/2010/09/consicely-animate-an-object-along-a-path-sensitive-to-time/
+			 * Find T in the time value between the points:
+			 *
+			 * durationBetweenPoints: Amount of time between the timestamp in both points
+			 * offset: Figure out what our time would be if we pretended the previousBeforeTime.time was 0.00 by subtracting it from us
+			 * t: Now that we have a zero based offsetTime, and a maximum time that is also zero based (durationBetweenPoints)
+			 * we can easily figure out what offsetTime / duration.
+			 *
+			 * Example values: timeValue = 5.0f, nextPointTime = 10.0f, lastPointTime = 4.0f
+			 * result:
+			 * duration = 6.0f
+			 * offsetTime = 1.0f
+			 * t = 0.16
+			 */
+			var durationBetweenPoints = (nextAfterTime.gameClock - previousBeforeTime.gameClock);
+			var offsetTime = renderTime - previousBeforeTime.gameClock;
+			
+			// T is where we fall between, as a function of these two points 
+			var t = offsetTime / durationBetweenPoints;
+			if(t > 1.0)  t = 1.0;
+			else if(t < 0) t = 0.0;
+
+			// Store positions before and after to compare below
+			var prevTimeX = previousBeforeTime['1'].x;
+			var prevTimeY = previousBeforeTime['1'].y;
+			var nextTimeX = nextAfterTime['1'].x;
+			var nextTimeY = nextAfterTime['1'].y;
+
+			// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
+			this.clientCharacter.position.x = ((nextTimeX - prevTimeX) * t ) + prevTimeX;
+			this.clientCharacter.position.y = ((nextTimeY - prevTimeY) * t ) + prevTimeY;
 		},
 
 		shouldAddPlayer: function (anObjectID, aClientID, playerType)
