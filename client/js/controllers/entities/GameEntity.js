@@ -72,6 +72,33 @@ var init = function(Vector, Rectangle, FieldController)
 			if(this.rotation < 0) this.rotation *= -1;
 		},
 
+
+		/**
+		 * Update, use delta to create frame independent motion
+		 * @param speedFactor	A normalized value our ACTUAL framerate vs our desired framerate. 1.0 means exactly correct, 0.5 means we're running at half speed
+		 */
+		tick: function(speedFactor)
+		{			
+			if(this.view)
+			{
+				this.view.update();
+			}
+			else
+			{
+				// Adjust to speedFactor
+				this.acceleration.mul(speedFactor);
+				// Add acceleration to velocity and velocity to the current position
+				this.velocity.add(this.acceleration);
+				this.calcuatePosition(speedFactor);
+
+				console.log( this.position );
+			}
+
+//			if(didMove && this.view) {
+//				this.view.update();
+//			}
+		},
+
 		calcuatePosition: function(speedFactor)
 		{
 			// Store previous position
@@ -80,11 +107,6 @@ var init = function(Vector, Rectangle, FieldController)
 				y: this.position.y
 			};
 
-			// Adjust to speedFactor
-			this.acceleration.mul(speedFactor);
-
-			// Add acceleration to velocity and velocity to the current position
-			this.velocity.add(this.acceleration);
 			this.position.x += this.velocity.x * speedFactor;
 			this.position.y += this.velocity.y * speedFactor;
 
@@ -114,20 +136,6 @@ var init = function(Vector, Rectangle, FieldController)
 			return ( this.position.x != prevPosition.x ) || ( this.position.y != prevPosition.y );
 		},
 
-		/**
-		 * Update, use delta to create frame independent motion
-		 * @param speedFactor	A normalized value our ACTUAL framerate vs our desired framerate. 1.0 means exactly correct, 0.5 means we're running at half speed
-		 */
-		tick: function(speedFactor)
-		{
-			var didMove = this.calcuatePosition(speedFactor);
-			if(this.view) {
-				this.view.update();
-			}
-//			if(didMove && this.view) {
-//				this.view.update();
-//			}
-		},
 
 		getRotationToTheNearest: function( degrees )
 		{
