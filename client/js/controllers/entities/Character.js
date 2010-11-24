@@ -26,7 +26,7 @@ Basic Usage:
 		this.view.addCharacter(newCharacter.initView());
 */
 
-var init = function(Vector, Rectangle, FieldController, GameEntity)
+var init = function(Vector, Rectangle, FieldController, GameEntity, CharacterView)
 {
 	return new JS.Class(GameEntity,
 	{
@@ -34,8 +34,6 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 		{
 			this.callSuper();
 			this.entityType = 'Character';
-
-			console.log("(Character)", this);
 
 			// some defaults we use for position
 			this.position = new Vector( Math.random() * this.fieldController.getWidth(), Math.random() * this.fieldController.getHeight() );
@@ -46,6 +44,14 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 
 			// the fastest i can go
 			this.maxVelocity = 3.5;
+
+			// if the field we're being placed in has a field, then we'll go into it
+			if( this.fieldController.view )
+			{
+				// init the view, pass ourselves as the controller
+				this.view = new CharacterView( this, 'smash-tv' );
+				this.fieldController.addPlayer( this )
+			}
 		},
 
 		/**
@@ -66,18 +72,11 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 			}
 		},
 
-		/**
-		 * Update, use delta to create frame independent motion
-		 * @param speedFactor	A normalized value our ACTUAL framerate vs our desired framerate. 1.0 means exactly correct, 0.5 means we're running at half speed
-		 */
-//		tick: function(speedFactor)
-//		{
-//			this.callSuper();
-//		},
-
-//		/**
-//		 * Net
-//		 */
+		tick: function(speedFactor)
+		{
+			this.handleInput();
+			this.callSuper();
+		},
 
 //
 //		deconstructFromEntityDescription: function(anEntityDescription)
@@ -126,6 +125,5 @@ else
 	// We're on the browser. 
 	// Require.js will use this file's name (CharacterController.js), to create a new
 	//	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'view/CharacterView', 'lib/jsclass/core'], init);
-
 	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'view/CharacterView', 'lib/jsclass/core'], init);
 }

@@ -23,6 +23,7 @@ Version:
 */
 
 require('../../client/js/controllers/AbstractGame.js');
+require('../../client/js/lib/Joystick.js');
 require('../network/ServerNetChannel.js');
 require('../model/WorldEntityDescription.js');
 require('../lib/Logger.js');
@@ -76,14 +77,23 @@ ServerGame = (function()
 
 			 */
 			var cmdData = aDecodedMessage.cmds.data;
-
 			var playerEntity = this.fieldController.allEntities.objectForKey(cmdData.objectID);
-			playerEntity.position.x = cmdData.x;
-			playerEntity.position.y = cmdData.y;
+
+			playerEntity.input.keys.up = cmdData.up;
+			playerEntity.input.keys.down = cmdData.down;
+			playerEntity.input.keys.left = cmdData.left;
+			playerEntity.input.keys.right = cmdData.right;
+
+//			playerEntity.position.x = cmdData.x;
+//			playerEntity.position.y = cmdData.y;
+//			playerEntity.velocity.x = cmdData.vx;
+//			playerEntity.velocity.y = cmdData.vy;
+//			playerEntity.rotation = cmdData.r;
 
 //			console.log('this.fieldController.allEntities', SYS.inspect(this.fieldController.allEntities));
 //			console.log( ' a', aDecodedMessage.cmds.data.objectID);
-			console.log('player', playerEntity.position.x, playerEntity.position.y);
+//			console.log('player', playerEntity.velocity.x, playerEntity.velocity.y);
+//			console.log('PlayerInput', SYS.inspect (playerEntity.input.isLeft() ) );//playerEntity.input.isLeft() )
 //			console.log('hello', playerEntity, aDecodedMessage.cmds.data.x);
 			//this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
 		},
@@ -92,7 +102,11 @@ ServerGame = (function()
 		shouldAddPlayer: function (anEntityID, aClientID, playerType)
 		{
 			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
-			this.callSuper(anEntityID, aClientID, 'Character');
+			var aNewCharacter = this.callSuper(anEntityID, aClientID, 'Character');
+			aNewCharacter.setInput(new Joystick() )
+
+			console.log("Charinput", aNewCharacter.input);
+			return aNewCharacter;
 		},
 
 		// start our game
@@ -104,7 +118,6 @@ ServerGame = (function()
 		tick: function()
 		{
 			this.callSuper();
-
 			var worldEntityDescription = new WorldEntityDescription( this );
 			this.netChannel.tick( this.gameClock, worldEntityDescription );
 		},

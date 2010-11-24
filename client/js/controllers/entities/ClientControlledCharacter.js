@@ -23,21 +23,21 @@ var init = function(Vector, Rectangle, FieldController, Character, CharacterView
 		{
 			this.callSuper();
 			this.entityType = 'ClientControlledCharacter';
-
-			// if the field we're being placed in has a field, then we'll go into it
-			if( this.fieldController.view )
-			{
-				// init the view, pass ourselves as the controller
-				this.view = new CharacterView( this, 'smash-tv' );
-				this.fieldController.addPlayer( this )
-			}
 		},
 
-		tick: function( speedFactor )
+		/**
+		 * Net
+		 */
+		constructEntityDescription: function()
 		{
-//			if( this.input )
-				this.handleInput();
-			this.callSuper();
+			return {
+				objectID: this.objectID,
+				clientID: this.clientID,
+				left: this.input.isLeft(),
+				right: this.input.isRight(),
+				up: this.input.isUp(),
+				down: this.input.isDown()
+			}
 		}
 	});
 };

@@ -53,7 +53,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			{
 				var characterStatus = this.clientCharacter.constructEntityDescription();
 				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
-//
+				
 //				create a message with our characters updated information and send it off
 				this.netChannel.addMessageToQueue( false, newMessage );
 			}
@@ -78,8 +78,6 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				if(shouldBreak) return; // Hacky fake 'break' for forEach
 
 				if( worldEntityDescription.gameClock >= renderTime ) {
-//					console.log('Rendertime:', renderTime, 'worldEntityDescription.gameClock', worldEntityDescription.gameClock);
-//					previousBeforeTime = cmdBuffer.objectForKey(key - 1);
 					nextAfterTime = worldEntityDescription;
 					shouldBreak = true;
 				}
@@ -96,9 +94,10 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 			if(this.clientCharacter != null && nextAfterTime['1'])
 			{
-//				this.clientCharacter.position.x = nextAfterTime['1'].x;//nextAfterTime['1'].x;
-//				this.clientCharacter.position.y = nextAfterTime['1'].y;
+				this.clientCharacter.position.x = nextAfterTime['1'].x;
+				this.clientCharacter.position.y = nextAfterTime['1'].y;
 			}
+//			console.log(nextAfterTime['1'].x)
 //			console.log(  );
 			//for(var entity in previousBeforeTime.en)
 //			for(var i = 1; i < 1; i++) {
@@ -132,7 +131,10 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			this.netChannel.addMessageToQueue( true, message );
 			// just create for now
 			this.clientCharacter = this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
-			this.clientCharacter.setInput( Joystick );
+
+			var input = new Joystick();
+			input.attachEvents();
+			this.clientCharacter.setInput(input);
 		},
 
 		onClientJoined: function(clientID, data)
