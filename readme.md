@@ -7,7 +7,7 @@ Specifically it aims to mimic Quakeworld/Source-SDK network model which is uses 
 Everything i'm trying to do is based on the two links below:  
 [Quakeworld network model code review](http://www.fabiensanglard.net/quakeSource/quakeSourceNetWork.php)       
 and here  
-[Valve Source-SDK networking documentation] (http://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking)
+[Valve Source-SDK networking documentation](http://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking)
 
 ##License##
 
