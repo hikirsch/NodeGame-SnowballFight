@@ -65,15 +65,6 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 		 */
 		renderAtTime: function(renderTime)
 		{
-			/**
-			 * 			// just create for now
-			this.clientCharacter = this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
-
-			var input = new Joystick();
-			input.attachEvents();
-			this.clientCharacter.setInput(input);
-
-			 */
 			var cmdBuffer = this.netChannel.incommingCmdBuffer;
 
 			var len = cmdBuffer.length;
@@ -104,28 +95,6 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				return false;
 			}
 
-<<<<<<< HEAD
-			console.dir( nextAfterTime, previousBeforeTime );
-
-			if(this.clientCharacter != null && nextAfterTime['1'])
-			{
-				this.clientCharacter.position.x = nextAfterTime['1'].x;
-				this.clientCharacter.position.y = nextAfterTime['1'].y;
-			}
-//			console.log(nextAfterTime['1'].x)
-//			console.log(  );
-			//for(var entity in previousBeforeTime.en)
-//			for(var i = 1; i < 1; i++) {
-//
-//			}
-			// Now to do something with the data
-			// No interpolation for now - just place where it says
-//			if(nextAfterTime['1'] == undefined)
-//			      this.clientCharacter.position
-//			this.clientCharacter.
-//			console.log( nextAfterTime['1'] );
-//			console.log('RenderTime', renderTime, 'WorldEntityDescription.gameClock:', nextAfterTime.gameClock)
-=======
 			if(previousBeforeTime['1'] == undefined || nextAfterTime['1'] == undefined) return;
 
 			/**
@@ -160,7 +129,6 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
 			this.clientCharacter.position.x = ((nextTimeX - prevTimeX) * t ) + prevTimeX;
 			this.clientCharacter.position.y = ((nextTimeY - prevTimeY) * t ) + prevTimeY;
->>>>>>> 46281965fffb812ceecec7aff973f15861d6435a
 		},
 
 		shouldAddPlayer: function (anObjectID, aClientID, playerType)
@@ -180,6 +148,12 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );
+			// just create for now
+			this.clientCharacter = this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
+
+			var input = new Joystick();
+			input.attachEvents();
+			this.clientCharacter.setInput(input);
 		},
 
 		onClientJoined: function(clientID, data)
