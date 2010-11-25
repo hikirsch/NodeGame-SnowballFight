@@ -3,9 +3,10 @@
 This branch is a restructuring of all the code into modular pieces, and a reworking of the Client/Server communication
 to follow more standard Multiplayer game methodology. 
 
-Specifically it aims to mimic Quakeworld which relied on high latency low bandwidth connections.
-See article on the Quakeworld net code here:
-http://www.fabiensanglard.net/quakeSource/quakeSourceNetWork.php
+Specifically it aims to mimic Quakeworld/Source-SDK network model which is uses interpolation and client side movement prediction for smooth network play.
+Everything i'm trying to do is based on the two links below:
+[Quakeworld network model code review](http://www.fabiensanglard.net/quakeSource/quakeSourceNetWork.php)
+[Valve Source-SDK networking documentation] (http://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking)
 
 ##License##
 
