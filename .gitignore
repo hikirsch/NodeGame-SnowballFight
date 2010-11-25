@@ -3,4 +3,19 @@ Thumbs.db
 .DS_Store
 NodeGame-SnowballFight.esproj
 NodeGame-SnowballFight-oneday.esproj
+<<<<<<< HEAD
 .idea
+=======
+
+# OSX
+.DS_Store?
+Icon?
+
+# Thumbnails
+._*
+
+# Files that might appear on external disk
+.Spotlight-V100
+.Trashes
+#EOF
+>>>>>>> 46281965fffb812ceecec7aff973f15861d6435a
