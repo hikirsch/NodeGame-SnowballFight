@@ -103,7 +103,7 @@ ServerGame = (function()
 		{
 			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
 			var aNewCharacter = this.callSuper(anEntityID, aClientID, 'Character');
-			aNewCharacter.setInput(new Joystick() )
+			aNewCharacter.setInput( new Joystick() )
 
 			console.log("Charinput", aNewCharacter.input);
 			return aNewCharacter;

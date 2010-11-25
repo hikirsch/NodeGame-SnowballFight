@@ -18,6 +18,11 @@ var init = function(HTMLFactory)
 			playerView.getElement().appendTo( this.element );
 		},
 
+		removePlayer: function()
+		{
+			playerView.getElement().remove();
+		},
+
 		getElement: function() {
 			return this.element;
 		},

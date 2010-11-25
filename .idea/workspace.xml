@@ -15,20 +15,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" readonly="true" id="c8bb4bd1-398f-4329-8ecb-0f126e791b96" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/view/CharacterView.js" afterPath="$PROJECT_DIR$/client/js/view/CharacterView.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/network/NetChannel.js" afterPath="$PROJECT_DIR$/client/js/network/NetChannel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/network/ServerNetChannel.js" afterPath="$PROJECT_DIR$/server/network/ServerNetChannel.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/factories/GameEntityFactory.js" afterPath="$PROJECT_DIR$/client/js/factories/GameEntityFactory.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/ClientGame.js" afterPath="$PROJECT_DIR$/client/js/controllers/ClientGame.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/game.js" afterPath="$PROJECT_DIR$/server/game.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/css/screen.css" afterPath="$PROJECT_DIR$/client/css/screen.css" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/model/WorldEntityDescription.js" afterPath="$PROJECT_DIR$/server/model/WorldEntityDescription.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/lib/Logger.js" afterPath="$PROJECT_DIR$/server/lib/Logger.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/controllers/ServerGame.js" afterPath="$PROJECT_DIR$/server/controllers/ServerGame.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/FIeldController.js" afterPath="$PROJECT_DIR$/client/js/controllers/FIeldController.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/ClientGame.js" afterPath="$PROJECT_DIR$/client/js/controllers/ClientGame.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/server/network/ServerNetChannel.js" afterPath="$PROJECT_DIR$/server/network/ServerNetChannel.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/view/FieldView.js" afterPath="$PROJECT_DIR$/client/js/view/FieldView.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" afterPath="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" />
     </list>
-    <ignored path="$USER_HOME_GRIFFON$/" />
     <ignored path="$USER_HOME_GRAILS$/" />
+    <ignored path="$USER_HOME_GRIFFON$/" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,46 +81,19 @@
   <component name="FileColors" enabled="true" enabledForTabs="true" />
   <component name="FileEditorManager">
     <leaf>
+      <file leaf-file-name="GameView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/js/view/GameView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="49" column="36" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ClientGame.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/client/js/controllers/ClientGame.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="9" column="172" selection-start="239" selection-end="239" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ClientControlledCharacter.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="39" column="29" selection-start="981" selection-end="981" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="GameEntity.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/GameEntity.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="47" column="29" selection-start="1406" selection-end="1423" vertical-scroll-proportion="-10.884615">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ServerNetChannel.js" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/server/network/ServerNetChannel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="250" column="145" selection-start="7619" selection-end="7619" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="NetChannel.js" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/client/js/network/NetChannel.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="58" column="41" selection-start="1278" selection-end="1278" vertical-scroll-proportion="0.7162791">
+            <state line="102" column="58" selection-start="3278" selection-end="3278" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -133,16 +102,70 @@
       <file leaf-file-name="ServerGame.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/server/controllers/ServerGame.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="125" column="8" selection-start="3089" selection-end="3089" vertical-scroll-proportion="0.0">
+            <state line="109" column="10" selection-start="3276" selection-end="3276" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FIeldController.js" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="AbstractGame.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/js/controllers/AbstractGame.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="94" column="38" selection-start="3130" selection-end="3130" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FIeldController.js" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/client/js/controllers/FIeldController.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="34" column="75" selection-start="904" selection-end="904" vertical-scroll-proportion="0.0">
+            <state line="52" column="27" selection-start="1247" selection-end="1247" vertical-scroll-proportion="0.70945156">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FieldView.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/js/view/FieldView.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="22" column="45" selection-start="426" selection-end="426" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SortedLookupTable.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/js/lib/SortedLookupTable.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="ServerNetChannel.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/server/network/ServerNetChannel.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="252" column="36" selection-start="7848" selection-end="7848" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Joystick.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/js/lib/Joystick.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="20" column="8" selection-start="491" selection-end="491" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="GameEntityFactory.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/client/js/factories/GameEntityFactory.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="38" column="8" selection-start="920" selection-end="920" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -156,28 +179,28 @@
     </FindUsagesManager>
   </component>
   <component name="Git.Settings">
-    <option name="GIT_EXECUTABLE" value="/usr/bin/git" />
+    <option name="GIT_EXECUTABLE" value="/usr/local/git/bin/git" />
     <option name="CHECKOUT_INCLUDE_TAGS" value="false" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" />
-        <option value="$PROJECT_DIR$/server/model/WorldEntityDescription.js" />
-        <option value="$PROJECT_DIR$/client/js/view/FieldView.js" />
         <option value="$PROJECT_DIR$/server/model/Client.js" />
         <option value="$PROJECT_DIR$/client/js/factories/GameEntityFactory.js" />
         <option value="$PROJECT_DIR$/client/js/view/CharacterView.js" />
-        <option value="$PROJECT_DIR$/client/js/controllers/entities/Character.js" />
-        <option value="$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js" />
         <option value="$PROJECT_DIR$/client/js/controllers/entities/GameEntity.js" />
         <option value="$PROJECT_DIR$/client/js/config.js" />
-        <option value="$PROJECT_DIR$/client/js/controllers/FIeldController.js" />
-        <option value="$PROJECT_DIR$/server/controllers/ServerGame.js" />
-        <option value="$PROJECT_DIR$/client/js/controllers/ClientGame.js" />
         <option value="$PROJECT_DIR$/client/css/screen.css" />
-        <option value="$PROJECT_DIR$/server/network/ServerNetChannel.js" />
         <option value="$PROJECT_DIR$/client/js/network/NetChannel.js" />
+        <option value="$PROJECT_DIR$/server/controllers/Server.js" />
+        <option value="$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js" />
+        <option value="$PROJECT_DIR$/client/js/controllers/entities/Character.js" />
+        <option value="$PROJECT_DIR$/client/js/controllers/ClientGame.js" />
+        <option value="$PROJECT_DIR$/client/js/controllers/AbstractGame.js" />
+        <option value="$PROJECT_DIR$/server/network/ServerNetChannel.js" />
+        <option value="$PROJECT_DIR$/server/controllers/ServerGame.js" />
+        <option value="$PROJECT_DIR$/client/js/view/FieldView.js" />
+        <option value="$PROJECT_DIR$/client/js/controllers/FIeldController.js" />
       </list>
     </option>
   </component>
@@ -532,31 +555,32 @@
       <sortByType />
     </navigator>
     <panes>
+      <pane id="Favorites" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -566,11 +590,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -584,65 +608,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="model" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="Logs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="server" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="lib" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -656,11 +626,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -670,11 +640,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -688,11 +658,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -710,55 +680,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="scratchpad" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugins" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -776,11 +702,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -798,55 +724,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="html" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="js" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="factories" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -864,11 +746,11 @@
           </PATH>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
+              <option name="myItemId" value="Holiday2010-NodeSnowball" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
@@ -888,28 +770,9 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="NodeGame-SnowballFight-oneday" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="client" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="css" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
-      <pane id="Favorites" />
       <pane id="Scope" />
     </panes>
   </component>
@@ -942,7 +805,7 @@
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
     <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
-    <property name="options.lastSelected" value="preferences.editor" />
+    <property name="options.lastSelected" value="project.propVCSSupport.VCSs.Git" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="MemberChooser.copyJavadoc" value="false" />
     <property name="options.searchVisible" value="true" />
@@ -979,14 +842,6 @@
       <method>
         <option name="AntTarget" enabled="false" />
         <option name="BuildArtifacts" enabled="false" />
-        <option name="Maven.BeforeRunTask" enabled="false" />
-      </method>
-    </configuration>
-    <configuration default="true" type="FlexUnitRunConfigurationType" factoryName="FlexUnit" adl_options="" air_descriptor_path="" air_program_params="" air_publisher_id="" air_root_dir_path="" air_run_mode="AppDescriptor" class_name="" debugger_sdk="Module SDK" html_or_swf_file_path="" main_class_name="" method_name="" module_name="" output_log_level="" package_name="" port="0" run_mode="HtmlOrSwfFile" scope="Class" socket_policy_port="0" url_to_launch="http://">
-      <method>
-        <option name="AntTarget" enabled="false" />
-        <option name="BuildArtifacts" enabled="false" />
-        <option name="Make" enabled="true" />
         <option name="Maven.BeforeRunTask" enabled="false" />
       </method>
     </configuration>
@@ -1146,23 +1001,23 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-4" y="22" width="1680" height="1024" extended-state="6" />
+    <frame x="2" y="22" width="1626" height="1028" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44911504" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.44812363" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32944787" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32853982" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32781458" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27730063" sideWeight="0.5542035" order="1" side_tool="true" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27728426" sideWeight="0.47240618" order="1" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27730063" sideWeight="0.4380531" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.27728426" sideWeight="0.51986754" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Dependency Viewer" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
@@ -1242,114 +1097,114 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/server/model/Client.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="106" column="29" selection-start="3264" selection-end="3264" vertical-scroll-proportion="0.29302326">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/factories/HTMLFactory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="11" column="12" selection-start="236" selection-end="236" vertical-scroll-proportion="0.176">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/factories/GameEntityFactory.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="40" column="0" selection-start="1007" selection-end="1007" vertical-scroll-proportion="0.45714286">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/view/CharacterView.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="56" column="0" selection-start="950" selection-end="950" vertical-scroll-proportion="0.608">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/controllers/AbstractGame.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.64">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/Character.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="103" column="8" selection-start="2605" selection-end="2605" vertical-scroll-proportion="0.472">
+        <state line="35" column="20" selection-start="967" selection-end="967" vertical-scroll-proportion="0.5215311">
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/config.js">
+    <entry file="file://$PROJECT_DIR$/server/controllers/Server.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="23" selection-start="647" selection-end="658" vertical-scroll-proportion="0.24">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/controllers/FIeldController.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="34" column="75" selection-start="904" selection-end="904" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="39" column="29" selection-start="981" selection-end="981" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/controllers/ClientGame.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="9" column="172" selection-start="239" selection-end="239" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/js/lib/SortedLookupTable.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="78" column="32" selection-start="1590" selection-end="1590" vertical-scroll-proportion="0.30057144">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/css/screen.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="21" column="168" selection-start="954" selection-end="954" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/controllers/ServerGame.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="125" column="8" selection-start="3089" selection-end="3089" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/server/network/ServerNetChannel.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="250" column="145" selection-start="7619" selection-end="7619" vertical-scroll-proportion="0.0">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.21892816">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/GameEntity.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="47" column="29" selection-start="1406" selection-end="1423" vertical-scroll-proportion="-10.884615">
+        <state line="26" column="17" selection-start="665" selection-end="674" vertical-scroll-proportion="0.3325359">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/entities/ClientControlledCharacter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="25" column="0" selection-start="598" selection-end="598" vertical-scroll-proportion="0.46403712">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/client/js/network/NetChannel.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="58" column="41" selection-start="1278" selection-end="1278" vertical-scroll-proportion="0.7162791">
+        <state line="58" column="41" selection-start="1802" selection-end="1802" vertical-scroll-proportion="0.0011600928">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/view/CharacterView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="8" selection-start="604" selection-end="604" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/lib/Joystick.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="20" column="8" selection-start="491" selection-end="491" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/factories/GameEntityFactory.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="38" column="8" selection-start="920" selection-end="920" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/ClientGame.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="102" column="58" selection-start="3278" selection-end="3278" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/view/GameView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="49" column="36" selection-start="1224" selection-end="1224" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/lib/SortedLookupTable.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/network/ServerNetChannel.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="252" column="36" selection-start="7848" selection-end="7848" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/controllers/ServerGame.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="109" column="10" selection-start="3276" selection-end="3276" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/view/FieldView.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="45" selection-start="426" selection-end="426" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/AbstractGame.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="94" column="38" selection-start="3130" selection-end="3130" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/js/controllers/FIeldController.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="52" column="27" selection-start="1247" selection-end="1247" vertical-scroll-proportion="0.70945156">
           <folding />
         </state>
       </provider>

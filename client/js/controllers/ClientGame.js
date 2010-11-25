@@ -61,6 +61,15 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 		renderAtTime: function(renderTime)
 		{
+			/**
+			 * 			// just create for now
+			this.clientCharacter = this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
+
+			var input = new Joystick();
+			input.attachEvents();
+			this.clientCharacter.setInput(input);
+
+			 */
 			var cmdBuffer = this.netChannel.incommingCmdBuffer;
 
 			var len = cmdBuffer.count();
@@ -91,6 +100,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				return false;
 			}
 
+			console.dir( nextAfterTime, previousBeforeTime );
 
 			if(this.clientCharacter != null && nextAfterTime['1'])
 			{
@@ -129,12 +139,6 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );
-			// just create for now
-			this.clientCharacter = this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
-
-			var input = new Joystick();
-			input.attachEvents();
-			this.clientCharacter.setInput(input);
 		},
 
 		onClientJoined: function(clientID, data)

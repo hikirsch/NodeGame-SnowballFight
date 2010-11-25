@@ -250,7 +250,8 @@ ServerNetChannel = (function()
 			if(aClient.enabled)
 			{
 				// before we actually remove this guy, make tell everyone else
-//				this.relayMessage(connection.$clientID, MESSAGES.REMOVE_FOREIGN_CHARACTER, { clientID: connection.$clientID });
+				this.delegate.removePlayer( clientID );
+				// this.relayMessage(connection.$clientID, MESSAGES.REMOVE_FOREIGN_CHARACTER, { clientID: connection.$clientID });
 			}
 
 			// Free the slot
@@ -313,26 +314,6 @@ ServerNetChannel = (function()
 		},
 
 		/**
-		 * CONNECTION EVENTS
-		 * User has connected, give them an ID, tell them - then tell all clients
-		 */
-		onClientConnected: function(connection, aDecodedMessage)
-		{
-			var data = aDecodedMessage.cmds.data;
-
-			// Create a new client, note UUID is incremented
-			var newClientID = this.addClient(connection);
-			aDecodedMessage.id = newClientID;
-			aDecodedMessage.gameClock = this.delegate.gameClock;
-
-			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
-
-			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
-			// console.log( aDecodedMessage );
-			connection.send( BISON.encode(aDecodedMessage) );
-		},
-
-		/**
 		 * Send this to all clients, and let the gamecontroller do what it should with the message
 		 */
 		onGenericPlayerCommand: function(connection, aDecodedMessage)
@@ -342,7 +323,8 @@ ServerNetChannel = (function()
 //			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
 		},
 
-		onPlayerMoveCommand: function(connection, aDecodedMessage) {
+		onPlayerMoveCommand: function(connection, aDecodedMessage)
+		{
 			  this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
 		},
 

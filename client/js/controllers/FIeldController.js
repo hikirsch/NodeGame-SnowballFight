@@ -39,6 +39,18 @@ var init = function(Rectangle, FieldView)
 				this.view.addPlayer( newPlayer.view );
 			}
 		},
+
+		removePlayer: function( aClientID )
+		{
+			var player = this.players.objectForKey( aClientID );
+
+			if( this.view )
+			{
+				this.view.removeplayer( player.view );
+			}
+
+			this.players.remove( aClientID );
+		},
 		
 		tick: function(speedFactor)
 		{
@@ -53,7 +65,9 @@ var init = function(Rectangle, FieldView)
 			}, this );
 
 			// Update entities
-			this.entities.forEach( function(key, entity){entity.tick(speedFactor) }, this );
+			this.entities.forEach( function(key, entity){
+				entity.tick(speedFactor)
+			}, this );
 		},
 
 		createView: function(aGameView)

@@ -89,7 +89,12 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			this.fieldController.addPlayer( aNewCharacter );
 			return aNewCharacter;
 		},
-		
+
+		removePlayer: function( aClientID )
+		{
+			this.fieldController.removePlayer( aClientID );
+		},
+
 		/**
 		 * Events from other players
 		 */
