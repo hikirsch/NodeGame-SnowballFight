@@ -1,13 +1,11 @@
-.project
-Thumbs.db
-.DS_Store
-NodeGame-SnowballFight.esproj
-NodeGame-SnowballFight-oneday.esproj
-<<<<<<< HEAD
+# intellij
+*.iml
+*.ipr
+*.iws
+.idea/
 .idea
-=======
 
-# OSX
+# OS X
 .DS_Store?
 Icon?
 
@@ -17,5 +15,28 @@ Icon?
 # Files that might appear on external disk
 .Spotlight-V100
 .Trashes
-#EOF
->>>>>>> 46281965fffb812ceecec7aff973f15861d6435a
+
+# Windows image file caches
+Thumbs.db 
+
+# Folder config file
+Desktop.ini
+
+# eclipse
+*.pydevproject
+.project
+.metadata
+bin/**
+tmp/**
+tmp/**/*
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.classpath
+.settings/
+.loadpath
+
+# CDT-specific
+.cproject
