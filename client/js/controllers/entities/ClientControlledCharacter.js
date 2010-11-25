@@ -30,13 +30,11 @@ var init = function(Vector, Rectangle, FieldController, Character, CharacterView
 		 */
 		constructEntityDescription: function()
 		{
+			this.input.constructInputBitmask();
 			return {
 				objectID: this.objectID,
 				clientID: this.clientID,
-				left: this.input.isLeft(),
-				right: this.input.isRight(),
-				up: this.input.isUp(),
-				down: this.input.isDown()
+				input: this.input.constructInputBitmask()
 			}
 		}
 	});

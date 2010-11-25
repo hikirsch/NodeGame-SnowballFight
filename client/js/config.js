@@ -1,6 +1,6 @@
 var init = function()
 { 
-	return {
+	return GAMECONFIG = {
 		HOST: 'localhost',
 		PORT: 28785,
 		DEBUG_MODE: true,
@@ -17,8 +17,8 @@ var init = function()
 			PLAYER_FIRE: 0x32
 		},
 		CLIENT_SETTING: {
-			updaterate: 1000/20, 			// How often to request an update from the server perserver
-			cmdrate:	1000/30,			// How often to send accumalated CMDS to the server
+			updaterate: 1000/30, 			// How often to request an update from the server perserver
+			cmdrate:	1000/40,			// How often to send accumalated CMDS to the server
 			rate: 10000,					// Controls how much data we can receive / sec before we connection suffers  (2500=modem, 10000=fast-broadband)
 
 			// Input prediction
@@ -35,6 +35,7 @@ var init = function()
 
 			fakelag: 0						
 		},
+
 		SERVER_SETTING: {
 			tickrate: 1000/66,				// The server runs the game at this FPS - Recommended to not modify,
 
@@ -42,6 +43,14 @@ var init = function()
 			maxupdaterate: 1000/60,
 			minrate: 2500,
 			maxrate: 10000
+		},
+
+		INPUT_BITMASK: {
+			UP: 0x01,
+			DOWN: 0x02,
+			LEFT: 0x04,
+			RIGHT: 0x08,
+			SPACE: 0x16
 		}
 
 	}

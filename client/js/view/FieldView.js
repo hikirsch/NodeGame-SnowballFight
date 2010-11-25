@@ -18,9 +18,9 @@ var init = function(HTMLFactory)
 			playerView.getElement().appendTo( this.element );
 		},
 
-		removePlayer: function()
+		removeEntity: function( entityView )
 		{
-			playerView.getElement().remove();
+			entityView.getElement().remove();
 		},
 
 		getElement: function() {

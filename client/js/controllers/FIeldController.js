@@ -11,6 +11,7 @@ var init = function(Rectangle, FieldView)
 
 			// Might do away with different types of entities
 			this.allEntities = new SortedLookupTable();
+			this.players = new SortedLookupTable();
 		},
 
 
@@ -27,6 +28,7 @@ var init = function(Rectangle, FieldView)
 		addPlayer: function( newPlayer )
 		{
 			this.allEntities.setObjectForKey( newPlayer, newPlayer.objectID );
+			this.players.setObjectForKey( newPlayer, newPlayer.clientID );
 
 			// if we have a view, then add the player to it
 			if( this.view ){
@@ -34,16 +36,42 @@ var init = function(Rectangle, FieldView)
 			}
 		},
 
-		removePlayer: function( aClientID )
+		removePlayer: function( connectionID )
 		{
-			var player = this.allEntities.objectForKey( aClientID );
+			var player = this.players.objectForKey(connectionID);
+			this.removeEntity( player.objectID );
+			this.players.remove(player);
+		},
 
-			if( this.view )
-			{
-				this.view.removeplayer( player.view );
+		removeEntity: function( objectID )
+		{
+			var entity = this.allEntities.objectForKey( objectID );
+
+			if( this.view ) {
+				this.view.removeEntity( entity.view );
 			}
 
-			this.allEntities.remove( aClientID );
+			this.allEntities.remove( objectID );
+		},
+
+		removeExpiredEntities: function( activeEntities )
+		{
+			var entityKeysArray = this.allEntities._keys,
+			i = entityKeysArray.length,
+			key;
+
+			while (i--)
+			{
+				key = entityKeysArray[i];
+
+				// This entity is still active. Move along.
+				if( activeEntities[key] )
+					continue;
+
+				// This entity is not active - remove
+				console.log("(FieldController) removeEntity", key);
+				this.removeEntity(key);
+			}
 		},
 
 		updateEntity: function( objectID, updatedPosition ) {
@@ -70,6 +98,14 @@ var init = function(Rectangle, FieldView)
 			{
 				this.view = new FieldView(this);
 			}
+		},
+
+		/**
+		 * Accessors
+		 */
+		getEntityWithObjectID: function( anEntityObjectID )
+		{
+			return this.allEntities.objectForKey( anEntityObjectID );
 		}
 	});
 };

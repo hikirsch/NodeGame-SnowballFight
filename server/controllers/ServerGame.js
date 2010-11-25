@@ -52,50 +52,17 @@ ServerGame = (function()
 			this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
 		},
 
+		/**
+		 * Parse input commands sent by a player
+		 * @param clientID
+		 * @param aDecodedMessage
+		 */
 		onPlayerMoveCommand: function(clientID, aDecodedMessage)
 		{
-			/**
-			 * }
-(ServerNetChannel) : onMessage
-{ id: 1
-, seq: 415
-, cmds:
-   { cmd: 9
-   , data:
-      { objectID: 1
-      , clientID: 1
-      , x: 573.5
-      , y: 151.44
-      , vx: 0
-      , vy: 0
-      , r: 0
-      }
-   }
-, t: 12659
-}
-
-
-			 */
 			var cmdData = aDecodedMessage.cmds.data;
 			var playerEntity = this.fieldController.allEntities.objectForKey(cmdData.objectID);
-
-			playerEntity.input.keys.up = cmdData.up;
-			playerEntity.input.keys.down = cmdData.down;
-			playerEntity.input.keys.left = cmdData.left;
-			playerEntity.input.keys.right = cmdData.right;
-
-//			playerEntity.position.x = cmdData.x;
-//			playerEntity.position.y = cmdData.y;
-//			playerEntity.velocity.x = cmdData.vx;
-//			playerEntity.velocity.y = cmdData.vy;
+			playerEntity.input.deconstructInputBitmask( cmdData.input );
 //			playerEntity.rotation = cmdData.r;
-
-//			console.log('this.fieldController.allEntities', SYS.inspect(this.fieldController.allEntities));
-//			console.log( ' a', aDecodedMessage.cmds.data.objectID);
-//			console.log('player', playerEntity.velocity.x, playerEntity.velocity.y);
-//			console.log('PlayerInput', SYS.inspect (playerEntity.input.isLeft() ) );//playerEntity.input.isLeft() )
-//			console.log('hello', playerEntity, aDecodedMessage.cmds.data.x);
-			//this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
 		},
 
 
@@ -107,6 +74,11 @@ ServerGame = (function()
 
 //			console.log("Charinput", aNewCharacter.input);
 			return aNewCharacter;
+		},
+
+		removePlayer: function (connectionID)
+		{
+			this.fieldController.removePlayer( connectionID );
 		},
 
 		// start our game

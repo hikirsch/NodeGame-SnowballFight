@@ -90,8 +90,6 @@ var init = function(Vector, Rectangle, FieldController)
 				// Add acceleration to velocity and velocity to the current position
 				this.velocity.add(this.acceleration);
 				this.calcuatePosition(speedFactor);
-
-				console.log( this.position );
 			}
 
 //			if(didMove && this.view) {

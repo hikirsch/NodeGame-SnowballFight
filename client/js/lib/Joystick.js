@@ -60,7 +60,34 @@ var init = function($)
 		isUp: function() { return this.keys['up']; },
 		isRight: function() { return this.keys['right']; },
 		isDown: function() { return this.keys['down']; },
-		isSpace: function() { return this.keys['space']; }
+		isSpace: function() { return this.keys['space']; },
+
+		/**
+		 * Constructs a bitmask based on current keyboard state
+		 * @return A bitfield containing input states
+		 */
+		constructInputBitmask: function()
+		{
+		  	var input = 0;
+			if(this.keys['up']) input |= GAMECONFIG.INPUT_BITMASK.UP;
+			if(this.keys['down']) input |= GAMECONFIG.INPUT_BITMASK.DOWN;
+			if(this.keys['left']) input |= GAMECONFIG.INPUT_BITMASK.LEFT;
+			if(this.keys['right']) input |= GAMECONFIG.INPUT_BITMASK.RIGHT;
+			return input;
+		},
+
+
+		/**
+		 * Sets the 'key down' properties based on an input mask
+		 * @param inputBitmask 	A bitfield containing input flags
+		 */
+		deconstructInputBitmask: function(inputBitmask)
+		{
+			this.keys['up'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.UP) == GAMECONFIG.INPUT_BITMASK.UP;
+			this.keys['down'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.DOWN) == GAMECONFIG.INPUT_BITMASK.DOWN;
+			this.keys['left'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.LEFT) == GAMECONFIG.INPUT_BITMASK.LEFT;
+			this.keys['right'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.RIGHT) == GAMECONFIG.INPUT_BITMASK.RIGHT;
+		}
 	});
 };
 

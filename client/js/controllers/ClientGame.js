@@ -105,13 +105,13 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			 * Example values: timeValue = 5.0f, nextPointTime = 10.0f, lastPointTime = 4.0f
 			 * result:
 			 * duration = 6.0f
-			 * offsetTime = 1.0f
+			 * offsetTime = 1.0f             	
 			 * t = 0.16
 			 */
 
 			var durationBetweenPoints = (nextAfterTime.gameClock - previousBeforeTime.gameClock);
 			var offsetTime = renderTime - previousBeforeTime.gameClock;
-			var processedObjectIDs = {};
+			var activeEntities = {};
 			
 			// T is where we fall between, as a function of these two points
 			var t = offsetTime / durationBetweenPoints;
@@ -119,51 +119,68 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			else if(t < 0) t = 0.0;
 
 
-			for( var objectID in nextAfterTime ) {
-		 		if( typeof nextAfterTime[ objectID ] === "object" && "clientID" in nextAfterTime[ objectID ] ) {
-					 if( !( objectID in previousBeforeTime ) )
-					 {
-						var objectClientID = nextAfterTime[ objectID ].clientID,
-							typeOfCharacter = (objectClientID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character',
-							newCharacter = this.entityFactory.createCharacter( objectID, objectClientID, typeOfCharacter, this.fieldController ),
-							input;
-						
-						if(objectClientID == this.netChannel.clientID)
-						{
-							this.clientCharacter = newCharacter;
-							input = new Joystick();
-							input.attachEvents();
-							this.clientCharacter.setInput(input);
-						}
-					}
-					else
-					{
-						console.log( nextAfterTime[ objectID ].clientID, nextAfterTime );
-						// Store positions before and after to compare below
-						var prevTimeX = previousBeforeTime[ objectID ].x;
-						var prevTimeY = previousBeforeTime[ objectID ].y;
-						var nextTimeX = nextAfterTime[ objectID ].x;
-						var nextTimeY = nextAfterTime[ objectID ].y;
 
-						// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
-						var newCoordinates = {
-							x: ( (nextTimeX - prevTimeX) * t ) + prevTimeX,
-							y: ( (nextTimeY - prevTimeY) * t ) + prevTimeY
-						};
+			for( var objectID in nextAfterTime )
+			{
+				var entityDesc = nextAfterTime[objectID]; // Store the entity description
 
-						this.fieldController.updateEntity( objectID, newCoordinates );
-					 }
-				}
-				
-				processedObjectIDs[ objectID ] = true;
-			}
-			
-			for( var objectID in previousBeforeTime ) {
-				if( processedObjectIDs[objectID] )
+				// Catch garbage values
+				if(!entityDesc.hasOwnProperty('objectID'))
+					continue;
+
+			 	var entity = this.fieldController.getEntityWithObjectID( entityDesc.objectID );
+
+				// We don't have this entity - create it!
+				if( !entity )
 				{
-					// this didn't process b/c the object is no longer there in after.
+					var connectionID = entityDesc.clientID,
+						typeOfCharacter = (connectionID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character', // Create a special character for us
+						newCharacter = this.entityFactory.createCharacter( objectID, connectionID, typeOfCharacter, this.fieldController ),
+						input;
+
+					// It's us!
+					if(connectionID == this.netChannel.clientID)
+					{
+						this.clientCharacter = newCharacter;
+						input = new Joystick();
+						input.attachEvents();
+						this.clientCharacter.setInput(input);
+					}
+
+					console.log( "EntityCreated");
+					// Place it where it will be
+					this.fieldController.updateEntity( objectID, {x: entityDesc.x,  y: entityDesc.y});
 				}
+				else
+				{
+//					if( !previousBeforeTime.hasOwnProperty('objectID') ) {
+//						continue;
+//					}
+
+					var prevEntityDesc = previousBeforeTime[objectID];
+//					console.log( prevEntityDesc );
+//					var entityDescPrev =                          
+					// Store positions before and after to compare below
+					var prevTimeX = previousBeforeTime[ objectID ].x;
+					var prevTimeY = previousBeforeTime[ objectID ].y;
+					var nextTimeX = nextAfterTime[ objectID ].x;
+					var nextTimeY = nextAfterTime[ objectID ].y;
+
+					// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
+					var newCoordinates = {
+						x: ( (nextTimeX - prevTimeX) * t ) + prevTimeX,
+						y: ( (nextTimeY - prevTimeY) * t ) + prevTimeY
+					};
+
+					this.fieldController.updateEntity( objectID, newCoordinates );
+				}
+
+				// Entities not processed are considered to have been removed on the server
+				activeEntities[ objectID ] = true;
 			}
+
+			// Destroy removed entities
+			this.fieldController.removeExpiredEntities( activeEntities );
 		},
 
 		shouldAddPlayer: function (anObjectID, aClientID, playerType)

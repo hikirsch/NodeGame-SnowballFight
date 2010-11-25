@@ -90,37 +90,9 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			return aNewCharacter;
 		},
 
-		removePlayer: function( aClientID )
+		removeEntity: function( objectID )
 		{
-			this.fieldController.removePlayer( aClientID );
-		},
-
-		/**
-		 * Events from other players
-		 */
-		onPlayerMoved: function(data)
-		{
-			var targetCharacter = this.players.get(data.id);
-			
-			if(targetCharacter == null) 
-			{
-//				console.log('(AbstractGameController#onPlayerMoved) - targetPlayer not found! Ignoring...\nMessageData:', (sys) ? sys.inspect(data) : data );
-				return;
-			}
-			
-//			targetCharacter.serverPosition.x = data.x;
-//			targetCharacter.serverPosition.y = data.y;
-//
-//			if (Math.abs(targetCharacter.position.x - data.x) > 0.01 || Math.abs(targetCharacter.position.y - targetCharacter.serverPosition.y) > 0.01)
-//			{
-//				var difference = new Vector(targetCharacter.serverPosition.x-targetCharacter.position.x, targetCharacter.serverPosition.y-targetCharacter.position.y);
-//				difference.mul(0.1);
-//
-//				targetCharacter.position.add(difference);
-//			}
-
-			targetCharacter.velocity.x = data.vx;
-			targetCharacter.velocity.y = data.vy;
+			this.fieldController.removeEntity( objectID );
 		}
 	});
 };
