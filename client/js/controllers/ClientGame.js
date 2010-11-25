@@ -73,7 +73,6 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			var nextAfterTime = null;
 			var previousBeforeTime = null;
 
-
 			// Loop thru the points, until we find the first one that has a timeValue which is greater than our renderTime
 			// Knowing that then we know that the combined with the one before it - that passed our just check - we know we want to render ourselves somehwere between these two points
 			var i = 0;
@@ -89,13 +88,10 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				}
 			}
 
-
 			// Could not find two points to render between
 			if(nextAfterTime == null || previousBeforeTime == null) {
 				return false;
 			}
-
-			if(previousBeforeTime['1'] == undefined || nextAfterTime['1'] == undefined) return;
 
 			/**
 			 * More info: http://www.learningiphone.com/2010/09/consicely-animate-an-object-along-a-path-sensitive-to-time/
@@ -112,23 +108,62 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			 * offsetTime = 1.0f
 			 * t = 0.16
 			 */
+
 			var durationBetweenPoints = (nextAfterTime.gameClock - previousBeforeTime.gameClock);
 			var offsetTime = renderTime - previousBeforeTime.gameClock;
+			var processedObjectIDs = {};
 			
-			// T is where we fall between, as a function of these two points 
+			// T is where we fall between, as a function of these two points
 			var t = offsetTime / durationBetweenPoints;
 			if(t > 1.0)  t = 1.0;
 			else if(t < 0) t = 0.0;
 
-			// Store positions before and after to compare below
-			var prevTimeX = previousBeforeTime['1'].x;
-			var prevTimeY = previousBeforeTime['1'].y;
-			var nextTimeX = nextAfterTime['1'].x;
-			var nextTimeY = nextAfterTime['1'].y;
 
-			// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
-			this.clientCharacter.position.x = ((nextTimeX - prevTimeX) * t ) + prevTimeX;
-			this.clientCharacter.position.y = ((nextTimeY - prevTimeY) * t ) + prevTimeY;
+			for( var objectID in nextAfterTime ) {
+		 		if( typeof nextAfterTime[ objectID ] === "object" && "clientID" in nextAfterTime[ objectID ] ) {
+					 if( !( objectID in previousBeforeTime ) )
+					 {
+						var objectClientID = nextAfterTime[ objectID ].clientID,
+							typeOfCharacter = (objectClientID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character',
+							newCharacter = this.entityFactory.createCharacter( objectID, objectClientID, typeOfCharacter, this.fieldController ),
+							input;
+						
+						if(objectClientID == this.netChannel.clientID)
+						{
+							this.clientCharacter = newCharacter;
+							input = new Joystick();
+							input.attachEvents();
+							this.clientCharacter.setInput(input);
+						}
+					}
+					else
+					{
+						console.log( nextAfterTime[ objectID ].clientID, nextAfterTime );
+						// Store positions before and after to compare below
+						var prevTimeX = previousBeforeTime[ objectID ].x;
+						var prevTimeY = previousBeforeTime[ objectID ].y;
+						var nextTimeX = nextAfterTime[ objectID ].x;
+						var nextTimeY = nextAfterTime[ objectID ].y;
+
+						// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
+						var newCoordinates = {
+							x: ( (nextTimeX - prevTimeX) * t ) + prevTimeX,
+							y: ( (nextTimeY - prevTimeY) * t ) + prevTimeY
+						};
+
+						this.fieldController.updateEntity( objectID, newCoordinates );
+					 }
+				}
+				
+				processedObjectIDs[ objectID ] = true;
+			}
+			
+			for( var objectID in previousBeforeTime ) {
+				if( processedObjectIDs[objectID] )
+				{
+					// this didn't process b/c the object is no longer there in after.
+				}
+			}
 		},
 
 		shouldAddPlayer: function (anObjectID, aClientID, playerType)
@@ -148,12 +183,6 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );
-			// just create for now
-			this.clientCharacter = this.entityFactory.createCharacter(1, 1, 'ClientControlledCharacter', this.fieldController );
-
-			var input = new Joystick();
-			input.attachEvents();
-			this.clientCharacter.setInput(input);
 		},
 
 		onClientJoined: function(clientID, data)

@@ -293,7 +293,7 @@ ServerNetChannel = (function()
 //			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
 		},
 
-				/**
+		/**
 		 * CONNECTION EVENTS
 		 * User has connected, give them an ID, tell them - then tell all clients
 		 */
@@ -327,8 +327,7 @@ ServerNetChannel = (function()
 		{
 			  this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
 		},
-
-
+		 
 		/**
 		 * SETTING CLIENT PROPERTIES
 		 * Called by clients to modify a property, if the server accepts the change (it is within bounds, name contains valid string, etc)

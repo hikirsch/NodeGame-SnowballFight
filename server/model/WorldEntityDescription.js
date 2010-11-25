@@ -27,19 +27,7 @@ var init = function()
 			this.gameTick = aGameInstance.gameTick;
 			
 			// Construct players
-			fieldController.players.forEach( function(key, player)
-			{
-				this.entities.setObjectForKey( player.constructEntityDescription(), player.objectID );
-			}, this );
-
-			// Construct projectiles
-			fieldController.projectiles.forEach( function(key, projectile)
-			{
-				this.entities.setObjectForKey( projectile.constructEntityDescription(), projectile.objectID );
-			}, this );
-
-			// Construct entities
-			fieldController.entities.forEach( function(key, entity)
+			fieldController.allEntities.forEach( function(key, entity)
 			{
 				this.entities.setObjectForKey( entity.constructEntityDescription(), entity.objectID );
 			}, this );

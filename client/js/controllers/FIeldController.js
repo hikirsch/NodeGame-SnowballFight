@@ -9,11 +9,6 @@ var init = function(Rectangle, FieldView)
 			this.gameController = game;
 			this.rectangle = new Rectangle(0, 0, 640, 480);
 
-			// Things in the game
-			this.players = new SortedLookupTable(); // Active players
-			this.projectiles = new SortedLookupTable(); // Things fired
-			this.entities = new SortedLookupTable(); // Everything else, e.g. trees, rocks, powerups, dogs, cats
-
 			// Might do away with different types of entities
 			this.allEntities = new SortedLookupTable();
 		},
@@ -31,7 +26,6 @@ var init = function(Rectangle, FieldView)
 		
 		addPlayer: function( newPlayer )
 		{
-			this.players.setObjectForKey( newPlayer, newPlayer.clientID );
 			this.allEntities.setObjectForKey( newPlayer, newPlayer.objectID );
 
 			// if we have a view, then add the player to it
@@ -42,30 +36,29 @@ var init = function(Rectangle, FieldView)
 
 		removePlayer: function( aClientID )
 		{
-			var player = this.players.objectForKey( aClientID );
+			var player = this.allEntities.objectForKey( aClientID );
 
 			if( this.view )
 			{
 				this.view.removeplayer( player.view );
 			}
 
-			this.players.remove( aClientID );
+			this.allEntities.remove( aClientID );
 		},
-		
+
+		updateEntity: function( objectID, updatedPosition ) {
+			var entity = this.allEntities.objectForKey( objectID );
+
+			if( entity != null ) {
+				entity.position.x = updatedPosition.x;
+				entity.position.y = updatedPosition.y;
+			}
+		},
+
 		tick: function(speedFactor)
 		{
 			// Update players
-			this.players.forEach( function(key, player){ 
-				player.tick(speedFactor)
-			}, this );
-
-			// Update projectiles
-			this.projectiles.forEach( function(key, projectile){ 
-				projectile.tick(speedFactor)
-			}, this );
-
-			// Update entities
-			this.entities.forEach( function(key, entity){
+			this.allEntities.forEach( function(key, entity){ 
 				entity.tick(speedFactor)
 			}, this );
 		},
