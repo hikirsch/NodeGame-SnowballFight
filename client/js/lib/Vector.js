@@ -202,8 +202,13 @@ var init = function()
 		toString: function()
 		{
 
-		    return '[Vector(' + this.x + ', ' + this.y + ') angle: ' + this.angle() + ', length: ' + this.length() + ']';
+		    return '[Vector(' + this.truncateAndReturnString(this.x) + ', ' + this.truncateAndReturnString(this.y) + ') angle: ' + this.truncateAndReturnString(this.angle())  + ', length: ' + this.truncateAndReturnString( this.length())  + ']';
 
+		},
+
+		truncateAndReturnString: function(aValue)
+		{
+			 return String(Math.round(Math.floor(aValue*10))/10)
 		}
 	});
 };

@@ -65,7 +65,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			var speedFactor = delta / ( this.targetDelta );
 			if (speedFactor <= 0) speedFactor = 1;
 
-			this.fieldController.tick(speedFactor);
+			this.fieldController.tick(speedFactor, this.clockActualTime);
 		},
 		
 		/**
@@ -85,8 +85,8 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 
 		shouldAddPlayer: function (anObjectID, aClientID, playerType)
 		{
-			var aNewCharacter = this.entityFactory.createCharacter(anObjectID, aClientID, playerType, this.fieldController);
-			this.fieldController.addPlayer( aNewCharacter );
+			// TODO: Check if we can still add new players
+			var aNewCharacter = this.fieldController.addPlayer( anObjectID, aClientID, playerType );
 			return aNewCharacter;
 		},
 

@@ -1,6 +1,6 @@
 /**
 File:
-	Client.js
+	Main.js
 Created By:
 	Adam Kirschner
 Project	:
@@ -10,8 +10,7 @@ Abstract:
 Basic Usage:
  	See index.html // TODO: Update basic usage.
 */
-//ClientGameController, config, Animal
-require(['controllers/ClientGame','config', 'scratchpad/Animal'], function(ClientGame, config, Animal) {
+require(['controllers/AbstractClientGame','config', 'scratchpad/Animal'], function(AbstractClientGame, config, Animal) {
 	// Everything ready - start the game client
     require.ready(function() {
 
@@ -19,6 +18,6 @@ require(['controllers/ClientGame','config', 'scratchpad/Animal'], function(Clien
 		var animal = new Animal('Max');
 		console.log('Animal', animal.speak("BARKING!!!") ); // Should output: Animal My name is Max and I like BARKING!!!
 
-	   var gameController = new ClientGame(config);
+	   var gameController = new AbstractClientGame(config);
     });
 });

@@ -36,11 +36,10 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
-
 		},
 
 		/**
-		 * tick()
+		 * A connected browser client's 'main loop'
 		 */
 		tick: function()
 		{
@@ -134,9 +133,17 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				if( !entity )
 				{
 					var connectionID = entityDesc.clientID,
-						typeOfCharacter = (connectionID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character', // Create a special character for us
-						newCharacter = this.entityFactory.createCharacter( objectID, connectionID, typeOfCharacter, this.fieldController ),
-						input;
+						typeOfCharacter = (connectionID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character'; // Create a special character for us
+
+
+					console.log( 'no entity', typeOfCharacter)
+					////newCharacter =
+//					var characterConfiguration = { 'objectID': objectID, 'connectionID': connectionID, 'typeOfCharacter': typeOfCharacter};
+					var newCharacter = this.shouldAddPlayer( objectID, connectionID, typeOfCharacter);
+
+//
+//					var newCharacter = this.
+//					var	input;
 
 					// It's us!
 					if(connectionID == this.netChannel.clientID)
@@ -147,19 +154,15 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 						this.clientCharacter.setInput(input);
 					}
 
-					console.log( "EntityCreated");
+					console.log("(AbstractClientGame) EntityCreated");
+
 					// Place it where it will be
 					this.fieldController.updateEntity( objectID, {x: entityDesc.x,  y: entityDesc.y});
 				}
 				else
 				{
-//					if( !previousBeforeTime.hasOwnProperty('objectID') ) {
-//						continue;
-//					}
-
 					var prevEntityDesc = previousBeforeTime[objectID];
-//					console.log( prevEntityDesc );
-//					var entityDescPrev =                          
+
 					// Store positions before and after to compare below
 					var prevTimeX = previousBeforeTime[ objectID ].x;
 					var prevTimeY = previousBeforeTime[ objectID ].y;
@@ -175,20 +178,27 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 					this.fieldController.updateEntity( objectID, newCoordinates );
 				}
 
-				// Entities not processed are considered to have been removed on the server
+				// Entities not processed are considered to have been removed on the server,
 				activeEntities[ objectID ] = true;
 			}
 
 			// Destroy removed entities
 			this.fieldController.removeExpiredEntities( activeEntities );
 		},
-
-		shouldAddPlayer: function (anObjectID, aClientID, playerType)
-		{
-			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
-			playerType = (aClientID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character'; 
-			this.callSuper(anObjectID, aClientID, playerType);
-		},
+//
+//		/**
+//		 * Attempt to create the player, can return null if player can't be added. (Already playing? Room
+//		 * @param anObjectID	Set by the server
+//		 * @param aClientID		Connection ID
+//		 * @param playerType	Type of player to create (NOTE: Only used by the server)
+//		 */
+//		shouldAddPlayer: function (anObjectID, aClientID, playerType)
+//		{
+//			console.log('################## This got  called');
+//			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
+//			playerType = (aClientID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character';
+//			return this.callSuper(anObjectID, aClientID, playerType);
+//		},
 
 		/**
 		 * ClientGameView delegate

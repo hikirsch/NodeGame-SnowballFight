@@ -16,6 +16,7 @@ var init = function()
 			PLAYER_MOVE: 0x16,
 			PLAYER_FIRE: 0x32
 		},
+
 		CLIENT_SETTING: {
 			updaterate: 1000/30, 			// How often to request an update from the server perserver
 			cmdrate:	1000/40,			// How often to send accumalated CMDS to the server
@@ -45,12 +46,14 @@ var init = function()
 			maxrate: 10000
 		},
 
+		// The client sends this bitmask to the server
+		// See (Joystick.js)
 		INPUT_BITMASK: {
-			UP: 0x01,
-			DOWN: 0x02,
-			LEFT: 0x04,
-			RIGHT: 0x08,
-			SPACE: 0x16
+			UP		: 1 << 0,
+			DOWN	: 1 << 1,
+			LEFT	: 1 << 2,
+			RIGHT	: 1 << 3,
+			SPACE	: 1 << 4
 		}
 
 	}
