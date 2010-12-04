@@ -11,7 +11,7 @@
 	 // TODO: FILL OUT
  */
 
-var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCharacter)
+var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCharacter, Projectile)
 {
 	return new JS.Class(
 	{
@@ -27,13 +27,14 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 			this.entityTypes.setObjectForKey(GameEntity, 'GameEntity');
 			this.entityTypes.setObjectForKey(Character, 'Character');
 			this.entityTypes.setObjectForKey(ClientControlledCharacter, 'ClientControlledCharacter');
-
-//			console.log( sys.inspect( this.entityTypes ) );
+			this.entityTypes.setObjectForKey(Projectile, 'Projectile');
 		},
 
-		createGenericEntity: function(anObjectID, aClientID, aFieldController)
+		createProjectile: function(anObjectID, aClientID, aProjectileModel, aFieldController)
 		{
-
+			//this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
+			var projectile = new Projectile(anObjectID, aClientID, aFieldController, aProjectileModel, 1);
+			return projectile;
 		},
 
 		createCharacter: function(anObjectID, aClientID, aCharacterType, aFieldController)
@@ -53,8 +54,9 @@ if (typeof window === 'undefined')
 	require('../controllers/entities/GameEntity');
 	require('../controllers/entities/ClientControlledCharacter');
 	require('../controllers/entities/Character');
+	require('../controllers/entities/Projectile');
 	var sys = require('sys');
-	GameEntityFactory = init(Vector, Rectangle, GameEntity, Character, ClientControlledCharacter);
+	GameEntityFactory = init(Vector, Rectangle, GameEntity, Character, ClientControlledCharacter, Projectile);
 }
 else
 {
@@ -65,5 +67,6 @@ else
 		'controllers/entities/GameEntity',
 		'controllers/entities/Character',
 		'controllers/entities/ClientControlledCharacter',
+		'controllers/entities/Projectile',
 		'lib/jsclass/core'], init);
 }

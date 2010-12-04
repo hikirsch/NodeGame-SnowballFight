@@ -9,15 +9,16 @@ var init = function($)
 		initialize: function()
 		{
 			this.keyCodes = { '32': 'space', '37': 'left', '38': 'up', '39': 'right', '40': 'down'},
-			this.keys = {'up': false, 'down': false, 'left': false, "right": false },
+			this.keys = {'space': false, 'up': false, 'down': false, 'left': false, "right": false },
 			this.keyPressed = 0;
+
 		},
 
 		/**
+		 * Attach events to the HTML element
 		 * We don't care about a time clock here, we attach events, we only want
 		 * to know if something's happened.
 		 */
-
 		attachEvents: function()
 		{
 			var that = this;
@@ -54,25 +55,20 @@ var init = function($)
 		},
 
 		/**
-		 * Some helper methods to find out if we're going in a specific direction
-		 */
-		isLeft: function() { return this.keys['left'];},
-		isUp: function() { return this.keys['up']; },
-		isRight: function() { return this.keys['right']; },
-		isDown: function() { return this.keys['down']; },
-		isSpace: function() { return this.keys['space']; },
-
-		/**
 		 * Constructs a bitmask based on current keyboard state
 		 * @return A bitfield containing input states
 		 */
 		constructInputBitmask: function()
 		{
 		  	var input = 0;
+
+			// Check each key
 			if(this.keys['up']) input |= GAMECONFIG.INPUT_BITMASK.UP;
 			if(this.keys['down']) input |= GAMECONFIG.INPUT_BITMASK.DOWN;
 			if(this.keys['left']) input |= GAMECONFIG.INPUT_BITMASK.LEFT;
 			if(this.keys['right']) input |= GAMECONFIG.INPUT_BITMASK.RIGHT;
+			if(this.keys['space']) input |= GAMECONFIG.INPUT_BITMASK.SPACE;
+
 			return input;
 		},
 
@@ -83,11 +79,33 @@ var init = function($)
 		 */
 		deconstructInputBitmask: function(inputBitmask)
 		{
-			this.keys['up'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.UP) == GAMECONFIG.INPUT_BITMASK.UP;
-			this.keys['down'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.DOWN) == GAMECONFIG.INPUT_BITMASK.DOWN;
-			this.keys['left'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.LEFT) == GAMECONFIG.INPUT_BITMASK.LEFT;
-			this.keys['right'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.RIGHT) == GAMECONFIG.INPUT_BITMASK.RIGHT;
-		}
+
+			this.keys['up'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.UP);
+			this.keys['down'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.DOWN);
+			this.keys['left'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.LEFT);
+			this.keys['right'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.RIGHT);
+			this.keys['space'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.SPACE);
+
+//			if(Math.random() < 0.25) {
+//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.UP );
+//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.DOWN );
+//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.LEFT );
+//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.RIGHT );
+//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.SPACE );
+//			}
+//			console.log( this.keys );
+
+		},
+
+		/**
+		 * Accessors
+		 */
+		// Some helper methods to find out if we're going in a specific direction
+		isLeft: function() { return this.keys['left'];},
+		isUp: function() { return this.keys['up']; },
+		isRight: function() { return this.keys['right']; },
+		isDown: function() { return this.keys['down']; },
+		isSpace: function() { return this.keys['space']; }
 	});
 };
 

@@ -1,10 +1,9 @@
 /**
- * Optionally creates an HTTP server if dictated in args
- **/
+* Optionally creates an HTTP server if dictated in args
+**/
 var ArgHelper = require('./lib/ArgHelper.js');
 var createHTTPServer = ArgHelper.getArgumentByNameOrSetDefault( 'createHTTPServer', false );
-if( createHTTPServer )
-{
+if( createHTTPServer ) {
 	var port = Math.abs( ArgHelper.getArgumentByNameOrSetDefault( 'port', 12345 ) );
 	var httpServer = require('./network/SimpleHTTPServer.js' );
 	httpServer.setPrefix('/../client');
@@ -12,15 +11,15 @@ if( createHTTPServer )
 }
 
 /**
- * Start the actual node server.
- */
+* Start the actual node server.
+*/
 SYS = require('sys');
 var config = require('../client/js/config.js').Config;
 var serverConfig = require('./serverConfig.js').Config;
 
 
 require('../client/js/scratchpad/Animal.js');
-require('./controllers/Server.js');
+require('./network/Server.js');
 var serverInstance = new Server(config, serverConfig);
 
 

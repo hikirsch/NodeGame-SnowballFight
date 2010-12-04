@@ -22,6 +22,7 @@ Version:
 	1.0
 */
 
+require('events');
 require('../../client/js/controllers/AbstractGame.js');
 require('../../client/js/lib/Joystick.js');
 require('../network/ServerNetChannel.js');
@@ -47,13 +48,32 @@ ServerGame = (function()
 			this.netChannel = new ServerNetChannel(this, this.server.gameConfig);
 		},
 
+		/**
+		 * Main loop
+		 * Calls super.tick()
+		 * Creates a WorldEntityDescription which it sends to NetChannel
+		 */
+		tick: function()
+		{
+			this.callSuper();
+			var worldEntityDescription = new WorldEntityDescription( this );
+			this.netChannel.tick( this.gameClock, worldEntityDescription );
+		},
+
+		/**
+		 * A generic client command has been received.
+		 * @param clientID
+		 * @param aDecodedMessage
+		 */
 		onGenericCommand: function(clientID, aDecodedMessage)
 		{
 			this.CMD_TO_FUNCTION[aDecodedMessage.cmds.cmd].apply(this, [aDecodedMessage]);
 		},
 
 		/**
-		 * Parse input commands sent by a player
+		 * A client has sent input inside of a message.
+		 * Grab the cmdData from the message, and the player via cmdData.objectID
+		 * Send the input bitmask to the playerEntity
 		 * @param clientID
 		 * @param aDecodedMessage
 		 */
@@ -62,37 +82,42 @@ ServerGame = (function()
 			var cmdData = aDecodedMessage.cmds.data;
 			var playerEntity = this.fieldController.allEntities.objectForKey(cmdData.objectID);
 			playerEntity.input.deconstructInputBitmask( cmdData.input );
-//			playerEntity.rotation = cmdData.r;
 		},
 
 
+		/**
+		 * Calls super.shouldAddPlayer to create the character and attaches a Joystick to it
+		 * @param anEntityID	An Entity ID for this Character, we created this right before this was called
+		 * @param aClientID		Connection ID of the client
+		 * @param playerType 	Playertype - ServerGame does not use this property
+		 */
 		shouldAddPlayer: function (anEntityID, aClientID, playerType)
 		{
-			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
 			var aNewCharacter = this.callSuper(anEntityID, aClientID, 'Character');
-			aNewCharacter.setInput( new Joystick() )
+			if(aNewCharacter == null) return; // No character created for whatever reason. Room full?
 
-//			console.log("Charinput", aNewCharacter.input);
+			aNewCharacter.setInput( new Joystick() );
 			return aNewCharacter;
 		},
 
+		/**
+		 * Remove a player from the game via their ConnectionID
+		 * @param connectionID
+		 */
 		removePlayer: function (connectionID)
 		{
 			this.fieldController.removePlayer( connectionID );
 		},
 
-		// start our game
+		/**
+		 * Start the netChannel and start the game.
+		 * TODO: zero out character health and projectiles etc
+		 */
 		start: function()
 		{
 			this.netChannel.start();
 		},
 
-		tick: function()
-		{
-			this.callSuper();
-			var worldEntityDescription = new WorldEntityDescription( this );
-			this.netChannel.tick( this.gameClock, worldEntityDescription );
-		},
 
 		log: function(o)
 		{
@@ -105,6 +130,9 @@ ServerGame = (function()
 			//this.logger.status();
 		},
 
+		/**
+		 * Internal game events
+		 */
 		/**
 		 * Accessors
 		 */

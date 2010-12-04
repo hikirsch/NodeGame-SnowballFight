@@ -29,7 +29,6 @@ var init = function()
 			this.nickname = '';
 			this.enabled = true; // Old property, leaving it in  for now 
 
-//			this.record = aRecord;
 			this.$ = aServer;
 
 			this.commandTypes = config.CMDS;

@@ -5,15 +5,15 @@ Created By:
 	Mario Gonzalez
 Project	:
 	Ogilvy Holiday Card 2010
-Abstract:  
+Abstract:
 	A generic character inside of our multiplayer game.
 	Anything too interesting should go in a subclass of this.
-	
-	Contains a view which is grabbed by the GameController and placed into 
+
+	Contains a view which is grabbed by the GameController and placed into
 	the game controllers view
-Basic Usage: 
+Basic Usage:
 		var newCharacter = new CharacterController(aClientID, this.fieldRect);
-		
+
 		// Is this the users character?
 		if(messageData.id == this.netChannel.clientID)
 		{
@@ -21,12 +21,12 @@ Basic Usage:
 			this.joystick = new Joystick();
 			console.log("(ClientGameController)", this.joystick);
 		}
-		
+
 		// Grab the view from the character and add it to our GameView
 		this.view.addCharacter(newCharacter.initView());
 */
 
-var init = function(Vector, Rectangle, FieldController, GameEntity, CharacterView)
+var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileModel, Projectile, CharacterView)
 {
 	return new JS.Class(GameEntity,
 	{
@@ -40,25 +40,36 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, CharacterVie
 
 			// move constants
 			// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
-			this.moveSpeed = 0.7;
-
-			// the fastest i can go
-			this.maxVelocity = 3.5;
+			this.moveSpeed = 0.2;
+			this.maxVelocity = 3.5; // the fastest i can go
 
 			// if the field we're being placed in has a field, then we'll go into it
-			if( this.fieldController.view )
-			{
+			if( this.fieldController.view ) {
+
 				// init the view, pass ourselves as the controller
 				this.view = new CharacterView( this, 'smash-tv' );
-				this.fieldController.addPlayer( this )
 			}
+
+			// Firing
+			this.fireRate = 500;
+			this.lastFireTime = 0;
+		},
+
+		/**
+		 * @inherit
+		 */
+		tick: function(speedFactor, gameClock)
+		{
+			this.handleInput(gameClock);
+			this.callSuper(speedFactor, gameClock);
 		},
 
 		/**
 		 * Handle keyboard Input
-		 * Note we allow the user to all keys at the same time
+		 * Note: we allow the user to all keys at the same time
+		 * Note: ClientControlledCharacter overrides this with a blank method!!!!!
 		 */
-		handleInput: function()
+		handleInput: function( gameClock )
 		{
 			if( this.input )
 			{
@@ -69,14 +80,28 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, CharacterVie
 				// Vertical movement
 				if( this.input.isUp() ) this.acceleration.y -= this.moveSpeed;
 				if( this.input.isDown() ) this.acceleration.y += this.moveSpeed;
+
+				// Firing
+				if( this.input.isSpace() )
+					this.fireProjectile( gameClock );
 			}
 		},
 
-		tick: function(speedFactor)
+		fireProjectile: function( gameClock )
 		{
-			this.handleInput();
-			this.callSuper();
+			if( gameClock - this.lastFireTime < this.fireRate) // Too soon
+				return;
+
+
+			// For now always fire the regular snowball
+			var projectileModel = ProjectileModel.superSnowball;
+			projectileModel.force = 1.0 ; // TODO: Use force gauge
+			
+			this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
+			this.lastFireTime = gameClock;
 		},
+
+
 
 //
 //		deconstructFromEntityDescription: function(anEntityDescription)
@@ -100,9 +125,9 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, CharacterVie
 				this.view.refresh();
 		},
 
-		setInput: function( anInnput )
+		setInput: function( anInput )
 		{
-			this.input = anInnput;
+			this.input = anInput;
 		}
 	});
 };
@@ -113,17 +138,23 @@ if (typeof window === 'undefined')
 	require('../../lib/jsclass/core.js');
 	require('../../lib/Vector');
 	require('../../lib/Rectangle');
-//	require('../../view/CharacterView');
 	require('../FieldController');
-	require('./GameEntity')
+	require('../../model/ProjectileModel');
+	require('./Projectile');
+	require('./GameEntity');
 
-	var sys = require('sys');
-	Character = init(Vector, Rectangle, FieldController, GameEntity);
+	Character = init(Vector, Rectangle, FieldController, GameEntity, ProjectileModel, Projectile, undefined);
 }
 else
 {
-	// We're on the browser. 
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	//	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'view/CharacterView', 'lib/jsclass/core'], init);
-	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'view/CharacterView', 'lib/jsclass/core'], init);
+	// We're on the browser.
+	// Require.js will use this file's name to
+	define(['lib/Vector',
+		'lib/Rectangle',
+		'controllers/FieldController',
+		'controllers/entities/GameEntity',
+		'model/ProjectileModel',
+		'controllers/entities/Projectile',
+		'view/CharacterView',
+		'lib/jsclass/core'], init);
 }

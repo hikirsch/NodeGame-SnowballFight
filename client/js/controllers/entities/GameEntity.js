@@ -76,8 +76,9 @@ var init = function(Vector, Rectangle, FieldController)
 		/**
 		 * Update, use delta to create frame independent motion
 		 * @param speedFactor	A normalized value our ACTUAL framerate vs our desired framerate. 1.0 means exactly correct, 0.5 means we're running at half speed
+		 * @param gameClock		The current gameclock
 		 */
-		tick: function(speedFactor)
+		tick: function(speedFactor, gameClock)
 		{			
 			if(this.view)
 			{
@@ -87,18 +88,17 @@ var init = function(Vector, Rectangle, FieldController)
 			{
 				// Adjust to speedFactor
 				this.acceleration.mul(speedFactor);
+
 				// Add acceleration to velocity and velocity to the current position
 				this.velocity.add(this.acceleration);
-				this.calcuatePosition(speedFactor);
+				this.updatePosition(speedFactor);
 			}
-
-//			if(didMove && this.view) {
-//				this.view.update();
-//			}
 		},
 
-		calcuatePosition: function(speedFactor)
+		updatePosition: function(speedFactor)
 		{
+			console.log("Velocity:", this.velocity, " Accel:", this.acceleration);
+			
 			// Store previous position
 			var prevPosition = {
 				x: this.position.x,
@@ -175,17 +175,14 @@ var init = function(Vector, Rectangle, FieldController)
 	});
 };
 
-if (typeof window === 'undefined')
-{
+if (typeof window === 'undefined') {
 	// We're in node!
 	require('../../lib/jsclass/core.js');
 	require('../../lib/Rectangle');
 	require('../../lib/Vector');
 	require('../FieldController');
 	GameEntity = init(Vector, Rectangle, FieldController);
-}
-else
-{
+} else {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
 	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'lib/jsclass/core'], init);

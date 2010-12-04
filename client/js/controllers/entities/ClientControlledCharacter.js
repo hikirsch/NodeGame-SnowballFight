@@ -11,7 +11,7 @@
  // TODO: FILL OUT
  */
 
-var init = function(Vector, Rectangle, FieldController, Character, CharacterView)
+var init = function(Vector, Rectangle, FieldController, GameEntity, Character, ProjectileModel, Projectile, CharacterView)
 {
 	/**
 	 * This is the clients character.
@@ -36,7 +36,10 @@ var init = function(Vector, Rectangle, FieldController, Character, CharacterView
 				clientID: this.clientID,
 				input: this.input.constructInputBitmask()
 			}
-		}
+		},
+
+		// Catch the handleInput so our super's version doesn't get called
+		handleInput: function( gameClock ) {}
 	});
 };
 
@@ -44,18 +47,27 @@ if (typeof window === 'undefined')
 {
 	// We're in node!
 	require('../../lib/jsclass/core.js');
-	require('../../lib/Rectangle');
 	require('../../lib/Vector');
-	require('./GameEntity');
+	require('../../lib/Rectangle');
+	require('../FieldController');
+	require('../../model/ProjectileModel');
+	require('./Projectile');
 	require('./Character');
+	require('./GameEntity');
 
-	var sys = require('sys');
-	ClientControlledCharacter = init(Vector, Rectangle, GameEntity, Character, null);
+	ClientControlledCharacter = init(Vector, Rectangle, FieldController, GameEntity, Character, ProjectileModel, Projectile, undefined);
 }
 else
 {
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
 
-	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/Character', 'view/CharacterView', 'lib/jsclass/core'], init);
-}
+	// We're on the browser.
+	// Require.js will use this file's name to
+	define(['lib/Vector',
+		'lib/Rectangle',
+		'controllers/FieldController',
+		'controllers/entities/GameEntity',
+		'controllers/entities/Character',
+		'model/ProjectileModel',
+		'controllers/entities/Projectile',
+		'view/CharacterView',
+		'lib/jsclass/core'], init);}

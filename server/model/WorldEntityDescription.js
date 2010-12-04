@@ -1,12 +1,17 @@
 /**
  File:
- GameEntityFactory.js
+ 	WorldEntityDescription.js
  Created By:
- Mario Gonzalez
- Project	:
- Ogilvy Holiday Card 2010
+ 	Mario Gonzalez
+ Project:
+ 	Ogilvy Holiday Card 2010
  Abstract:
- GameEntityFactory is in charge of creating GameEntities
+	A world entity description is a full description of the current world state.
+
+ 	ServerGame creates this
+ 		-> NetChannel passes it to each Client
+ 			-> Each client does 'delta compression' (removes unchanged stuff)
+ 				-> If ready, each client sends the customized WorldEntityDescription to it's connection
  Basic Usage:
  // TODO: FILL OUT
  */
