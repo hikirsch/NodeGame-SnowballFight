@@ -1,4 +1,4 @@
-var init = function()
+var init = function(EntityModel, ProjectileModel)
 { 
 	return GAMECONFIG = {
 		HOST: 'localhost',
@@ -54,13 +54,17 @@ var init = function()
 			LEFT	: 1 << 2,
 			RIGHT	: 1 << 3,
 			SPACE	: 1 << 4
-		}
+		},
 
+		ENTITY_MODEL: EntityModel,
+		PROJECTILE_MODEL: ProjectileModel
 	}
 };
 
 if (typeof window === 'undefined') {
-	exports.Config = init();
+	require('./model/EntityModel.js');
+	require('./model/ProjectileModel.js');
+	exports.Config = init(EntityModel, ProjectileModel);
 } else if( typeof define === 'function' ) {
-	define( init );
+	define(['model/EntityModel', 'model/ProjectileModel'], init);
 }
