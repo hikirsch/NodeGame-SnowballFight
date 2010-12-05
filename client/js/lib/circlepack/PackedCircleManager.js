@@ -19,7 +19,7 @@ var init = function(Vector, PackedCircle)
 	/*
 	 *	PackedCircleManager
 	 */
-	var PackedCircleManager = function( centeringPasses, collisionPasses)
+	var PackedCircleManager = function( options )
 	{
 		this.allCircles = [];
 		this.desiredTarget = new Vector(0,0);
@@ -27,8 +27,12 @@ var init = function(Vector, PackedCircle)
 
 		// Number of passes for the centering and collision algorithms - it's (O)logN^2 so use increase at your own risk!
 		// Play with these numbers - see what works best for your project
-		this.numberOfCollisionPasses = collisionPasses || 5;  // More passes looks better but is slower
-		this.numberOfCenteringPasses = centeringPasses;   // More passes gets to target position faster, A value of 1 works well
+		this.numberOfCollisionPasses = options.collisionPasses || 5;  // More passes looks better but is slower
+		this.numberOfCenteringPasses = options.centeringPasses || 0;   // More passes gets to target position faster, A value of 1 works well
+
+		// Uses Node.js event system, not compatible in browser!
+		this.dispatchCollisionEvents = options.dispatchCollisionEvents || false;
+		 
 	};
 
 
@@ -50,8 +54,7 @@ var init = function(Vector, PackedCircle)
 	PackedCircleManager.prototype.addCircle = function(aCircle)
 	{
 		this.allCircles.push(aCircle);
-		aCircle.targetPosition = this.desiredTarget.cp();
-		//this.allCircles.setObjectForKey(aCircle, this.allCircles.count());
+		// aCircle.targetPosition = this.desiredTarget.cp();
 	};
 
 	/**
@@ -129,15 +132,17 @@ var init = function(Vector, PackedCircle)
 				for (var j = i + 1; j< len; j++)
 				{
 					var cj = circleList[j];
-					if(ci == cj) continue;   // It's us!
 
-					var dx = cj.position.x - ci.position.x;
-					var dy = cj.position.y - ci.position.y;
-					var r = (ci.radius + cj.radius) * 1.08; // The distance between the two circles radii, but we're also gonna pad it a tiny bit 
+					if( !this.circlesShouldCollide(ci, cj) ) continue;   // It's us!
 
-//					console.log(ci.position.distanceSquared(new Vector(10, 10)));
-					var d = ci.position.distanceSquared(cj.position);
+					var dx = cj.position.x - ci.position.x,
+						dy = cj.position.y - ci.position.y,
+						r = (ci.radius + cj.radius) * 1.08, // The distance between the two circles radii, but we're also gonna pad it a tiny bit
+						d = ci.position.distanceSquared(cj.position);
 
+					/**
+					 * Collision detected!
+					 */
 					if (d < (r * r) - 0.02 )
 					{
 						v.x = dx;
@@ -147,20 +152,26 @@ var init = function(Vector, PackedCircle)
 						var inverseForce = (r - Math.sqrt(d)) * 0.5;
 						v.mul(inverseForce);
 
-						if(cj != dragCircle)
+						// Move cj opposite of the collision as long as its not fixed
+						if(!cj.isFixed)
 						{
-							if(ci == dragCircle) v.mul(2.2); // Double inverse force to make up for the fact that the other object is fixed
-
-							cj.position.x += v.x;
-							cj.position.y += v.y;
+							if(ci.isFixed) v.mul(2.2);	// Double inverse force to make up for the fact that the other object is fixed
+							cj.position.add(v);         // ADD the velocity
 						}
 
-						if (ci != dragCircle)
+						// Move ci opposite of the collision as long as its not fixed
+						if(!ci.isFixed)
 						{
-							if(cj == dragCircle) v.mul(2.2);  // Double inverse force to make up for the fact that the other object is fixed
+							if(cj.isFixed) v.mul(2.2);	// Double inverse force to make up for the fact that the other object is fixed
+							ci.position.sub(v); 		// SUBTRACT the velocity
+						}
 
-							ci.position.x -= v.x;
-							ci.position.y -= v.y;
+
+						// Emit the collision event from each circle, with itself as the first parameter
+						if(this.dispatchCollisionEvents)
+						{
+							ci.eventeEmitter.emit('collision', ci, cj, v);
+							cj.eventeEmitter.emit('collision', cj, ci, v);
 						}
 					}
 				}
@@ -168,6 +179,21 @@ var init = function(Vector, PackedCircle)
 		}
 	};
 
+
+	/**
+	 * Determins if two circles should collide by comparing tha they are not equal,
+	 * and collision bitmask of each determines they want to collide
+	 * @param circleA	A circle that wants to collide with circleB
+	 * @param circleB 	A circle that wants to collide with circleA
+	 */
+	PackedCircleManager.prototype.circlesShouldCollide = function(circleA, circleB)
+	{
+		if(circleA == circleB) return false;
+		if(circleA.isFixed & circleB.isFixed) return false;
+
+		
+		return true;
+	},
 
 	PackedCircleManager.prototype.handleBoundaryForCircle = function(aCircle, boundsRule)
 	{
@@ -310,10 +336,11 @@ var init = function(Vector, PackedCircle)
 };
 
 if (typeof window === 'undefined') {
+
 	require('../jsclass/core.js');	
 	require('../Vector.js');
 	require('./PackedCircle.js');
-
+	
 	PackedCircleManager = init(Vector, PackedCircle);
 } else {
 	define(['lib/Vector', 'lib/circlepack/PackedCircle', 'lib/jsclass/core'], init);
