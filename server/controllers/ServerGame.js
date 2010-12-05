@@ -37,6 +37,8 @@ ServerGame = (function()
 			this.callSuper();
 			console.log('(ServerGame)::init');
 
+			this.fieldController.createPackedCircleManager();
+			
 			// Each time we create an entity we increment this
 			this.nextEntityID = 1;
 
@@ -56,6 +58,10 @@ ServerGame = (function()
 		tick: function()
 		{
 			this.callSuper();
+
+			this.fieldController.packedCircleManager.handleCollisions();
+			
+			// Create a new world-entity-description, could be some room for optimization here but it only happens once per game loop anyway
 			var worldEntityDescription = new WorldEntityDescription( this );
 			this.netChannel.tick( this.gameClock, worldEntityDescription );
 		},

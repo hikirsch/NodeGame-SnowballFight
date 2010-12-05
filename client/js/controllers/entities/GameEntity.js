@@ -11,7 +11,7 @@ Abstract:
  	A lot of what im trying here comes from this:
 	Valve Source SDK Network Entities
  	http://developer.valvesoftware.com/wiki/Networking_Entities
- 
+
 Basic Usage:
 		var newCharacter = new CharacterController(aClientID, this.fieldRect);
 
@@ -34,7 +34,7 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
 			console.log("(GameEntity)::initialize - ");
-			
+
 			this.fieldController = aFieldController;
 
 			// Meta information
@@ -43,7 +43,7 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 			this.objectID = anObjectID;				// Everything the server creates an object it assigns this number to it
 
 			// Movement vector quantities
-			this.position = new Vector();
+			this.position = new Vector(-100, -100);
 			this.velocity = new Vector( 0, 0 );		// Rolling velocity
 			this.acceleration = new Vector( 0, 0 );	// All combined forced. reset every tick
 
@@ -58,10 +58,6 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 //			this.isFixed = false; 					// Objects cannot go through us if they collide (for example a tree)
 		},
 
-		hasView: function()
-		{
-			return this.view != null;
-		},
 
 		/**
 		 * Creates the field view, used by the AbstractClientGame
@@ -77,15 +73,16 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 			}
 		},
 
-
-		getView: function()
+		/**
+		 * Creates the event-listener function for handling collisions
+		 * Note: This only is called on the server side
+		 * @param aPackedCircle A PackedCircle which is tied to (and represents in the collision system) this entity
+		 */
+		setupCollisionEvents: function(aPackedCircle)
 		{
-			if( ! this.view )
-			{
-				this.createView();
-			}
-
-			return this.view;
+			aPackedCircle.collisionBitfield = this.collisionBitfield;
+			aPackedCircle.position = this.position;
+			aPackedCircle.eventEmitter.on("collision", this.onCollision);
 		},
 
 		/**
@@ -103,37 +100,40 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 		},
 
 
+		onCollision: function(ourCircle, otherCircle, collisionInverseNormal)
+		{
+			console.log('GOT IT!');
+			otherCircle.view.position.mul(0);
+		},
+		
 		/**
 		 * Update, use delta to create frame independent motion
 		 * @param speedFactor	A normalized value our ACTUAL framerate vs our desired framerate. 1.0 means exactly correct, 0.5 means we're running at half speed
 		 * @param gameClock		The current gameclock
 		 */
 		tick: function(speedFactor, gameClock)
-		{			
+		{
 			if(this.view)
 			{
 				this.view.update();
 			}
 			else
 			{
-				// Adjust to speedFactor
-				this.acceleration.mul(speedFactor);
-
-				// Add acceleration to velocity and velocity to the current position
-				this.velocity.add(this.acceleration);
 				this.updatePosition(speedFactor);
 			}
 		},
 
+		/**
+		 * Updates the position of this gameentity based on it's movement properties (velocity, acceleration, damping)
+		 * @param speedFactor Float for considering framerate speedFactor, 1.0 means perfectly accurate.
+		 */
 		updatePosition: function(speedFactor)
 		{
-//			console.log("Velocity:", this.velocity, " Accel:", this.acceleration);
-			
-			// Store previous position
-			var prevPosition = {
-				x: this.position.x,
-				y: this.position.y
-			};
+			// Adjust to speedFactor
+			this.acceleration.mul(speedFactor);
+
+			// Add acceleration to velocity and velocity to the current position
+			this.velocity.add(this.acceleration);
 
 			this.position.x += this.velocity.x * speedFactor;
 			this.position.y += this.velocity.y * speedFactor;
@@ -152,6 +152,7 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 				this.position.y = this.fieldController.getHeight();
 			}
 
+			// Cap velocity
 			this.velocity.limit(this.maxVelocity);
 
 			// Apply damping force
@@ -160,8 +161,6 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 
 			this.calculateRotation();
 			this.acceleration.x = this.acceleration.y = 0;
-
-			return ( this.position.x != prevPosition.x ) || ( this.position.y != prevPosition.y );
 		},
 
 
@@ -189,8 +188,10 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 
 		deconstructFromEntityDescription: function(anEntityDescription)
 		{
+			// TODO: This does nothing now, but should be able to parse entity description and set up own properties
 //			throw("All GameEntity subclasses must override this method.");
 		},
+
 
 		/**
 		 * Accessors
@@ -202,6 +203,21 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 
 		getPosition: function() {
 			return this.position;
+		},
+
+		hasView: function()
+		{
+			return this.view != null;
+		},
+
+		getView: function()
+		{
+			if( ! this.view )
+			{
+				this.createView();
+			}
+
+			return this.view;
 		}
 	});
 };

@@ -50,6 +50,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 		{
 			var characterClass = this.entityTypes.objectForKey(aCharacterType), // Retrieve class from sorted table
 				aNewCharacter = new characterClass(anObjectID, aClientID, aFieldController);
+			
 			aNewCharacter.collisionBitfield = this.collisionBitmask.Projectile & this.collisionBitmask.CollidableLevelObject;
 
 			return aNewCharacter;

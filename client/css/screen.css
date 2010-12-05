@@ -49,4 +49,4 @@ html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-
 
 #logger { font-family: monospace; padding: 20px; position: absolute; left: 0; bottom: 0; height: 160px; width: 1000px; background-color: #000; color: #fff; }
 
-.game-container .game-entity-view { position: absolute; height: 10px; width: 10px; background-color: #00f; }
+.game-container .game-entity-view { background-image: url( '../img/entities/snowball.png' ); position: absolute; height: 32px; width: 32px;}

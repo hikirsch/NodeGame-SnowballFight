@@ -54,22 +54,28 @@ var init = function(Vector, PackedCircle)
 	PackedCircleManager.prototype.addCircle = function(aCircle)
 	{
 		this.allCircles.push(aCircle);
+
+		if(this.dispatchCollisionEvents)
+			aCircle.createEventEmitter();
+		
 		// aCircle.targetPosition = this.desiredTarget.cp();
 	};
 
-	/**
-	 * Place all circles randomly within the boundary
-	 */
-	PackedCircleManager.prototype.randomizeCirclePositions = function()
-	{
-		for(var i = 0; i < this.allCircles.length; i++)
-		{
-			var ci = this.allCircles[i];
-			var randomPosition = new Vector(0,0);
-			randomPosition.x = this.randRange(this.bounds.left, this.bounds.right);
-			randomPosition.y = this.randRange(this.bounds.top, this.bounds.bottom);
 
-			ci.setPosition(randomPosition);			
+	/**
+	 * Forces all circles to move to where their target's position is
+	 * Assumes all targets have a 'position' property!
+	 */
+	PackedCircleManager.prototype.forceCirclesToMatchViewPositions = function()
+	{
+		len = this.allCircles.length;
+		// push toward target position
+		for(var n = 0; n < this.numberOfCenteringPasses; n++)
+		{
+			var c = this.allCircles[i];
+			if(!c.view) continue;
+
+			c.position = c.view.position;
 		}
 	};
 
@@ -81,14 +87,12 @@ var init = function(Vector, PackedCircle)
 	{
 		var v = new Vector(0, 0);
 
-		var dragCircle = this.draggedCircle;
-		var circleList = this.allCircles;
+		var dragCircle = this.draggedCircle,
+			circleList = this.allCircles,
+			len = circleList.length;
+
 //		circleList.sort(this.sortOnDistanceToCenter);
 
-		var len = circleList.length;
-
-
-//		console.log(this.numberOfCenteringPasses)
 		// push toward target position
 		for(var n = 0; n < this.numberOfCenteringPasses; n++)
 		{
@@ -170,8 +174,9 @@ var init = function(Vector, PackedCircle)
 						// Emit the collision event from each circle, with itself as the first parameter
 						if(this.dispatchCollisionEvents)
 						{
-							ci.eventeEmitter.emit('collision', ci, cj, v);
-							cj.eventeEmitter.emit('collision', cj, ci, v);
+							console.log('Collision!')
+							ci.eventEmitter.emit('collision', ci, cj, v);
+							cj.eventEmitter.emit('collision', cj, ci, v);
 						}
 					}
 				}
@@ -179,21 +184,6 @@ var init = function(Vector, PackedCircle)
 		}
 	};
 
-
-	/**
-	 * Determins if two circles should collide by comparing tha they are not equal,
-	 * and collision bitmask of each determines they want to collide
-	 * @param circleA	A circle that wants to collide with circleB
-	 * @param circleB 	A circle that wants to collide with circleA
-	 */
-	PackedCircleManager.prototype.circlesShouldCollide = function(circleA, circleB)
-	{
-		if(circleA == circleB) return false;
-		if(circleA.isFixed & circleB.isFixed) return false;
-
-		
-		return true;
-	},
 
 	PackedCircleManager.prototype.handleBoundaryForCircle = function(aCircle, boundsRule)
 	{
@@ -207,7 +197,6 @@ var init = function(Vector, PackedCircle)
 
 		// Toggle these on and off,
 		// Wrap and bounce, are opposite behaviors so pick one or the other for each axis, or bad things will happen.
-
 		var wrapXMask = 1 << 0;
 		var wrapYMask = 1 << 2;
 		var constrainXMask = 1 << 3;
@@ -249,20 +238,19 @@ var init = function(Vector, PackedCircle)
 	};
 
 	/**
-	 * Returns the comaprison result for two circles based on their distance from their target location
-	 * @param circleA	First Circle	
-	 * @param circleB
+	 * Place all circles randomly within the boundary
 	 */
-	PackedCircleManager.prototype.sortOnDistanceToCenter = function(circleA, circleB)
+	PackedCircleManager.prototype.randomizeCirclePositions = function()
 	{
-		var valueA = circleA.distanceSquaredFromTargetPosition();
-		var valueB = circleB.distanceSquaredFromTargetPosition();
-		var comparisonResult = 0;
+		for(var i = 0; i < this.allCircles.length; i++)
+		{
+			var ci = this.allCircles[i];
+			var randomPosition = new Vector(0,0);
+			randomPosition.x = this.randRange(this.bounds.left, this.bounds.right);
+			randomPosition.y = this.randRange(this.bounds.top, this.bounds.bottom);
 
-		if(valueA > valueB) comparisonResult = -1;
-		else if(valueA < valueB) comparisonResult = 1;
-
-		return comparisonResult;
+			ci.setPosition(randomPosition);
+		}
 	};
 
 	/**
@@ -323,6 +311,38 @@ var init = function(Vector, PackedCircle)
 		this.draggedCircle.radius = this.draggedCircle.originalRadius*2;
 		return closestCircle;
 	};
+
+	/**
+	 * Returns the comaprison result for two circles based on their distance from their target location
+	 * @param circleA	First Circle
+	 * @param circleB
+	 */
+	PackedCircleManager.prototype.sortOnDistanceToCenter = function(circleA, circleB)
+	{
+		var valueA = circleA.distanceSquaredFromTargetPosition();
+		var valueB = circleB.distanceSquaredFromTargetPosition();
+		var comparisonResult = 0;
+
+		if(valueA > valueB) comparisonResult = -1;
+		else if(valueA < valueB) comparisonResult = 1;
+
+		return comparisonResult;
+	};
+
+	/**
+	 * Determins if two circles should collide by comparing tha they are not equal,
+	 * and collision bitmask of each determines they want to collide
+	 * @param circleA	A circle that wants to collide with circleB
+	 * @param circleB 	A circle that wants to collide with circleA
+	 */
+	PackedCircleManager.prototype.circlesShouldCollide = function(circleA, circleB)
+	{
+		if(circleA == circleB) return false;
+		if(circleA.isFixed & circleB.isFixed) return false;
+
+
+		return true;
+	},
 
 	/**
 	 * Helper functions

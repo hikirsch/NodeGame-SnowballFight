@@ -36,7 +36,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.entityType = GAMECONFIG.ENTITY_MODEL.CHARACTER;			// Type
 
 			// some defaults we use for position
-			this.position = new Vector( Math.random() * this.fieldController.getWidth(), Math.random() * this.fieldController.getHeight() );
+			this.position = new Vector(-100, -100);
 
 			// move constants
 			// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime

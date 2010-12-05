@@ -103,17 +103,18 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		addEntity: function(anEntity)
 		{
-			console.log('(FieldController PackedCircle:', aPackedCircle);
-
 			this.allEntities.setObjectForKey( anEntity, anEntity.objectID );
 
 			// If we have a circle collision manager - create a acked circle and add it to that
-			if(this.packedCircleManager) {
+			if(this.packedCircleManager)
+			{
+				// Create the PackedCircle
 				var aPackedCircle = new PackedCircle( anEntity, anEntity.radius );
-				aPackedCircle.collisionBitfield = anEntity.collisionBitfield;
-				aPackedCircle.position = anEntity.position;
 
+				// Allow the entity to setup the collision callback, and set some properties inside aPackedCircle
+				// (Note) Entities do not store a reference to packedCircle. (although im set in stone about this one yet)
 				this.packedCircleManager.addCircle(aPackedCircle);
+//				anEntity.setupCollisionEvents(aPackedCircle);
 			}
 
 

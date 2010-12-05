@@ -12,7 +12,7 @@ Basic Usage:
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
 
-var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
+var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGame)
 {
 
 	return new JS.Class(AbstractGame,
@@ -70,12 +70,17 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 		renderAtTime: function(renderTime)
 		{
 			var cmdBuffer = this.netChannel.incommingCmdBuffer;
+				len = cmdBuffer.length;
 
-			var len = cmdBuffer.length;
 			if( len < 2 ) return false; // Nothing to do!
 
-			var nextAfterTime = null;
-			var previousBeforeTime = null;
+			// if the distance between prev and next is too great - don't interpolate
+			var maxInterpolationDistance = 20,
+				maxInterpolationDistanceSquared = maxInterpolationDistance*maxInterpolationDistance;
+
+			// Store the next WED before and after the desired render time
+			var nextWorldEDAfterRenderTime = null,
+				previousWorldEDBeforeRenderTime = null;
 
 			// Loop through the points, until we find the first one that has a timeValue which is greater than our renderTime
 			// Knowing that then we know that the combined with the one before it - that passed our just check - we know we want to render ourselves somehwere between these two points
@@ -86,14 +91,14 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 				// We fall between this "currentWorldEntityDescription", and the last one we just checked
 				if( currentWorldEntityDescription.gameClock >= renderTime ) {
-					previousBeforeTime = cmdBuffer[i-1];
-					nextAfterTime = currentWorldEntityDescription;
+					previousWorldEDBeforeRenderTime = cmdBuffer[i-1];
+					nextWorldEDAfterRenderTime = currentWorldEntityDescription;
 					break;
 				}
 			}
 
 			// Could not find two points to render between
-			if(nextAfterTime == null || previousBeforeTime == null) {
+			if(nextWorldEDAfterRenderTime == null || previousWorldEDBeforeRenderTime == null) {
 				return false;
 			}
 
@@ -113,8 +118,8 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			 * t = 0.16
 			 */
 
-			var durationBetweenPoints = (nextAfterTime.gameClock - previousBeforeTime.gameClock);
-			var offsetTime = renderTime - previousBeforeTime.gameClock;
+			var durationBetweenPoints = (nextWorldEDAfterRenderTime.gameClock - previousWorldEDBeforeRenderTime.gameClock);
+			var offsetTime = renderTime - previousWorldEDBeforeRenderTime.gameClock;
 			var activeEntities = {};
 			
 			// T is where we fall between, as a function of these two points
@@ -124,9 +129,11 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 
 
 
-			for( var objectID in nextAfterTime )
+			var entityPositionBeforeRenderTime = new Vector(0,0);
+			var entityPositionAfterRenderTime = new Vector(0,0);
+			for( var objectID in nextWorldEDAfterRenderTime )
 			{
-				var entityDesc = nextAfterTime[objectID]; // Store the entity description
+				var entityDesc = nextWorldEDAfterRenderTime[objectID]; // Store the entity description
 
 				// Catch garbage values
 				if(!entityDesc.hasOwnProperty('objectID'))
@@ -161,18 +168,25 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				}
 				else // We already have this entity - update it
 				{
-					var prevEntityDesc = previousBeforeTime[objectID];
+					var prevEntityDesc = previousWorldEDBeforeRenderTime[objectID];
 
 					// Store positions before and after to compare below
-					var prevTimeX = previousBeforeTime[ objectID ].x;
-					var prevTimeY = previousBeforeTime[ objectID ].y;
-					var nextTimeX = nextAfterTime[ objectID ].x;
-					var nextTimeY = nextAfterTime[ objectID ].y;
+					// before
+					entityPositionBeforeRenderTime.x = previousWorldEDBeforeRenderTime[ objectID ].x;
+					entityPositionBeforeRenderTime.y = previousWorldEDBeforeRenderTime[ objectID ].y;
+					// after
+					entityPositionAfterRenderTime.x = nextWorldEDAfterRenderTime[ objectID ].x;
+					entityPositionAfterRenderTime.y = nextWorldEDAfterRenderTime[ objectID ].y;
+
+					// if the distance between prev and next is too great - don't interpolate					
+					if(entityPositionBeforeRenderTime.distanceSquared(entityPositionAfterRenderTime) > maxInterpolationDistanceSquared) {
+						t = 1;
+					}
 
 					// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
 					var newCoordinates = {
-						x: ( (nextTimeX - prevTimeX) * t ) + prevTimeX,
-						y: ( (nextTimeY - prevTimeY) * t ) + prevTimeY
+						x: ( (entityPositionAfterRenderTime.x - entityPositionBeforeRenderTime.x) * t ) + entityPositionBeforeRenderTime.x,
+						y: ( (entityPositionAfterRenderTime.y - entityPositionBeforeRenderTime.y) * t ) + entityPositionBeforeRenderTime.y
 					};
 
 					this.fieldController.updateEntity( objectID, newCoordinates );
@@ -273,4 +287,4 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 	});
 };
 
-define(['network/NetChannel', 'view/GameView', 'lib/joystick', 'config',  'controllers/AbstractGame', 'lib/jsclass/core'], init);
+define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/joystick', 'config',  'controllers/AbstractGame', 'lib/jsclass/core'], init);

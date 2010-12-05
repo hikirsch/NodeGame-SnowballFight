@@ -15,11 +15,16 @@
  Basic Usage:
 	http://onedayitwillmake.com/CirclePackJS/
 */
-var init = function(Vector)
+var init = function(Vector, EventEmitter)
 {
 
 	var PackedCircle = function(view, radius)
 	{
+//		if(EventEmitter) {
+//			console.log( require('events') );
+//		} else{
+//			console.log(EventEmitter)
+//		}
 		// Data
 		this.view = view;
 
@@ -38,12 +43,20 @@ var init = function(Vector)
 
 		this.isFixed = false; // If fixed it can collide with something but is never moved!
 		this.collisionBitfield = 0;
-
-		// For now event dispatching only works in Node.js
-		if(EventEmitter) {
-			this.eventeEmitter = new EventEmitter();
-		}
+		this.eventEmitter = null;
 	};
+
+	PackedCircle.prototype.createEventEmitter = function ()
+	{
+		this.eventEmitter = new EVENTS.EventEmitter();
+		this.eventEmitter.addListener("newListener", function (event, listener)
+		{
+			// In case we care about when a new listener is added
+		});
+
+		if(this.view)
+			this.view.setupCollisionEvents(this)
+	},
 
 	PackedCircle.prototype.setPosition = function(aPosition)
 	{
@@ -96,9 +109,10 @@ var init = function(Vector)
 if(typeof window === 'undefined') {
 	require('../jsclass/core.js');
 	require('../Vector.js');
-
-	var EventEmitter = require('events').EventEmitter;	
+	EVENTS= require('events');
+	
+	//if(typeof window === 'undefined') {
 	PackedCircle = init(Vector);
 } else {
-	define(['lib/Vector', 'lib/jsclass/core'], init);
+	define(['lib/Vector'], init);
 }
