@@ -27,7 +27,7 @@ Basic Usage:
 		this.view.addCharacter(newCharacter.initView());
 */
 
-var init = function(Vector, Rectangle, FieldController)
+var init = function(Vector, Rectangle, FieldController, EntityView)
 {
 	return new JS.Class(
 	{
@@ -54,12 +54,39 @@ var init = function(Vector, Rectangle, FieldController)
 			// Flags
 			this.collisionBitfield = 0;
 			this.radius = 5;
-			
 //			this.isCollidable = false;				// Objects can collide against us, but they might be able to go through us ( For example, a puddle )
 //			this.isFixed = false; 					// Objects cannot go through us if they collide (for example a tree)
 		},
 
+		hasView: function()
+		{
+			return this.view != null;
+		},
 
+		/**
+		 * Creates the field view, used by the AbstractClientGame
+		 * @param aGameView
+		 */
+		createView: function()
+		{
+			// if our game has a view, then create one
+			if( this.fieldController.hasView() )
+			{
+				this.view = new EntityView(this, 'smash-tv');
+				console.log("creating entity view");
+			}
+		},
+
+
+		getView: function()
+		{
+			if( ! this.view )
+			{
+				this.createView();
+			}
+
+			return this.view;
+		},
 
 		/**
 		 * Based on the velocity that we're going at, we calculate the angle that we should be currently pointing at since
@@ -185,9 +212,10 @@ if (typeof window === 'undefined') {
 	require('../../lib/Rectangle');
 	require('../../lib/Vector');
 	require('../FieldController');
+
 	GameEntity = init(Vector, Rectangle, FieldController);
 } else {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'lib/jsclass/core'], init);
+	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'view/EntityView', 'lib/jsclass/core'], init);
 }

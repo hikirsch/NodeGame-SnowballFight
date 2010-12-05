@@ -44,6 +44,11 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			var that = this; // Temporarily got rid of bind (had some bug with it), feel free to add back in -
 			this.gameTickInterval = setInterval(function(){that.tick()}, this.targetDelta);
 		},
+
+		hasView: function()
+		{
+			return this.view != null;
+		},
 		
 		/**
 		 * Tick tock, the clock is running! Make everyone do stuff.

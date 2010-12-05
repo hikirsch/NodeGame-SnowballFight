@@ -21,12 +21,12 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 		{
 			this.callSuper();
 
+			this.createView();
+			this.fieldController.createView();
+			
 			// we need to create our view first before we call our super constructor so that our
 			// super class knows to create the view for anything else it needs, this is primarily
 			// for the field controller since this element is being shared between client/server
-			this.view = new GameView(this);
-			this.fieldController.createView();
-
 			this.netChannel = new NetChannel(config, this);
 
 			this.clientCharacter = null; // Special pointer to our own client character
@@ -36,6 +36,11 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
+		},
+
+		createView: function()
+		{
+			this.view = new GameView(this);
 		},
 
 		/**

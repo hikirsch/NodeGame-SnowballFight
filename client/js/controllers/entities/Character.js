@@ -43,16 +43,21 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.moveSpeed = 0.2;
 			this.maxVelocity = 3.5; // the fastest i can go
 
-			// if the field we're being placed in has a field, then we'll go into it
-			if( this.fieldController.view ) {
-
-				// init the view, pass ourselves as the controller
-				this.view = new CharacterView( this, 'smash-tv' );
-			}
+			this.createView();
 
 			// Firing
 			this.fireRate = 500;
 			this.lastFireTime = 0;
+		},
+
+		createView: function()
+		{
+			// if our game has a view, then create one
+			if( this.fieldController.hasView() )
+			{
+				this.view = new CharacterView(this, 'smash-tv');
+				console.log("creating character view");
+			}
 		},
 
 		/**

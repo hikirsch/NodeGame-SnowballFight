@@ -45,7 +45,6 @@ define(['factories/HTMLFactory', 'lib/jsclass/core'], function(HTMLFactory)
 				theme: this.theme
 			};
 
-
 			this.element = HTMLFactory.character(options);
 
 			// show the right default rotation and sprite class

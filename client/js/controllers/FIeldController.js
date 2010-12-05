@@ -14,6 +14,13 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			// Might do away with different types of entities tables
 			this.allEntities = new SortedLookupTable();
 			this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (websocket connection) not the objectID
+
+			this.createView();
+		},
+
+		hasView: function()
+		{
+			return this.view != null;
 		},
 
 		/**
@@ -23,7 +30,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		createView: function(aGameView)
 		{
 			// if our game has a view, then create one
-			if( this.gameController.view )
+			if( this.gameController.hasView() )
 			{
 				this.view = new FieldView(this);
 			}
@@ -96,8 +103,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 			console.log('(FieldController PackedCircle:', aPackedCircle);
 			// If we have a view, then add the player to it
+
 			if( this.view ) {
-				this.view.addEntity( anEntity.view );
+				this.view.addEntity( anEntity.getView('smash-tv') );
 			}
 
 		},

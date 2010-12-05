@@ -1,4 +1,4 @@
-var init = function( $, serverUnavailable, joinGame, character, field  ) {
+var init = function( $, serverUnavailable, joinGame, character, field, entity  ) {
 		return {
 			serverUnavailableDialog: function() {
 				return $(serverUnavailable);
@@ -17,6 +17,12 @@ var init = function( $, serverUnavailable, joinGame, character, field  ) {
 
 			field: function() {
 				return $(field);
+			},
+
+			entity: function(data, theme) {
+				return $(entity)
+					.tmpl(data)
+					.addClass( theme );
 			}
 		};
 	}
@@ -26,6 +32,7 @@ define(
 		'text!html/server-unavailable.html', 'text!html/join-game.html',
 		'text!html/character.html',
 		'text!html/field.html',
+		'text!html/entity.html',
 		'plugins/jquery.tmpl.min' /** this should be last **/
 ], init);
 
