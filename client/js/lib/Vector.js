@@ -53,6 +53,13 @@ var init = function()
 
 		},
 
+		addXY: function(argX, argY)
+		{
+		    this.x += argX;
+		    this.y += argY;
+		    return this;
+		},
+
 		addNew: function(vec)
 		{
 
@@ -95,7 +102,12 @@ var init = function()
 
 		},
 
-		// angle in radians... again
+		set: function(newX, newY)
+		{
+			this.x = newX, this.y = newY;
+		},
+
+		// RADIANS
 		setAngle: function(angle)
 		{
 
@@ -191,20 +203,36 @@ var init = function()
 
 		},
 
+
+		distance: function(vec)
+		{
+			var deltaX = this.x - vec.x;
+			var deltaY = this.y - vec.y;
+			return Math.sqrt( (deltaX * deltaX) + (deltaY * deltaY) );
+		},
+
+		distanceSquared: function(vec)
+		{
+			var deltaX = this.x - vec.x;
+			var deltaY = this.y - vec.y;
+			return (deltaX * deltaX) + (deltaY * deltaY);
+		},
+
 		is: function(test)
 		{
 
 
-		    return typeof test == 'object' && this.x == test.x && this.y == test.y;
+			return typeof test == 'object' && this.x == test.x && this.y == test.y;
 
 		},
 
 		toString: function()
 		{
 
-		    return '[Vector(' + this.truncateAndReturnString(this.x) + ', ' + this.truncateAndReturnString(this.y) + ') angle: ' + this.truncateAndReturnString(this.angle())  + ', length: ' + this.truncateAndReturnString( this.length())  + ']';
+			return '[Vector(' + this.x + ', ' + this.y + ') angle: ' + this.angle() + ', length: ' + this.length() + ']';
 
 		},
+		
 
 		truncateAndReturnString: function(aValue)
 		{
