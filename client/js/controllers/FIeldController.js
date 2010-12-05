@@ -7,15 +7,13 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			console.log('(FieldController)::initialize');
 
 			this.gameController = game;
-
-			this.packedCircleManager = new PackedCircleManager(0,4);
 			this.rectangle = new Rectangle(0, 0, 640, 480);
+
+			this.packedCircleManager = null;
 
 			// Might do away with different types of entities tables
 			this.allEntities = new SortedLookupTable();
 			this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (websocket connection) not the objectID
-
-			this.createView();
 		},
 
 		hasView: function()
@@ -23,6 +21,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			return this.view != null;
 		},
 
+		
 		/**
 		 * Creates the field view, used by the AbstractClientGame
 		 * @param aGameView
@@ -30,17 +29,26 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		createView: function(aGameView)
 		{
 			// if our game has a view, then create one
-			if( this.gameController.hasView() )
+			if( this.gameController.view )
 			{
 				this.view = new FieldView(this);
 			}
 		},
-		
+
+		/**
+		 * Create the PackedCircleManager
+		 * This is only created on the server side
+		 */
+		createPackedCircleManager: function()
+		{
+			this.packedCircleManager = new PackedCircleManager( {centeringPasses: 0, collisionPasses: 1, dispatchCollisionEvents: true});
+		},
+
 		createAndAddEntityFromDescription: function( anEntityDescription )
 		{
 			var anEntity = null;
 			if( anEntityDescription.entityType != GAMECONFIG.ENTITY_MODEL.PROJECTILE ) {
-				console.log("(FieldController) Don't know how to handle entity type: '" + anEntityDescription.entityType + "'! Ignoring... ");
+				console.log("(FieldController): Don't know how to handle entity type: '" + anEntityDescription.entityType + "'! Ignoring... ");
 				return 0;
 			}
 
@@ -70,7 +78,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 * Fires a projectile from a character.
 		 * Note: This is only called on the servers version of the game.
 		 * @param aCharacter		The character which fired the projectile
-		 * @param aProjectileModel	A Projectile Model containing information for this projectile such as force, maxspeed, angle etc 
+		 * @param aProjectileModel	A Projectile Model containing information for this projectile such as force, maxspeed, angle etc
 		 */
 		fireProjectileFromCharacterUsingProjectileModel: function( aCharacter, aProjectileModel )
 		{
@@ -84,7 +92,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			var impulseVector = new Vector(Math.cos(currentAngle) * -impulseForce, Math.sin(currentAngle) * -impulseForce);
 
 //			aCharacter.velocity.mul(0);
-			aCharacter.acceleration.add( impulseVector );			
+			aCharacter.acceleration.add( impulseVector );
 			return aNewProjectile;
 		},
 
@@ -95,15 +103,21 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		addEntity: function(anEntity)
 		{
+			console.log('(FieldController PackedCircle:', aPackedCircle);
+
 			this.allEntities.setObjectForKey( anEntity, anEntity.objectID );
 
-			var aPackedCircle = new PackedCircle( anEntity, anEntity.radius );
-			aPackedCircle.collisionBitfield = anEntity.collisionBitfield;
-			aPackedCircle.position = anEntity.position;
+			// If we have a circle collision manager - create a acked circle and add it to that
+			if(this.packedCircleManager) {
+				var aPackedCircle = new PackedCircle( anEntity, anEntity.radius );
+				aPackedCircle.collisionBitfield = anEntity.collisionBitfield;
+				aPackedCircle.position = anEntity.position;
 
-			console.log('(FieldController PackedCircle:', aPackedCircle);
+				this.packedCircleManager.addCircle(aPackedCircle);
+			}
+
+
 			// If we have a view, then add the player to it
-
 			if( this.view ) {
 				this.view.addEntity( anEntity.getView('smash-tv') );
 			}
