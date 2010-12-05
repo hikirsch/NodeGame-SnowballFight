@@ -17,8 +17,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 		initialize: function(anObjectID, aClientID, aFieldController, projectileModel, force)
 		{
 			this.callSuper(anObjectID, aClientID, aFieldController);
-
-			this.entityType = 'Projectile';
+			this.entityType = GAMECONFIG.ENTITY_MODEL.PROJECTILE; // 			
 
 			this.position = new Vector( Math.random() * this.fieldController.getWidth(), Math.random() * this.fieldController.getHeight() );
 
