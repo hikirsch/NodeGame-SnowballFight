@@ -59,9 +59,8 @@ var init = function()
 }; // close init()
 
 
-require('../controllers/ServerGame.js');
-require('../network/ServerNetChannel.js');
-require('../lib/Logger.js');
-require('../../client/js/lib/jsclass/core.js');
-var sys = require('sys');
+require('js/lib/jsclass/core.js');
+require('controllers/ServerGame.js');
+require('network/ServerNetChannel.js');
+require('lib/Logger.js');
 Server = init();

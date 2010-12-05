@@ -121,8 +121,8 @@ var init = function()
 
 // Handle Node.JS and browser
 if (typeof window === 'undefined') {
-	require('../../client/js/lib/jsclass/core.js');
-	require('../lib/bison.js');
+	require('js/lib/jsclass/core.js');
+	require('js/lib/bison.js');
 	Client = init();
 }
 

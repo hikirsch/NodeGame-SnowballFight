@@ -1,9 +1,11 @@
+
+// Use ArgHelper to get optional command line arguments
+var ArgHelper = require('./lib/ArgHelper.js');
+SYS = require('sys');  // This is a really good example of when a global, is actually the best option!
+
 /**
 * Optionally creates an HTTP server if dictated in args
 **/
-// Use ArgHelper to get optional command line arguments
-var ArgHelper = require('./lib/ArgHelper.js');
-
 var createHTTPServer = ArgHelper.getArgumentByNameOrSetDefault( 'createHTTPServer', false );
 if( createHTTPServer ) {
 	var port = ArgHelper.getArgumentByNameOrSetDefault( 'port', 12345 );
@@ -13,13 +15,16 @@ if( createHTTPServer ) {
 }
 
 /**
-* Start the actual node server.
+* Start the node server.
 */
-SYS = require('sys');
-var config = require('../client/js/config.js').Config;
-var serverConfig = require('./serverConfig.js').Config;
-require('../client/js/scratchpad/Animal.js');
-require('./network/Server.js');
+// Add our two paths here for a more 'import' like syntax when requiring files
+require.paths.unshift('./');
+require.paths.unshift('../client'); // We still want to know when we're going into client/, however we don't want ../../../client/
+
+
+require('network/Server.js');
+var config = require('js/config.js').Config;
+var serverConfig = require('serverConfig.js').Config;
 var serverInstance = new Server(config, serverConfig);
 
 

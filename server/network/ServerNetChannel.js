@@ -31,13 +31,11 @@ Basic Usage:
 	netChannel.start();
 */
 
-var sys = require('sys');
-var ws = require('./ws.js');
-var BISON = require('../lib/bison.js');
-
-require('../../client/js/lib/jsclass/core.js');
-require('../../client/js/lib/SortedLookupTable.js');
-require('../model/Client.js');
+var ws = require('network/ws.js');
+require('js/lib/bison.js');
+require('js/lib/jsclass/core.js');
+require('js/lib/SortedLookupTable.js');
+require('model/Client.js');
 
 ServerNetChannel = (function()
 {
@@ -61,9 +59,6 @@ ServerNetChannel = (function()
 				sent: 0,
 				received: 0
 			};
-
-
-
 		    // Connections
 		    this.clients = new SortedLookupTable();		// Everyone connected
 		    this.clientCount = 0;	// Length of above

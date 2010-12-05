@@ -15,10 +15,10 @@
  Basic Usage:
  // TODO: FILL OUT
  */
-require('../../client/js/lib/jsclass/core.js');
-require('../../client/js/lib/SortedLookupTable.js');
-require('../../client/js/controllers/entities/GameEntity');
-require('../controllers/ServerGame');
+require('js/lib/jsclass/core.js');
+require('js/lib/SortedLookupTable.js');
+require('js/controllers/entities/GameEntity');
+require('controllers/ServerGame');
 
 var init = function()
 {

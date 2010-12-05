@@ -252,10 +252,9 @@ function decode(data) {
     return d;
 }
 
-if (typeof window === 'undefined') {
-    exports.encode = encode;
-    exports.decode = decode;
-
+if (typeof window === 'undefined')
+{
+	BISON = {'encode': encode, 'decode': decode };
 } else {
     window['BISON'] = {
         'encode': encode,

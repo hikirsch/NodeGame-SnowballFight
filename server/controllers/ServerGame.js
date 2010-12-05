@@ -23,11 +23,11 @@ Version:
 */
 
 require('events');
-require('../../client/js/controllers/AbstractGame.js');
-require('../../client/js/lib/Joystick.js');
-require('../network/ServerNetChannel.js');
-require('../model/WorldEntityDescription.js');
-require('../lib/Logger.js');
+require('js/controllers/AbstractGame.js');
+require('js/lib/Joystick.js');
+require('network/ServerNetChannel.js');
+require('model/WorldEntityDescription.js');
+require('lib/Logger.js');
 
 ServerGame = (function()
 {
