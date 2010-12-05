@@ -13,14 +13,14 @@ var init = function(HTMLFactory)
 				.appendTo('body');
 		},
 
-		addPlayer: function( playerView )
+		addEntity: function( anEntityView )
 		{
-			playerView.getElement().appendTo( this.element );
+			anEntityView.getElement().appendTo( this.element );
 		},
 
-		removeEntity: function( entityView )
+		removeEntity: function( anEntityView )
 		{
-			entityView.getElement().remove();
+			anEntityView.getElement().remove();
 		},
 
 		getElement: function() {
