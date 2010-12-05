@@ -36,7 +36,13 @@ var init = function(Vector)
 		this.originalDivPosition = undefined;  // set by someone who created us
 		this.setRadius(radius);
 
+		this.isFixed = false; // If fixed it can collide with something but is never moved!
 		this.collisionBitfield = 0;
+
+		// For now event dispatching only works in Node.js
+		if(EventEmitter) {
+			this.eventeEmitter = new EventEmitter();
+		}
 	};
 
 	PackedCircle.prototype.setPosition = function(aPosition)
@@ -74,6 +80,11 @@ var init = function(Vector)
 		this.originalRadius = aRadius;
 	};
 
+	PackedCircle.prototype.onCollision = function(circleB, inverseCollisionNormal)
+	{
+
+	};
+	
 	PackedCircle.prototype.toString = function()
 	{
 		return '[PackedCircle(' + this.position.x + ', ' + this.position.y + ') Radius:' + this.radius + ']';
@@ -85,6 +96,8 @@ var init = function(Vector)
 if(typeof window === 'undefined') {
 	require('../jsclass/core.js');
 	require('../Vector.js');
+
+	var EventEmitter = require('events').EventEmitter;	
 	PackedCircle = init(Vector);
 } else {
 	define(['lib/Vector', 'lib/jsclass/core'], init);
