@@ -9,7 +9,7 @@ Abstract:
 	A generic character inside of our multiplayer game.
 	Anything too interesting should go in a subclass of this.
 
-	Contains a view which is grabbed by the GameController and placed into
+	Contains a view whic h is grabbed by the GameController and placed into
 	the game controllers view
 Basic Usage:
 		var newCharacter = new CharacterController(aClientID, this.fieldRect);
@@ -33,7 +33,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
 			this.callSuper();
-			this.entityType = 'Character';
+			this.entityType = GAMECONFIG.ENTITY_MODEL.CHARACTER;			// Type
 
 			// some defaults we use for position
 			this.position = new Vector( Math.random() * this.fieldController.getWidth(), Math.random() * this.fieldController.getHeight() );
@@ -94,7 +94,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 
 
 			// For now always fire the regular snowball
-			var projectileModel = ProjectileModel.superSnowball;
+			var projectileModel = ProjectileModel.defaultSnowball;
 			projectileModel.force = 1.0 ; // TODO: Use force gauge
 			
 			this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
