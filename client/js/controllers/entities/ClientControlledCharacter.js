@@ -11,7 +11,7 @@
  // TODO: FILL OUT
  */
 
-var init = function(Vector, Rectangle, FieldController, GameEntity, Character, ProjectileModel, Projectile, CharacterView)
+var init = function(Vector, Rectangle, Joystick, FieldController, GameEntity, Character, ProjectileModel, Projectile, CharacterView)
 {
 	/**
 	 * This is the clients character.
@@ -22,7 +22,10 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, Character, P
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
 			this.callSuper();
-			this.entityType = 'ClientControlledCharacter';
+
+			// This character is allowed to be controlled client side
+			this.setInput ( new Joystick() );
+			this.input.attachEvents();
 		},
 
 		/**
@@ -49,13 +52,14 @@ if (typeof window === 'undefined')
 	require('../../lib/jsclass/core.js');
 	require('../../lib/Vector');
 	require('../../lib/Rectangle');
+	require('../../lib/Joystick');
 	require('../FieldController');
 	require('../../model/ProjectileModel');
 	require('./Projectile');
 	require('./Character');
 	require('./GameEntity');
 
-	ClientControlledCharacter = init(Vector, Rectangle, FieldController, GameEntity, Character, ProjectileModel, Projectile, undefined);
+	ClientControlledCharacter = init(Vector, Rectangle, Joystick, FieldController, GameEntity, Character, ProjectileModel, Projectile, undefined);
 }
 else
 {
@@ -64,6 +68,7 @@ else
 	// Require.js will use this file's name to
 	define(['lib/Vector',
 		'lib/Rectangle',
+		'lib/Joystick',
 		'controllers/FieldController',
 		'controllers/entities/GameEntity',
 		'controllers/entities/Character',
