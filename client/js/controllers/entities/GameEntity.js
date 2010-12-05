@@ -33,12 +33,12 @@ var init = function(Vector, Rectangle, FieldController)
 	{
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
-			console.log("(GameEntity)::initialize");
+			console.log("(GameEntity)::initialize - ");
 			
 			this.fieldController = aFieldController;
 
 			// Meta information
-			this.entityType = 'GameEntity';			// Override in subclasses to
+			this.entityType = GAMECONFIG.ENTITY_MODEL.UNKNOWN;			// Type
 			this.clientID = aClientID;				// Client who created this object, 0 means it has no owner or the owner is the server
 			this.objectID = anObjectID;				// Everything the server creates an object it assigns this number to it
 
@@ -52,8 +52,11 @@ var init = function(Vector, Rectangle, FieldController)
 			this.rotation = 0;
 
 			// Flags
-			this.isCollidable = false;				// Objects can collide against us, but they might be able to go through us ( For example, a puddle )
-			this.isFixed = false; 					// Objects cannot go through us if they collide (for example a tree)
+			this.collisionBitfield = 0;
+			this.radius = 5;
+			
+//			this.isCollidable = false;				// Objects can collide against us, but they might be able to go through us ( For example, a puddle )
+//			this.isFixed = false; 					// Objects cannot go through us if they collide (for example a tree)
 		},
 
 
@@ -97,7 +100,7 @@ var init = function(Vector, Rectangle, FieldController)
 
 		updatePosition: function(speedFactor)
 		{
-			console.log("Velocity:", this.velocity, " Accel:", this.acceleration);
+//			console.log("Velocity:", this.velocity, " Accel:", this.acceleration);
 			
 			// Store previous position
 			var prevPosition = {
@@ -148,6 +151,7 @@ var init = function(Vector, Rectangle, FieldController)
 			return {
 				objectID: this.objectID,
 				clientID: this.clientID,
+				entityType: this.entityType,
 				x: this.position.x,
 				y: this.position.y,
 				vx: this.velocity.x,
