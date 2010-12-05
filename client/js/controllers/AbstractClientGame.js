@@ -47,13 +47,13 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			this.netChannel.tick( this.gameClock );
 			this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
 
-			// Continuously store information about this character
+			// Continuously store information about our input
 			if( this.clientCharacter != null )
 			{
 				var characterStatus = this.clientCharacter.constructEntityDescription();
 				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
 				
-//				create a message with our characters updated information and send it off
+				// create a message with our characters updated information and send it off
 				this.netChannel.addMessageToQueue( false, newMessage );
 			}
 		},
@@ -72,7 +72,7 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 			var nextAfterTime = null;
 			var previousBeforeTime = null;
 
-			// Loop thru the points, until we find the first one that has a timeValue which is greater than our renderTime
+			// Loop through the points, until we find the first one that has a timeValue which is greater than our renderTime
 			// Knowing that then we know that the combined with the one before it - that passed our just check - we know we want to render ourselves somehwere between these two points
 			var i = 0;
 			while(++i < len)
@@ -133,33 +133,28 @@ var init = function(NetChannel, GameView, Joystick, aConfig, AbstractGame)
 				if( !entity )
 				{
 					var connectionID = entityDesc.clientID,
-						typeOfCharacter = (connectionID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character'; // Create a special character for us
+						isCharacter  = entityDesc.entityType == GAMECONFIG.ENTITY_MODEL.CHARACTER,
+					    isOwnedByMe = connectionID == this.netChannel.clientID;
 
-
-					console.log( 'no entity', typeOfCharacter)
-					////newCharacter =
-//					var characterConfiguration = { 'objectID': objectID, 'connectionID': connectionID, 'typeOfCharacter': typeOfCharacter};
-					var newCharacter = this.shouldAddPlayer( objectID, connectionID, typeOfCharacter);
-
-//
-//					var newCharacter = this.
-//					var	input;
-
-					// It's us!
-					if(connectionID == this.netChannel.clientID)
+					// Take care of the special things we have to do when adding a character
+					if(isCharacter)
 					{
-						this.clientCharacter = newCharacter;
-						input = new Joystick();
-						input.attachEvents();
-						this.clientCharacter.setInput(input);
-					}
+						// This character actually belongs to us
+						var typeOfCharacter = (isOwnedByMe) ? 'ClientControlledCharacter' : 'Character',
+							aCharacter = this.shouldAddPlayer( objectID, connectionID, typeOfCharacter );
 
-					console.log("(AbstractClientGame) EntityCreated");
+						// Asign to this.clientCharacter if this character belongs to our connection 
+						this.clientCharacter = (isOwnedByMe) ? aCharacter : this.clientCharacter;
+					}
+					else // Every other kind of entity - is just a glorified view as far as the client game is concerned
+					{
+ 						this.fieldController.createAndAddEntityFromDescription(entityDesc);
+					}
 
 					// Place it where it will be
 					this.fieldController.updateEntity( objectID, {x: entityDesc.x,  y: entityDesc.y});
 				}
-				else
+				else // We already have this entity - update it
 				{
 					var prevEntityDesc = previousBeforeTime[objectID];
 
