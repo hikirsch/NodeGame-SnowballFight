@@ -1,13 +1,3 @@
-#NodeGame: Snowball Fight - Oneday Branch#
-
-This branch is a restructuring of all the code into modular pieces, and a reworking of the Client/Server communication
-to follow more standard Multiplayer game methodology.  
-
-Specifically it aims to mimic Quakeworld / Source-SDK network model which use interpolation, along with client side movement prediction for smooth network play.  
-### Everything i'm trying to do is based on the two links below:  
-[Quakeworld network model code review](http://www.fabiensanglard.net/quakeSource/quakeSourceNetWork.php)       
-[Valve Source-SDK networking documentation](http://developer.valvesoftware.com/wiki/Source_Multiplayer_Networking)
-
 ##License##
 
 Copyright (c) 2010 Ogilvy & Mather.
