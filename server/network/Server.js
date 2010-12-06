@@ -24,6 +24,7 @@ Version:
 
 
 require('js/lib/jsclass/core.js');
+require('js/model/GameModel.js');
 require('controllers/SnowGame.js');
 require('lib/Logger.js');
 Server = (function()
@@ -43,7 +44,7 @@ Server = (function()
 			for( var i = 0; i < 1; i += 1 )
 			{
 				// create our game
-				var aGameInstance = new SnowGame( this );
+				var aGameInstance = new SnowGame( this, GameModel );
 				// start the game
 				aGameInstance.start();
 				this.games[ i ] = aGameInstance;

@@ -227,7 +227,7 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		// Only the server can create client ID's - grab the one i returned for us;
 		this.clientID = serverMessage.id;
-		console.log('(NetChannel) Setting clientID to', this.clientID);
+		console.log('(NetChannel) Setting clientID to', this.clientID, serverMessage);
 
 		this.controller.netChannelDidConnect(serverMessage);
 	};
