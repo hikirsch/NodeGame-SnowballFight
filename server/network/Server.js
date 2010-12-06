@@ -22,7 +22,11 @@ Version:
 	1.0
 */
 
-var init = function()
+
+require('js/lib/jsclass/core.js');
+require('controllers/SnowGame.js');
+require('lib/Logger.js');
+Server = (function()
 {
 	return new JS.Class(
 	{
@@ -39,7 +43,7 @@ var init = function()
 			for( var i = 0; i < 1; i += 1 )
 			{
 				// create our game
-				var aGameInstance = new ServerGame( this );
+				var aGameInstance = new SnowGame( this );
 				// start the game
 				aGameInstance.start();
 				this.games[ i ] = aGameInstance;
@@ -56,11 +60,4 @@ var init = function()
 			this.logger.log( o );
 		} // Close prototype object
 	}); // Close .extend
-}; // close init()
-
-
-require('js/lib/jsclass/core.js');
-require('controllers/ServerGame.js');
-require('network/ServerNetChannel.js');
-require('lib/Logger.js');
-Server = init();
+})(); // close init()
