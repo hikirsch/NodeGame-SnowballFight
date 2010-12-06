@@ -28,7 +28,7 @@ require('network/ServerNetChannel.js');
 require('model/WorldEntityDescription.js');
 require('lib/Logger.js');
 
-ServerGame = (function()
+AbstractServerGame = (function()
 {
 	return new JS.Class(AbstractGame, {
 		initialize: function(aServer)
