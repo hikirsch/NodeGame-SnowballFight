@@ -1,14 +1,13 @@
 /**
 File:
-	ServerGameController.js
+	SnowGame.js
 Created By:
 	Mario Gonzalez
 Project:
 	Ogilvy Holiday Card 2010
 Abstract:
-	This class is incharge of the actual game, it is aware of all the players / objects that currently exist.
-	The servers version of the game, 'checks' all clients movements and internally handles collisions and informs clients
-Basic Usage: 
+	This is the GameController that is specific to OgilvyHolidayGame 2010
+Basic Usage:
 	var gameController = new ServerGameController({
 	    'port': Math.abs(ArgHelper.getArgumentByNameOrSetDefault('port', 28785)),
 	    'status': false,
@@ -17,7 +16,7 @@ Basic Usage:
 	    'server': null
 	});
 	gameController.run();
-	
+
 Version:
 	1.0
 */
@@ -29,7 +28,7 @@ require('network/ServerNetChannel.js');
 require('model/WorldEntityDescription.js');
 require('lib/Logger.js');
 
-ServerGame = (function()
+AbstractServerGame = (function()
 {
 	return new JS.Class(AbstractGame, {
 		initialize: function(aServer)
@@ -38,14 +37,14 @@ ServerGame = (function()
 			console.log('(ServerGame)::init');
 
 			this.fieldController.createPackedCircleManager();
-			
+
 			// Each time we create an entity we increment this
 			this.nextEntityID = 1;
 
 			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
 			this.server = aServer;
-			                          
+
 			// Each ServerNetChannel is owned by a single ServerGameInstance
 			this.netChannel = new ServerNetChannel(this, this.server.gameConfig);
 		},
@@ -60,7 +59,7 @@ ServerGame = (function()
 			this.callSuper();
 
 			this.fieldController.packedCircleManager.handleCollisions();
-			
+
 			// Create a new world-entity-description, could be some room for optimization here but it only happens once per game loop anyway
 			var worldEntityDescription = new WorldEntityDescription( this );
 			this.netChannel.tick( this.gameClock, worldEntityDescription );

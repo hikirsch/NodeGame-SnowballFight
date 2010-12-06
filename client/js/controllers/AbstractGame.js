@@ -20,9 +20,10 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 	{
 		include: JS.StackTrace,
 		
-		initialize: function(config)
+		initialize: function(config, model)
 		{
 			this.config = config;
+			this.model = model;
 
 			// our game takes place in a field
 			this.fieldController = new FieldController( this );
@@ -78,7 +79,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 		*/
 		addClient: function( aClientID, nickName )
 		{
-
+		   
 		},
 		
 		setNickNameForClientID: function(aNickName, aClientID) 

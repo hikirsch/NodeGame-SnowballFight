@@ -15,7 +15,7 @@
  Basic Usage:
 	http://onedayitwillmake.com/CirclePackJS/
 */
-var init = function(Vector, EventEmitter)
+var init = function(Vector)
 {
 
 	var PackedCircle = function(view, radius)
@@ -29,28 +29,27 @@ var init = function(Vector, EventEmitter)
 		this.position = new Vector(0,0);
 		this.previousPosition = new Vector(0,0);
 
-		// For the div stuff  - to avoid superflous movement calls
-	  	this.positionWithOffset = new Vector(0,0);
-
-		// Stored because transform3D is relative
-		this.originalDivPosition = undefined;  // set by someone who created us
 		this.setRadius(radius);
 
 		this.isFixed = false; // If fixed it can collide with something but is never moved!
-		this.collisionBitfield = 0;
+		this.collisionBitfield = 1;
 		this.eventEmitter = null;
 	};
 
 	PackedCircle.prototype.createEventEmitter = function ()
 	{
 		this.eventEmitter = new EVENTS.EventEmitter();
-		this.eventEmitter.addListener("newListener", function (event, listener)
-		{
-			// In case we care about when a new listener is added
-		});
 
-		if(this.view)
-			this.view.setupCollisionEvents(this)
+		if(this.view) {
+			this.view.setupCollisionEvents(this);
+		}
+
+		// Comment if needed, Node.js creates a array of listeners if more than one is detected. Avoid the array
+//		this.eventEmitter.addListener("newListener", function (event, listener)
+//		{
+//			// In case we care about when a new listener is added
+//		});
+
 	},
 
 	PackedCircle.prototype.setPosition = function(aPosition)
@@ -88,11 +87,30 @@ var init = function(Vector, EventEmitter)
 		this.originalRadius = aRadius;
 	};
 
-	PackedCircle.prototype.onCollision = function(circleB, inverseCollisionNormal)
+	/**
+	 * Memory Management
+	 */
+	PackedCircle.prototype.dealloc = function ()
 	{
+		if(this.eventEmitter) {
+			this.eventEmitter.removeAllListeners('newListener');
+			this.eventEmitter.removeAllListeners('collision');
 
-	};
-	
+			delete this.eventEmitter;
+			this.eventEmitter = null;
+		}
+
+		// Destroy Vectors
+		delete this.targetPosition, this.targetPosition = null;
+		delete this.position, this.targetPosition = null;
+		delete this.previousPosition, this.targetPosition = null;
+
+		this.view = null;
+	},
+			
+	/**
+	 * Accessors
+	 */
 	PackedCircle.prototype.toString = function()
 	{
 		return '[PackedCircle(' + this.position.x + ', ' + this.position.y + ') Radius:' + this.radius + ']';
@@ -104,7 +122,7 @@ var init = function(Vector, EventEmitter)
 if(typeof window === 'undefined') {
 	require('../jsclass/core.js');
 	require('../Vector.js');
-	EVENTS= require('events');
+	EVENTS = require('events');
 	
 	//if(typeof window === 'undefined') {
 	PackedCircle = init(Vector);

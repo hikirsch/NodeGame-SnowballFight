@@ -77,8 +77,8 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		 */
 		onCollision: function(ourCircle, otherCircle, collisionInverseNormal)
 		{
-			this.velocity.mul(0);
-			this.fieldController.onCharacterWasHitByProjectile(ourCircle, otherCircle, collisionInverseNormal);
+//			this.velocity.mul(0);
+//			this.fieldController.onCharacterWasHitByProjectile(ourCircle, otherCircle, collisionInverseNormal);
 		},
 
 		/**

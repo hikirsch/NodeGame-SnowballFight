@@ -24,6 +24,7 @@ var init = (function() {
 	{
 		this._keys = [];
 		this._data = {};
+		this.nextUUID = 0;
 	};
 
 

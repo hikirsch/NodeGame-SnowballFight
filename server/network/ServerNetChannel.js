@@ -264,6 +264,7 @@ ServerNetChannel = (function()
 
 			connection.$clientID = clientID;
 			var aClient = new Client(this, connection, this.config);
+
 			// Add to our list of connected users
 			this.clients.setObjectForKey( aClient, clientID);
 
@@ -299,7 +300,8 @@ ServerNetChannel = (function()
 			var newClientID = this.addClient(connection);
 			aDecodedMessage.id = newClientID;
 			aDecodedMessage.gameClock = this.delegate.gameClock;
-
+			aDecodedMessage.model = this.delegate.model;
+			
 			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
 
 			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
