@@ -14,13 +14,14 @@
  Basic Usage:
 	http://onedayitwillmake.com/CirclePackJS/
 */
-var init = function(Vector, PackedCircle)
+var init = function(Vector, PackedCircle, SortedLookupTable)
 {
 	/*
 	 *	PackedCircleManager
 	 */
 	var PackedCircleManager = function( options )
 	{
+		//allCircles
 		this.allCircles = [];
 		this.desiredTarget = new Vector(0,0);
 		this.bounds = {left:0, top:0, right:0, bottom:0};
@@ -32,10 +33,27 @@ var init = function(Vector, PackedCircle)
 
 		// Uses Node.js event system, not compatible in browser!
 		this.dispatchCollisionEvents = options.dispatchCollisionEvents || false;
-		 
+		this.eventEmitter = null;
+
+		if(this.dispatchCollisionEvents) {
+			this.createEventEmitter();
+		}
 	};
 
+	/**
+	 * Create the event emitter.
+	 * Note: This only works in Node.js
+	 */
+	PackedCircleManager.prototype.createEventEmitter = function() {
+		this.eventEmitter = new EVENTS.EventEmitter();
 
+		// Comment if needed, Node.js creates a array of listeners if more than one is detected. Avoid the array
+//		this.eventEmitter.addListener("newListener", function (event, listener)
+//		{
+//			// In case we care about when a new listener is added
+//		});
+	};
+	
 	/**
 	 * Set the boundary rectangle for the circle packing.
 	 * This is used to locate the 'center'
@@ -51,15 +69,47 @@ var init = function(Vector, PackedCircle)
 	 * Add a circle
 	 * @param aCircle A Circle to add, should already be created.
 	 */
-	PackedCircleManager.prototype.addCircle = function(aCircle)
+	PackedCircleManager.prototype.addCircle = function(aCircle, key)
 	{
 		this.allCircles.push(aCircle);
 
 		if(this.dispatchCollisionEvents)
 			aCircle.createEventEmitter();
-		
-		// aCircle.targetPosition = this.desiredTarget.cp();
+
+//		if(this.allCircles.length > 3)
+//			this.removeCircle(aCircle);
 	};
+
+	/**
+	 * Removes a circle
+	 * @param aCircle	Circle to remove
+	 */
+	PackedCircleManager.prototype.removeCircle = function(aCircle)
+	{
+		var index = 0,
+			found = false,
+			len = this.allCircles.length;
+
+		if(len === 0) {
+			throw "Error: (PackedCircleManager) attempting to remove circle, and allCircles.length === 0!!"
+		}
+
+		while (len--) {
+			if(this.allCircles[len] === aCircle) {
+				found = true;
+				break;
+			}
+		}
+
+		if(!found) {
+			throw "Could not locate circle in allCircles array!"
+		}
+
+		// Remove
+		this.allCircles[index].dealloc();
+		delete this.allCircles[index];
+		this.allCircles.splice(index, 1);
+	}
 
 
 	/**
@@ -172,9 +222,11 @@ var init = function(Vector, PackedCircle)
 
 
 						// Emit the collision event from each circle, with itself as the first parameter
-						if(this.dispatchCollisionEvents)
+						if(this.dispatchCollisionEvents && n == this.numberOfCollisionPasses-1)
 						{
-							console.log('Collision!')
+							this.eventEmitter.emit('collision', cj, ci, v);
+							
+							// Allow each circle to also dispatch the event - ...for now
 							ci.eventEmitter.emit('collision', ci, cj, v);
 							cj.eventEmitter.emit('collision', cj, ci, v);
 						}
@@ -201,7 +253,8 @@ var init = function(Vector, PackedCircle)
 		var wrapYMask = 1 << 2;
 		var constrainXMask = 1 << 3;
 		var constrainYMask = 1 << 4;
-
+		var emitEvent = 1 << 5;
+		
 		// TODO: Promote to member variable
 		// Convert to bitmask - Uncomment the one you want, or concact your own :)
 //		boundsRule = wrapY; // Wrap only Y axis
@@ -339,12 +392,12 @@ var init = function(Vector, PackedCircle)
 	{
 		if(circleA == circleB) return false;
 		if(circleA.isFixed & circleB.isFixed) return false;
-
-//		console.log(circleA.view.clientID, circleB.view.clientID);
-		if(circleA.view.clientID === circleB.view.clientID) return false; // Don't let something collide with stuff it owns
+		if(!(circleA.collisionBitfield & circleB.collisionBitfield)) return false;		// Collisions not defined in
+		if(circleA.view.clientID === circleB.view.clientID) return false; 				// Don't let something collide with stuff it owns
 
 		return true;
 	},
+
 
 	/**
 	 * Helper functions
@@ -359,10 +412,12 @@ var init = function(Vector, PackedCircle)
 
 if (typeof window === 'undefined') {
 
-	require('../jsclass/core.js');	
-	require('../Vector.js');
-	require('./PackedCircle.js');
-	
+	require('js/lib/Vector.js');
+	require('js/lib/circlepack/PackedCircle.js');
+	require('js/lib/jsclass/core.js');
+	require('js/lib/SortedLookupTable.js');
+	EVENTS = require('events');	
+
 	PackedCircleManager = init(Vector, PackedCircle);
 } else {
 	define(['lib/Vector', 'lib/circlepack/PackedCircle', 'lib/jsclass/core'], init);

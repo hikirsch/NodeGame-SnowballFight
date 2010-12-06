@@ -28,8 +28,19 @@ SnowGame = (function()
 		initialize: function(aServer)
 		{
 			this.callSuper();
+			var collisionManager = this.fieldController.getCollisionManager();
+			collisionManager.eventEmitter.on('collision', this.onCollision);
+		},
 
-			console.log("(SnowGame)");
+		onCollision: function(circleA, circleB, collisionNormal)
+		{
+			//console.log("YO!");
+			// Messy for now, but call proper function on collision
+//
+//			var player = null,
+//				projectile = null;
+//
+//			if(circleA.view.entityType === EntityModel.CHARACTER
 		}
 	});
 })();

@@ -13,7 +13,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 			// Might do away with different types of entities tables
 			this.allEntities = new SortedLookupTable();
-			this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (websocket connection) not the objectID
+			this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (WebSocket connection) not the objectID
 		},
 
 		hasView: function()
@@ -57,8 +57,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				return 0;
 			}
 
-
-			
 			// For now we only know hwo to add projectiles using this method!!
 			var aProjectileModel = GAMECONFIG.PROJECTILE_MODEL.defaultSnowball; // TODO: Send projectile type
 		   	aProjectileModel.initialPosition = new Vector(anEntityDescription.x,  anEntityDescription.y);
@@ -120,11 +118,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			{
 				// Create the PackedCircle
 				var aPackedCircle = new PackedCircle( anEntity, anEntity.radius );
+				aPackedCircle.collisionBitfield = 1;//anEntity.collisionBitfield;
 
 				// Allow the entity to setup the collision callback, and set some properties inside aPackedCircle
 				// (Note) Entities do not store a reference to packedCircle. (although im set in stone about this one yet)
 				this.packedCircleManager.addCircle(aPackedCircle);
-//				anEntity.setupCollisionEvents(aPackedCircle);
 			}
 
 
@@ -147,7 +145,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			}, this );
 		},
 
-		onCharacterWasHitByProjectile: function(characterCircle, projectileCircle, collisionInverseNormal)
+		onEntityCollision: function(characterCircle, projectileCircle, collisionInverseNormal)
 		{
 			this.removeEntity( projectileCircle );
 		},
@@ -220,7 +218,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.allEntities.remove( objectID );
 		},
 
-
 		/**
 		 * Accessors
 		 */
@@ -235,19 +232,28 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		getHeight: function()
 		{
 			return this.rectangle.height;
+		},
+
+		/**
+		 * Return the PackedCircleManager
+		 * @return {PackedCircleManager} The PackedCircleManager instance.
+		 */
+		getCollisionManager: function()
+		{
+			return this.packedCircleManager;
 		}
 	});
 };
 
 if (typeof window === 'undefined')
 {
-	require('../lib/jsclass/core.js');
-	require('../lib/Vector.js');
-	require('../lib/Vector.js');
-	require('../lib/circlepack/PackedCircleManager.js');
-	require('../lib/circlepack/PackedCircle.js');
-	require('../lib/Rectangle.js');
-	require('../view/FieldView.js');
+	require('js/lib/jsclass/core.js');
+	require('js/lib/Vector.js');
+	require('js/lib/Vector.js');
+	require('js/lib/circlepack/PackedCircleManager.js');
+	require('js/lib/circlepack/PackedCircle.js');
+	require('js/lib/Rectangle.js');
+	require('js/view/FieldView.js');
 	FieldController = init(Vector, Rectangle, FieldView, PackedCircle, PackedCircleManager);
 }
 else

@@ -30,6 +30,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 			this.entityTypes.setObjectForKey(Projectile, 'Projectile');
 
 			this.collisionBitmask = {
+				'None': 0,
 				'Character':  1 << 0,
 				'Projectile': 1 << 1,
 				'CollidableLevelObject': 1 << 2
@@ -41,7 +42,8 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 		{
 			//this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
 			var projectile = new Projectile(anObjectID, aClientID, aFieldController, aProjectileModel, 1);
-			projectile.collisionBitfield = this.collisionBitmask.Character & this.collisionBitmask.CollidableLevelObject;
+			projectile.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.CollidableLevelObject;
+
 			return projectile;
 		},
 
@@ -50,7 +52,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 			var characterClass = this.entityTypes.objectForKey(aCharacterType), // Retrieve class from sorted table
 				aNewCharacter = new characterClass(anObjectID, aClientID, aFieldController);
 			
-			aNewCharacter.collisionBitfield = this.collisionBitmask.Projectile & this.collisionBitmask.CollidableLevelObject;
+			aNewCharacter.collisionBitfield = this.collisionBitmask.Projectile | this.collisionBitmask.CollidableLevelObject;
 
 			return aNewCharacter;
 		}

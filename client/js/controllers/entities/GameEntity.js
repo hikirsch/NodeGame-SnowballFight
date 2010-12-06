@@ -58,6 +58,7 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 			// (Acceleration is applied to velocity)
 			this.acceleration = new Vector( 0, 0 );		// All combined forced. reset every tick
 			this.moveSpeed = 0;    						// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
+
 			// Locaiton
 			this.position = new Vector(0, 0);
 			this.rotation = 0;
@@ -92,7 +93,7 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 		setupCollisionEvents: function(aPackedCircle)
 		{
 			aPackedCircle.collisionBitfield = this.collisionBitfield;
-			aPackedCircle.position = this.position;
+			aPackedCircle.position = this.position;	// TODO: This is not the best place to do this
 			aPackedCircle.eventEmitter.on("collision", this.onCollision);
 		},
 
@@ -257,7 +258,7 @@ if (typeof window === 'undefined') {
 	require('../../lib/Vector');
 	require('../FieldController');
 
-	GameEntity = init(Vector, Rectangle, FieldController);
+	GameEntity = init(Vector, Rectangle, FieldController, null);
 } else {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
