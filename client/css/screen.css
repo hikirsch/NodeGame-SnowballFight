@@ -1,9 +1,20 @@
 @import url( reset.css );
 
 html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-serif; font-size: 12px;
-	background-image: url("../img/global/backgroundGradient.png");
-	background-repeat: repeat-x;
+	background-image: url( ../img/global/img-main-background.png ); background-position: 50% 0;
+	background-repeat: no-repeat;
 }
+nav.main { width: 900px; margin: 0 auto 40px; }
+nav.main ul { overflow: hidden; }
+nav.main ul li { float: left; }
+nav.main ul li a {
+	overflow: hidden; text-indent: -9999px; width: 160px; height: 58px;
+	float: left; background-repeat: no-repeat; background-position: 0 0;
+}
+nav.main ul li.instructions a { background-image: url( ../img/global/nav-instructions.png ); }
+nav.main ul li.share a { background-image: url( ../img/global/nav-share.png ); }
+nav.main ul li.ogilvy-logo { float: right; }
+nav.main ul li.ogilvy-logo { float: right; background-image: url( ../img/global/logo-ogilvy.png ); }
 
 .site-message { position: absolute; bottom: 10px; width: 100%; }
 .site-message .wrapper {
@@ -23,7 +34,7 @@ html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-
 .site-message input[type='button']:hover { background-color: #f3fcff; border-color: #c13b3b; color: #7eabba; }
 .site-message input[type='button']:active { background-color: #f3fcff; border-color: #c13b3b; color: #6398aa; }
 
-.game-container  { width: 640px; height: 480px; margin: 0; position: relative; overflow: hidden;}
+.game-container  { width: 640px; height: 480px; margin: auto; position: relative; overflow: hidden;}
 .game-container .background {
 	position: absolute; top: 0; left: 0;
 	background-color: #ffffff; opacity: 1;

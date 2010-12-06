@@ -21,6 +21,14 @@ define( ['lib/Rectangle', 'factories/HTMLFactory', 'view/FieldView', 'lib/jsclas
 		initialize: function(controller)
 		{                                  
 			this.gameController = controller;
+
+			this.showNav();
+		},
+
+		showNav: function()
+		{
+	      HTMLFactory.navigation()
+			.appendTo("body");
 		},
 
 		showJoinGame: function()
