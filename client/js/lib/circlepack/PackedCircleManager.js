@@ -340,6 +340,8 @@ var init = function(Vector, PackedCircle)
 		if(circleA == circleB) return false;
 		if(circleA.isFixed & circleB.isFixed) return false;
 
+//		console.log(circleA.view.clientID, circleB.view.clientID);
+		if(circleA.view.clientID === circleB.view.clientID) return false; // Don't let something collide with stuff it owns
 
 		return true;
 	},

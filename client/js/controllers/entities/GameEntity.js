@@ -31,37 +31,48 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 {
 	return new JS.Class(
 	{
+		/**
+		 * Initialize a GameEntity with an objectID, and tie it a client
+		 * @param {String|Number} anObjectID An unique objectID as supplied by the game controller
+		 * @param {String|Number} aClientID	The connection which spawned this object. "0" means it belongs to the game
+		 * @param {FieldController} aFieldController	A FieldController instance this object belongs to.
+		 */
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
-			console.log("(GameEntity)::initialize - ");
-
-			this.fieldController = aFieldController;
-
 			// Meta information
+			this.fieldController = aFieldController;
 			this.entityType = GAMECONFIG.ENTITY_MODEL.UNKNOWN;			// Type
-			this.clientID = aClientID;				// Client who created this object, 0 means it has no owner or the owner is the server
-			this.objectID = anObjectID;				// Everything the server creates an object it assigns this number to it
 
-			// Movement vector quantities
-			this.position = new Vector(-100, -100);
-			this.velocity = new Vector( 0, 0 );		// Rolling velocity
-			this.acceleration = new Vector( 0, 0 );	// All combined forced. reset every tick
+			/**
+			 * Connection Properties
+			 */
+			this.clientID = aClientID;					// Client who created this object, 0 means it has no owner or the owner is the server
+			this.objectID = anObjectID;					// Everything the server creates an object it assigns this number to it
 
-			// Movement scalar quantities
-			this.damping = 0.96; 					// Bring velocity to 0 ( or near zero anyway :) ) over time
+			/**
+			 * Movement properties
+			 */
+			this.velocity = new Vector( 0, 0 );			// Current velocity
+			this.maxVelocity = 3.5;   					// Fastest velocity this object will travel at
+			this.damping = 1;							// 1.0 means never lose speed over time
+			// (Acceleration is applied to velocity)
+			this.acceleration = new Vector( 0, 0 );		// All combined forced. reset every tick
+			this.moveSpeed = 0;    						// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
+			// Locaiton
+			this.position = new Vector(0, 0);
 			this.rotation = 0;
-
-			// Flags
+			/**
+			 * Collision
+			 */
 			this.collisionBitfield = 0;
 			this.radius = 5;
-//			this.isCollidable = false;				// Objects can collide against us, but they might be able to go through us ( For example, a puddle )
-//			this.isFixed = false; 					// Objects cannot go through us if they collide (for example a tree)
 		},
 
 
 		/**
-		 * Creates the field view, used by the AbstractClientGame
-		 * @param aGameView
+		 * Creates the 'View' for this character
+		 * This should only be called client side.
+		 * Will throw an error if the field controller does not contain a view
 		 */
 		createView: function()
 		{
@@ -100,10 +111,16 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 		},
 
 
+		/**
+		 * Called when a collision has occurred, subclasses should override this method.
+		 * @param {PackedCircle} ourCircle The circle that represents this GameEntity in the collision
+		 * @param {PackedCircle} otherCircle The circle that represents the GameEntity we collided with
+		 * @param {Number} collisionInverseNormal Inverse collision normal, in which [x:cos(collisionInverseNormal) * radius, y:sin(collisionInverseNormal) * radius] is where we collided
+		 */
 		onCollision: function(ourCircle, otherCircle, collisionInverseNormal)
 		{
-			console.log('GOT IT!');
-			otherCircle.view.position.mul(0);
+			// Console.log("I was involved in a collision!!");
+//			otherCircle.view.position.mul(0);
 		},
 		
 		/**
@@ -192,7 +209,6 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 //			throw("All GameEntity subclasses must override this method.");
 		},
 
-
 		/**
 		 * Accessors
 		 */
@@ -218,6 +234,18 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 			}
 
 			return this.view;
+		},
+
+		/**
+		 * Deallocation
+		 */
+		dealloc: function()
+		{
+			delete this.position;
+			delete this.velocity;
+			delete this.acceleration;
+
+			this.fieldController = null;
 		}
 	});
 };

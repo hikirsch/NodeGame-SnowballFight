@@ -13,8 +13,8 @@
 var init = function()
 {
 	return {
-		defaultSnowball		: { radius: 3, maxVelocity: 5, collisionGroup: 0, force: 1, image: "yeah.png" },
-		superSnowball	: { radius: 5, maxVelocity: 8, collisionGroup: 0, force: 1, image: "yeah.png" }
+		defaultSnowball	: { initialPosition: null, angle: 0, radius: 3, maxVelocity: 5, collisionGroup: 0, force: 1, image: "yeah.png" },
+		superSnowball	: { initialPosition: null, angle: 0, radius: 5, maxVelocity: 8, collisionGroup: 0, force: 1, image: "yeah.png" }
 	}
 };
 

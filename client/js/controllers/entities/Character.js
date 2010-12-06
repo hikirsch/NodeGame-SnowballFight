@@ -30,43 +30,55 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 {
 	return new JS.Class(GameEntity,
 	{
+		/**
+		 * @inheritDoc
+		 */
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
 			this.callSuper();
 			this.entityType = GAMECONFIG.ENTITY_MODEL.CHARACTER;			// Type
 
-			// some defaults we use for position
-			this.position = new Vector(-100, -100);
-
-			// move constants
-			// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
-			this.moveSpeed = 0.2;
-			this.maxVelocity = 3.5; // the fastest i can go
-
-			this.createView();
+			// Override movement properties
+			this.moveSpeed = 0.4;
+			this.damping = 0.96; 
+			this.maxVelocity = 3.5;
 
 			// Firing
 			this.fireRate = 500;
 			this.lastFireTime = 0;
+
+			this.createView();
 		},
 
+		/**
+		 * Creates the 'View' for this character
+		 * This should only be called client side.
+		 * Will throw an error if the field controller does not contain a view
+		 */
 		createView: function()
 		{
 			// if our game has a view, then create one
-			if( this.fieldController.hasView() )
-			{
+			if( this.fieldController.hasView() ) {
 				this.view = new CharacterView(this, 'smash-tv');
-				console.log("creating character view");
 			}
 		},
 
 		/**
-		 * @inherit
+		 * @inheritDoc
 		 */
 		tick: function(speedFactor, gameClock)
 		{
 			this.handleInput(gameClock);
 			this.callSuper(speedFactor, gameClock);
+		},
+
+		/**
+		 * @inheritDoc
+		 */
+		onCollision: function(ourCircle, otherCircle, collisionInverseNormal)
+		{
+			this.velocity.mul(0);
+			this.fieldController.onCharacterWasHitByProjectile(ourCircle, otherCircle, collisionInverseNormal);
 		},
 
 		/**
@@ -87,11 +99,14 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 				if( this.input.isDown() ) this.acceleration.y += this.moveSpeed;
 
 				// Firing
-				if( this.input.isSpace() )
-					this.fireProjectile( gameClock );
+				if( this.input.isSpace() )this.fireProjectile( gameClock );
 			}
 		},
-
+		/**
+		 * Causes character to attempt to fire a projectile.
+		 * If not enough time has elapsed since the lastFireTime, the character will not fire
+		 * @param {Number} gameClock GameControllers current clock value
+		 */
 		fireProjectile: function( gameClock )
 		{
 			if( gameClock - this.lastFireTime < this.fireRate) // Too soon
@@ -101,27 +116,28 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			// For now always fire the regular snowball
 			var projectileModel = ProjectileModel.defaultSnowball;
 			projectileModel.force = 1.0 ; // TODO: Use force gauge
+			projectileModel.initialPosition = this.position.cp();
+			projectileModel.angle = this.rotation * -0.0174532925;
 			
 			this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
 			this.lastFireTime = gameClock;
 		},
 
-
-
-//
-//		deconstructFromEntityDescription: function(anEntityDescription)
-//		{
-//			throw("All GameEntity subclasses must override this method.");
-//		},
-
 		/**
 		 * Accessors
+		 */
+		/**
+		 * return {String} This characters nickname
 		 */
 		getNickName: function()
 		{
 			return this.nickName;
 		},
 
+		/**
+		 * Sets the nickname of a particular client, should contain a view already
+		 * @param {String} aNickName
+		 */
 		setNickName: function( aNickName )
 		{
 			this.nickName = aNickName;
@@ -133,6 +149,14 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		setInput: function( anInput )
 		{
 			this.input = anInput;
+		},
+
+		/**
+		 * Deallocation
+		 */
+		dealloc: function()
+		{
+			this.callSuper();
 		}
 	});
 };

@@ -44,6 +44,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.packedCircleManager = new PackedCircleManager( {centeringPasses: 0, collisionPasses: 1, dispatchCollisionEvents: true});
 		},
 
+		/**
+		 * Creates an entity from an EntityDescription.
+		 * This is called when the game receives an entity that it does not want to handle in a special way
+		 * @param anEntityDescription	A EntityDescription containing all information needed to create this entity
+		 */
 		createAndAddEntityFromDescription: function( anEntityDescription )
 		{
 			var anEntity = null;
@@ -52,11 +57,16 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				return 0;
 			}
 
-			// For now we only know hwo to add projectiles using this method
-			var aProjectileModel = GAMECONFIG.PROJECTILE_MODEL.defaultSnowball; // TODO: Send projectile type
-			var aNewProjectile = this.gameController.entityFactory.createProjectile(anEntityDescription.objectID, anEntityDescription.clientID, aProjectileModel, this);
-			this.addEntity( aNewProjectile );
 
+			
+			// For now we only know hwo to add projectiles using this method!!
+			var aProjectileModel = GAMECONFIG.PROJECTILE_MODEL.defaultSnowball; // TODO: Send projectile type
+		   	aProjectileModel.initialPosition = new Vector(anEntityDescription.x,  anEntityDescription.y);
+
+			// Create!
+			var aNewProjectile = this.gameController.entityFactory.createProjectile(anEntityDescription.objectID, anEntityDescription.clientID, aProjectileModel, this);
+
+			this.addEntity( aNewProjectile );
 			return aNewProjectile;
 		},
 
@@ -92,7 +102,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			var impulseVector = new Vector(Math.cos(currentAngle) * -impulseForce, Math.sin(currentAngle) * -impulseForce);
 
 //			aCharacter.velocity.mul(0);
-			aCharacter.acceleration.add( impulseVector );
+//			aCharacter.acceleration.add( impulseVector );
 			return aNewProjectile;
 		},
 
@@ -135,6 +145,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.allEntities.forEach( function(key, entity){
 				entity.tick(speedFactor, gameClock);
 			}, this );
+		},
+
+		onCharacterWasHitByProjectile: function(characterCircle, projectileCircle, collisionInverseNormal)
+		{
+			this.removeEntity( projectileCircle );
 		},
 
 		/**
@@ -196,7 +211,8 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		removeEntity: function( objectID )
 		{
 			var entity = this.allEntities.objectForKey( objectID );
-
+			entity.dealloc();
+			
 			if( this.view ) {
 				this.view.removeEntity( entity.view );
 			}

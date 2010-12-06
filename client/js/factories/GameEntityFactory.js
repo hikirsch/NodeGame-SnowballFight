@@ -42,7 +42,6 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 			//this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
 			var projectile = new Projectile(anObjectID, aClientID, aFieldController, aProjectileModel, 1);
 			projectile.collisionBitfield = this.collisionBitmask.Character & this.collisionBitmask.CollidableLevelObject;
-			
 			return projectile;
 		},
 

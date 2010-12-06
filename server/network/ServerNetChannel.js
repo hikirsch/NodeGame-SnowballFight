@@ -242,8 +242,7 @@ ServerNetChannel = (function()
 			this.delegate.log("(ServerNetChannel) Disconnecting client: " + clientID );
 
 			// if this client is mid game playing then we need to tell the other players to remove it
-			if(aClient.enabled)
-			{
+			if(aClient.enabled) {
 				// before we actually remove this guy, make tell everyone else
 				this.delegate.removePlayer( clientID );
 				// this.relayMessage(connection.$clientID, MESSAGES.REMOVE_FOREIGN_CHARACTER, { clientID: connection.$clientID });

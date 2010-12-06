@@ -20,11 +20,6 @@ var init = function(Vector, EventEmitter)
 
 	var PackedCircle = function(view, radius)
 	{
-//		if(EventEmitter) {
-//			console.log( require('events') );
-//		} else{
-//			console.log(EventEmitter)
-//		}
 		// Data
 		this.view = view;
 
