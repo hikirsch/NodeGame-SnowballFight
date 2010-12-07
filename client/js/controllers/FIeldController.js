@@ -16,7 +16,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 		initWithModel: function(aGameModel)
 		{
-			console.log('gm', aGameModel)
 			this.rectangle = new Rectangle(0, 0, aGameModel.width, aGameModel.height);
 		},
 		

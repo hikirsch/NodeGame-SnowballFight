@@ -256,13 +256,13 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 			this.gameClock = messageData.gameClock;
 			this.gameModel = messageData.gameModel;
 
-			// Create the field now that we have the correct game properties
-			this.fieldController.initWithModel(this.gameModel);
-			this.fieldController.createView();
-
 			// Create the view and show name entry
 			this.createView();
 			this.view.showJoinGame();
+
+			// Create the field now that we have the correct game properties
+			this.fieldController.initWithModel(this.gameModel);
+			this.fieldController.createView();
 		},
 
 		netChannelDidReceiveMessage: function (messageData)
