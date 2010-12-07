@@ -26,6 +26,12 @@ Logger = (function()
 			this.options = options || {};
 			this.game = game || null;
 			this.netChannel = game.netChannel;
+
+			// Keep a rolling count of KB/Sec
+			this.perSecondTick = 0;
+			this.lastSent = 0;
+			this.perSecond = 0;
+
 			this.logs = [];
 		},
 		
@@ -81,6 +87,14 @@ Logger = (function()
 			var that = this;
 			if( !this.options.showStatus ) { return; }
 
+			// Update this.perSecond
+			if( (this.game.gameClock - this.perSecondTick) > 1000)
+			{
+				this.perSecondTick = this.game.gameClock;
+				this.perSecond = this.game.netChannel.bytes.sent - this.lastSent;
+				this.lastSent = this.game.netChannel.bytes.sent;
+			}
+
 			// Log statistics
 		    var stats = '    Running ' + this.toTime( this.game.gameClock ) + ' | '
 						+ this.game.netChannel.clientCount + ' Client(s) | '
@@ -88,9 +102,9 @@ Logger = (function()
 						+ this.game.fieldController.allEntities.count() + ' Entities(s) | '
 						+ this.toSize( this.game.netChannel.bytes.sent ) + ' sent | '
 						+ this.toSize( this.game.netChannel.bytes.received ) + ' received | '
-						+ this.toSize( this.game.netChannel.bytes.sent - this.game.netChannel.bytes.sentLast );
+						+ this.toSize( this.perSecond ) + '/sec';
 
-			this.game.netChannel.bytes.sentLast = this.game.netChannel.bytes.sent;
+
 
 			// Show latest rolling log messages
 			var len = this.logs.length;

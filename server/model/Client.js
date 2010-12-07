@@ -23,14 +23,13 @@ var init = function()
 {
 	return new JS.Class(
 	{
-		initialize: function( aServer, aConnection, config, netChannelBytes )
+		initialize: function( aServer, aConnection, config )
 		{
 			this.conn = aConnection;
 			this.nickname = '';
-			this.enabled = true; // Old property, leaving it in  for now 
+			this.isPlaying = false; // Before the match, or if only observing this is false
 
-			this.$ = aServer;
-			this.netChannelBytes = netChannelBytes;
+			this.netChannel = aServer;
 			this.commandTypes = config.CMDS;
 
 			this.updaterate = config.CLIENT_SETTING.updaterate; 	// Send user info this ofte
@@ -78,7 +77,8 @@ var init = function()
 			this.conn.send( anEncodedMessage );
 			this.outgoingSequenceNumber++;
 
-			this.netChannelBytes.received += anEncodedMessage.length;
+			// Incriment bytes sent by the NetChannel
+			this.netChannel.bytes.sent += anEncodedMessage.length;
 		},
 
 
