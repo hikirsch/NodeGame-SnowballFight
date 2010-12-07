@@ -28,19 +28,35 @@ SnowGame = (function()
 		initialize: function(aServer)
 		{
 			this.callSuper();
+			var that = this;
+
 			var collisionManager = this.fieldController.getCollisionManager();
-			collisionManager.eventEmitter.on('collision', this.onCollision);
+			collisionManager.eventEmitter.on('collision', function() { that.onCollision.apply(that, arguments) });
 		},
 
 		onCollision: function(circleA, circleB, collisionNormal)
 		{
-			//console.log("YO!");
-			// Messy for now, but call proper function on collision
+			console.log("HIT!")
+//			console.log( arguments );
+//			console.log("YO!", circleA.view.entityType === EntityModel.CHARACTER, circleB.view.entityType === EntityModel.CHARACTER);
+//			Messy for now, but call proper function on collision
 //
 //			var player = null,
 //				projectile = null;
 //
-//			if(circleA.view.entityType === EntityModel.CHARACTER
+			// Player vs projectile collision occured
+			if( (circleA.view.entityType === EntityModel.CHARACTER || circleB.view.entityType === EntityModel.CHARACTER) &&
+				(circleA.view.entityType === EntityModel.PROJECTILE || circleB.view.entityType === EntityModel.PROJECTILE))
+			{
+				var player = (circleA.view.entityType === EntityModel.CHARACTER) ? circleA.view : circleB.view;
+				var projectile = (circleA.view.entityType === EntityModel.PROJECTILE) ? circleA.view : circleB.view;
+
+//				console.log("Player vs Projectile!", this.fieldController.getEntityWithObjectID(projectile.objectID));
+//				console.log( this.fieldController );
+//
+				console.log('PVP', projectile.objectID);
+				this.fieldController.removeEntity(projectile.objectID);
+			}
 		}
 	});
 })();

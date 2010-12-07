@@ -173,6 +173,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		removePlayer: function( connectionID )
 		{
 			var player = this.players.objectForKey(connectionID);
+
+			if(!player) {
+				console.log("(FieldController), No 'Character' with connectionID " + connectionID + " ignoring...");
+				return;
+			}
 			this.removeEntity( player.objectID );
 			this.players.remove(player);
 		},
