@@ -30,11 +30,20 @@ require('lib/Logger.js');
 
 AbstractServerGame = (function()
 {
+	var LOG_LEVEL = new function()
+	{
+		this.ERROR = 0;
+		this.DEBUG = 1;
+		this.INFO = 2;
+		this.ALL = 3;
+	};
+
+
 	return new JS.Class(AbstractGame, {
 		initialize: function(aServer, aGameModel)
 		{
 			this.callSuper();
-
+			
 			console.log('(ServerGame)::init');
 
 			this.setModel(aGameModel);
@@ -49,6 +58,10 @@ AbstractServerGame = (function()
 
 			// Each ServerNetChannel is owned by a single ServerGameInstance
 			this.netChannel = new ServerNetChannel(this, this.server.gameConfig);
+
+
+			this.logLevel = LOG_LEVEL.ALL;
+			this.logger = new Logger({time: this.gameClock, showStatus: true }, this);
 		},
 
 		/**
@@ -65,6 +78,8 @@ AbstractServerGame = (function()
 			// Create a new world-entity-description, could be some room for optimization here but it only happens once per game loop anyway
 			var worldEntityDescription = new WorldEntityDescription( this );
 			this.netChannel.tick( this.gameClock, worldEntityDescription );
+
+			this.logger.tick();
 		},
 
 		/**
@@ -126,10 +141,12 @@ AbstractServerGame = (function()
 		},
 
 
-		log: function(o)
+		log: function(aMessage)
 		{
+			this.logger.log(aMessage);
+//			console.log('ll', this.logLevel);
 			// console.log( o );
-			this.server.log(o);
+//			this.server.log(o);
 		},
 
 		status: function()

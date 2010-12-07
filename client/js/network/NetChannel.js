@@ -19,14 +19,6 @@ Basic Usage:
 
 
 define(['network/Message', 'config'], function(Message, config) {
-
-	var LOG_LEVEL = new function()
-	{
-		this.ERROR = 0;
-		this.DEBUG = 1;
-		this.INFO = 2;
-	};
-
 	/**
 	 * NetChannel facilitates communication between the client-game, and the server-game
 	 * @param config  		A game configuration
@@ -35,7 +27,7 @@ define(['network/Message', 'config'], function(Message, config) {
 	function NetChannel( config, aController )
 	{
 
-		console.log(LOG_LEVEL.INFO)
+		
 		this.controller = aController;	// For callbacks once messages are validated
 		this.config = config;
 		var that = this;

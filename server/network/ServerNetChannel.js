@@ -57,7 +57,8 @@ ServerNetChannel = (function()
 
 			this.bytes = {
 				sent: 0,
-				received: 0
+				received: 0,
+				sentLast: 0
 			};
 		    // Connections
 		    this.clients = new SortedLookupTable();		// Everyone connected
@@ -179,8 +180,9 @@ ServerNetChannel = (function()
 				var deltaCompressedWorldUpdate = client.compressDeltaAndQueueMessage( worldDescription, gameClock );
 
 				// Ask if enough time passed
-				if ( client.shouldSendMessage(gameClock) )
+				if ( client.canSendMessage(gameClock) ) {
 					client.sendQueuedCommands(gameClock);
+				}
 
 			}, this );
 		},
@@ -193,19 +195,19 @@ ServerNetChannel = (function()
 		 */
 		broadcastMessage: function(originalClientID, anUnencodedMessage, sendToOriginalClient)
 		{
-			var encodedMessage = BISON.encode(anUnencodedMessage);
-			// this.delegate.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
-
-			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
-			for( var clientID in this.clients )
-			{
-				// Don't send to original client
-				if( sendToOriginalClient == false && clientID == originalClientID )
-					continue;
-
-				this.clients.objectForKey([clientID]).sendMessage(encodedMessage);
-				this.bytes.sent += encodedMessage.length;
-			}
+//			var encodedMessage = BISON.encode(anUnencodedMessage);
+//			// this.delegate.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
+//
+//			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
+//			for( var clientID in this.clients )
+//			{
+//				// Don't send to original client
+//				if( sendToOriginalClient == false && clientID == originalClientID )
+//					continue;
+//
+//				this.clients.objectForKey([clientID]).sendMessage(encodedMessage);
+//				this.bytes.sent += encodedMessage.length;
+//			}
 		},
 
 		// Shut down the server
@@ -263,7 +265,7 @@ ServerNetChannel = (function()
 			this.clientCount++;
 
 			connection.$clientID = clientID;
-			var aClient = new Client(this, connection, this.config);
+			var aClient = new Client(this, connection, this.config, this.bytes);
 
 			// Add to our list of connected users
 			this.clients.setObjectForKey( aClient, clientID);
@@ -274,18 +276,14 @@ ServerNetChannel = (function()
 
 		onPlayerJoined: function(connection, aDecodedMessage)
 		{
-			//console.log( sys.inspect(decodedMessage) );
 			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
 
+			// Create an entity ID for this new player
+			// This is done here, because shouldAddPlayer is the same on client and server, and only the server can define client entities
 			var entityID = this.delegate.getNextEntityID();
 			this.delegate.shouldAddPlayer(entityID, connection.$clientID);
 
-			console.log("Sending:",BISON.encode(aDecodedMessage));
 			connection.send( BISON.encode(aDecodedMessage) );
-//			this.delegate.setNickNameForClientID(aDecodedMessage.cmds.data.nickName, connection.$clientID);
-
-			// Tell all the clients that a player has joined
-//			this.broadcastMessage(connection.$clientID, aDecodedMessage, true);
 		},
 
 		/**

@@ -23,14 +23,14 @@ var init = function()
 {
 	return new JS.Class(
 	{
-		initialize: function( aServer, aConnection, config )
+		initialize: function( aServer, aConnection, config, netChannelBytes )
 		{
 			this.conn = aConnection;
 			this.nickname = '';
 			this.enabled = true; // Old property, leaving it in  for now 
 
 			this.$ = aServer;
-
+			this.netChannelBytes = netChannelBytes;
 			this.commandTypes = config.CMDS;
 
 			this.updaterate = config.CLIENT_SETTING.updaterate; 	// Send user info this ofte
@@ -77,6 +77,8 @@ var init = function()
 			// Send and increment our message count
 			this.conn.send( anEncodedMessage );
 			this.outgoingSequenceNumber++;
+
+			this.netChannelBytes.received += anEncodedMessage.length;
 		},
 
 
@@ -112,7 +114,7 @@ var init = function()
 		 * Returns true if its ok to send this client a new message
 		 * @param gameClock
 		 */
-		shouldSendMessage: function( gameClock ) {
+		canSendMessage: function( gameClock ) {
 			return (gameClock - this.lastSentMessageTime) > this.updaterate;
 		}
 

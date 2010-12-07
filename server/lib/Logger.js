@@ -21,11 +21,12 @@ Logger = (function()
 {
 	return new JS.Class(
 	{
-		initialize: function( options, game )
+		initialize: function( options, game)
 		{
 			this.options = options || {};
-			this.game = game;
-			this.logs = [];		
+			this.game = game || null;
+			this.netChannel = game.netChannel;
+			this.logs = [];
 		},
 		
 		push: function( anObject )
@@ -48,18 +49,10 @@ Logger = (function()
 	
 		log: function( str )
 		{
-			if ( this.options.showStatus )
-			{
-				this.logs.push([this.game.gameClock, str]);
-				if (this.logs.length > 20)
-				{
-					this.logs.shift();
-				}
-			}
-			else
-			{
-				console.log(str);
-			}
+			this.logs.push([this.game.gameClock, str]);
+			
+			if(this.logs.length > 20)
+				this.logs.shift();
 		},
 
 		toSize: function( size ) {
@@ -82,36 +75,30 @@ Logger = (function()
 			return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
 		},
 	
-		status: function( end )
+		tick: function( end )
 		{
+			
 			var that = this;
-		
 			if( !this.options.showStatus ) { return; }
-		    
+
+			// Log statistics
 		    var stats = '    Running ' + this.toTime( this.game.gameClock ) + ' | '
 						+ this.game.netChannel.clientCount + ' Client(s) | '
-						+ this.game.field.players.count() + ' Entities(s) | '
+						+ this.game.fieldController.players.count() + ' Players(s) | '
+						+ this.game.fieldController.allEntities.count() + ' Entities(s) | '
 						+ this.toSize( this.game.netChannel.bytes.sent ) + ' sent | '
 						+ this.toSize( this.game.netChannel.bytes.received ) + ' received | '
 						+ this.toSize( this.game.netChannel.bytes.sent - this.game.netChannel.bytes.sentLast );
-						
+
 			this.game.netChannel.bytes.sentLast = this.game.netChannel.bytes.sent;
-			
-		    for(var i = this.logs.length - 1; i >= 0; i--) 
-			{
-		        stats += '\n      ' + this.toTime(this.logs[i][0]) + ' ' + this.logs[i][1];
+
+			// Show latest rolling log messages
+			var len = this.logs.length;
+			while(len--) {
+				 stats += '\n      ' + this.toTime(this.logs[len][0]) + ' ' + this.logs[len][1];
 			}
-		
-			sys.print('\x1b[H\x1b[J# NodeGame Server at port ' + this.netChannel.port + '\n' + stats + '\n\x1b[s\x1b[H');
-		
-		    if( !end )
-			{
-				setTimeout(function() { that.status(false) }, 500);
-			}
-			else
-			{
-				sys.print('\x1b[u\n');
-			}
+
+			console.log('\x1b[H\x1b[J# NodeGame Server at port ' + this.netChannel.port + '\n' + stats + '\n\x1b[s\x1b[H');
 		}
 	});
 })();
