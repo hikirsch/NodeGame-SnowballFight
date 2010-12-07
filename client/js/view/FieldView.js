@@ -29,6 +29,12 @@ var init = function(HTMLFactory)
 
 		destroy: function() {
 			this.element.destroy();
+		},
+		update: function() {
+			this.element.css({
+				width: this.controller.getWidth(),
+				height: this.controller.getHeight()
+			});
 		}
 	});
 };

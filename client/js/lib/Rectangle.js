@@ -24,6 +24,16 @@ var init = function()
 		toString: function()
 		{
 		    return '[Rectangle(' + this.x + ', ' + this.y + ',' + this.width + ',' + this.height + ')]';
+		},
+
+		getWidth: function()
+		{
+			return this.width;
+		},
+
+		getHeight: function()
+		{
+			return this.height;
 		}
 	});
 };

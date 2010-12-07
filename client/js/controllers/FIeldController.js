@@ -18,7 +18,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			this.rectangle = new Rectangle(0, 0, aGameModel.width, aGameModel.height);
 		},
-		
+
 		/**
 		 * Creates the field view, used by the AbstractClientGame
 		 * @param aGameView
