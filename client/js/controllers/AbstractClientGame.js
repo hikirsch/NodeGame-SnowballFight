@@ -12,18 +12,15 @@ Basic Usage:
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
 
-var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGame)
+var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, AbstractGame)
 {
 
 	return new JS.Class(AbstractGame,
 	{
-		initialize: function(config)
+		initialize: function(config, gameModel)
 		{
 			this.callSuper();
 
-			this.createView();
-			this.fieldController.createView();
-			
 			// we need to create our view first before we call our super constructor so that our
 			// super class knows to create the view for anything else it needs, this is primarily
 			// for the field controller since this element is being shared between client/server
@@ -36,11 +33,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGam
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
-		},
 
-		createView: function()
-		{
-			this.view = new GameView(this);
+			// Note:
+			// Nothing interesting happens on the client game until it receives the first message from the server
+			// See this.netChannelDidConnect
 		},
 
 		/**
@@ -199,23 +195,18 @@ var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGam
 			// Destroy removed entities
 			this.fieldController.removeExpiredEntities( activeEntities );
 		},
-//
-//		/**
-//		 * Attempt to create the player, can return null if player can't be added. (Already playing? Room
-//		 * @param anObjectID	Set by the server
-//		 * @param aClientID		Connection ID
-//		 * @param playerType	Type of player to create (NOTE: Only used by the server)
-//		 */
-//		shouldAddPlayer: function (anObjectID, aClientID, playerType)
-//		{
-//			console.log('################## This got  called');
-//			// Server ALWAYS creates 'Character' - but clients may create ClientControlledCharacter
-//			playerType = (aClientID == this.netChannel.clientID) ? 'ClientControlledCharacter' : 'Character';
-//			return this.callSuper(anObjectID, aClientID, playerType);
-//		},
+
+		createView: function()
+		{
+			this.view = new GameView(this);
+		},
 
 		/**
 		 * ClientGameView delegate
+		 */
+		/**
+		 * Called when the user has entered a name, and wants to join the match
+		 * @param aNickName
 		 */
 		joinGame: function(aNickName)
 		{
@@ -226,8 +217,14 @@ var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGam
 			this.netChannel.addMessageToQueue( true, message );
 		},
 
+		/**
+		 * Dispatched by the server when a new player joins the match
+		 * @param clientID
+		 * @param data
+		 */
 		onClientJoined: function(clientID, data)
 		{
+			console.log( "onClientJoined~!");
 			// Let our super class create the character
 			var newCharacter = this.addClient( clientID, data.nickName, true );
 
@@ -255,7 +252,16 @@ var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGam
 		 **/
 		netChannelDidConnect: function (messageData)
 		{
+			// Copy the game properties from the server
 			this.gameClock = messageData.gameClock;
+			this.gameModel = messageData.gameModel;
+
+			// Create the field now that we have the correct game properties
+			this.fieldController.initWithModel(this.gameModel);
+			this.fieldController.createView();
+
+			// Create the view and show name entry
+			this.createView();
 			this.view.showJoinGame();
 		},
 
@@ -277,7 +283,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGam
 
 		netChannelDidDisconnect: function (messageData)
 		{
-			this.view.serverOffline();
+			if(this.view) // If the server was never online, then we never had a view to begin with
+				this.view.serverOffline();
 		},
 
 		log: function(o)
@@ -287,4 +294,11 @@ var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGam
 	});
 };
 
-define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/joystick', 'config',  'controllers/AbstractGame', 'lib/jsclass/core'], init);
+define(['lib/Vector',
+	'network/NetChannel',
+	'model/GameModel', 
+	'view/GameView',
+	'lib/joystick',
+	'config',
+	'controllers/AbstractGame',
+	'lib/jsclass/core'], init);

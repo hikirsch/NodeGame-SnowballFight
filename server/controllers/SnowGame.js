@@ -25,7 +25,7 @@ require('controllers/AbstractServerGame');
 SnowGame = (function()
 {
 	return new JS.Class(AbstractServerGame, {
-		initialize: function(aServer)
+		initialize: function(aServer, gameModel)
 		{
 			this.callSuper();
 			var that = this;

@@ -7,8 +7,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			console.log('(FieldController)::initialize');
 
 			this.gameController = game;
-			this.rectangle = new Rectangle(0, 0, 640, 480);
-
 			this.packedCircleManager = null;
 
 			// Might do away with different types of entities tables
@@ -16,11 +14,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (WebSocket connection) not the objectID
 		},
 
-		hasView: function()
+		initWithModel: function(aGameModel)
 		{
-			return this.view != null;
+			console.log('gm', aGameModel)
+			this.rectangle = new Rectangle(0, 0, aGameModel.width, aGameModel.height);
 		},
-
 		
 		/**
 		 * Creates the field view, used by the AbstractClientGame
@@ -239,6 +237,10 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			return this.rectangle.height;
 		},
 
+		hasView: function()
+		{
+			return this.view != null;
+		},
 		/**
 		 * Return the PackedCircleManager
 		 * @return {PackedCircleManager} The PackedCircleManager instance.

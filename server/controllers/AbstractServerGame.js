@@ -31,11 +31,13 @@ require('lib/Logger.js');
 AbstractServerGame = (function()
 {
 	return new JS.Class(AbstractGame, {
-		initialize: function(aServer)
+		initialize: function(aServer, aGameModel)
 		{
 			this.callSuper();
+
 			console.log('(ServerGame)::init');
 
+			this.setModel(aGameModel);
 			this.fieldController.createPackedCircleManager();
 
 			// Each time we create an entity we increment this

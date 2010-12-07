@@ -19,20 +19,32 @@ Basic Usage:
 
 
 define(['network/Message', 'config'], function(Message, config) {
+
+	var LOG_LEVEL = new function()
+	{
+		this.ERROR = 0;
+		this.DEBUG = 1;
+		this.INFO = 2;
+	};
+
 	/**
-	 * NetChannel!
+	 * NetChannel facilitates communication between the client-game, and the server-game
+	 * @param config  		A game configuration
+	 * @param aController 	The delegate for this NetChannel. One NetChannel per game.
 	 */
 	function NetChannel( config, aController )
-	{		
-		var that = this; // Forclosures (haw haw)	
+	{
+
+		console.log(LOG_LEVEL.INFO)
 		this.controller = aController;	// For callbacks once messages are validated
 		this.config = config;
+		var that = this;
 
 		// Dev flag, turning this on will output tons information to the console
 		this.verboseMode = false;
 
 		// Make sure this controller is valid before moving forward, the controller must contain certain methods we can rely on being callable
-		if( this.validateController(aController) === false )
+		if( this.validateController(aController) === false)
 		{
 			console.log("(NetChannel) Controller " + aController + " is undefined or does not conform to the valid methods. Ignored."); 	 
 			return;
@@ -42,7 +54,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.frameLatency = 0; 	// lag over time
 		this.latency = 1000; // lag right now
 
-		//
+		// Timings
 		this.gameClock = -1;
 		this.lastSentTime = -1;
 		this.lastRecievedTime = -1; // Last time we received a message
@@ -66,6 +78,9 @@ define(['network/Message', 'config'], function(Message, config) {
 		// When this is empty, then we can send whatever the next one is
 		this.reliableBuffer = null;  // store last sent message here
 
+		/**
+		 * WebSocket connection
+		 */
 		this.clientID = -1;
 		this.connection = new WebSocket( 'ws://' + config.HOST + ':' + config.PORT );
 		this.connection.onopen = function() { that.onConnectionOpened(); };
@@ -82,9 +97,8 @@ define(['network/Message', 'config'], function(Message, config) {
 	NetChannel.prototype.validateController = function(aController)
 	{
 		var isValid = false; // Assume false
-		if(aController &&  aController.netChannelDidConnect && aController.netChannelDidReceiveMessage && aController.netChannelDidDisconnect)
-		{
 
+		if(aController &&  aController.netChannelDidConnect && aController.netChannelDidReceiveMessage && aController.netChannelDidDisconnect) {
 			isValid = true;
 		}
 

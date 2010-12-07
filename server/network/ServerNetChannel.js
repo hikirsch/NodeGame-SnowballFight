@@ -300,7 +300,7 @@ ServerNetChannel = (function()
 			var newClientID = this.addClient(connection);
 			aDecodedMessage.id = newClientID;
 			aDecodedMessage.gameClock = this.delegate.gameClock;
-			aDecodedMessage.model = this.delegate.model;
+			aDecodedMessage.gameModel = this.delegate.model;
 			
 			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
 
