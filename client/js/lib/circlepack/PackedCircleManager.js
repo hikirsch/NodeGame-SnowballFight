@@ -14,7 +14,7 @@
  Basic Usage:
 	http://onedayitwillmake.com/CirclePackJS/
 */
-var init = function(Vector, PackedCircle, SortedLookupTable)
+var init = function(Vector, PackedCircle)
 {
 	/*
 	 *	PackedCircleManager
@@ -182,6 +182,7 @@ var init = function(Vector, PackedCircle, SortedLookupTable)
 			for(var i = 0; i < len; i++)
 			{
 				var ci = circleList[i];
+
 				
 				for (var j = i + 1; j< len; j++)
 				{
@@ -199,6 +200,7 @@ var init = function(Vector, PackedCircle, SortedLookupTable)
 					 */
 					if (d < (r * r) - 0.02 )
 					{
+
 						v.x = dx;
 						v.y = dy;
 						v.normalize();
@@ -392,7 +394,7 @@ var init = function(Vector, PackedCircle, SortedLookupTable)
 	{
 		if(circleA == circleB) return false;
 		if(circleA.isFixed & circleB.isFixed) return false;
-		if(!(circleA.collisionBitfield & circleB.collisionBitfield)) return false;		// Collisions not defined in
+//		if(!(circleA.collisionBitfield & circleB.collisionBitfield)) return false;		// Collisions not defined in
 		if(circleA.view.clientID === circleB.view.clientID) return false; 				// Don't let something collide with stuff it owns
 
 		return true;

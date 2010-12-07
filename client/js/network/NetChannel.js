@@ -202,7 +202,6 @@ define(['network/Message', 'config'], function(Message, config) {
 		else // Server wants to tell the gameclient something, not just a regular world update
 		{
 			this.controller.netChannelDidReceiveMessage(serverMessage);
-
 		}
 
 		delete serverMessage;
