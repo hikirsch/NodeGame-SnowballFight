@@ -59,17 +59,7 @@ define( ['lib/Rectangle', 'factories/HTMLFactory', 'view/FieldView', 'lib/jsclas
 			$("#join-game").remove();
 
 		},
-	
-		addCharacter: function(aCharacterView)
-		{
-			aCharacterView.element.appendTo(this.field.getElement());
-		},
-	
-		getFieldRect: function()
-		{
-			return new Rectangle(0, 0, this.field.width(), this.field.height());
-		},
-	
+
 		destroy: function() {
 			this.element.remove();
 		}

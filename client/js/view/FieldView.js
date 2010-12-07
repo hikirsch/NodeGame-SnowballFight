@@ -2,14 +2,18 @@ var init = function(HTMLFactory)
 {
 	return new JS.Class(
 	{
-		initialize:  function(controller) {
+		initialize:  function(controller, model) {
 			this.controller = controller;
 
-			this.createElement();
+			this.createElement( model.height, model.width );
 		},
 
-		createElement: function() {
+		createElement: function( height, width ) {
 			this.element = HTMLFactory.field()
+				.css({
+					width: width + 'px',
+					height: height + 'px'
+				})
 				.appendTo('body');
 		},
 
@@ -29,12 +33,6 @@ var init = function(HTMLFactory)
 
 		destroy: function() {
 			this.element.destroy();
-		},
-		update: function() {
-			this.element.css({
-				width: this.controller.getWidth(),
-				height: this.controller.getHeight()
-			});
 		}
 	});
 };

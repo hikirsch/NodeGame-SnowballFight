@@ -23,12 +23,12 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 * Creates the field view, used by the AbstractClientGame
 		 * @param aGameView
 		 */
-		createView: function(aGameView)
+		createView: function(aModel)
 		{
 			// if our game has a view, then create one
 			if( this.gameController.view )
 			{
-				this.view = new FieldView(this);
+				this.view = new FieldView(this, aModel);
 			}
 		},
 
@@ -227,10 +227,12 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			return this.allEntities.objectForKey( anEntityObjectID );
 		},
+
 		getWidth: function()
 		{
 			return this.rectangle.width;
 		},
+
 		getHeight: function()
 		{
 			return this.rectangle.height;
@@ -240,6 +242,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			return this.view != null;
 		},
+		
 		/**
 		 * Return the PackedCircleManager
 		 * @return {PackedCircleManager} The PackedCircleManager instance.

@@ -261,8 +261,7 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 			this.view.showJoinGame();
 
 			// Create the field now that we have the correct game properties
-			this.fieldController.initWithModel(this.gameModel);
-			this.fieldController.createView();
+			this.fieldController.createView(this.gameModel);
 		},
 
 		netChannelDidReceiveMessage: function (messageData)

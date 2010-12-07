@@ -49,6 +49,7 @@ nav.main ul li.ogilvy-logo { float: right; background-image: url( ../img/global/
 	background-repeat: no-repeat; background-position: 50% 50%; font-size: 10px; font-weight: bold;
 }
 
+.game-container { background-image: url( ../img/global/bg-field.png ); background-position: 0 0; background-repeat: no-repeat; }
 .game-container .character.smash-tv.rotation-0 { background-image: url( '../img/characters/smash-tv/8wayrun/north.png' ); }
 .game-container .character.smash-tv.rotation-45 { background-image: url( '../img/characters/smash-tv/8wayrun/northeast.png' ); }
 .game-container .character.smash-tv.rotation-90 { background-image: url( '../img/characters/smash-tv/8wayrun/east.png' ); }
