@@ -7,7 +7,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			console.log('(FieldController)::initialize');
 
 			this.gameController = game;
-			this.rectangle = new Rectangle(0, 0, 640, 480);
 
 			this.packedCircleManager = null;
 
@@ -16,12 +15,26 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (WebSocket connection) not the objectID
 		},
 
+		setDimensions: function( aModel ) {
+			this.rectangle = new Rectangle(0, 0, aModel.width, aModel.height );
+			this.view.update();
+		},
+
 		hasView: function()
 		{
 			return this.view != null;
 		},
 
-		
+		getWidth: function()
+		{
+			return this.rectangle.getWidth();
+		},
+
+		getHeight: function()
+		{
+			return this.rectangle.getHeight();
+		},
+
 		/**
 		 * Creates the field view, used by the AbstractClientGame
 		 * @param aGameView

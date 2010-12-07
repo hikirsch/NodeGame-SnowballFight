@@ -256,6 +256,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, aConfig, AbstractGam
 		netChannelDidConnect: function (messageData)
 		{
 			this.gameClock = messageData.gameClock;
+			this.fieldController.setDimensions( messageData.model );
+
 			this.view.showJoinGame();
 		},
 
