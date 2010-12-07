@@ -1,34 +1,40 @@
-var init = function( $, serverUnavailable, joinGame, character, field, entity  ) {
-		return {
-			serverUnavailableDialog: function() {
-				return $(serverUnavailable);
-			},
+var init = function( $, navigation, serverUnavailable, joinGame, character, field, entity  ) {
+	return {
+		navigation: function() {
+			return $(navigation)
+				.tmpl();
+		},
 
-			joinGameDialog: function()
-			{
-				return $(joinGame);
-			},
+		serverUnavailableDialog: function() {
+			return $(serverUnavailable);
+		},
 
-			character: function( data ) {
-				return $(character)
-					.tmpl( data )
-					.addClass( data.theme );
-			},
+		joinGameDialog: function()
+		{
+			return $(joinGame);
+		},
 
-			field: function() {
-				return $(field);
-			},
+		character: function( data ) {
+			return $(character)
+				.tmpl( data )
+				.addClass( data.theme );
+		},
 
-			entity: function(data, theme) {
-				return $(entity)
-					.tmpl(data)
-					.addClass( theme );
-			}
-		};
-	}
+		field: function() {
+			return $(field);
+		},
 
-define(
-		['jquery',
+		entity: function(data, theme) {
+			return $(entity)
+				.tmpl(data)
+				.addClass( theme );
+		}
+	};
+};
+
+define([
+		'jquery',
+		'text!html/navigation.html',
 		'text!html/server-unavailable.html', 'text!html/join-game.html',
 		'text!html/character.html',
 		'text!html/field.html',
