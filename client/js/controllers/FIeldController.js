@@ -25,6 +25,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		createView: function(aModel)
 		{
+			console.log("created a field view!");
 			// if our game has a view, then create one
 			if( this.gameController.view )
 			{
@@ -236,6 +237,16 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		getHeight: function()
 		{
 			return this.rectangle.height;
+		},
+
+		getLeft: function()
+		{
+			return this.view.getLeft();
+		},
+
+		getTop: function()
+		{
+			return this.view.getTop();
 		},
 
 		hasView: function()

@@ -39,6 +39,26 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 			// See this.netChannelDidConnect
 		},
 
+		getWidth: function()
+		{
+			return this.fieldController.getWidth();
+		},
+
+		getHeight: function()
+		{
+			return this.fieldController.getHeight();
+		},
+
+		getFieldLeft: function()
+		{
+			return this.fieldController.getLeft();
+		},
+
+		getFieldTop: function()
+		{
+			return this.fieldController.getTop();
+		},
+
 		/**
 		 * A connected browser client's 'main loop'
 		 */
@@ -258,14 +278,15 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 		{
 			// Copy the game properties from the server
 			this.gameClock = messageData.gameClock;
-			this.gameModel = messageData.gameModel;
+
+			this.setModel( messageData.gameModel );
 
 			// Create the view and show name entry
 			this.createView();
-			this.view.showJoinGame();
 
 			// Create the field now that we have the correct game properties
-			this.fieldController.createView(this.gameModel);
+			this.fieldController.createView(this.model);
+			this.view.showJoinGame();
 		},
 
 		netChannelDidReceiveMessage: function (messageData)

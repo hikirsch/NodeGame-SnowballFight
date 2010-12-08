@@ -14,6 +14,7 @@ var init = function(HTMLFactory)
 					width: width + 'px',
 					height: height + 'px'
 				})
+				.show()
 				.appendTo('body');
 		},
 
@@ -33,6 +34,16 @@ var init = function(HTMLFactory)
 
 		destroy: function() {
 			this.element.destroy();
+		},
+
+		getLeft: function()
+		{
+			return this.element.offset().left;
+		},
+
+		getTop: function()
+		{
+			return this.element.offset().top;
 		}
 	});
 };
