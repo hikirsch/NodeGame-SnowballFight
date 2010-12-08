@@ -221,7 +221,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		{
 			this.traits.setObjectForKey(aTrait, aTrait.traitName);
 			aTrait.execute();
-			setTimeout(aTrait.detach, 3000)
 		},
 
 		getTraitWithName: function(aTraitName)
@@ -232,8 +231,9 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		removeTraitWithName: function(aTraitName)
 		{
 			var aTrait = this.traits.objectForKey(aTraitName);
+			if(!aTrait) return;
+			
 			aTrait.detach();
-
 			this.traits.remove(aTraitName);
 		},
 

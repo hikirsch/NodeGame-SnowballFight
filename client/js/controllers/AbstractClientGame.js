@@ -26,7 +26,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, Client
 			this.fieldController.createView( this.model );
 			this.view = new GameView(this, this.model );
 
-			console.log( 'created NetChannel');
+			console.log('created NetChannel');
 
 			this.clientCharacter = null; // Special pointer to our own client character
 
@@ -172,6 +172,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, Client
 						if(isOwnedByMe)
 						{
 							aCharacter.addTraitAndExecute(new ClientControlledTrait(aCharacter));
+							
 							this.clientCharacter = aCharacter;
 						}
 					}

@@ -4,23 +4,37 @@ var init = function()
 	{
 		initialize: function(anEntity, commandObject)
 		{
-			this.traitName = 'BaseTrait';
+			this.traitName |= 'BaseTrait';			// Use name default trait if none supplied - however if this happens there is an error
 			this.attachedEntity = anEntity;
+			this.attachedEntity.removeTraitWithName(this.traitName);
 
 			if(!commandObject.hasOwnProperty('execute') || !commandObject.hasOwnProperty('detach')) {
-				console.log("(BaseTrait) Child class does not implement 'execute' and 'detach'. Aborting...");
-				commandObject = null;
-				return;
+				console.log("(BaseTrait) Child class must implement 'execute' and 'detach'. Aborting..."); return;
 			}
 
-			var childDetach = commandObject.detach;
-			commandObject.detach = function() {
-				console.log('detacch')
-				this.attachedEntity = null;
-			};
+			// Store some properties to safely avoid memory leaks
+			this.commandObject = commandObject;
+			this.commandObject.childDetach = commandObject.detach;
+			this.commandObject.detach = this.detach;
 
 			// Take advantage of closure
 			this.callSuper(commandObject);
+		},
+
+		detach: function()
+		{
+			this.commandObject.childDetach.apply(this);
+			this.commandObject.detach = null;
+			this.attachedEntity = null;
+			this.commandObject = null;
+			clearTimeout(this.detachTimeout);
+		},
+
+		detachSelfAfterDelay: function(aDelay)
+		{
+			var that = this;
+
+			this.detachTimeout = setTimeout(function(){that.detach()}, 100);
 		}
 	});
 };

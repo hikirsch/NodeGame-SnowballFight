@@ -25,10 +25,7 @@ var init = function(BaseTrait, Joystick)
 		{
 			this.traitName = 'ClientControlledTrait';
 
-			// Take advantage of closure
 			var that = this;
-
-			// console.log(this.setInput)
 			this.callSuper(anEntity,
 			{
 				// Hijack the methods
@@ -36,9 +33,11 @@ var init = function(BaseTrait, Joystick)
 				{
 					this.attachedEntity.setInput( new Joystick() );
 					this.attachedEntity.input.attachEvents();
-//
+
 					this.attachedEntity.constructEntityDescription = this.constructEntityDescription;
 					this.attachedEntity.handleInput = this.handleInput;
+
+//					this.detachSelfAfterDelay(1000)
 				},
 
 				// If we needed to we could store the old method references
