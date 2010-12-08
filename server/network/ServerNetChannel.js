@@ -53,11 +53,11 @@ ServerNetChannel = (function()
 			this.maxChars = config.maxChars || 128;
 			this.maxClients = config.maxClients || 64;
 			this.port = config.PORT || 8000;
-			this.showStatus = config.status === false ? false : true;
+			this.showStatus = config.status !== false;
 
 			this.bytes = {
 				sent: 0,
-				received: 0,
+				received: 0
 			};
 			
 		    // Connections
@@ -112,7 +112,7 @@ ServerNetChannel = (function()
 					var decodedMessage = BISON.decode(encodedMessage);
 
 
-					if(decodedMessage.cmds instanceof Array == false)
+					if(!(decodedMessage.cmds instanceof Array))
 					{
 						// Call the mapped function, always pass the connection. Also pass data if available
 						that.CMD_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [connection, decodedMessage]);

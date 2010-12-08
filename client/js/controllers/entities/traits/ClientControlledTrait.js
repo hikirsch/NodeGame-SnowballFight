@@ -25,6 +25,7 @@ var init = function(Character)
 		{
 			this.component.setInput( joystick );
 			this.component.input.attachEvents();
+			this.component.handleInput = function() {};
 		},
 
 		constructEntityDescription: function()
