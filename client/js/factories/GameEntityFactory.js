@@ -11,7 +11,7 @@
 	 // TODO: FILL OUT
  */
 
-var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCharacter, Projectile)
+var init = function(Vector, Rectangle, GameEntity, Character, Projectile)
 {
 	return new JS.Class(
 	{
@@ -26,7 +26,6 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 			this.entityTypes = new SortedLookupTable();
 			this.entityTypes.setObjectForKey(GameEntity, 'GameEntity');
 			this.entityTypes.setObjectForKey(Character, 'Character');
-			this.entityTypes.setObjectForKey(ClientControlledCharacter, 'ClientControlledCharacter');
 			this.entityTypes.setObjectForKey(Projectile, 'Projectile');
 
 			this.collisionBitmask = {
@@ -47,10 +46,12 @@ var init = function(Vector, Rectangle, GameEntity, Character, ClientControlledCh
 			return projectile;
 		},
 
-		createCharacter: function(anObjectID, aClientID, aCharacterType, aFieldController)
+		createCharacter: function(anObjectID, aClientID, aFieldController)
 		{
-			var characterClass = this.entityTypes.objectForKey(aCharacterType), // Retrieve class from sorted table
-				aNewCharacter = new characterClass(anObjectID, aClientID, aFieldController);
+			//Character
+//			console.log(arguments)
+//			var characterClass = this.entityTypes.objectForKey(aCharacterType), // Retrieve class from sorted table
+			var aNewCharacter = new Character(anObjectID, aClientID, aFieldController);
 			
 			aNewCharacter.collisionBitfield = this.collisionBitmask.Projectile | this.collisionBitmask.CollidableLevelObject;
 
@@ -66,11 +67,10 @@ if (typeof window === 'undefined')
 	require('../lib/Vector');
 	require('../lib/Rectangle');
 	require('../controllers/entities/GameEntity');
-	require('../controllers/entities/ClientControlledCharacter');
 	require('../controllers/entities/Character');
 	require('../controllers/entities/Projectile');
 	
-	GameEntityFactory = init(Vector, Rectangle, GameEntity, Character, ClientControlledCharacter, Projectile);
+	GameEntityFactory = init(Vector, Rectangle, GameEntity, Character, Projectile);
 }
 else
 {
@@ -80,7 +80,6 @@ else
 		'lib/Rectangle',
 		'controllers/entities/GameEntity',
 		'controllers/entities/Character',
-		'controllers/entities/ClientControlledCharacter',
 		'controllers/entities/Projectile',
 		'lib/jsclass/core'], init);
 }

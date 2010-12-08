@@ -12,7 +12,7 @@ Basic Usage:
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
 
-var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, AbstractGame)
+var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, AbstractGame, ClientControlledTrait)
 {
 
 	return new JS.Class(AbstractGame,
@@ -148,11 +148,15 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 					if(isCharacter)
 					{
 						// This character actually belongs to us
-						var typeOfCharacter = (isOwnedByMe) ? 'ClientControlledCharacter' : 'Character',
-							aCharacter = this.shouldAddPlayer( objectID, connectionID, typeOfCharacter );
+						var aCharacter = this.shouldAddPlayer( objectID, connectionID, this.fieldController );
 
-						// Asign to this.clientCharacter if this character belongs to our connection 
-						this.clientCharacter = (isOwnedByMe) ? aCharacter : this.clientCharacter;
+						// If this character is owned by the us, allow it to be controlled by the keyboard
+						if(isOwnedByMe)
+						{
+							aCharacter = new ClientControlledTrait(aCharacter);
+							aCharacter.setInput( new Joystick() );
+							this.clientCharacter = aCharacter;
+						}
 					}
 					else // Every other kind of entity - is just a glorified view as far as the client game is concerned
 					{
@@ -300,4 +304,5 @@ define(['lib/Vector',
 	'lib/joystick',
 	'config',
 	'controllers/AbstractGame',
+	'controllers/entities/traits/ClientControlledTrait',
 	'lib/jsclass/core'], init);

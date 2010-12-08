@@ -14,7 +14,7 @@ Basic Usage:
 	 See subclasses
 */
 
-var init = function( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter)
+var init = function( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character)
 {
 	return new JS.Class(
 	{
@@ -94,10 +94,10 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 		},
 
 
-		shouldAddPlayer: function (anObjectID, aClientID, playerType)
+		shouldAddPlayer: function (anObjectID, aClientID)
 		{
 			// TODO: Check if we can still add new players
-			var aNewCharacter = this.fieldController.addPlayer( anObjectID, aClientID, playerType );
+			var aNewCharacter = this.fieldController.addPlayer( anObjectID, aClientID );
 			return aNewCharacter;
 		},
 
@@ -117,10 +117,9 @@ if (typeof window === 'undefined')
 	require('../factories/GameEntityFactory');
 	require('./entities/GameEntity');
 	require('./entities/Character');
-	require('./entities/ClientControlledCharacter');
 	require('../lib/jsclass/core.js');
 	var sys = require("sys");
-	AbstractGame = init( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter);
+	AbstractGame = init( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character);
 }
 else 
 {
@@ -131,6 +130,5 @@ else
 		'factories/GameEntityFactory',
 		'controllers/entities/GameEntity',
 		'controllers/entities/Character',
-		'controllers/entities/ClientControlledCharacter',
 		'lib/jsclass/core'], init);
 }
