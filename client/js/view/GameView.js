@@ -14,14 +14,14 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( ['lib/Rectangle', 'factories/HTMLFactory', 'view/FieldView', 'lib/jsclass/core'], function(Rectangle, HTMLFactory, FieldView)
+define( ['lib/Rectangle', 'managers/OverlayManager', 'factories/HTMLFactory', 'lib/jsclass/core'], function(Rectangle, OverlayManager, HTMLFactory )
 {
 	return new JS.Class(
 	{
 		initialize: function(controller)
-		{                                  
+		{
 			this.gameController = controller;
-
+			this.overlayManager = new OverlayManager( controller );
 			this.showNav();
 		},
 
@@ -33,21 +33,24 @@ define( ['lib/Rectangle', 'factories/HTMLFactory', 'view/FieldView', 'lib/jsclas
 
 		showJoinGame: function()
 		{
-			var that = this;
-			var joinGameDialog = HTMLFactory.joinGameDialog();
-			joinGameDialog.appendTo("body");
-			$(joinGameDialog).click( function(e){ that.joinGame(e); });  // Had bug with bind, feel free to remove this and re-add bind
+			var that = this,
+				$joinGameDialog = HTMLFactory.joinGameDialog();
+
+			$joinGameDialog
+				.find("form")
+				.submit( function(e) { return that.joinGame(e); } );
+			
+			this.overlayManager.show( $joinGameDialog );
 		},
 	
 		serverOffline: function()
 		{
-			HTMLFactory.serverUnavailableDialog()
-				.appendTo("body");
+			var $unavailableEle = HTMLFactory.serverUnavailableDialog();
+			OverlayManager.show( $unavailableEle );
 		},
 	
 		joinGame: function(e)
-		{
-			e.preventDefault();
+		{	
 			var nickName = $("#nickname").val();
 			
 			if( nickName.length <= 0)
@@ -56,8 +59,11 @@ define( ['lib/Rectangle', 'factories/HTMLFactory', 'view/FieldView', 'lib/jsclas
 			}
 
 			this.gameController.joinGame(nickName);
+			
 			$("#join-game").remove();
-
+			this.overlayManager.hide();
+			
+			return false;
 		},
 
 		destroy: function() {

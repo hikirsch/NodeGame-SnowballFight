@@ -1,4 +1,4 @@
-var init = function( $, navigation, serverUnavailable, joinGame, character, field, entity  ) {
+var init = function( $, overlay, navigation, serverUnavailable, joinGame, character, field, entity  ) {
 	return {
 		navigation: function() {
 			return $(navigation)
@@ -6,12 +6,14 @@ var init = function( $, navigation, serverUnavailable, joinGame, character, fiel
 		},
 
 		serverUnavailableDialog: function() {
-			return $(serverUnavailable);
+			return $(serverUnavailable)
+				.tmpl();
 		},
 
 		joinGameDialog: function()
 		{
-			return $(joinGame);
+			return $(joinGame)
+				.tmpl();
 		},
 
 		character: function( data ) {
@@ -21,19 +23,25 @@ var init = function( $, navigation, serverUnavailable, joinGame, character, fiel
 		},
 
 		field: function() {
-			return $(field);
+			return $(field)
+				.tmpl();
 		},
 
 		entity: function(data, theme) {
 			return $(entity)
 				.tmpl(data)
 				.addClass( theme );
+		},
+		overlay: function() {
+			return $(overlay)
+				.tmpl();
 		}
 	};
 };
 
 define([
 		'jquery',
+		'text!html/overlay.html',
 		'text!html/navigation.html',
 		'text!html/server-unavailable.html', 'text!html/join-game.html',
 		'text!html/character.html',

@@ -1,7 +1,7 @@
 @import url( reset.css );
 
 html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-serif; font-size: 12px;
-	background-image: url( ../img/global/img-main-background.png ); background-position: 50% 0;
+	background-color: #f2f7fb; background-image: url( ../img/global/bg-main.png ); background-position: 50% 0;
 	background-repeat: no-repeat;
 }
 nav.main { width: 900px; margin: 0 auto 40px; }
@@ -62,3 +62,5 @@ nav.main ul li.ogilvy-logo { float: right; background-image: url( ../img/global/
 #logger { font-family: monospace; padding: 20px; position: absolute; left: 0; bottom: 0; height: 160px; width: 1000px; background-color: #000; color: #fff; }
 
 .game-container .game-entity-view { background-image: url( '../img/entities/snowball.png' ); position: absolute; height: 32px; width: 32px;}
+
+.overlay-container { z-index: 1000; position: absolute; background-image: url( ../img/global/bg-overlay.png ); }
