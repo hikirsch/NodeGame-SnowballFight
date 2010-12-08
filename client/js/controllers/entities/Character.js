@@ -40,7 +40,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 
 			// Override movement properties
 			this.moveSpeed = 0.4;
-			this.damping = 0.96; 
+			this.damping = 0.96;
 			this.maxVelocity = 3.5;
 
 			// Firing
@@ -118,7 +118,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			projectileModel.force = 1.0 ; // TODO: Use force gauge
 			projectileModel.initialPosition = this.position.cp();
 			projectileModel.angle = this.rotation * -0.0174532925;
-			
+
 			this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
 			this.lastFireTime = gameClock;
 		},

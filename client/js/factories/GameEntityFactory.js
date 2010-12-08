@@ -41,6 +41,8 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile)
 		{
 			//this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
 			var projectile = new Projectile(anObjectID, aClientID, aFieldController, aProjectileModel, 1);
+
+			// Should snowballs collide with one another? 
 			projectile.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.CollidableLevelObject;
 
 			return projectile;
@@ -48,13 +50,10 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile)
 
 		createCharacter: function(anObjectID, aClientID, aFieldController)
 		{
-			//Character
-//			console.log(arguments)
-//			var characterClass = this.entityTypes.objectForKey(aCharacterType), // Retrieve class from sorted table
 			var aNewCharacter = new Character(anObjectID, aClientID, aFieldController);
-			
-			aNewCharacter.collisionBitfield = this.collisionBitmask.Projectile | this.collisionBitmask.CollidableLevelObject;
 
+			// Collide against other characters, projectiles, and level objects
+			aNewCharacter.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.Projectile | this.collisionBitmask.CollidableLevelObject;
 			return aNewCharacter;
 		}
 	});

@@ -47,13 +47,14 @@ var init = function(Vector, PackedCircle)
 	PackedCircleManager.prototype.createEventEmitter = function() {
 		this.eventEmitter = new EVENTS.EventEmitter();
 
-		// Comment if needed, Node.js creates a array of listeners if more than one is detected. Avoid the array
+		// Comment out only if really need to know when a new listener is added.
+		// Node.js creates a array of listeners if more than one is detected. Avoid the array
 //		this.eventEmitter.addListener("newListener", function (event, listener)
 //		{
 //			// In case we care about when a new listener is added
 //		});
 	};
-	
+
 	/**
 	 * Set the boundary rectangle for the circle packing.
 	 * This is used to locate the 'center'
@@ -97,6 +98,7 @@ var init = function(Vector, PackedCircle)
 		while (len--) {
 			if(this.allCircles[len] === aCircle) {
 				found = true;
+				index = len;
 				break;
 			}
 		}
@@ -107,8 +109,8 @@ var init = function(Vector, PackedCircle)
 
 		// Remove
 		this.allCircles[index].dealloc();
-		delete this.allCircles[index];
-		this.allCircles.splice(index, 1);
+		this.allCircles[index] = null;
+		//this.allCircles.splice(index, 1);
 	}
 
 
@@ -118,7 +120,7 @@ var init = function(Vector, PackedCircle)
 	 */
 	PackedCircleManager.prototype.forceCirclesToMatchViewPositions = function()
 	{
-		len = this.allCircles.length;
+		var len = this.allCircles.length;
 		// push toward target position
 		for(var n = 0; n < this.numberOfCenteringPasses; n++)
 		{
@@ -156,7 +158,7 @@ var init = function(Vector, PackedCircle)
 				v.x = c.position.x - aTarget.x;
 				v.y = c.position.y - aTarget.y;
 				v.mul(damping);
-				
+
 				c.position.x -= v.x;
 				c.position.y -= v.y;
 			}
@@ -173,22 +175,30 @@ var init = function(Vector, PackedCircle)
 		var v = new Vector(0, 0);
 
 		var dragCircle = this.draggedCircle; // ignore for now
-		var circleList = this.allCircles;
-		var len = circleList.length;
+	  	var circleList = this.allCircles;
+
+		// remove null elements
+		for (var k = circleList.length; k >= 0; k--) {
+			if (circleList[k] === null)
+				circleList.splice(k, 1);
+		}
+
 
 		// Collide circles
+		var len = circleList.length;
 		for(var n = 0; n < this.numberOfCollisionPasses; n++)
 		{
 			for(var i = 0; i < len; i++)
 			{
 				var ci = circleList[i];
 
-				
+
 				for (var j = i + 1; j< len; j++)
 				{
 					var cj = circleList[j];
 
 					if( !this.circlesShouldCollide(ci, cj) ) continue;   // It's us!
+
 
 					var dx = cj.position.x - ci.position.x,
 						dy = cj.position.y - ci.position.y,
@@ -227,10 +237,6 @@ var init = function(Vector, PackedCircle)
 						if(this.dispatchCollisionEvents && n == this.numberOfCollisionPasses-1)
 						{
 							this.eventEmitter.emit('collision', cj, ci, v);
-							
-							// Allow each circle to also dispatch the event - ...for now
-							ci.eventEmitter.emit('collision', ci, cj, v);
-							cj.eventEmitter.emit('collision', cj, ci, v);
 						}
 					}
 				}
@@ -242,7 +248,7 @@ var init = function(Vector, PackedCircle)
 	PackedCircleManager.prototype.handleBoundaryForCircle = function(aCircle, boundsRule)
 	{
 		if(aCircle == this.draggedCircle) return; // Ignore if being dragged
-		
+
 		var xpos = aCircle.position.x;
 		var ypos = aCircle.position.y;
 
@@ -256,13 +262,13 @@ var init = function(Vector, PackedCircle)
 		var constrainXMask = 1 << 3;
 		var constrainYMask = 1 << 4;
 		var emitEvent = 1 << 5;
-		
+
 		// TODO: Promote to member variable
 		// Convert to bitmask - Uncomment the one you want, or concact your own :)
 //		boundsRule = wrapY; // Wrap only Y axis
 //		boundsRule = wrapX; // Wrap only X axis
 //		boundsRule = wrapXMask | wrapYMask; // Wrap both X and Y axis
-		boundsRule = wrapYMask | constrainXMask;  // Wrap Y axis, but constrain horizontally 
+		boundsRule = wrapYMask | constrainXMask;  // Wrap Y axis, but constrain horizontally
 
 //		Wrap X
 		if(boundsRule & wrapXMask && xpos-diameter > this.bounds.right) {
@@ -331,7 +337,7 @@ var init = function(Vector, PackedCircle)
 	{
 		this.desiredTarget = aPosition;
 	};
-	
+
 	/**
 	 * Given an x,y position finds circle underneath and sets it to the currently grabbed circle
 	 * @param xpos
@@ -392,9 +398,11 @@ var init = function(Vector, PackedCircle)
 	 */
 	PackedCircleManager.prototype.circlesShouldCollide = function(circleA, circleB)
 	{
-		if(circleA == circleB) return false;
+		if(!circleA || !circleB || circleA === circleB) return false; 					// one is null (will be deleted next loop), or both point to same obj.
+		if(circleA.view == null || circleB.view == null) return false;					// This circle will be removed next loop, it's entity is already removed
+
 		if(circleA.isFixed & circleB.isFixed) return false;
-//		if(!(circleA.collisionBitfield & circleB.collisionBitfield)) return false;		// Collisions not defined in
+//		if(!(circleA.collisionBitfield & circleB.collisionBitfield)) return false;		// Shouldn't collide according to group
 		if(circleA.view.clientID === circleB.view.clientID) return false; 				// Don't let something collide with stuff it owns
 
 		return true;
@@ -418,7 +426,7 @@ if (typeof window === 'undefined') {
 	require('js/lib/circlepack/PackedCircle.js');
 	require('js/lib/jsclass/core.js');
 	require('js/lib/SortedLookupTable.js');
-	EVENTS = require('events');	
+	EVENTS = require('events');
 
 	PackedCircleManager = init(Vector, PackedCircle);
 } else {

@@ -58,6 +58,13 @@ var init = (function() {
 		return this._keys.length;
 	};
 
+	LookupTable.prototype.dealloc = function()
+	{
+		delete this._keys;
+		delete this._data;
+	};
+
+
 
 	/**
 	*	Sorted LookupTable, 

@@ -17,24 +17,45 @@ Basic Usage:
 	}
 */
 
-var init = function(Character)
+var init = function(BaseTrait, Joystick)
 {
-	return new JS.Decorator(Character,
+	return new JS.Class(BaseTrait,
 	{
-		setInput: function( joystick )
+		initialize: function(anEntity)
 		{
-			this.component.setInput( joystick );
-			this.component.input.attachEvents();
-			this.component.handleInput = function() {};
+			this.traitName = 'ClientControlledTrait';
+
+			// Take advantage of closure
+			var that = this;
+
+			// console.log(this.setInput)
+			this.callSuper(anEntity,
+			{
+				// Hijack the methods
+				execute: function()
+				{
+					this.attachedEntity.setInput( new Joystick() );
+					this.attachedEntity.input.attachEvents();
+//
+					this.attachedEntity.constructEntityDescription = this.constructEntityDescription;
+					this.attachedEntity.handleInput = this.handleInput;
+				},
+
+				// If we needed to we could store the old method references
+				// and set the back in this function
+				detach: function()
+				{
+				}
+			});
 		},
 
 		constructEntityDescription: function()
 		{
-			this.component.input.constructInputBitmask();
+			this.input.constructInputBitmask();
 			return {
-				objectID: this.component.objectID,
-				clientID: this.component.clientID,
-				input: this.component.input.constructInputBitmask()
+				objectID: this.objectID,
+				clientID: this.clientID,
+				input: this.input.constructInputBitmask()
 			}
 		},
 
@@ -43,15 +64,11 @@ var init = function(Character)
 	});
 };
 
-if (typeof window === 'undefined')
-{
+if (typeof window === 'undefined') {
 	// We're in node!
-	require('./Character');
-	ClientControlledTrait = init(Character);
-}
-else
-{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['controllers/entities/Character', 'lib/jsclass/core', 'lib/jsclass/decorator'], init);
+	require('js/controllers/entities/Character');
+	require('js/lib/Joystick');
+	ClientControlledTrait = init(BaseTrait, Joystick);
+} else {
+	define(['controllers/entities/traits/BaseTrait', 'lib/Joystick', 'lib/jsclass/core', 'lib/jsclass/command'], init);
 }

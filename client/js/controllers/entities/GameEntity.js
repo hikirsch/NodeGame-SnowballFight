@@ -27,7 +27,7 @@ Basic Usage:
 		this.view.addCharacter(newCharacter.initView());
 */
 
-var init = function(Vector, Rectangle, FieldController, EntityView)
+var init = function(Vector, Rectangle, FieldController, SortedLookupTable, EntityView)
 {
 	return new JS.Class(
 	{
@@ -65,8 +65,11 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 			/**
 			 * Collision
 			 */
+			this.collisionCircle = null;
 			this.collisionBitfield = 0;
-			this.radius = 5;
+			this.radius = 18;
+
+			this.traits = new SortedLookupTable();
 		},
 
 
@@ -92,6 +95,7 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 		 */
 		setupCollisionEvents: function(aPackedCircle)
 		{
+			this.collisionCircle = aPackedCircle;
 			aPackedCircle.collisionBitfield = this.collisionBitfield;
 			aPackedCircle.position = this.position;	// TODO: This is not the best place to do this
 			aPackedCircle.eventEmitter.on("collision", this.onCollision);
@@ -211,6 +215,30 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 		},
 
 		/**
+		 * Trait accesors
+		 */
+		addTraitAndExecute: function(aTrait)
+		{
+			this.traits.setObjectForKey(aTrait, aTrait.traitName);
+			aTrait.execute();
+			setTimeout(aTrait.detach, 3000)
+		},
+
+		getTraitWithName: function(aTraitName)
+		{
+			return this.traits.objectForKey(aTraitName)
+		},
+
+		removeTraitWithName: function(aTraitName)
+		{
+			var aTrait = this.traits.objectForKey(aTraitName);
+			aTrait.detach();
+
+			this.traits.remove(aTraitName);
+		},
+
+
+		/**
 		 * Accessors
 		 */
 		getRotation: function()
@@ -246,6 +274,9 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 			delete this.velocity;
 			delete this.acceleration;
 
+			this.traits.dealloc();
+			delete this.traits;
+
 			this.fieldController = null;
 		}
 	});
@@ -253,14 +284,16 @@ var init = function(Vector, Rectangle, FieldController, EntityView)
 
 if (typeof window === 'undefined') {
 	// We're in node!
-	require('../../lib/jsclass/core.js');
-	require('../../lib/Rectangle');
-	require('../../lib/Vector');
-	require('../FieldController');
+	require('js/lib/Vector');
+	require('js/lib/Rectangle');
+	require('js/controllers/FieldController');
+	require('js/lib/SortedLookupTable');
+	require('js/lib/jsclass/core.js');
 
-	GameEntity = init(Vector, Rectangle, FieldController, null);
+
+	GameEntity = init(Vector, Rectangle, FieldController, SortedLookupTable, null);
 } else {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'view/EntityView', 'lib/jsclass/core'], init);
+	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'lib/SortedLookupTable', 'view/EntityView', 'lib/jsclass/core'], init);
 }

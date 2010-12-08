@@ -141,11 +141,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			}, this );
 		},
 
-		onEntityCollision: function(characterCircle, projectileCircle, collisionInverseNormal)
-		{
-			this.removeEntity( projectileCircle );
-		},
-
 		/**
 		 * Updates an entity postion
 		 * @param objectID
@@ -209,13 +204,18 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		removeEntity: function( objectID )
 		{
+			console.log("Removing Entity!", objectID);
 			var entity = this.allEntities.objectForKey( objectID );
-			entity.dealloc();
-			
+
+			// Clients contain a view, server entities contain a collisionCircle.
+			// If this statement is false then something went wrong, so no check on second conditional
 			if( this.view ) {
 				this.view.removeEntity( entity.view );
+			} else {
+				this.packedCircleManager.removeCircle(entity.collisionCircle);
 			}
 
+			entity.dealloc();
 			this.allEntities.remove( objectID );
 		},
 

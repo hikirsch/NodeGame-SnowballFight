@@ -89,7 +89,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, Client
 			if( len < 2 ) return false; // Nothing to do!
 
 			// if the distance between prev and next is too great - don't interpolate
-			var maxInterpolationDistance = 20,
+			var maxInterpolationDistance = 25,
 				maxInterpolationDistanceSquared = maxInterpolationDistance*maxInterpolationDistance;
 
 			// Store the next WED before and after the desired render time
@@ -171,8 +171,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, Client
 						// If this character is owned by the us, allow it to be controlled by the keyboard
 						if(isOwnedByMe)
 						{
-							aCharacter = new ClientControlledTrait(aCharacter);
-							aCharacter.setInput( new Joystick() );
+							aCharacter.addTraitAndExecute(new ClientControlledTrait(aCharacter));
 							this.clientCharacter = aCharacter;
 						}
 					}

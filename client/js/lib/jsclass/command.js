@@ -10,7 +10,9 @@ JS.Command = new JS.Class('Command', {
     if (this._stack) this._stack._restart();
     var exec = this._functions.execute;
     if (exec) exec.apply(this);
-    if (this._stack && push !== false) this._stack.push(this);
+    if (this._stack && push !== false) {
+		this._stack.push(this);
+	}
   },
   
   undo: function() {
