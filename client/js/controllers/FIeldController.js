@@ -2,35 +2,33 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 {
 	return new JS.Class(
 	{
-		initialize: function(game)
+		initialize: function(gameController, gameModel )
 		{
 			console.log('(FieldController)::initialize');
 
-			this.gameController = game;
+			this.gameController = gameController;
 			this.packedCircleManager = null;
 
 			// Might do away with different types of entities tables
 			this.allEntities = new SortedLookupTable();
 			this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (WebSocket connection) not the objectID
+
+			this.setModel( gameModel );
 		},
 
-		initWithModel: function(aGameModel)
+		setModel: function(aGameModel)
 		{
 			this.rectangle = new Rectangle(0, 0, aGameModel.width, aGameModel.height);
+
+			if( this.view )
+			{
+				this.view.resize( aGameModel.height, aGameModel.width );
+			}
 		},
 
-		/**
-		 * Creates the field view, used by the AbstractClientGame
-		 * @param aGameView
-		 */
-		createView: function(aModel)
+		createView: function( gameModel )
 		{
-			console.log("created a field view!");
-			// if our game has a view, then create one
-			if( this.gameController.view )
-			{
-				this.view = new FieldView(this, aModel);
-			}
+			this.view = new FieldView( this, gameModel );
 		},
 
 		/**

@@ -10,12 +10,18 @@ var init = function(HTMLFactory)
 
 		createElement: function( height, width ) {
 			this.element = HTMLFactory.field()
-				.css({
-					width: width + 'px',
-					height: height + 'px'
-				})
 				.show()
 				.appendTo('body');
+
+			this.resize( height, width );
+		},
+
+		resize: function( height, width )
+		{
+		 	this.element.css({
+				 height: height + 'px',
+				 width: width + 'px'
+			});
 		},
 
 		addEntity: function( anEntityView )

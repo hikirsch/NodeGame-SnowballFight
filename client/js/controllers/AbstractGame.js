@@ -14,19 +14,22 @@ Basic Usage:
 	 See subclasses
 */
 
-var init = function( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter)
+var init = function( GameModel, Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter)
 {
 	return new JS.Class(
 	{
 		include: JS.StackTrace,
 		
-		initialize: function(config, aGameModel)
+		initialize: function(config)
 		{
+			var that = this;
+			
 			this.config = config;
-
+			this.setModel(GameModel);
+			
 			// our game takes place in a field
-			this.fieldController = new FieldController( this );
-			this.fieldController.tick();
+			this.fieldController = new FieldController( this, this.model );
+			// this.fieldController.tick();
 
 			// This is the Factory that will create all the entities for us
 			this.entityFactory = new GameEntityFactory(this.fieldController);
@@ -38,10 +41,9 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 
 			// Loop
 			this.clockActualTime = new Date().getTime();
-			this.gameClock = 0;									// Our game clock is relative
+			this.gameClock = 0; // Our game clock is relative
 			this.gameTick = 0;
-			
-			var that = this; // Temporarily got rid of bind (had some bug with it), feel free to add back in -
+
 			this.gameTickInterval = setInterval(function(){that.tick()}, this.targetDelta);
 		},
 
@@ -53,7 +55,16 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 		setModel: function(aGameModel)
 		{
 			this.model = aGameModel;
-			this.fieldController.initWithModel(aGameModel);
+
+			if( this.fieldController )
+			{
+				this.fieldController.setModel(aGameModel);
+			}
+		},
+
+		getModel: function()
+		{
+			return this.model;
 		},
 		
 		/**
@@ -110,6 +121,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 
 if (typeof window === 'undefined') 
 {
+	require('js/model/GameModel.js');
 	require('../lib/Vector.js');
 	require('../lib/Rectangle.js');
 	require('../lib/SortedLookupTable.js');
@@ -120,11 +132,12 @@ if (typeof window === 'undefined')
 	require('./entities/ClientControlledCharacter');
 	require('../lib/jsclass/core.js');
 	var sys = require("sys");
-	AbstractGame = init( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter);
+	AbstractGame = init( GameModel, Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter);
 }
 else 
 {
-	define(['lib/Vector',
+	define(['model/GameModel',
+		'lib/Vector',
 		'lib/Rectangle',
 		'lib/SortedLookupTable',
 		'controllers/FieldController',

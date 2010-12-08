@@ -12,19 +12,21 @@ Basic Usage:
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
 
-var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, AbstractGame)
+var init = function(GameModel, Vector, NetChannel, GameView, Joystick, aConfig, AbstractGame)
 {
 
 	return new JS.Class(AbstractGame,
 	{
-		initialize: function(config, gameModel)
+		initialize: function(config)
 		{
 			this.callSuper();
 
-			// we need to create our view first before we call our super constructor so that our
-			// super class knows to create the view for anything else it needs, this is primarily
-			// for the field controller since this element is being shared between client/server
-			this.netChannel = new NetChannel(config, this);
+			this.netChannel = new NetChannel( config, this );
+			
+			this.fieldController.createView( this.model );
+			this.view = new GameView(this, this.model );
+
+			console.log( 'created NetChannel');
 
 			this.clientCharacter = null; // Special pointer to our own client character
 
@@ -33,10 +35,6 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
-
-			// Note:
-			// Nothing interesting happens on the client game until it receives the first message from the server
-			// See this.netChannelDidConnect
 		},
 
 		getWidth: function()
@@ -85,7 +83,7 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 		 */
 		renderAtTime: function(renderTime)
 		{
-			var cmdBuffer = this.netChannel.incommingCmdBuffer;
+			var cmdBuffer = this.netChannel.incommingCmdBuffer,
 				len = cmdBuffer.length;
 
 			if( len < 2 ) return false; // Nothing to do!
@@ -216,11 +214,6 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 			this.fieldController.removeExpiredEntities( activeEntities );
 		},
 
-		createView: function()
-		{
-			this.view = new GameView(this);
-		},
-
 		/**
 		 * ClientGameView delegate
 		 */
@@ -275,13 +268,9 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 			// Copy the game properties from the server
 			this.gameClock = messageData.gameClock;
 
+			// we get a copy of the game model from the server to be extra efficient :-), so set it
 			this.setModel( messageData.gameModel );
 
-			// Create the view and show name entry
-			this.createView();
-
-			// Create the field now that we have the correct game properties
-			this.fieldController.createView(this.model);
 			this.view.showJoinGame();
 		},
 
@@ -314,9 +303,10 @@ var init = function(Vector, NetChannel, GameModel, GameView, Joystick, aConfig, 
 	});
 };
 
-define(['lib/Vector',
-	'network/NetChannel',
-	'model/GameModel', 
+define([
+	'model/GameModel',
+	'lib/Vector',
+	'network/NetChannel', 
 	'view/GameView',
 	'lib/joystick',
 	'config',

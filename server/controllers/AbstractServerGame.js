@@ -46,7 +46,6 @@ AbstractServerGame = (function()
 			
 			console.log('(ServerGame)::init');
 
-			this.setModel(aGameModel);
 			this.fieldController.createPackedCircleManager();
 
 			// Each time we create an entity we increment this

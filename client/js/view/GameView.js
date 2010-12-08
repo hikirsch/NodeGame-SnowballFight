@@ -18,10 +18,10 @@ define( ['lib/Rectangle', 'managers/OverlayManager', 'factories/HTMLFactory', 'l
 {
 	return new JS.Class(
 	{
-		initialize: function(controller)
+		initialize: function( controller, gameModel )
 		{
 			this.gameController = controller;
-			this.overlayManager = new OverlayManager( controller );
+			this.overlayManager = new OverlayManager( controller, gameModel );
 			this.showNav();
 		},
 
@@ -46,7 +46,7 @@ define( ['lib/Rectangle', 'managers/OverlayManager', 'factories/HTMLFactory', 'l
 		serverOffline: function()
 		{
 			var $unavailableEle = HTMLFactory.serverUnavailableDialog();
-			OverlayManager.show( $unavailableEle );
+			this.overlayManager.show( $unavailableEle );
 		},
 	
 		joinGame: function(e)
@@ -66,7 +66,8 @@ define( ['lib/Rectangle', 'managers/OverlayManager', 'factories/HTMLFactory', 'l
 			return false;
 		},
 
-		destroy: function() {
+		destroy: function()
+		{
 			this.element.remove();
 		}
 	});
