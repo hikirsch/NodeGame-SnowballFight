@@ -9,18 +9,20 @@ define(['factories/HTMLFactory'], function( HTMLFactory ) {
 
 			createElement: function()
 			{
+				this.settings = {
+					height: this.controller.getHeight(),
+					width: this.controller.getWidth(),
+					top: this.controller.getFieldTop(),
+					left: this.controller.getFieldLeft()
+				};
+				
 				this.element = HTMLFactory.overlay()
 					.hide()
-					.css({
-						height: this.controller.getHeight(),
-						width: this.controller.getWidth(),
-						top: this.controller.getFieldTop(),
-						left: this.controller.getFieldLeft()
-					})
+					.css(this.settings)
 					.appendTo("body");
 			},
 
-			show: function( ele )
+			show: function( $ele )
 			{
 				if( this.element == null )
 				{
@@ -29,8 +31,13 @@ define(['factories/HTMLFactory'], function( HTMLFactory ) {
 				
 				this.element.show();
 
-				console.log( ele );
-				$(ele).appendTo("body");
+				$ele
+					.appendTo("body")
+					.css({
+						left: this.settings.left + ( ( this.settings.width - $ele.width() ) / 2 ), 
+						top: this.settings.top + ( ( this.settings.height - $ele.height() ) / 2 )
+					});
+
 			},
 
 			hide: function()
