@@ -99,7 +99,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 				if( this.input.isDown() ) this.acceleration.y += this.moveSpeed;
 
 				// Firing
-				if( this.input.isSpace() )this.fireProjectile( gameClock );
+				if( this.input.isSpace() ) this.fireProjectile( gameClock );
 			}
 		},
 		/**

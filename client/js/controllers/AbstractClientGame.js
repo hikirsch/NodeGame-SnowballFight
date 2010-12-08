@@ -12,7 +12,7 @@ Basic Usage:
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
 
-var init = function(GameModel, Vector, NetChannel, GameView, Joystick, aConfig, AbstractGame)
+var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, ClientControlledTrait)
 {
 
 	return new JS.Class(AbstractGame,
@@ -21,8 +21,8 @@ var init = function(GameModel, Vector, NetChannel, GameView, Joystick, aConfig, 
 		{
 			this.callSuper();
 
-			this.netChannel = new NetChannel( config, this );
-			
+			this.netChannel = new NetChannel(config, this);
+
 			this.fieldController.createView( this.model );
 			this.view = new GameView(this, this.model );
 
@@ -83,7 +83,7 @@ var init = function(GameModel, Vector, NetChannel, GameView, Joystick, aConfig, 
 		 */
 		renderAtTime: function(renderTime)
 		{
-			var cmdBuffer = this.netChannel.incommingCmdBuffer,
+			var cmdBuffer = this.netChannel.incommingCmdBuffer;
 				len = cmdBuffer.length;
 
 			if( len < 2 ) return false; // Nothing to do!
@@ -153,28 +153,32 @@ var init = function(GameModel, Vector, NetChannel, GameView, Joystick, aConfig, 
 				if(!entityDesc.hasOwnProperty('objectID'))
 					continue;
 
-			 	var entity = this.fieldController.getEntityWithObjectID( entityDesc.objectID );
+				 var entity = this.fieldController.getEntityWithObjectID( entityDesc.objectID );
 
 				// We don't have this entity - create it!
 				if( !entity )
 				{
 					var connectionID = entityDesc.clientID,
 						isCharacter  = entityDesc.entityType == GAMECONFIG.ENTITY_MODEL.CHARACTER,
-					    isOwnedByMe = connectionID == this.netChannel.clientID;
+						isOwnedByMe = connectionID == this.netChannel.clientID;
 
 					// Take care of the special things we have to do when adding a character
 					if(isCharacter)
 					{
 						// This character actually belongs to us
-						var typeOfCharacter = (isOwnedByMe) ? 'ClientControlledCharacter' : 'Character',
-							aCharacter = this.shouldAddPlayer( objectID, connectionID, typeOfCharacter );
+						var aCharacter = this.shouldAddPlayer( objectID, connectionID, this.fieldController );
 
-						// Asign to this.clientCharacter if this character belongs to our connection 
-						this.clientCharacter = (isOwnedByMe) ? aCharacter : this.clientCharacter;
+						// If this character is owned by the us, allow it to be controlled by the keyboard
+						if(isOwnedByMe)
+						{
+							aCharacter = new ClientControlledTrait(aCharacter);
+							aCharacter.setInput( new Joystick() );
+							this.clientCharacter = aCharacter;
+						}
 					}
 					else // Every other kind of entity - is just a glorified view as far as the client game is concerned
 					{
- 						this.fieldController.createAndAddEntityFromDescription(entityDesc);
+						 this.fieldController.createAndAddEntityFromDescription(entityDesc);
 					}
 
 					// Place it where it will be
@@ -192,7 +196,7 @@ var init = function(GameModel, Vector, NetChannel, GameView, Joystick, aConfig, 
 					entityPositionAfterRenderTime.x = nextWorldEDAfterRenderTime[ objectID ].x;
 					entityPositionAfterRenderTime.y = nextWorldEDAfterRenderTime[ objectID ].y;
 
-					// if the distance between prev and next is too great - don't interpolate					
+					// if the distance between prev and next is too great - don't interpolate
 					if(entityPositionBeforeRenderTime.distanceSquared(entityPositionAfterRenderTime) > maxInterpolationDistanceSquared) {
 						t = 1;
 					}
@@ -212,6 +216,11 @@ var init = function(GameModel, Vector, NetChannel, GameView, Joystick, aConfig, 
 
 			// Destroy removed entities
 			this.fieldController.removeExpiredEntities( activeEntities );
+		},
+
+		createView: function()
+		{
+			this.view = new GameView(this);
 		},
 
 		/**
@@ -303,12 +312,10 @@ var init = function(GameModel, Vector, NetChannel, GameView, Joystick, aConfig, 
 	});
 };
 
-define([
-	'model/GameModel',
-	'lib/Vector',
+define(['lib/Vector',
 	'network/NetChannel', 
 	'view/GameView',
 	'lib/joystick',
-	'config',
 	'controllers/AbstractGame',
+	'controllers/entities/traits/ClientControlledTrait',
 	'lib/jsclass/core'], init);

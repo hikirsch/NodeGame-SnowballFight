@@ -14,7 +14,7 @@ Basic Usage:
 	 See subclasses
 */
 
-var init = function( GameModel, Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter)
+var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldController, GameEntityFactory, GameEntity, Character)
 {
 	return new JS.Class(
 	{
@@ -23,10 +23,10 @@ var init = function( GameModel, Vector, Rectangle, SortedLookupTable, FieldContr
 		initialize: function(config)
 		{
 			var that = this;
-			
+
 			this.config = config;
 			this.setModel(GameModel);
-			
+
 			// our game takes place in a field
 			this.fieldController = new FieldController( this, this.model );
 			// this.fieldController.tick();
@@ -66,7 +66,7 @@ var init = function( GameModel, Vector, Rectangle, SortedLookupTable, FieldContr
 		{
 			return this.model;
 		},
-		
+
 		/**
 		 * Tick tock, the clock is running! Make everyone do stuff.
 		 */
@@ -121,29 +121,27 @@ var init = function( GameModel, Vector, Rectangle, SortedLookupTable, FieldContr
 
 if (typeof window === 'undefined') 
 {
-	require('js/model/GameModel.js');
 	require('../lib/Vector.js');
 	require('../lib/Rectangle.js');
 	require('../lib/SortedLookupTable.js');
+	require('js/model/GameModel.js');
 	require('./FieldController.js');
 	require('../factories/GameEntityFactory');
 	require('./entities/GameEntity');
 	require('./entities/Character');
-	require('./entities/ClientControlledCharacter');
 	require('../lib/jsclass/core.js');
-	var sys = require("sys");
-	AbstractGame = init( GameModel, Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory, GameEntity, Character, ClientControlledCharacter);
+	
+	AbstractGame = init( Vector, Rectangle, SortedLookupTable, GameModel, FieldController, GameEntityFactory, GameEntity, Character );
 }
 else 
 {
-	define(['model/GameModel',
-		'lib/Vector',
+	define(['lib/Vector',
 		'lib/Rectangle',
 		'lib/SortedLookupTable',
+		'model/GameModel',
 		'controllers/FieldController',
 		'factories/GameEntityFactory',
 		'controllers/entities/GameEntity',
 		'controllers/entities/Character',
-		'controllers/entities/ClientControlledCharacter',
 		'lib/jsclass/core'], init);
 }

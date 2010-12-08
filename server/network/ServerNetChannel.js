@@ -53,13 +53,13 @@ ServerNetChannel = (function()
 			this.maxChars = config.maxChars || 128;
 			this.maxClients = config.maxClients || 64;
 			this.port = config.PORT || 8000;
-			this.showStatus = config.status === false ? false : true;
+			this.showStatus = config.status !== false;
 
 			this.bytes = {
 				sent: 0,
-				received: 0,
-				sentLast: 0
+				received: 0
 			};
+			
 		    // Connections
 		    this.clients = new SortedLookupTable();		// Everyone connected
 		    this.clientCount = 0;	// Length of above
@@ -112,7 +112,7 @@ ServerNetChannel = (function()
 					var decodedMessage = BISON.decode(encodedMessage);
 
 
-					if(decodedMessage.cmds instanceof Array == false)
+					if(!(decodedMessage.cmds instanceof Array))
 					{
 						// Call the mapped function, always pass the connection. Also pass data if available
 						that.CMD_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [connection, decodedMessage]);
@@ -179,7 +179,7 @@ ServerNetChannel = (function()
 				// Collapse delta - store the world state
 				var deltaCompressedWorldUpdate = client.compressDeltaAndQueueMessage( worldDescription, gameClock );
 
-				// Ask if enough time passed
+				// Ask if enough time passed, and send a new world update
 				if ( client.canSendMessage(gameClock) ) {
 					client.sendQueuedCommands(gameClock);
 				}
@@ -243,8 +243,8 @@ ServerNetChannel = (function()
 
 			this.delegate.log("(ServerNetChannel) Disconnecting client: " + clientID );
 
-			// if this client is mid game playing then we need to tell the other players to remove it
-			if(aClient.enabled) {
+			// if this client is mid-game, and playing then we need to tell the other players to remove it
+			if(aClient.isPlaying) {
 				// before we actually remove this guy, make tell everyone else
 				this.delegate.removePlayer( clientID );
 				// this.relayMessage(connection.$clientID, MESSAGES.REMOVE_FOREIGN_CHARACTER, { clientID: connection.$clientID });
@@ -272,8 +272,12 @@ ServerNetChannel = (function()
 
 			return clientID;
 		},
-		// player is now in the game after this
 
+		/**
+		 * Player has joined the match
+		 * @param connection		The clients WebSocket connection
+		 * @param aDecodedMessage	A message containing client information
+		 */
 		onPlayerJoined: function(connection, aDecodedMessage)
 		{
 			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
@@ -309,12 +313,11 @@ ServerNetChannel = (function()
 
 		/**
 		 * Send this to all clients, and let the gamecontroller do what it should with the message
+		 * @deprecated
 		 */
 		onGenericPlayerCommand: function(connection, aDecodedMessage)
 		{
 			throw("ERROR"); // This is deprecated
-//			this.delegate.onGenericPlayerCommand(connection.$clientID, aDecodedMessage);
-//			this.broadcastMessage(connection.$clientID, aDecodedMessage, false);
 		},
 
 		onPlayerMoveCommand: function(connection, aDecodedMessage)
@@ -324,17 +327,15 @@ ServerNetChannel = (function()
 		 
 		/**
 		 * SETTING CLIENT PROPERTIES
-		 * Called by clients to modify a property, if the server accepts the change (it is within bounds, name contains valid string, etc)
-		 * The clients property is updated
+		 * Called by clients to modify a property.
+		 * If the server accepts the change (it is within bounds, name contains valid string, etc) the Client's property is updated.
 		 */
+
 		//Set the clients 'nickName' as defined by them
 		setClientPropertyNickName: function(connection, aDecodedMessage)
 		{
 			var nickname = aDecodedMessage.cmds.data.nickname;
 			this.delegate.log('(ServerNetChannel) Setting nickname for ' + connection.$clientID + ' to ' +  nickname);
-//			var client = this.clients.objectForKey( connection.$clientID );
-//			this.clients[connection.$clientID].enabled = true;
-//			this.clients[connection.$clientID].nickname = nickname;
 		}
 
 		// Close prototype object

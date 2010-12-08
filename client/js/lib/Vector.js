@@ -12,6 +12,8 @@ var init = function()
 	{
 		initialize: function(x, y)
 		{
+//			debugger;
+//			console.log(x,y);
 		    if (typeof x == 'Object') {
 		        this.x = x.x;
 		        this.y = x.y;

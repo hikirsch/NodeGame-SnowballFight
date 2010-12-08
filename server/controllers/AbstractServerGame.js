@@ -60,7 +60,7 @@ AbstractServerGame = (function()
 
 
 			this.logLevel = LOG_LEVEL.ALL;
-			this.logger = new Logger({time: this.gameClock, showStatus: true }, this);
+			this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
 		},
 
 		/**
@@ -112,9 +112,9 @@ AbstractServerGame = (function()
 		 * @param aClientID		Connection ID of the client
 		 * @param playerType 	Playertype - ServerGame does not use this property
 		 */
-		shouldAddPlayer: function (anEntityID, aClientID, playerType)
+		shouldAddPlayer: function (anEntityID, aClientID)
 		{
-			var aNewCharacter = this.callSuper(anEntityID, aClientID, 'Character');
+			var aNewCharacter = this.callSuper(anEntityID, aClientID);
 			if(aNewCharacter == null) return; // No character created for whatever reason. Room full?
 
 			aNewCharacter.setInput( new Joystick() );
