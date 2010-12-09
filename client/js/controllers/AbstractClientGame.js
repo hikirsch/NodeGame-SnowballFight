@@ -171,8 +171,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, Client
 						// If this character is owned by the us, allow it to be controlled by the keyboard
 						if(isOwnedByMe)
 						{
-							aCharacter.addTraitAndExecute(new ClientControlledTrait(aCharacter));
-							
+							var trait = new NodeGameKit.traits.BaseTrait();
+							console.log('ttt', trait.displayName)
+//							new ClientControlledTrait()
+//							aCharacter.addTraitAndExecute(  );
 							this.clientCharacter = aCharacter;
 						}
 					}

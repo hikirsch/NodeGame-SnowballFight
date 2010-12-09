@@ -24,6 +24,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		{
 			var that = this;
 
+			console.log(new NodeGameKit.traits.BaseTrait())
 			this.config = config;
 			this.setModel(GameModel);
 
@@ -130,6 +131,7 @@ if (typeof window === 'undefined')
 	require('./entities/GameEntity');
 	require('./entities/Character');
 	require('../lib/jsclass/core.js');
+	require('js/controllers/entities/traits/BaseTrait.js');
 	
 	AbstractGame = init( Vector, Rectangle, SortedLookupTable, GameModel, FieldController, GameEntityFactory, GameEntity, Character );
 }

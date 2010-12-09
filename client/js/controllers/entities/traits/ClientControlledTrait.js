@@ -11,63 +11,56 @@ Basic Usage:
 
  	// Let my character be controlled by the KB
 	if(newEntity.connectionID === this.netChannel.connectionID) {
-		aCharacter = new ClientControlledTrait(aCharacter);
-		aCharacter.setInput( new Joystick() );
+		aCharacter.addTraitAndExecute( new ClientControlledTrait() );
 		this.clientCharacter = aCharacter;
 	}
 */
-
-var init = function(BaseTrait, Joystick)
+var init = function(SortedLookupTable, Joystick, BaseTrait, that)
 {
-	return new JS.Class(BaseTrait,
+	return new JS.Class("ClientControlledTrait", BaseTrait,
 	{
-		initialize: function(anEntity)
+		initialize: function()
 		{
-			this.traitName = 'ClientControlledTrait';
-
-			var that = this;
-			this.callSuper(anEntity,
-			{
-				// Hijack the methods
-				execute: function()
-				{
-					this.attachedEntity.setInput( new Joystick() );
-					this.attachedEntity.input.attachEvents();
-
-					this.attachedEntity.constructEntityDescription = this.constructEntityDescription;
-					this.attachedEntity.handleInput = this.handleInput;
-
-//					this.detachSelfAfterDelay(1000)
-				},
-
-				// If we needed to we could store the old method references
-				// and set the back in this function
-				detach: function()
-				{
-				}
-			});
+			that = this;
+			this.callSuper();
 		},
 
+		attach: function(anEntity)
+		{
+			this.callSuper();
+			this.intercept(['constructEntityDescription', 'handleInput']);
+
+			this.attachedEntity.setInput( new Joystick() );
+			this.attachedEntity.input.attachEvents();
+		},
+
+		/**
+		 * Implement our own intercepted version of the methods/properties
+		 */
 		constructEntityDescription: function()
 		{
-			this.input.constructInputBitmask();
 			return {
 				objectID: this.objectID,
 				clientID: this.clientID,
 				input: this.input.constructInputBitmask()
 			}
 		},
-
-		// Catch the handleInput so our super's version doesn't get called
-		handleInput: function( gameClock ) {}
+		handleInput: function(gameClock){}
 	});
 };
 
-if (typeof window === 'undefined') {
+
+if (typeof window === 'undefined')
+{
 	// We're in node!
-	require('js/controllers/entities/Character');
+	require('js/controllers/entities/traits/BaseTrait');
+	require('js/lib/SortedLookupTable');
 	require('js/lib/Joystick');
-	ClientControlledTrait = init(BaseTrait, Joystick);
-} else {
-	define(['controllers/entities/traits/BaseTrait', 'lib/Joystick', 'lib/jsclass/core', 'lib/jsclass/command'], init);
+	ClientControlledTrait = init(SortedLookupTable, Joystick, BaseTrait);
+}
+else
+{
+	// We're on the browser.
+	// Require.js will use this file's name (CharacterController.js), to create a new
+	define(['lib/SortedLookupTable', 'lib/Joystick', 'controllers/entities/traits/BaseTrait', 'lib/jsclass/core'], init);
 }
