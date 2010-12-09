@@ -1,14 +1,9 @@
-this.NodeGameKit = this.NodeGameKit || {};
-NodeGameKit = this.NodeGameKit;
-
-var onReady = function(that)
+var init = function()
 {
-	NodeGameKit.traits = this.NodeGameKit.traits || {};
-	NodeGameKit.traits.BaseTrait = new JS.Class("BaseTrait", Object,
+	return new JS.Class("BaseTrait",
 	{
 		initialize: function()
 		{
-//			console.log('inner', NodeGameKit.traits);
 			that = this;
 			this.attachedEntity = null;
 			this.interceptedProperties = new SortedLookupTable();
@@ -46,7 +41,7 @@ var onReady = function(that)
 		/**
 		 * Intercept properties from the entity we are attached to.
 		 * For example, if we intercept handleInput, then our own 'handleInput' function gets called.
-		 * We can reset all the properties by calling, this.restore(); 
+		 * We can reset all the properties by calling, this.restore();
 		 * @param arrayOfProperties
 		 */
 		intercept: function(arrayOfProperties) {
@@ -72,11 +67,11 @@ if (typeof window === 'undefined')
 	// We're in node!
 	require('js/lib/jsclass/core');
 	require('js/lib/SortedLookupTable');
-	BaseTrait = onReady();
+	BaseTrait = init();
 }
 else
 {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/jsclass/core', 'lib/SortedLookupTable'], onReady);
+	define(['lib/jsclass/core', 'lib/SortedLookupTable'], init);
 }
