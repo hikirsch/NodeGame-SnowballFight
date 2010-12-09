@@ -17,7 +17,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 		initialize: function(anObjectID, aClientID, aFieldController, projectileModel, force)
 		{
 			this.callSuper(anObjectID, aClientID, aFieldController);
-			this.entityType = GAMECONFIG.ENTITY_MODEL.PROJECTILE; // 			
+			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.PROJECTILE; // 			
 
 			this.force = force;
 			// Get information from the projectile model

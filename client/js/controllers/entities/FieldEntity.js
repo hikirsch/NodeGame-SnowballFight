@@ -17,7 +17,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 		initialize: function(anObjectID, aClientID, aFieldController, aFieldEntityModel)
 		{
 			this.callSuper();
-			this.entityType = GAMECONFIG.ENTITY_MODEL.FIELD_ENTITY; //
+			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.FIELD_ENTITY; //
 		   	this.position = aFieldEntityModel.initialPosition;
 			// Get information from the projectile model
 //			this.collisionOffset = aFieldEntityModel.collisionOffset;

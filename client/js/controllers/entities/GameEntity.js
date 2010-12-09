@@ -41,7 +41,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		{
 			// Meta information
 			this.fieldController = aFieldController;
-			this.entityType = GAMECONFIG.ENTITY_MODEL.UNKNOWN;			// Type
+			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.UNKNOWN;			// Type
 
 			/**
 			 * Connection Properties

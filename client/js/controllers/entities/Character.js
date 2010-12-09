@@ -36,7 +36,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		initialize: function(anObjectID, aClientID, aFieldController)
 		{
 			this.callSuper();
-			this.entityType = GAMECONFIG.ENTITY_MODEL.CHARACTER;			// Type
+			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER;			// Type
 
 			// Override movement properties
 			this.moveSpeed = 0.4;
