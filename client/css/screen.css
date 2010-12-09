@@ -16,6 +16,8 @@ nav.main ul li.share a { background-image: url( ../img/global/nav-share.png ); }
 nav.main ul li.ogilvy-logo { float: right; }
 nav.main ul li.ogilvy-logo { float: right; background-image: url( ../img/global/logo-ogilvy.png ); }
 
+footer { margin: 10px auto; width: 900px; text-align: center; }
+
 .site-message {
 	width: 250px; padding: 11px; color: #7eabba; position: absolute; z-index: 2000;
 	border-radius: 20px; border: 3px solid #ff8e8e; background-color: #f3fcff;

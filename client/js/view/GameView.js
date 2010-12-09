@@ -23,12 +23,19 @@ define( ['lib/Rectangle', 'managers/OverlayManager', 'factories/HTMLFactory', 'l
 			this.gameController = controller;
 			this.overlayManager = new OverlayManager( controller, gameModel );
 			this.showNav();
+			this.showFooter();
 		},
 
 		showNav: function()
 		{
 	      HTMLFactory.navigation()
 			.appendTo("body");
+		},
+
+		showFooter: function()
+		{
+			HTMLFactory.footer()
+				.appendTo("body");
 		},
 
 		showJoinGame: function()

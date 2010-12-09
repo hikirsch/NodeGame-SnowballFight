@@ -7,15 +7,22 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 				this.visible = false;
 
 				this.settings = {
-					height: aGameModel.height,
-					width: aGameModel.width,
-					left: this.controller.getFieldLeft(),
-					top: this.controller.getFieldTop()
-				};
+					height: '100%',
+					width: '100%',
+					top: 0,
+					left: 0
+				}
 			},
 
 			createElement: function()
 			{
+				this.settings = {
+					height: this.controller.model.height,
+					width: this.controller.model.width,
+					left: this.controller.getFieldLeft(),
+					top: this.controller.getFieldTop()
+				};
+
 				this.element = HTMLFactory.overlay()
 					.hide()
 					.css(this.settings)

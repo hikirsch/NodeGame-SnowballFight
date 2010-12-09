@@ -23,9 +23,9 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, Client
 
 			this.netChannel = new NetChannel(config, this);
 
-			this.fieldController.createView( this.model );
 			this.view = new GameView(this, this.model );
-
+			this.fieldController.createView( this.model );
+			
 			console.log('created NetChannel');
 
 			this.clientCharacter = null; // Special pointer to our own client character

@@ -11,7 +11,7 @@ var init = function(HTMLFactory)
 		createElement: function( height, width ) {
 			this.element = HTMLFactory.field()
 				.show()
-				.appendTo('body');
+				.insertAfter('nav');
 
 			this.resize( height, width );
 		},
