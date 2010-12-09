@@ -42,7 +42,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile)
 			//this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
 			var projectile = new Projectile(anObjectID, aClientID, aFieldController, aProjectileModel, 1);
 
-			// Should snowballs collide with one another? 
+			// Should snowballs collide with one another?
 			projectile.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.CollidableLevelObject;
 
 			return projectile;
@@ -55,7 +55,17 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile)
 			// Collide against other characters, projectiles, and level objects
 			aNewCharacter.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.Projectile | this.collisionBitmask.CollidableLevelObject;
 			return aNewCharacter;
+		},
+
+		createLevelElement: function(anObjectID, aClientID, aFieldController)
+		{
+			var aNewLevelElement = new Character(anObjectID, aClientID, aFieldController);
+
+			// Collide against other characters, projectiles, and level objects
+			aNewLevelElement.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.Projectile | this.collisionBitmask.CollidableLevelObject;
+			return aNewLevelElement;
 		}
+
 	});
 };
 
@@ -68,7 +78,7 @@ if (typeof window === 'undefined')
 	require('../controllers/entities/GameEntity');
 	require('../controllers/entities/Character');
 	require('../controllers/entities/Projectile');
-	
+
 	GameEntityFactory = init(Vector, Rectangle, GameEntity, Character, Projectile);
 }
 else
