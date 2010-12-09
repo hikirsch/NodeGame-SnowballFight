@@ -15,7 +15,7 @@ Version:
 */
 
 var sys = require('sys');
-var BISON = require('./bison');
+var BISON = require('js/lib/bison');
 
 Logger = (function()
 {

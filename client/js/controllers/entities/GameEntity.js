@@ -97,7 +97,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		setupCollisionEvents: function(aPackedCircle)
 		{
-			console.log(this, 'mask', this.collisionMask, 'group', this.collisionGroup);
 			this.collisionCircle = aPackedCircle;
 			aPackedCircle.collisionMask = this.collisionMask;
 			aPackedCircle.collisionGroup = this.collisionGroup;
