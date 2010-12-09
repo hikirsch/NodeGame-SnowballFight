@@ -12,6 +12,8 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 					top: 0,
 					left: 0
 				}
+
+				this.active = null;
 			},
 
 			createElement: function()
@@ -31,7 +33,11 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 
 			show: function( $ele )
 			{
-				console.log( $ele );
+				if( this.active != null )
+				{
+					this.active.remove();
+					this.active = null;
+				}
 				
 				if( this.element == null )
 				{
@@ -46,6 +52,8 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 						left: this.settings.left + ( ( this.element.width() - $ele.width() ) / 2 ),
 						top: this.settings.top + ( ( this.element.height() - $ele.height() ) / 2 )
 					});
+
+				this.active = $ele;
 
 			},
 
