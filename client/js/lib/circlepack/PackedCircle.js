@@ -32,7 +32,8 @@ var init = function(Vector)
 		this.setRadius(radius);
 
 		this.isFixed = false; // If fixed it can collide with something but is never moved!
-		this.collisionMask = 1;
+		this.collisionMask = 0;
+		this.collisionGroup = 0;
 		this.eventEmitter = null;
 	};
 

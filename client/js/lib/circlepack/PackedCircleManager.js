@@ -399,8 +399,10 @@ var init = function(Vector, PackedCircle)
 		if(circleA.view == null || circleB.view == null) return false;					// This circle will be removed next loop, it's entity is already removed
 
 		if(circleA.isFixed & circleB.isFixed) return false;
-//		if(!(circleA.collisionMask & circleB.collisionMask)) return false;		// Shouldn't collide according to group
 		if(circleA.view.clientID === circleB.view.clientID) return false; 				// Don't let something collide with stuff it owns
+
+		// They want to collide
+		if((circleA.collisionGroup & circleB.collisionMask) == 0) return false;
 
 		return true;
 	},

@@ -48,8 +48,9 @@ AbstractServerGame = (function()
 			this.nextEntityID = 1; 	// Each time we create an entity we increment this
 
 			console.log('(ServerGame)::init');
+			var that = this;
 			console.ourLog = function (var_args) {
-				this.log('+'+var_args);
+				that.log('+'+var_args);
 			}
 			this.fieldController.createPackedCircleManager();
             this.createLevel();
@@ -63,7 +64,7 @@ AbstractServerGame = (function()
 
 
 			this.logLevel = LOG_LEVEL.ALL;
-			this.logger = new Logger({time: this.gameClock, showStatus: true }, this);
+			this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
 		},
 
 		createLevel: function()
