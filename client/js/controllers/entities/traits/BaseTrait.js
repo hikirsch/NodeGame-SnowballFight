@@ -1,40 +1,67 @@
-var init = function()
+this.NodeGameKit = this.NodeGameKit || {};
+NodeGameKit = this.NodeGameKit;
+
+var onReady = function(that)
 {
-	return new JS.Class(JS.Command,
+	NodeGameKit.traits = this.NodeGameKit.traits || {};
+	NodeGameKit.traits.BaseTrait = new JS.Class("BaseTrait", Object,
 	{
-		initialize: function(anEntity, commandObject)
+		initialize: function()
 		{
-			this.traitName |= 'BaseTrait';			// Use name default trait if none supplied - however if this happens there is an error
+//			console.log('inner', NodeGameKit.traits);
+			that = this;
+			this.attachedEntity = null;
+			this.interceptedProperties = new SortedLookupTable();
+			this.detachTimeout = 0;
+			this.displayName = this.klass.displayName; // Work around for bug, but technically we should be able to just use this.displayName
+		},
+
+		attach: function(anEntity)
+		{
+			if(this.attachedEntity != null) { throw {name: "Invalid use of trait", message: "Do not reuse trait instances!"}; };
 			this.attachedEntity = anEntity;
-			this.attachedEntity.removeTraitWithName(this.traitName);
+		},
 
-			if(!commandObject.hasOwnProperty('execute') || !commandObject.hasOwnProperty('detach')) {
-				console.log("(BaseTrait) Child class must implement 'execute' and 'detach'. Aborting..."); return;
-			}
-
-			// Store some properties to safely avoid memory leaks
-			this.commandObject = commandObject;
-			this.commandObject.childDetach = commandObject.detach;
-			this.commandObject.detach = this.detach;
-
-			// Take advantage of closure
-			this.callSuper(commandObject);
+		execute: function() {
+		   // Override
 		},
 
 		detach: function()
 		{
-			this.commandObject.childDetach.apply(this);
-			this.commandObject.detach = null;
-			this.attachedEntity = null;
-			this.commandObject = null;
 			clearTimeout(this.detachTimeout);
+
+			delete this.interceptedProperties;
+			this.interceptProperties = null;
+
+			this.attachedEntity.removeTraitWithName(this.displayName);
+			this.attachedEntity = null;
 		},
 
-		detachSelfAfterDelay: function(aDelay)
+		detachAfterDelay: function(aDelay)
 		{
 			var that = this;
+			this.detachTimeout = setTimeout( function(){ that.detach() }, aDelay);
+		},
 
-			this.detachTimeout = setTimeout(function(){that.detach()}, 100);
+		/**
+		 * Intercept properties from the entity we are attached to.
+		 * For example, if we intercept handleInput, then our own 'handleInput' function gets called.
+		 * We can reset all the properties by calling, this.restore(); 
+		 * @param arrayOfProperties
+		 */
+		intercept: function(arrayOfProperties) {
+			var len = arrayOfProperties.length;
+			while(len--) {
+				var aKey = arrayOfProperties[len];
+				this.interceptedProperties.setObjectForKey(this.attachedEntity[aKey], aKey);
+				this.attachedEntity[aKey] = this[aKey];
+			}
+		},
+
+		restore: function() {
+			this.interceptedProperties.forEach(function(key, aStoredProperty) {
+				this.attachedEntity[key] = aStoredProperty;
+			}, this );
 		}
 	});
 };
@@ -44,12 +71,12 @@ if (typeof window === 'undefined')
 {
 	// We're in node!
 	require('js/lib/jsclass/core');
-	require('lib/jsclass/command');
-	BaseTrait = init();
+	require('js/lib/SortedLookupTable');
+	BaseTrait = onReady();
 }
 else
 {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/jsclass/core', 'lib/jsclass/command'], init);
+	define(['lib/jsclass/core', 'lib/SortedLookupTable'], onReady);
 }

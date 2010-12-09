@@ -217,9 +217,16 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		/**
 		 * Trait accesors
 		 */
+		addTrait: function(aTrait)
+		{
+//			this.removeTraitWithName(aTrait.displayName);
+			this.traits.setObjectForKey(aTrait, aTrait.displayName);
+			aTrait.attach(this);
+		},
+
 		addTraitAndExecute: function(aTrait)
 		{
-			this.traits.setObjectForKey(aTrait, aTrait.traitName);
+			this.addTrait(aTrait);
 			aTrait.execute();
 		},
 
@@ -232,7 +239,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		{
 			var aTrait = this.traits.objectForKey(aTraitName);
 			if(!aTrait) return;
-			
+
 			aTrait.detach();
 			this.traits.remove(aTraitName);
 		},
