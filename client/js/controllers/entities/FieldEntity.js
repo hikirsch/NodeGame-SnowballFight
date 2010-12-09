@@ -33,7 +33,6 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 		{
 			this.callSuper();
 			this.collisionCircle.isFixed = true;
-			this.collisionCircle.radius *= 2;
 		}
 	});
 };

@@ -13,7 +13,7 @@
 var init = function()
 {
 	return {
-		blockOfIce1		: { initialPosition:{x:5, y:5}, collisionBitfield: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: "block-of-ice-1" }
+		blockOfIce1		: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: "block-of-ice-1" }
 	}
 };
 

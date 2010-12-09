@@ -29,7 +29,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			this.entityTypes.setObjectForKey(Projectile, 'Projectile');
 			this.entityTypes.setObjectForKey(FieldEntity, 'FieldEntity');
 
-			this.collisionBitmask = {
+			this.collisionGroups = {
 				'None': 0,
 				'Character':  1 << 0,
 				'Projectile': 1 << 1,
@@ -44,7 +44,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			var projectile = new Projectile(anObjectID, aClientID, aFieldController, aProjectileModel, 1);
 
 			// Should snowballs collide with one another?
-			projectile.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.FieldEntity;
+			projectile.collisionMask = this.collisionGroups.Character | this.collisionGroups.FieldEntity;
 
 			return projectile;
 		},
@@ -54,7 +54,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			var aNewCharacter = new Character(anObjectID, aClientID, aFieldController);
 
 			// Collide against other characters, projectiles, and level objects
-			aNewCharacter.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.Projectile | this.collisionBitmask.FieldEntity;
+			aNewCharacter.collisionMask = this.collisionGroups.Character | this.collisionGroups.Projectile | this.collisionGroups.FieldEntity;
 			return aNewCharacter;
 		},
 
@@ -64,7 +64,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			aNewFieldEntity.position = new Vector(aFieldEntityModel.initialPosition.x, aFieldEntityModel.initialPosition.y);
 			
 			// Collide against characters and projectiles
-			aNewFieldEntity.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.Projectile;
+			aNewFieldEntity.collisionMask = this.collisionGroups.Character | this.collisionGroups.Projectile;
 			return aNewFieldEntity;
 		}
 

@@ -77,9 +77,6 @@ var init = function(Vector, PackedCircle)
 
 		if(this.dispatchCollisionEvents)
 			aCircle.createEventEmitter();
-
-//		if(this.allCircles.length > 3)
-//			this.removeCircle(aCircle);
 	};
 
 	/**
@@ -233,7 +230,6 @@ var init = function(Vector, PackedCircle)
 							ci.position.sub(v); 		// SUBTRACT the velocity
 						}
 
-						console.ourLog('collision!', i, j);
 						// Emit the collision event from each circle, with itself as the first parameter
 						if(this.dispatchCollisionEvents && n == this.numberOfCollisionPasses-1)
 						{
@@ -403,7 +399,7 @@ var init = function(Vector, PackedCircle)
 		if(circleA.view == null || circleB.view == null) return false;					// This circle will be removed next loop, it's entity is already removed
 
 		if(circleA.isFixed & circleB.isFixed) return false;
-//		if(!(circleA.collisionBitfield & circleB.collisionBitfield)) return false;		// Shouldn't collide according to group
+//		if(!(circleA.collisionMask & circleB.collisionMask)) return false;		// Shouldn't collide according to group
 		if(circleA.view.clientID === circleB.view.clientID) return false; 				// Don't let something collide with stuff it owns
 
 		return true;

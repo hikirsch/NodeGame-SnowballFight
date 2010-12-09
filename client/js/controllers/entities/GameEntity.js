@@ -67,7 +67,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			 */
 			this.collisionCircle = null;
 			this.collisionOffset = new Vector(0,0);
-			this.collisionBitfield = 0;
+			this.collisionMask = 0;
 			this.radius = 18;
 
 			this.traits = new SortedLookupTable();
@@ -97,8 +97,8 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		setupCollisionEvents: function(aPackedCircle)
 		{
 			this.collisionCircle = aPackedCircle;
-			aPackedCircle.collisionBitfield = this.collisionBitfield;
-			aPackedCircle.position = this.position;	// TODO: This is not the best place to do this
+			aPackedCircle.collisionMask = this.collisionMask;
+			aPackedCircle.position = this.position.add(this.collisionOffset);
 			aPackedCircle.eventEmitter.on("collision", this.onCollision);
 		},
 
