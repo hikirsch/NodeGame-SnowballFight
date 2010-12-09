@@ -8,6 +8,7 @@ var onReady = function(that)
 	{
 		initialize: function()
 		{
+//			console.log('inner', NodeGameKit.traits);
 			that = this;
 			this.attachedEntity = null;
 			this.interceptedProperties = new SortedLookupTable();
@@ -17,7 +18,7 @@ var onReady = function(that)
 
 		attach: function(anEntity)
 		{
-			if(this.attachedEntity != null) { throw { name: "Invalid use of trait", message: "Do not reuse trait instances!" }; }
+			if(this.attachedEntity != null) { throw {name: "Invalid use of trait", message: "Do not reuse trait instances!"}; };
 			this.attachedEntity = anEntity;
 		},
 
