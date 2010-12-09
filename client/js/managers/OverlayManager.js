@@ -11,7 +11,7 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 					width: '100%',
 					top: 0,
 					left: 0
-				}
+				};
 
 				this.active = null;
 			},

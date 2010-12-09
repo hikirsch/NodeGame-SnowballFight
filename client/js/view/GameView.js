@@ -38,6 +38,20 @@ define( ['lib/Rectangle', 'managers/OverlayManager', 'factories/HTMLFactory', 'l
 				.appendTo("body");
 		},
 
+		showIntro: function()
+		{
+			var that = this,
+				$intro = HTMLFactory.intro();
+
+			$intro
+				.find('a.jumpinLink')
+				.click( function(){ return that.showJoinGame(); } );
+
+			this.overlayManager.show( $intro );
+
+			return false;
+		},
+
 		showJoinGame: function()
 		{
 			var that = this,
@@ -48,6 +62,8 @@ define( ['lib/Rectangle', 'managers/OverlayManager', 'factories/HTMLFactory', 'l
 				.submit( function(e) { return that.joinGame(e); } );
 			
 			this.overlayManager.show( $joinGameDialog );
+
+			return false;
 		},
 	
 		serverOffline: function()

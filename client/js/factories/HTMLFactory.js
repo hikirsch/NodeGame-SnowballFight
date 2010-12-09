@@ -1,4 +1,4 @@
-var init = function( $, overlay, navigation, footer, serverUnavailable, joinGame, character, field, entity  ) {
+var init = function( $, overlay, navigation, footer, serverUnavailable, intro, characterSelect, instructions, character, field, entity  ) {
 	return {
 		navigation: function() {
 			return $(navigation)
@@ -15,9 +15,21 @@ var init = function( $, overlay, navigation, footer, serverUnavailable, joinGame
 				.tmpl();
 		},
 
+		intro: function()
+		{
+			return $(intro)
+				.tmpl();
+		},
+
+		instructions: function()
+		{
+			return $(instructions)
+				.tmpl();
+		},
+
 		joinGameDialog: function()
 		{
-			return $(joinGame)
+			return $(characterSelect)
 				.tmpl();
 		},
 
@@ -49,7 +61,10 @@ define([
 		'text!html/overlay.html',
 		'text!html/navigation.html',
 		'text!html/footer.html',
-		'text!html/server-unavailable.html', 'text!html/join-game.html',
+		'text!html/server-unavailable.html',
+		'text!html/intro.html',
+		'text!html/character-select.html',
+		'text!html/instructions.html',
 		'text!html/character.html',
 		'text!html/field.html',
 		'text!html/entity.html',

@@ -279,7 +279,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			// we get a copy of the game model from the server to be extra efficient :-), so set it
 			this.setModel( messageData.gameModel );
 
-			this.view.showJoinGame();
+			this.view.showIntro();
 		},
 
 		netChannelDidReceiveMessage: function (messageData)

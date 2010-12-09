@@ -1,0 +1,146 @@
+/* welcome overlay */
+
+.mainOverlay {
+	margin-top: -10px;
+	width: 900px;
+	height: 600px;
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	overflow: hidden;
+	background: transparent;
+	padding: 10px;
+	color: #005072;
+	font-family: "Lucida Grande";
+	font-size: 13px;
+}
+
+.mainOverlay .intro {
+	background: url(../img/intro/bg-intro.jpg) no-repeat top center;
+	-webkit-box-shadow: 0px 0px 10px #999;
+	width: 810px;
+	height: 600px;
+	margin: auto;
+	position: relative;
+	overflow: visible;
+	z-index: 1000;
+}
+
+.mainOverlay .inviteCharacters {
+	position: absolute;
+	bottom: 10px;
+	left: 30px;
+	display: block;
+	z-index: 1100;
+}
+
+.mainOverlay .invite {
+	position: relative;
+	float: right;
+	display: block;
+	z-index: 1100;
+	margin-right: 13px;
+}
+
+.mainOverlay .snobigdeal {
+	position: relative;
+	left: 65px;
+	top: -9px;
+}
+
+.mainOverlay .btnJumpin {
+	position: relative;
+	left: 570px;
+	top: 20px;
+	overflow: visible;
+	-webkit-box-reflect:below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.8, transparent), to(white));
+	display: block;
+	display: block;
+}
+
+.mainOverlay .jumpinLink {
+	display: block;
+	width: 160px;
+	height: 45px;
+	position: absolute;
+	top: 335px;
+	left: 625px;
+	z-index: 1200;
+}
+
+.introTxt {
+	padding: 0;
+	margin: 15px auto 15px 77px;
+	line-height: 140%;
+	width: 650px;
+	opacity: 1;
+	z-index: 1010;
+	background: transparent;
+}
+
+.introSteps {
+	position: relative;
+	left: 70px;
+	top: 0px;
+}
+
+/* how to overlay */
+
+.howtoOverlay {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	color: #005072;
+	font-family: "Lucida Grande";
+	font-size: 12px;
+	-webkit-box-shadow: 0px 0px 10px #999;
+	background: url(../../../../Desktop/xmas 2/img/bg-howto.jpg) no-repeat top left;
+	overflow: hidden;
+	width: 620px;
+	height: 510px;
+	line-height: 120%;
+}
+
+.howtoTitle {
+	padding: 20px 0px 5px 20px;
+}
+
+
+.howtoOverlay p {
+	margin: 0px;
+	padding: 0px 60px 20px 20px;
+	line-height: 110%;
+}
+
+.howtoOverlay .keyContainers {
+	width: 580px;
+	height: 85px;
+	border-bottom: 1px solid #e2eff1;
+	margin: auto;
+	position: relative;
+	padding-top: 25px;
+}
+
+.howtoOverlay .keyContainers div {
+	position: absolute;
+	top: 20px;
+	left: 240px;
+	width: 280px;
+}
+
+.howtoOverlay .keyContainers div strong {
+	display: block;
+	padding-bottom: 10px;
+}
+
+.howtoOverlay .keyContainers.lastRow {
+	border: 0 !important;
+}
+
+.howtoOverlay .playButton {
+	-webkit-box-reflect:below 0px -webkit-gradient(linear, left top, left bottom, from(transparent), color-stop(0.5, transparent), to(white));
+	float: right;
+	position: relative;
+	left: -35px;
+	top:-20px
+}

@@ -1,4 +1,5 @@
 @import url( reset.css );
+@import url( overlays.css );
 
 html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 	background-color: #f2f7fb; background-image: url( ../img/global/bg-main.png ); background-position: 50% 0;
