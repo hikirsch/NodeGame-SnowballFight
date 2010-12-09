@@ -12,7 +12,7 @@ Basic Usage:
 	 var gameController = new ClientGameController(HOST, PORT) 
 */
 
-var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, ClientControlledTrait)
+var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitFactory)
 {
 
 	return new JS.Class(AbstractGame,
@@ -171,8 +171,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, Client
 						// If this character is owned by the us, allow it to be controlled by the keyboard
 						if(isOwnedByMe)
 						{
-
-							aCharacter.addTraitAndExecute(new ClientControlledTrait());
+							var clientControlledTrait = TraitFactory.createTraitWithName('ClientControlledTrait');
+							aCharacter.addTraitAndExecute( new clientControlledTrait() );
 							this.clientCharacter = aCharacter;
 						}
 					}
@@ -312,10 +312,11 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, Client
 	});
 };
 
+
 define(['lib/Vector',
 	'network/NetChannel', 
 	'view/GameView',
 	'lib/joystick',
 	'controllers/AbstractGame',
-	'controllers/entities/traits/ClientControlledTrait',
+	'factories/TraitFactory',
 	'lib/jsclass/core'], init);
