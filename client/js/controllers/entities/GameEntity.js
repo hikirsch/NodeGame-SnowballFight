@@ -61,7 +61,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 
 			// Locaiton
 			this.position = new Vector(0, 0);
-			this.previousPosition = new Vector();
 			this.rotation = 0;
 			/**
 			 * Collision
@@ -153,16 +152,13 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		updatePosition: function(speedFactor)
 		{
-			// Store previous
-			this.previousPosition.x = this.position.x;
-			this.previousPosition.y = this.position.y;
-
 			// Adjust to speedFactor
 			this.acceleration.mul(speedFactor);
 
 			// Add acceleration to velocity and velocity to the current position
 			this.velocity.add(this.acceleration);
 
+			console.ourLog(this.position);
 			this.position.x += this.velocity.x * speedFactor;
 			this.position.y += this.velocity.y * speedFactor;
 

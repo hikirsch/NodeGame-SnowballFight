@@ -13,12 +13,12 @@
 var init = function()
 {
 	return {
-		blockOfIce1		: { collisionBitfield: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: "block-of-ice-1" }
+		blockOfIce1		: { initialPosition:{x:5, y:5}, collisionBitfield: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: "block-of-ice-1" }
 	}
 };
 
 if (typeof window === 'undefined') {
-	ProjectileModel = init();
+	FieldEntityModel = init();
 } else{
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new

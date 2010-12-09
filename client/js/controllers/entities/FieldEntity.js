@@ -14,14 +14,26 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 {
 	return new JS.Class(GameEntity,
 	{
-		initialize: function(anObjectID, aFieldController, aFieldEntityModel)
+		initialize: function(anObjectID, aClientID, aFieldController, aFieldEntityModel)
 		{
-			this.callSuper(anObjectID, 0, aFieldController);
+			this.callSuper();
 			this.entityType = GAMECONFIG.ENTITY_MODEL.FIELD_ENTITY; //
-
+		   	this.position = aFieldEntityModel.initialPosition;
 			// Get information from the projectile model
-			this.collisionOffset = aFieldEntityModel.initialPosition;
+//			this.collisionOffset = aFieldEntityModel.collisionOffset;
 			this.radius = aFieldEntityModel.radius;
+		},
+
+		/**
+		 * Creates the event-listener function for handling collisions
+		 * Note: This only is called on the server side
+		 * @param aPackedCircle A PackedCircle which is tied to (and represents in the collision system) this entity
+		 */
+		setupCollisionEvents: function(aPackedCircle)
+		{
+			this.callSuper();
+			this.collisionCircle.isFixed = true;
+			this.collisionCircle.radius *= 2;
 		}
 	});
 };

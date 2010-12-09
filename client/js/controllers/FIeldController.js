@@ -58,8 +58,8 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			var anEntity = null;
 			if( anEntityDescription.entityType != GAMECONFIG.ENTITY_MODEL.PROJECTILE ) {
-				console.log("(FieldController): Don't know how to handle entity type: '" + anEntityDescription.entityType + "'! Ignoring... ");
-				return 0;
+				//console.log("(FieldController): Don't know how to handle entity type: '" + anEntityDescription.entityType + "'! Ignoring... ");
+				//return 0;
 			}
 
 			// For now we only know hwo to add projectiles using this method!!

@@ -58,10 +58,11 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			return aNewCharacter;
 		},
 
-		createFieldEntity: function(anObjectID, aFieldEntityModel, aFieldController)
+		createFieldEntity: function(anObjectID, aFieldController, aFieldEntityModel)
 		{
-			var aNewFieldEntity = new FieldEntity(anObjectID, aFieldController);
-
+			var aNewFieldEntity = new FieldEntity(anObjectID, 0, aFieldController, aFieldEntityModel);
+			aNewFieldEntity.position = new Vector(aFieldEntityModel.initialPosition.x, aFieldEntityModel.initialPosition.y);
+			
 			// Collide against characters and projectiles
 			aNewFieldEntity.collisionBitfield = this.collisionBitmask.Character | this.collisionBitmask.Projectile;
 			return aNewFieldEntity;

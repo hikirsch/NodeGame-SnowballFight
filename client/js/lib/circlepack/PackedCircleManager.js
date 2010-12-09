@@ -21,6 +21,7 @@ var init = function(Vector, PackedCircle)
 	 */
 	var PackedCircleManager = function( options )
 	{
+		
 		//allCircles
 		this.allCircles = [];
 		this.desiredTarget = new Vector(0,0);
@@ -232,7 +233,7 @@ var init = function(Vector, PackedCircle)
 							ci.position.sub(v); 		// SUBTRACT the velocity
 						}
 
-
+						console.ourLog('collision!', i, j);
 						// Emit the collision event from each circle, with itself as the first parameter
 						if(this.dispatchCollisionEvents && n == this.numberOfCollisionPasses-1)
 						{
