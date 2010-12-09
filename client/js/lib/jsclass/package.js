@@ -13,6 +13,9 @@ JS.Package = function(loader) {
 };
 
 (function(klass) {
+  klass.displayName = 'Package';
+  klass.toString = function() { return klass.displayName };
+  
   //================================================================
   // Ordered list of unique elements, for storing dependencies
   
@@ -37,12 +40,18 @@ JS.Package = function(loader) {
   //================================================================
   // Environment settings
   
-  klass._env = this;
+  klass.ENV = this;
   
   if ((this.document || {}).getElementsByTagName) {
     var script = document.getElementsByTagName('script')[0];
     klass._isIE = (script.readyState !== undefined);
   }
+  
+  klass.onerror = function(e) { throw e };
+  
+  klass._throw = function(message) {
+    klass.onerror(new Error(message));
+  };
   
   
   //================================================================
@@ -104,7 +113,7 @@ JS.Package = function(loader) {
       object = klass.getObject(name);
       if (object !== undefined) continue;
       if (withExceptions)
-        throw new Error('Expected package at ' + this._loader + ' to define ' + name);
+        return klass._throw('Expected package at ' + this._loader + ' to define ' + name);
       else
         return this._isLoaded = false;
     }
@@ -114,13 +123,12 @@ JS.Package = function(loader) {
   instance.load = function() {
     if (!this.fire('request')) return;
     
-    var allDeps    = this._deps.list.concat(this._uses.list),
-        startEvent = 'load',  // could potentially use 'download' event in
-        listener   = {};      // browsers that guarantee execution order
+    var allDeps = this._deps.list.concat(this._uses.list),
+        i = allDeps.length;
     
-    listener[startEvent] = this._deps.list;
+    klass.when({load: allDeps});
     
-    klass.when(listener, function() {
+    klass.when({complete: this._deps.list}, function() {
       klass.when({complete: allDeps, load: [this]}, function() {
         this.fire('complete');
       }, this);
@@ -137,7 +145,7 @@ JS.Package = function(loader) {
       }
       
       if (this._loader === undefined)
-        throw new Error('No load path found for ' + this._names.list[0]);
+        return klass._throw('No load path found for ' + this._names.list[0]);
       
       typeof this._loader === 'function'
             ? this._loader(fireOnLoad)
@@ -206,6 +214,12 @@ JS.Package = function(loader) {
     return placeholder;
   };
   
+  klass.remove = function(name) {
+    var pkg = this.getByName(name);
+    delete this._indexByName[name];
+    delete this._indexByPath[pkg._loader];
+  };
+  
   //================================================================
   // Auotloading API, generates packages from naming patterns
   
@@ -249,7 +263,7 @@ JS.Package = function(loader) {
     var cached = this.getFromCache(name);
     if (cached.obj !== undefined) return cached.obj;
     
-    var object = this._env,
+    var object = this.ENV,
         parts  = name.split('.'), part;
     
     while (part = parts.shift()) object = object && object[part];
@@ -303,10 +317,10 @@ JS.Package.CommonJSLoader = {
   
   setup: function() {
     var self = this;
-    require = (function(oridRequire) {
+    require = (function(origRequire) {
       return function() {
         self._currentPath = arguments[0] + '.js';
-        return oridRequire.apply(JS.Package._env, arguments);
+        return origRequire.apply(JS.Package.ENV, arguments);
       };
     })(require);
   },
@@ -337,7 +351,7 @@ JS.Package.ServerLoader = {
     load = (function(origLoad) {
       return function() {
         self._currentPath = arguments[0];
-        return origLoad.apply(JS.Package._env, arguments);
+        return origLoad.apply(JS.Package.ENV, arguments);
       };
     })(load);
   },

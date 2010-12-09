@@ -79,7 +79,7 @@ JS.Set = new JS.Class('Set', {
     block = JS.Enumerable.toFn(block);
     
     var classes = this.classify(block, context),
-        sets    = new this.klass;
+        sets    = new JS.HashSet;
     
     classes.forEachValue(sets.method('add'));
     return sets;
@@ -110,6 +110,10 @@ JS.Set = new JS.Class('Set', {
       else set.add(item);
     });
     return set;
+  },
+  
+  inspect: function() {
+    return this.toString();
   },
   
   intersection: function(other) {
@@ -150,7 +154,7 @@ JS.Set = new JS.Class('Set', {
   },
   
   product: function(other) {
-    var pairs = new JS.Set;
+    var pairs = new JS.HashSet;
     this.forEach(function(item) {
       this.klass.forEach(other, function(partner) {
         pairs.add([item, partner]);
@@ -197,6 +201,14 @@ JS.Set = new JS.Class('Set', {
     }, this);
   },
   
+  toString: function() {
+    var items = [];
+    this.forEach(function(item) {
+      items.push(item.toString());
+    });
+    return this.klass.displayName + ':{' + items.join(',') + '}';
+  },
+  
   union: function(other) {
     var set = new this.klass;
     set.merge(this);
@@ -205,7 +217,7 @@ JS.Set = new JS.Class('Set', {
   },
   
   xor: function(other) {
-    var set = new JS.Set(other);
+    var set = new this.klass(other);
     this.forEach(function(item) {
       set[set.contains(item) ? 'remove' : 'add'](item);
     });
@@ -213,11 +225,11 @@ JS.Set = new JS.Class('Set', {
   },
   
   _indexOf: function(item) {
-    var i     = this._members.length,
-        equal = JS.Enumerable.areEqual;
+    var i    = this._members.length,
+        Enum = JS.Enumerable;
     
     while (i--) {
-      if (equal(item, this._members[i])) return i;
+      if (Enum.areEqual(item, this._members[i])) return i;
     }
     return -1;
   }
@@ -240,9 +252,10 @@ JS.SortedSet = new JS.Class('SortedSet', JS.Set, {
   
   add: function(item) {
     var point = this._indexOf(item, true);
-    if (point === null) return;
+    if (point === null) return false;
     this._members.splice(point, 0, item);
     this.length = this.size = this._members.length;
+    return true;
   },
   
   _indexOf: function(item, insertionPoint) {
@@ -251,7 +264,7 @@ JS.SortedSet = new JS.Class('SortedSet', JS.Set, {
         i       = 0,
         d       = n,
         compare = this.klass.compare,
-        equal   = JS.Enumerable.areEqual,
+        Enum    = JS.Enumerable,
         found;
     
     if (n === 0) return insertionPoint ? 0 : -1;
@@ -259,7 +272,7 @@ JS.SortedSet = new JS.Class('SortedSet', JS.Set, {
     if (compare(item, items[0]) < 1)   { d = 0; i = 0; }
     if (compare(item, items[n-1]) > 0) { d = 0; i = n; }
     
-    while (!equal(item, items[i]) && d > 0.5) {
+    while (!Enum.areEqual(item, items[i]) && d > 0.5) {
       d = d / 2;
       i += (compare(item, items[i]) > 0 ? 1 : -1) * Math.round(d);
       if (i > 0 && compare(item, items[i-1]) > 0 && compare(item, items[i]) < 1) d = 0;
@@ -267,10 +280,10 @@ JS.SortedSet = new JS.Class('SortedSet', JS.Set, {
     
     // The pointer will end up at the start of any homogenous section. Step
     // through the section until we find the needle or until the section ends.
-    while (items[i] && !equal(item, items[i]) &&
+    while (items[i] && !Enum.areEqual(item, items[i]) &&
         compare(item, items[i]) === 0) i += 1;
     
-    found = equal(item, items[i]);
+    found = Enum.areEqual(item, items[i]);
     return insertionPoint
         ? (found ? null : i)
         : (found ? i : -1);

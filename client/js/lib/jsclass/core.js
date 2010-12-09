@@ -41,10 +41,7 @@
  * various utility methods used throughout. None of these methods should be taken as being
  * public API, they are all 'plumbing' and may be removed or changed at any time.
  **/
-
-
-this.JS = this.JS || {};
-JS = this.JS;
+JS = (typeof JS === 'undefined') ? {} : JS;
 
   /**
    * JS.extend(target, extensions) -> Object
@@ -193,9 +190,12 @@ JS.extend(JS, {
    * Returns `true` iff `object` is of the given `type`.
    **/
   isType: function(object, type) {
-    if (!object || !type) return false;
-    return (type instanceof Function && object instanceof type) ||
-           (typeof type === 'string' && typeof object === type) ||
+    if (object === null || object === undefined || typeof type === 'string')
+      return typeof object === type;
+    
+    return (type instanceof Function &&
+             (object instanceof type || object.constructor === type))
+           ||
            (object.isA && object.isA(type));
   },
   
@@ -407,12 +407,15 @@ JS.extend(JS.Module.prototype, {
         n         = ancestors.length,
         name;
     
-    for (name in self.__fns__) {
+    var add = function(name) {
       if (self.__fns__.hasOwnProperty(name) &&
           JS.isFn(self.__fns__[name]) &&
           JS.indexOf(results, name) === -1)
         results.push(name);
-    }
+    };
+    for (name in self.__fns__) add(name);
+    add('toString');  // IE will not enumerate this
+    
     if (includeSuper === false) return results;
     
     while (n--) ancestors[n].instanceMethods(false, results);
@@ -456,10 +459,13 @@ JS.extend(JS.Module.prototype, {
       
       if (options._recall) {
         // Second call: add all the methods
-        for (method in module) {
-          if (JS.ignore(method, module[method])) continue;
-          this.define(method, module[method], false, {_notify: includer || options._extended || this});
-        }
+        var make = function(self, method) {
+          if (JS.ignore(method, module[method])) return;
+          self.define(method, module[method], false, {_notify: includer || options._extended || self});
+        };
+        for (method in module) make(this, method);
+        // IE never enumerates the toString property
+        if (module.hasOwnProperty('toString')) make(this, 'toString');
       } else {
         // First call: handle include and extend blocks
         
@@ -516,7 +522,7 @@ JS.extend(JS.Module.prototype, {
    * Returns `true` if the receiver is in the inheritance chain of `object`.
    **/
   match: function(object) {
-    return object.isA && object.isA(this);
+    return object && object.isA && object.isA(this);
   },
   
   /**
@@ -665,10 +671,14 @@ JS.extend(JS.Module.prototype, {
       self.__inc__[i].resolve(target);
     
     // Wrap and copy methods to the target
-    for (key in self.__fns__) {
-      made = target.make(key, self.__fns__[key]);
+    var make = function(key) {
+      var made = target.make(key, self.__fns__[key]);
+      if (made) made.arity = self.__fns__[key].length;
       if (resolved[key] !== made) resolved[key] = made;
-    }
+    };
+    for (key in self.__fns__) make(key);
+    // IE never enumerates the toString property
+    if (self.__fns__.hasOwnProperty('toString')) make('toString');
   },
   
   /**
@@ -688,6 +698,17 @@ JS.extend(JS.Module.prototype, {
     while (i--) self.__dep__[i].uncache();
   }
 });
+
+/**
+ * JS.Module#toString() -> String
+ * 
+ * Returns a string representation of the module, which will be its display name
+ * if one is set, or a generic classname/hash representation from Kernel.
+ **/
+JS.Module.prototype.toString = function() {
+  var name = this.displayName;
+  return name ? name : JS.Kernel.__fns__.toString.call(this, this.klass.displayName);
+};
 
 
 /** section: core
@@ -739,10 +760,8 @@ JS.extend(JS.Class.prototype = JS.makeBridge(JS.Module), {
     klass.include(methods, false);
     klass.resolve();
     
-    // Fire inherited() callback on ancestors
-    do {
-      parent.inherited && parent.inherited(klass);
-    } while (parent = parent.superclass);
+    // Fire inherited() callback on parent
+    if (parent.inherited) parent.inherited(klass);
     
     return klass;
   },
@@ -961,6 +980,17 @@ JS.Kernel = JS.extend(new JS.Module('Kernel', {
   tap: function(block, context) {
     block.call(context || null, this);
     return this;
+  },
+  
+  /**
+   * JS.Kernel#toString() -> String
+   * 
+   * Returns a string representation of the object; the default representation
+   * just includes the object's type and hashcode.
+   **/
+  toString: function(className) {
+    className = className || this.klass.displayName || this.klass.toString();
+    return '#<' + className + ':' + this.hash() + '>';
   }
 }),
 

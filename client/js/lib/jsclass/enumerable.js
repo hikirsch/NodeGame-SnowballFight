@@ -2,10 +2,8 @@ JS.Enumerable = new JS.Module('Enumerable', {
   extend: {
     forEach: function(block, context) {
       if (!block) return new JS.Enumerator(this, 'forEach');
-      for (var i = 0, n = this.length; i < n; i++) {
-        if (this[i] !== undefined)
-          block.call(context || null, this[i]);
-      }
+      for (var i = 0; i < this.length; i++)
+        block.call(context || null, this[i]);
       return this;
     },
     
@@ -13,19 +11,63 @@ JS.Enumerable = new JS.Module('Enumerable', {
       return list.all(function(item) { return JS.isFn(item.compareTo) });
     },
     
-    areEqual: function(one, another) {
-      return one.equals
-          ? one.equals(another)
-          : (one === another);
+    areEqual: function(expected, actual) {
+      if (expected === actual)
+        return true;
+      
+      if (expected && JS.isFn(expected.equals))
+        return expected.equals(actual);
+      
+      if (expected instanceof Function)
+        return expected === actual;
+      
+      if (expected instanceof Array) {
+        if (!(actual instanceof Array)) return false;
+        if (expected.length !== actual.length) return false;
+        for (var i = 0, n = expected.length; i < n; i++) {
+          if (!this.areEqual(expected[i], actual[i]))
+            return false;
+        }
+        return true;
+      }
+      
+      if ((expected instanceof Object)) {
+        if (!(actual instanceof Object)) return false;
+        if (this.objectSize(expected) !== this.objectSize(actual)) return false;
+        for (var key in expected) {
+          if (!this.areEqual(expected[key], actual[key]))
+            return false;
+        }
+        return true;
+      }
+      
+      return false;
+    },
+    
+    objectKeys: function(object) {
+      var keys = [];
+      for (var key in object) keys.push(key);
+      return keys;
+    },
+    
+    objectSize: function(object) {
+      return this.objectKeys(object).length;
     },
     
     Collection: new JS.Class({
       initialize: function(array) {
         this.length = 0;
-        var push = Array.prototype.push;
-        JS.Enumerable.forEach.call(array, function(item) {
-          push.call(this, item);
-        }, this);
+        JS.Enumerable.forEach.call(array, this.push, this);
+      },
+      
+      push: function(item) {
+        Array.prototype.push.call(this, item);
+      },
+      
+      clear: function() {
+        var i = this.length;
+        while (i--) delete this[i];
+        this.length = 0;
       }
     })
   },
@@ -184,7 +226,10 @@ JS.Enumerable = new JS.Module('Enumerable', {
     block = JS.Enumerable.toFn(block);
     var results = [];
     this.forEach(function(item) {
-      var match = JS.isFn(pattern.match) ? pattern.match(item) : pattern(item);
+      var match = JS.isFn(pattern.match) ? pattern.match(item)
+                : JS.isFn(pattern.test)  ? pattern.test(item)
+                : JS.isType(item, pattern);
+      
       if (!match) return;
       if (block) item = block.apply(context || null, arguments);
       results.push(item);
@@ -473,6 +518,15 @@ JS.Enumerable.include({
         this._object = object;
         this._method = method || this.klass.DEFAULT_METHOD;
         this._args   = (args || []).slice();
+      },
+      
+      // this is largely here to support testing
+      // since I don't want to make the ivars public
+      equals: function(enumerator) {
+        return JS.isType(enumerator, this.klass) &&
+               this._object === enumerator._object &&
+               this._method === enumerator._method &&
+               JS.Enumerable.areEqual(this._args, enumerator._args);
       },
       
       forEach: function(block, context) {

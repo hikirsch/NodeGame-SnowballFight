@@ -1,6 +1,5 @@
 JS.Decorator = new JS.Class('Decorator', {
   initialize: function(decoree, methods) {
-	console.log("(DEC) A")
     var decorator  = new JS.Class(),
         delegators = {},
         method, func;
@@ -18,19 +17,14 @@ JS.Decorator = new JS.Class('Decorator', {
   },
   
   extend: {
-
     delegate: function(name) {
-		console.log("(DEC) B")
       return function() {
-		console.log("(DEC) B2")
         return this.component[name].apply(this.component, arguments);
       };
     },
     
     InstanceMethods: new JS.Module({
       initialize: function(component) {
-
-		  console.log("(DEC) C")
         this.component = component;
         this.klass = this.constructor = component.klass;
         var method, func;
@@ -43,7 +37,6 @@ JS.Decorator = new JS.Class('Decorator', {
       },
       
       extend: function(source) {
-		  console.log("(DEC) D")
         this.component.extend(source);
         var method, func;
         for (method in source) {
