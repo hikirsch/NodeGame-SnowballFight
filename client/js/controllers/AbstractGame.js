@@ -24,7 +24,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		{
 			var that = this;
 
-			console.log(new NodeGameKit.traits.BaseTrait())
 			this.config = config;
 			this.setModel(GameModel);
 
