@@ -231,7 +231,8 @@ var init = function()
 		toString: function()
 		{
 
-			return '[Vector(' + this.x + ', ' + this.y + ') angle: ' + this.angle() + ', length: ' + this.length() + ']';
+			return '[Vector] x:' + this.truncateAndReturnString(this.x) + " y:" + this.truncateAndReturnString(this.y);
+//			return '[Vector(' + this.x + ', ' + this.y + ') angle: ' + this.angle() + ', length: ' + this.length() + ']';
 
 		},
 		

@@ -79,22 +79,11 @@ var init = function($)
 		 */
 		deconstructInputBitmask: function(inputBitmask)
 		{
-
 			this.keys['up'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.UP);
 			this.keys['down'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.DOWN);
 			this.keys['left'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.LEFT);
 			this.keys['right'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.RIGHT);
 			this.keys['space'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.SPACE);
-
-//			if(Math.random() < 0.25) {
-//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.UP );
-//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.DOWN );
-//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.LEFT );
-//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.RIGHT );
-//				console.log( inputBitmask & GAMECONFIG.INPUT_BITMASK.SPACE );
-//			}
-//			console.log( this.keys );
-
 		},
 
 		/**

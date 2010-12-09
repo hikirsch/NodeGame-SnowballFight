@@ -1,6 +1,6 @@
 /**
  File:
- 	EntityModel.js
+ 	GameModel.js
  Created By:
 	 Mario Gonzalez
  Project	:

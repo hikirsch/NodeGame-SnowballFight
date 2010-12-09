@@ -102,6 +102,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 				if( this.input.isSpace() ) this.fireProjectile( gameClock );
 			}
 		},
+
 		/**
 		 * Causes character to attempt to fire a projectile.
 		 * If not enough time has elapsed since the lastFireTime, the character will not fire
@@ -112,12 +113,11 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			if( gameClock - this.lastFireTime < this.fireRate) // Too soon
 				return;
 
-
 			// For now always fire the regular snowball
 			var projectileModel = ProjectileModel.defaultSnowball;
 			projectileModel.force = 1.0 ; // TODO: Use force gauge
 			projectileModel.initialPosition = this.position.cp();
-			projectileModel.angle = this.rotation * -0.0174532925;
+			projectileModel.angle = this.rotation;// * 0.0174532925;
 
 			this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
 			this.lastFireTime = gameClock;

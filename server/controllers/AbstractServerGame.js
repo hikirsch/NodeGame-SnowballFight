@@ -60,8 +60,20 @@ AbstractServerGame = (function()
 
 
 			this.logLevel = LOG_LEVEL.ALL;
-			this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
+			this.logger = new Logger({time: this.gameClock, showStatus: true }, this);
 		},
+
+		createLevel: function()
+		{
+			var aFieldEntity,
+				aFieldModel;
+
+			for (var i = 0; i < 8; i++)
+			{
+//			 	aFieldEntity =
+			}
+		},
+
 
 		/**
 		 * Main loop

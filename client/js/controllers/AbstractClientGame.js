@@ -9,12 +9,11 @@ Abstract:
 	This class represents the client-side GameController.
 	It contains a NetChannel instead of a Server, as well as a ClientGameView 
 Basic Usage: 
-	 var gameController = new ClientGameController(HOST, PORT) 
+	var gameController = new ClientGameController(HOST, PORT) 
 */
 
 var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitFactory)
 {
-
 	return new JS.Class(AbstractGame,
 	{
 		initialize: function(config)

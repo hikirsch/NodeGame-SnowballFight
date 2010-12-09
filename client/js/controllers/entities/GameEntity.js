@@ -61,11 +61,13 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 
 			// Locaiton
 			this.position = new Vector(0, 0);
+			this.previousPosition = new Vector();
 			this.rotation = 0;
 			/**
 			 * Collision
 			 */
 			this.collisionCircle = null;
+			this.collisionOffset = new Vector(0,0);
 			this.collisionBitfield = 0;
 			this.radius = 18;
 
@@ -111,8 +113,8 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// no change
 			if(combinedVelocity > -0.1 && combinedVelocity < 0.1) return;
 
-			this.rotation = 57.2957795 * Math.atan2(this.velocity.x, this.velocity.y) - 180;
-			if(this.rotation < 0) this.rotation *= -1;
+			this.rotation = Math.atan2(this.velocity.y, this.velocity.x);
+//			this.fieldController.gameController.log("(Character) " + Math.round(this.rotation * 57.2957795) + " | (Velocity) " + this.velocity.toString());
 		},
 
 
@@ -151,6 +153,10 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		updatePosition: function(speedFactor)
 		{
+			// Store previous
+			this.previousPosition.x = this.position.x;
+			this.previousPosition.y = this.position.y;
+
 			// Adjust to speedFactor
 			this.acceleration.mul(speedFactor);
 
@@ -180,6 +186,8 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// Apply damping force
 			this.velocity.x *= this.damping;
 			this.velocity.y *= this.damping;
+
+
 
 			this.calculateRotation();
 			this.acceleration.x = this.acceleration.y = 0;
