@@ -160,7 +160,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// Add acceleration to velocity and velocity to the current position
 			this.velocity.add(this.acceleration);
 
-			console.ourLog(this.position);
 			this.position.x += this.velocity.x * speedFactor;
 			this.position.y += this.velocity.y * speedFactor;
 

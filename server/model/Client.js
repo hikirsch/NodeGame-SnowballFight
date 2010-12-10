@@ -57,7 +57,7 @@ var init = function()
 
 		onMessage: function( anEncodedMessage ) 
 		{
-
+//			 console.log('abc')
 		},
 
 		/**

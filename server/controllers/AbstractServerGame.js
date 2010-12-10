@@ -46,12 +46,16 @@ AbstractServerGame = (function()
 		{
 			this.callSuper();
 			this.nextEntityID = 1; 	// Each time we create an entity we increment this
-
 			console.log('(ServerGame)::init');
+
+			// Make our rolling log globally accessible
 			var that = this;
-			console.ourLog = function (var_args) {
-				that.log('+'+var_args);
-			}
+			console.gameLog = function () {
+				var len = arguments.length;
+				while(len--)
+					that.log(arguments[len]);
+			};
+
 			this.fieldController.createPackedCircleManager();
             this.createLevel();
 
@@ -64,7 +68,7 @@ AbstractServerGame = (function()
 
 
 			this.logLevel = LOG_LEVEL.ALL;
-			this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
+			this.logger = new Logger({time: this.gameClock, showStatus: true }, this);
 		},
 
 		createLevel: function()
