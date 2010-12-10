@@ -37,7 +37,8 @@ var init = function()
 	// return an object containing both
 	return {
 		'THEME_MAP': THEME_MAP,
-		'ENTITY_MAP': ENTITY_MAP
+		'ENTITY_MAP': ENTITY_MAP,
+		'DEFAULT_MODEL': DEFAULT_MODEL
 	}
 };
 

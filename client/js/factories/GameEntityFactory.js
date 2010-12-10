@@ -85,18 +85,18 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 				break;
 				case entityMap.PROJECTILE:
 					model = GAMECONFIG.PROJECTILE_MODEL.defaultSnowball;
-					createFunction = this.createProjectile;
+					creationFunction = this.createProjectile;
 				break;
 				case entityMap.FIELD_ENTITY:
 					model = this.entityModel.DEFAULT_MODEL;
-					createFunction = this.createFieldEntity;
+					creationFunction = this.createFieldEntity;
 				break;
 				default:
 				   console.log("No mapping for " + anEntityDescription.entityType);
 			}
 
 
-			if(createFunction == null) {
+			if(creationFunction == null) {
 				throw {name: "Entity Error", message: "Could not create entity", info: anEntityDescription};
 			}
 
@@ -104,7 +104,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			model.initialPosition = new Vector(anEntityDescription.x, anEntityDescription.y);
 
 			// Call the matched create function
-			return creationFunction(anEntityDescription.objectID, anEntityDescription.clientID, model, aFieldController);
+			return creationFunction.apply(this,[anEntityDescription.objectID, anEntityDescription.clientID, model, aFieldController]);
 		}
 	});
 };
