@@ -16,9 +16,7 @@ Abstract:
 Basic Usage:
 
  */
-
-
-define(['network/Message', 'config'], function(Message, config) {
+var init = function(Message, config) {
 	/**
 	 * NetChannel facilitates communication between the client-game, and the server-game
 	 * @param config  		A game configuration
@@ -27,7 +25,7 @@ define(['network/Message', 'config'], function(Message, config) {
 	function NetChannel( config, aController )
 	{
 
-		
+
 		this.controller = aController;	// For callbacks once messages are validated
 		this.config = config;
 		var that = this;
@@ -38,10 +36,10 @@ define(['network/Message', 'config'], function(Message, config) {
 		// Make sure this controller is valid before moving forward, the controller must contain certain methods we can rely on being callable
 		if( this.validateController(aController) === false)
 		{
-			console.log("(NetChannel) Controller " + aController + " is undefined or does not conform to the valid methods. Ignored."); 	 
+			console.log("(NetChannel) Controller " + aController + " is undefined or does not conform to the valid methods. Ignored.");
 			return;
 		}
-		
+
 		// connection info
 		this.frameLatency = 0; 	// lag over time
 		this.latency = 1000; // lag right now
@@ -50,7 +48,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.gameClock = -1;
 		this.lastSentTime = -1;
 		this.lastRecievedTime = -1; // Last time we received a message
-		
+
 		// When we  can send another message to prevent flooding - determined by 'rate' variable
 		this.clearTime = -1; // if realtime > cleartime, free to go
 		this.cmdrate = this.config.CLIENT_SETTING.cmdrate;	// (SEND) messages/sec
@@ -66,7 +64,7 @@ define(['network/Message', 'config'], function(Message, config) {
 		this.outgoingSequenceNumber = 0;
 		this.outgoingCmdBuffer = new SortedLookupTable();
 
-		// We send this, and we wait for the server to send back matching seq.number before we empty this. 
+		// We send this, and we wait for the server to send back matching seq.number before we empty this.
 		// When this is empty, then we can send whatever the next one is
 		this.reliableBuffer = null;  // store last sent message here
 
@@ -81,7 +79,7 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		console.log("(NetChannel) Created with socket: ", this.connection);
 	}
-	
+
 	/**
 	* Check if a controller conforms to our required methods
 	* Later on we can add new things here to make sure this controller is valid to make cheating at least slightly more  difficult
@@ -96,12 +94,10 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		return isValid;
 	};
-	
+
 	NetChannel.prototype.tick = function(gameClockTime)
 	{
 		this.gameClock = gameClockTime;
-
-//		if( this.verboseMode ) console.log("(NetChannel) tick", gameClockTime);
 
 		if(this.reliableBuffer !== null) return; // Can't send new message, still waiting
 
@@ -146,19 +142,23 @@ define(['network/Message', 'config'], function(Message, config) {
 		// Create a new message with the SERVER_CONNECT command
 		this.addMessageToQueue(true, this.composeCommand(config.CMDS.SERVER_CONNECT, null) );
 	};
-	
+
+	/**
+	 * A message has been received from the server
+	 * @param messageEvent
+	 */
 	NetChannel.prototype.onServerMessage = function (messageEvent)
-	{	
+	{
 		var serverMessage = BISON.decode(messageEvent.data);
 
 //		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", serverMessage);
-		
+
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) return;
-		
+
 		this.lastReceivedTime = this.gameClock;
 		this.adjustRate(serverMessage);
-			
+
 		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
 		// So we have to put it here, because otherwise e don't actually have a true client ID yet so the code below will not work
 		if(serverMessage.cmds.cmd == config.CMDS.SERVER_CONNECT)
@@ -167,16 +167,16 @@ define(['network/Message', 'config'], function(Message, config) {
 		}
 
 		// We sent this, clear our reliable buffer que
-		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.fullupdate) 
+		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.fullupdate)
 		{
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
-			
+
 			// Free up reliable buffer to allow for new message to be sent
 			if(this.reliableBuffer === message) {
 				this.reliableBuffer = null;
 			}
-				
+
 			// Remove from memory
 			delete this.messageBuffer[messageIndex];
 			delete message;
@@ -212,13 +212,13 @@ define(['network/Message', 'config'], function(Message, config) {
 
 		delete serverMessage;
 	};
-	
+
 	NetChannel.prototype.onConnectionClosed = function (serverMessage)
 	{
 		console.log('(NetChannel) onConnectionClosed', serverMessage);
 		this.controller.netChannelDidDisconnect();
 	};
-	
+
 	/**
 	 * An WS connection hand-shake has occured. We still do not have a clientID.
 	 * Once we receive our first message from the server, it will contain our clientID
@@ -328,4 +328,6 @@ define(['network/Message', 'config'], function(Message, config) {
 	};
 
 	return NetChannel;
-});
+}
+
+define(['network/Message', 'config'], init);
