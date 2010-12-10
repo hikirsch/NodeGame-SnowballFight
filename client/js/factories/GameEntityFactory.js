@@ -40,7 +40,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 		createProjectile: function(anObjectID, aClientID, aProjectileModel, aFieldController)
 		{
 			//this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
-			var projectile = new Projectile(anObjectID, aClientID, aFieldController, aProjectileModel, 1);
+			var projectile = new Projectile(anObjectID, aClientID, aProjectileModel, aFieldController);
 
 			// Should snowballs collide with one another?
 			projectile.collisionGroup = this.collisionGroups.Projectile;

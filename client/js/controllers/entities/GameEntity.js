@@ -210,7 +210,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 				objectID: this.objectID,
 				clientID: this.clientID,
 				entityType: this.entityType,
-				entityTheme: this.model.theme,
+				theme: this.model.theme,
 				x: this.position.x,
 				y: this.position.y,
 				r: this.rotation
