@@ -58,16 +58,16 @@ var init = function( $, overlay, navigation, footer, serverUnavailable, intro, c
 
 define([
 		'jquery',
-		'text!html/overlay.html',
-		'text!html/navigation.html',
-		'text!html/footer.html',
-		'text!html/server-unavailable.html',
-		'text!html/intro.html',
-		'text!html/character-select.html',
-		'text!html/instructions.html',
-		'text!html/character.html',
-		'text!html/field.html',
-		'text!html/entity.html',
+		'text!view/html/overlay.html',
+		'text!view/html/navigation.html',
+		'text!view/html/footer.html',
+		'text!view/html/server-unavailable.html',
+		'text!view/html/intro.html',
+		'text!view/html/character-select.html',
+		'text!view/html/instructions.html',
+		'text!view/html/character.html',
+		'text!view/html/field.html',
+		'text!view/html/entity.html',
 		'plugins/jquery.tmpl.min' /** this should be last **/
 ], init);
 

@@ -88,7 +88,7 @@ var init = function()
 		sendQueuedCommands: function( gameClock )
 		{
 			var messageContent = {gameClock: gameClock, id:1, seq: this.outgoingSequenceNumber, cmds:{cmd:this.commandTypes.fullupdate}, data:this.cmdBuffer};
-			var encodedMessage = MBISON.encode(messageContent);
+			var encodedMessage = BISON.encode(messageContent);
 
 			this.sendMessage(encodedMessage, gameClock);
 

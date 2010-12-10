@@ -65,4 +65,7 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 
 .game-container .game-entity-view { background-image: url( '../img/entities/snowball.png' ); position: absolute; height: 32px; width: 32px;}
 
+.game-container .snowballDefault { background-image: url( '../img/entities/snowball.png' ); position: absolute; height: 32px; width: 32px;}
+.game-container .fieldEntityDefault { background-image: url( '../img/entities/field/block-of-ice-4.png' ); position: absolute; height: 99px; width: 88px;}
+
 .overlay-container { z-index: 1000; position: absolute; background-image: url( ../img/global/bg-overlay.png ); }

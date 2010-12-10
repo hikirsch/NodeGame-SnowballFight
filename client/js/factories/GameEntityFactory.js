@@ -57,6 +57,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			// Collide against other characters, projectiles, and level objects
 			aNewCharacter.collisionGroup = this.collisionGroups.Character;
 			aNewCharacter.collisionMask = this.collisionGroups.Character | this.collisionGroups.Projectile | this.collisionGroups.FieldEntity;
+
 			return aNewCharacter;
 		},
 

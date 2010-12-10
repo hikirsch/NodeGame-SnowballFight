@@ -17,7 +17,6 @@ var init = function()
 		width: 900,
 		height: 600,
 		gameDuration: 5 * 60 * 1000
-		
 	}
 };
 

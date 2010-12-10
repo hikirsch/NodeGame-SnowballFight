@@ -57,7 +57,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		createAndAddEntityFromDescription: function( anEntityDescription )
 		{
 			var anEntity = null;
-			if( anEntityDescription.entityType != GAMECONFIG.ENTITY_MODEL.PROJECTILE ) {
+			if( anEntityDescription.entityType != GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.PROJECTILE ) {
 				//console.log("(FieldController): Don't know how to handle entity type: '" + anEntityDescription.entityType + "'! Ignoring... ");
 				//return 0;
 			}

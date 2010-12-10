@@ -41,7 +41,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		{
 			// Meta information
 			this.fieldController = aFieldController;
-			this.entityType = GAMECONFIG.ENTITY_MODEL.UNKNOWN;			// Type
+			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.UNKNOWN;			// Type
 
 			/**
 			 * Connection Properties
@@ -97,7 +97,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		setupCollisionEvents: function(aPackedCircle)
 		{
-			console.log(this, 'mask', this.collisionMask, 'group', this.collisionGroup);
 			this.collisionCircle = aPackedCircle;
 			aPackedCircle.collisionMask = this.collisionMask;
 			aPackedCircle.collisionGroup = this.collisionGroup;

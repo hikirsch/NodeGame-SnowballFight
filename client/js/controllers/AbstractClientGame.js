@@ -158,7 +158,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 				if( !entity )
 				{
 					var connectionID = entityDesc.clientID,
-						isCharacter  = entityDesc.entityType == GAMECONFIG.ENTITY_MODEL.CHARACTER,
+						isCharacter  = entityDesc.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER,
 						isOwnedByMe = connectionID == this.netChannel.clientID;
 
 					// Take care of the special things we have to do when adding a character
