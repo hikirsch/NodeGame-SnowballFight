@@ -192,6 +192,9 @@ var init = function(Message, config) {
 				var singleWorldUpdate = serverMessage.data[i];
 				var timeStamp = singleWorldUpdate.gameTick;
 				var key = this.incomingSequenceNumber++ & this.MESSAGE_BUFFER_MASK;
+				var data = createWorldEntityDescriptionFromString()
+
+				debugger;
 				this.incommingCmdBuffer.push(singleWorldUpdate);
 
 				if(this.incommingCmdBuffer.length > this.MESSAGE_BUFFER_MASK)

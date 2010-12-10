@@ -137,7 +137,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// Console.log("I was involved in a collision!!");
 //			otherCircle.view.position.mul(0);
 		},
-		
+
 		/**
 		 * Update, use delta to create frame independent motion
 		 * @param speedFactor	A normalized value our ACTUAL framerate vs our desired framerate. 1.0 means exactly correct, 0.5 means we're running at half speed
@@ -206,15 +206,15 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		constructEntityDescription: function()
 		{
-			return {
-				objectID: this.objectID,
-				clientID: this.clientID,
-				entityType: this.entityType,
-				entityTheme: this.model.theme,
-				x: this.position.x,
-				y: this.position.y,
-				r: this.rotation
-			}
+			var returnString = "|"+this.objectID;
+				returnString += ","+this.clientID;
+				returnString += ","+this.entityType;
+				returnString += ","+this.model.theme;
+				returnString += ","+Math.round(this.position.x);
+				returnString += ","+Math.round(this.position.y);
+				returnString += ","+Math.round(this.rotation*57.2957795);
+
+			return returnString;
 		},
 
 		deconstructFromEntityDescription: function(anEntityDescription)

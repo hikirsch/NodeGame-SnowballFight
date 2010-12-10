@@ -110,7 +110,8 @@ var init = function()
 		 */
 		compressDeltaAndQueueMessage: function( worldDescription, gameClock )
 		{
-			var entityDescriptionObject = worldDescription.entities._data;
+			entityDescriptionObject = {};
+			entityDescriptionObject.entities = worldDescription.entities;
 			entityDescriptionObject.gameClock = worldDescription.gameClock;
 			entityDescriptionObject.gameTick = worldDescription.gameTick;
 
