@@ -56,22 +56,15 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		createAndAddEntityFromDescription: function( anEntityDescription )
 		{
-			var anEntity = null;
+			var aNewEntity = null;
 			if( anEntityDescription.entityType != GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.PROJECTILE ) {
 				//console.log("(FieldController): Don't know how to handle entity type: '" + anEntityDescription.entityType + "'! Ignoring... ");
 				//return 0;
 			}
 
-			// For now we only know hwo to add projectiles using this method!!
-			var aProjectileModel = GAMECONFIG.PROJECTILE_MODEL.defaultSnowball; // TODO: Send projectile type
-		   	aProjectileModel.initialPosition = new Vector(anEntityDescription.x,  anEntityDescription.y);
-
-			// Create!
-			var aNewProjectile = this.gameController.entityFactory.createProjectile(anEntityDescription.objectID, anEntityDescription.clientID, aProjectileModel, this);
-
-			this.addEntity( aNewProjectile );
-
-			return aNewProjectile;
+			aNewEntity = this.gameController.entityFactory.createEntityFromDescription(anEntityDescription, this);
+			this.addEntity( aNewEntity );
+			return aNewEntity;
 		},
 
 		/**

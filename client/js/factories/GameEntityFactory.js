@@ -19,9 +19,10 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 		 * Creates an instance of the GameEntityFactory
 		 * @param aFieldController
 		 */
-		initialize: function(aFieldController)
+		initialize: function(aFieldController, anEntityModel)
 		{
 		    this.fieldController = aFieldController;
+			this.entityModel = anEntityModel;
 
 			this.entityTypes = new SortedLookupTable();
 			this.entityTypes.setObjectForKey(GameEntity, 'GameEntity');
@@ -71,8 +72,42 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			aNewFieldEntity.collisionMask = this.collisionGroups.Character;
 			
 			return aNewFieldEntity;
-		}
+		},
 
+		createEntityFromDescription: function(anEntityDescription, aFieldController)
+		{
+			var entityMap = this.entityModel.ENTITY_MAP,
+				model = null,
+				creationFunction = null;
+
+			switch(anEntityDescription.entityType)
+			{
+				case entityMap.CHARACTER:
+					console.log("Ooops? Character created");
+				break;
+				case entityMap.PROJECTILE:
+					model = GAMECONFIG.PROJECTILE_MODEL.defaultSnowball;
+					createFunction = this.createProjectile;
+				break;
+				case entityMap.FIELD_ENTITY:
+					model = this.entityModel.DEFAULT_MODEL;
+					createFunction = this.createFieldEntity;
+				break;
+				default:
+				   console.log("No mapping for " + anEntityDescription.entityType);
+			}
+
+
+			if(createFunction == null) {
+				throw {name: "Entity Error", message: "Could not create entity", info: anEntityDescription};
+			}
+
+			model.theme = anEntityDescription.theme;
+			model.initialPosition = new Vector(anEntityDescription.x, anEntityDescription.y);
+
+			// Call the matched create function
+			return creationFunction(anEntityDescription.objectID, anEntityDescription.clientID, model, aFieldController);
+		}
 	});
 };
 

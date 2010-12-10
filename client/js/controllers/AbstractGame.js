@@ -32,7 +32,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 			// this.fieldController.tick();
 
 			// This is the Factory that will create all the entities for us
-			this.entityFactory = new GameEntityFactory(this.fieldController);
+			this.entityFactory = new GameEntityFactory(this.fieldController, config.ENTITY_MODEL);
 
 			// intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
 			// this.targetDelta, Milliseconds between frames 16ms means 60FPS - it's the framerate the game is designed against
