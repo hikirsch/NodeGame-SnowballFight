@@ -104,25 +104,20 @@ ServerNetChannel = (function()
 			*/
 			aWebSocket.onMessage = function(connection, encodedMessage )
 			{
-//				that.delegate.log( '(ServerNetChannel) : onMessage', connection, BISON.decode(encodedMessage) );
+				var client;
 				try
 				{
 					that.bytes.received += encodedMessage.length;
-
 					var decodedMessage = BISON.decode(encodedMessage);
 
+					// Tell the Client of this connection that a message was received
+					if(client = that.clients.objectForKey(decodedMessage.id)) {
+						client.onMessage(decodedMessage);
+					}
 
-					if(!(decodedMessage.cmds instanceof Array))
-					{
-						// Call the mapped function, always pass the connection. Also pass data if available
-						that.CMD_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [connection, decodedMessage]);
-					}
-					else // An array of commands
-					{
-//						for(var singleCommand in decodedMessage.cmds){
-//							that.CMD_TO_FUNCTION[singleCommand.cmd].apply(that, singleCommand.data);
-//						}
-					}
+					// Call the mapped function, always pass the connection. Also pass data if available
+					that.CMD_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [connection, decodedMessage]);
+
 				}
 				catch (e)
 				{ // If something went wrong, just remove this client and avoid crashign

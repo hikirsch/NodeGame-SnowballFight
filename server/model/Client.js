@@ -37,14 +37,19 @@ var init = function()
 			this.rate =  config.CLIENT_SETTING.rate;				// Cap bandwidth/sec 
 
 			//
-			this.incomingSequenceNumber = 0;
-			this.outgoingSequenceNumber = 0;
 
-			// array of the last 31 messages sent/received
-			this.MESSAGE_BUFFER_MASK = 31; // This is used in the messageBuffer bitmask - It's the sequence number - store
+
+
+			// 	Array of the last 31 messages sent/received
+			 // This is used in the messageBuffer bitmask - It's the sequence number - store
+			this.MESSAGE_BUFFER_MASK = 31;
+
+			// outgoing sent
 			this.outgoingMessageBuffer = [];
+			this.outgoingSequenceNumber = 0;
+			// incoming received
 			this.incommingMessageBuffer = [];
-
+			this.incomingSequenceNumber = 0;
 
 			// Every tick store the queued commands here, every CLIENT_CONFIG.updateRate, send the queue
 			this.cmdBuffer = [];
@@ -55,9 +60,12 @@ var init = function()
 			this.lastReceivedMessageTime = -this.updaterate;
 		},
 
-		onMessage: function( anEncodedMessage ) 
+		onMessage: function( aDecodedMessage )
 		{
-//			 console.log('abc')
+			var messageIndex = this.incomingSequenceNumber & this.MESSAGE_BUFFER_MASK;
+			this.incommingMessageBuffer[messageIndex] = aDecodedMessage;
+
+			this.incomingSequenceNumber++;
 		},
 
 		/**

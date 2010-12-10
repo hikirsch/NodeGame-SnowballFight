@@ -40,7 +40,7 @@ var init = function()
 		{
 			// Info
 			this.sequenceNumber = aSequenceNumber;
-			this.clientID = -1; // Some kind of hash value returned to the NetChannel from the server on connect
+			this.clientID = -1; // Server gives us one when we first  connect to it
 
 			// Data
 			this.unencodedMessage = anUnencodedMessage;
@@ -56,7 +56,7 @@ var init = function()
 		{
 			if(this.clientID == -1) {
 				console.log("(Message) Sending message without clientID. Note this is ok, if it's the first message to the server.");
-			};
+			}
 
 			if(this.messageTime == -1) {
 				console.log("(Message) Sending message without messageTime. Expected result is undefined");
