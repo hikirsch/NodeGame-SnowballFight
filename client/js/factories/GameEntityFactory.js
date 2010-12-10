@@ -15,7 +15,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 {
 	return new JS.Class(
 	{
-		/**
+		/**           asd ad
 		 * Creates an instance of the GameEntityFactory
 		 * @param aFieldController
 		 */
@@ -36,9 +36,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 				'Projectile': 1 << 1,
 				'FieldEntity': 1 << 2
 			};
-
 		},
-
 		createProjectile: function(anObjectID, aClientID, aProjectileModel, aFieldController)
 		{
 			//this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
