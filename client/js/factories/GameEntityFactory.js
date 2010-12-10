@@ -50,9 +50,9 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			return projectile;
 		},
 
-		createCharacter: function(anObjectID, aClientID, aFieldController)
+		createCharacter: function(anObjectID, aClientID, aCharacterModel, aFieldController)
 		{
-			var aNewCharacter = new Character(anObjectID, aClientID, aFieldController);
+			var aNewCharacter = new Character(anObjectID, aClientID, aCharacterModel, aFieldController);
 
 			// Collide against other characters, projectiles, and level objects
 			aNewCharacter.collisionGroup = this.collisionGroups.Character;
@@ -61,9 +61,9 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			return aNewCharacter;
 		},
 
-		createFieldEntity: function(anObjectID, aFieldController, aFieldEntityModel)
+		createFieldEntity: function(anObjectID, aClientID, aFieldEntityModel, aFieldController )
 		{
-			var aNewFieldEntity = new FieldEntity(anObjectID, 0, aFieldController, aFieldEntityModel);
+			var aNewFieldEntity = new FieldEntity(anObjectID, aClientID, aFieldEntityModel, aFieldController);
 			aNewFieldEntity.position = new Vector(aFieldEntityModel.initialPosition.x, aFieldEntityModel.initialPosition.y);
 			
 			// Collide against characters and projectiles

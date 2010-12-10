@@ -14,7 +14,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 {
 	return new JS.Class(GameEntity,
 	{
-		initialize: function(anObjectID, aClientID, aFieldController, aFieldEntityModel)
+		initialize: function(anObjectID, aClientID, aFieldEntityModel, aFieldController)
 		{
 			this.callSuper();
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.FIELD_ENTITY; //

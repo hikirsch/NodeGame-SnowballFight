@@ -14,12 +14,12 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 {
 	return new JS.Class(GameEntity,
 	{
-		initialize: function(anObjectID, aClientID, aFieldController, projectileModel, force)
+		initialize: function(anObjectID, aClientID, projectileModel, aFieldController)
 		{
-			this.callSuper(anObjectID, aClientID, aFieldController);
+			this.callSuper();
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.PROJECTILE; // 			
 
-			this.force = force;
+			this.force = projectileModel.force;
 			// Get information from the projectile model
 			this.position = projectileModel.initialPosition;
 			this.maxVelocity = projectileModel.maxVelocity;

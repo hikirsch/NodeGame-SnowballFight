@@ -33,7 +33,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		/**
 		 * @inheritDoc
 		 */
-		initialize: function(anObjectID, aClientID, aFieldController)
+		initialize: function(anObjectID, aClientID, aCharacterModel, aFieldController)
 		{
 			this.callSuper();
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER;			// Type

@@ -15,9 +15,11 @@ var init = function()
 {
 	// All the different themes that can be applied to the views
 	var THEME_MAP = {
+		'0': 'default',
 		'1': "smash-tv",
 		'2': "snowballDefault",
-		'3': "fieldEntityDefault"
+		'3': "fieldEntityDefault",
+		'4': 'yetti'
 	};
 
 	// Actual game play object types
@@ -26,6 +28,10 @@ var init = function()
 		CHARACTER			: 1 << 1,
 		PROJECTILE			: 1 << 2,
 		FIELD_ENTITY		: 1 << 3
+	};
+
+	var DEFAULT_MODEL = {
+		theme: '0'
 	};
 
 	// return an object containing both

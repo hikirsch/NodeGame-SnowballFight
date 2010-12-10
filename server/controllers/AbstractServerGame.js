@@ -57,7 +57,6 @@ AbstractServerGame = (function()
 			};
 
 			this.fieldController.createPackedCircleManager();
-            this.createLevel();
 
 			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
@@ -70,22 +69,6 @@ AbstractServerGame = (function()
 			this.logLevel = LOG_LEVEL.ALL;
 			this.logger = new Logger({time: this.gameClock, showStatus: true }, this);
 		},
-
-		createLevel: function()
-		{
-			var aFieldEntity,
-				aFieldEntityModel;
-
-			//blockOfIce
-			for (var i = 0; i < 8; i++)
-			{
-				aFieldEntityModel = FieldEntityModel.blockOfIce1;
-				aFieldEntityModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
-				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), this.fieldController, aFieldEntityModel)
-				this.fieldController.addEntity(aFieldEntity);
-			}
-		},
-
 
 		/**
 		 * Main loop
@@ -136,12 +119,13 @@ AbstractServerGame = (function()
 		 * @param aClientID		Connection ID of the client
 		 * @param playerType 	Playertype - ServerGame does not use this property
 		 */
-		shouldAddPlayer: function (anEntityID, aClientID)
+		shouldAddPlayer: function (anEntityID, aClientID, aCharacterModel)
 		{
-			var aNewCharacter = this.callSuper(anEntityID, aClientID);
+			var aNewCharacter = this.callSuper();
 			if(aNewCharacter == null) return; // No character created for whatever reason. Room full?
 
 			aNewCharacter.setInput( new Joystick() );
+
 			return aNewCharacter;
 		},
 

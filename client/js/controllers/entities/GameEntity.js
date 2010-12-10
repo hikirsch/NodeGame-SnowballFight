@@ -37,11 +37,12 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 * @param {String|Number} aClientID	The connection which spawned this object. "0" means it belongs to the game
 		 * @param {FieldController} aFieldController	A FieldController instance this object belongs to.
 		 */
-		initialize: function(anObjectID, aClientID, aFieldController)
+		initialize: function(anObjectID, aClientID, anEntityModel, aFieldController)
 		{
 			// Meta information
 			this.fieldController = aFieldController;
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.UNKNOWN;			// Type
+			this.setModel( anEntityModel );
 
 			/**
 			 * Connection Properties
@@ -55,11 +56,12 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			this.velocity = new Vector( 0, 0 );			// Current velocity
 			this.maxVelocity = 3.5;   					// Fastest velocity this object will travel at
 			this.damping = 1;							// 1.0 means never lose speed over time
+
 			// (Acceleration is applied to velocity)
 			this.acceleration = new Vector( 0, 0 );		// All combined forced. reset every tick
 			this.moveSpeed = 0;    						// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
 
-			// Locaiton
+			// Location
 			this.position = new Vector(0, 0);
 			this.rotation = 0;
 			/**
@@ -75,6 +77,11 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		},
 
 
+		setModel: function( newModel )
+		{
+			this.model = newModel;
+		},
+
 		/**
 		 * Creates the 'View' for this character
 		 * This should only be called client side.
@@ -85,7 +92,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// if our game has a view, then create one
 			if( this.fieldController.hasView() )
 			{
-				this.view = new EntityView(this, 'smash-tv');
+				this.view = new EntityView(this);
 				console.log("creating entity view");
 			}
 		},
@@ -183,8 +190,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// Apply damping force
 			this.velocity.x *= this.damping;
 			this.velocity.y *= this.damping;
-
-
 
 			this.calculateRotation();
 			this.acceleration.x = this.acceleration.y = 0;

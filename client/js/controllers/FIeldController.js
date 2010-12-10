@@ -70,15 +70,16 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			var aNewProjectile = this.gameController.entityFactory.createProjectile(anEntityDescription.objectID, anEntityDescription.clientID, aProjectileModel, this);
 
 			this.addEntity( aNewProjectile );
+
 			return aNewProjectile;
 		},
 
 		/**
 		 * Adds a player to the field
 		 */
-		addPlayer: function( anObjectID, aClientID )
+		addPlayer: function( anObjectID, aClientID, aCharacterModel )
 		{
-			var aNewCharacter = this.gameController.entityFactory.createCharacter(anObjectID, aClientID, this);
+			var aNewCharacter = this.gameController.entityFactory.createCharacter(anObjectID, aClientID, aCharacterModel, this);
 
 			// Add internally, and store in a special 'players' SortedLookupTable (via clientID)
 			this.addEntity(aNewCharacter);

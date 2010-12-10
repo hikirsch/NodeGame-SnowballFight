@@ -31,6 +31,7 @@ SnowGame = (function()
 			var that = this;
 			var collisionManager = this.fieldController.getCollisionManager();
 			collisionManager.eventEmitter.on('collision', function() { that.onCollision.apply(that, arguments) });
+			this.createLevel();
 		},
 
 		onCollision: function(circleA, circleB, collisionNormal)
@@ -44,6 +45,21 @@ SnowGame = (function()
 				var player = (circleA.view.entityType === EntityModel.CHARACTER) ? circleA.view : circleB.view;
 				var projectile = (circleA.view.entityType === EntityModel.PROJECTILE) ? circleA.view : circleB.view;
 				this.fieldController.removeEntity(projectile.objectID);
+			}
+		},
+
+		createLevel: function()
+		{
+			var aFieldEntity,
+				aFieldEntityModel;
+
+			//blockOfIce
+			for (var i = 0; i < 8; i++)
+			{
+				aFieldEntityModel = FieldEntityModel.blockOfIce1;
+				aFieldEntityModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
+				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController)
+				this.fieldController.addEntity(aFieldEntity);
 			}
 		}
 	});

@@ -232,7 +232,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		joinGame: function(aNickName)
 		{
 			// the message to send to the server
-			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { nickName: aNickName } );
+			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: '3', nickName: aNickName } );
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );

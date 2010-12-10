@@ -285,7 +285,8 @@ ServerNetChannel = (function()
 			// Create an entity ID for this new player
 			// This is done here, because shouldAddPlayer is the same on client and server, and only the server can define client entities
 			var entityID = this.delegate.getNextEntityID();
-			this.delegate.shouldAddPlayer(entityID, connection.$clientID);
+
+			this.delegate.shouldAddPlayer(entityID, connection.$clientID, {theme: '1'});
 
 			connection.send( BISON.encode(aDecodedMessage) );
 		},

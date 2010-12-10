@@ -105,10 +105,10 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		},
 
 
-		shouldAddPlayer: function (anObjectID, aClientID, playerType)
+		shouldAddPlayer: function (anObjectID, aClientID, aCharacterModel)
 		{
 			// TODO: Check if we can still add new players
-			var aNewCharacter = this.fieldController.addPlayer( anObjectID, aClientID, playerType );
+			var aNewCharacter = this.fieldController.addPlayer( anObjectID, aClientID, aCharacterModel );
 			return aNewCharacter;
 		},
 
