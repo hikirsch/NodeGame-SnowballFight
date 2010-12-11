@@ -54,13 +54,12 @@ SnowGame = (function()
 				aFieldEntityModel;
 
 			//blockOfIce
-			for (var i = 0; i < 8; i++)
+			for (var i = 0; i < 1; i++)
 			{
 				aFieldEntityModel = FieldEntityModel.gingerBreadHouse;
-				aFieldEntityModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
+				aFieldEntityModel.initialPosition = {x: 400, y: 300 };
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController)
 				console.gameLog('creating entity');
-				console.gameLog( SYS.inspect( aFieldEntity) );
 				this.fieldController.addEntity(aFieldEntity);
 			}
 

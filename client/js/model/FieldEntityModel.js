@@ -13,7 +13,7 @@
 var init = function()
 {
 	return {
-		gingerBreadHouse		: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 72, theme: '100' },
+		gingerBreadHouse		: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: { x:-10, y:0 }, radius: 68, theme: '100' },
 		blockOfIce1				: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '101' },
 		blockOfIce2				: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '102' },
 		blockOfIce3				: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '103' },

@@ -40,6 +40,8 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'factories/HTMLFactory
 
 		showIntro: function()
 		{
+			this.joinGame();
+			return false;
 			var that = this,
 				$intro = HTMLFactory.intro();
 
@@ -74,7 +76,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'factories/HTMLFactory
 	
 		joinGame: function(e)
 		{	
-			var nickName = $("#nickname").val();
+			var nickName = $("#nickname").length > 0 ? $("#nickname").val() : "";
 			
 			if( nickName.length <= 0)
 			{

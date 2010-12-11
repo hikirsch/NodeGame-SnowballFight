@@ -68,7 +68,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			 * Collision
 			 */
 			this.collisionCircle = null; 			// Thing that represents us in collisions
-			this.collisionOffset = new Vector(0,0);	// Offset of our circle from where we are
+			this.collisionOffset = anEntityModel.collisionOffset || new Vector(0,0); // Offset of our circle from where we are
 			this.collisionMask = 0; 				// Group we want to collide against
 			this.collisionGroup = 0;				// Group we are in
 			this.radius = 18;
@@ -107,7 +107,9 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			this.collisionCircle = aPackedCircle;
 			aPackedCircle.collisionMask = this.collisionMask;
 			aPackedCircle.collisionGroup = this.collisionGroup;
+			console.gameLog( this.collisionOffset );
 			aPackedCircle.position = this.position.add(this.collisionOffset);
+			console.gameLog( aPackedCircle.position );
 			aPackedCircle.eventEmitter.on("collision", this.onCollision);
 		},
 

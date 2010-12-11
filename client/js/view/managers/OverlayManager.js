@@ -58,6 +58,10 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 
 			resize: function()
 			{
+				if( this.element != null ) {
+					this.createElement();
+				}
+
 				this.settings.left = this.controller.getFieldLeft();
 				this.settings.top = this.controller.getFieldTop();
 
@@ -73,8 +77,13 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 			},
 			hide: function()
 			{
-				this.active.remove();
-				this.element.hide();
+				if( this.active != null ) {
+					this.active.remove();
+				}
+
+				if( this.element != null ) {
+					this.element.hide();
+				}
 			}
 		}
 	);

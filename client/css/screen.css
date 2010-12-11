@@ -65,7 +65,7 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 
 /** field entities */
 .game-container .game-entity-view.field-entity-default { background-image: url( '../img/entities/field/block-of-ice-4.png' ); height: 99px; width: 88px;}
-.game-container .game-entity-view.ginger-bread-house { background-image: url( '../img/entities/field/ginger-bread-house.png' ); width: 146px; height: 157px; }
+.game-container .game-entity-view.ginger-bread-house { background-image: url( '../img/entities/field/ginger-bread-house.png' ); width: 146px; height: 157px;  margin-left: -73px; margin-top: -78px; }
 .game-container .game-entity-view.block-of-ice-1 { background-image: url( '../img/entities/field/block-of-ice-1.png' ); width: 29px; height: 37px; }
 .game-container .game-entity-view.block-of-ice-2 { background-image: url( '../img/entities/field/block-of-ice-2.png' ); width: 52px; height: 42px; }
 .game-container .game-entity-view.block-of-ice-3 { background-image: url( '../img/entities/field/block-of-ice-3.png' ); width: 42px; height: 38px; }
