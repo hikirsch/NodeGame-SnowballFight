@@ -13,7 +13,16 @@
 var init = function()
 {
 	return {
-		blockOfIce1		: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '2' }
+		gingerBreadHouse		: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '100' },
+		blockOfIce1				: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '101' },
+		blockOfIce2				: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '102' },
+		blockOfIce3				: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '103' },
+		blockOfIce4				: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '104' },
+		iceMountainOgilvyFlag	: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '105' },
+		iglooGreenFlag			: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '106' },
+		lakeHorizontalBridge	: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '107' },
+		lakeVerticalBridge		: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '108' },
+		smallPong				: { initialPosition:{x:5, y:5}, collisionMask: 0, collisionOffset: {x:0, y:0}, radius: 10, theme: '109' }
 	}
 };
 

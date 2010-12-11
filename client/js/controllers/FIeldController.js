@@ -127,7 +127,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 			// If we have a view, then add the player to it
 			if( this.view ) {
-				this.view.addEntity( anEntity.getView('smash-tv') );
+				this.view.addEntity( anEntity.getView() );
 			}
 
 		},
