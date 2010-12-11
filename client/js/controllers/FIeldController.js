@@ -145,16 +145,18 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		},
 
 		/**
-		 * Updates an entity postion
-		 * @param objectID
-		 * @param updatedPosition
+		 * Updates the entity based on new information (called by AbstractClientGame::renderAtTime)
+		 * @param {int}		objectID  	ObjectID we want to update
+		 * @param {Vector}	newPosition	position
+		 * @param {Number}	newRotation rotation
 		 */
-		updateEntity: function( objectID, updatedPosition ) {
+		updateEntity: function( objectID, newPosition, newRotation ) {
 			var entity = this.allEntities.objectForKey( objectID );
 
 			if( entity != null ) {
-				entity.position.x = updatedPosition.x;
-				entity.position.y = updatedPosition.y;
+				entity.position.x = newPosition.x;
+				entity.position.y = newPosition.y;
+				entity.rotation = newRotation;
 			}
 		},
 

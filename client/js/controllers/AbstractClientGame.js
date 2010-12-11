@@ -87,7 +87,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 			if( len < 2 ) return false; // Nothing to do!
 
-			var newPosition = new Vector(0,0);
+			var newPosition = new Vector(0,0),
+				newRotation = 0.0;
 
 			// if the distance between prev and next is too great - don't interpolate
 			var maxInterpolationDistance = 25,
@@ -145,8 +146,11 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 
 			// Note: We want to render at time "B", so grab the position at time "A" (previous), and time "C"(next)
-			var entityPositionPast = new Vector(0,0);
-			var entityPositionFuture = new Vector(0,0);
+			var entityPositionPast = new Vector(0,0),
+				entityRotationPast = 0;
+
+			var entityPositionFuture = new Vector(0,0),
+				entityRotationFuture = 0;
 
 			// Update players
 			nextWorldEDAfterRenderTime.forEach(function(key, entityDesc)
@@ -191,7 +195,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 					// Store past and future positions to compare
 					entityPositionPast.set(previousEntityDescription.x, previousEntityDescription.y);
+					entityRotationPast = previousEntityDescription.rotation;
+
 					entityPositionFuture.set(entityDesc.x, entityDesc.y);
+					entityRotationFuture = entityDesc.rotation;
 
 					// if the distance between prev and next is too great - don't interpolate
 					if(entityPositionPast.distanceSquared(entityPositionFuture) > maxInterpolationDistanceSquared) {
@@ -201,8 +208,11 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
 					newPosition.x = ( (entityPositionFuture.x - entityPositionPast.x) * t ) + entityPositionPast.x;
 					newPosition.y = ( (entityPositionFuture.y - entityPositionPast.y) * t ) + entityPositionPast.y;
+//					newRotation =  ( (entityRotationFuture - entityRotationPast) * t ) + entityRotationPast;
+//					if(newRotation != 0)
+						console.log(newRotation);
 
-					this.fieldController.updateEntity( objectID, newPosition );
+					this.fieldController.updateEntity( objectID, newPosition, newRotation );
 				}
 
 				// Entities not processed are considered to have been removed on the server,
