@@ -79,6 +79,7 @@ AbstractServerGame = (function()
 		{
 			this.callSuper();
 
+			this.fieldController.packedCircleManager.forceCirclesToMatchViewPositions();
 			this.fieldController.packedCircleManager.handleCollisions();
 
 			// Create a new world-entity-description, could be some room for optimization here but it only happens once per game loop anyway

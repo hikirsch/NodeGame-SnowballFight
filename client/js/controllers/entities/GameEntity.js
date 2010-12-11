@@ -111,7 +111,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			this.collisionCircle.collisionGroup = this.collisionGroup;	// Which group we are in
 			// Position
 			this.collisionCircle.position = this.position.cp();		//
-			this.collisionCircle.offset = new Vector(this.collisionOffset.x, this.collisionOffset.y);	// Relative location
+			this.collisionCircle.offset = new Vector(this.collisionOffset.x, this.collisionOffset.y);
 			// Radius
 			this.collisionCircle.setRadius(this.radius);
 		},

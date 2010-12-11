@@ -144,6 +144,8 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.allEntities.forEach( function(key, entity){
 				entity.tick(speedFactor, gameClock);
 			}, this );
+
+
 		},
 
 		/**

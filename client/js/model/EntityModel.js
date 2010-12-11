@@ -54,6 +54,14 @@ var init = function()
 		FIELD_ENTITY		: 1 << 3
 	};
 
+	// For development, friendly names - WILL BE REMOVED
+	var ENTITY_NAME_FRIENDLY = {
+	    '1' : "UNKNOWN",
+		'2' : "CHARACTER",
+		'4' : "PROJECTILE",
+		'8' : "FIELD_ENTITY"
+	};
+
 	var DEFAULT_MODEL = {
 		theme: '0'
 	};
@@ -62,6 +70,7 @@ var init = function()
 	return {
 		'THEME_MAP': THEME_MAP,
 		'ENTITY_MAP': ENTITY_MAP,
+		'ENTITY_NAME_FRIENDLY': ENTITY_NAME_FRIENDLY,
 		'DEFAULT_MODEL': DEFAULT_MODEL
 	}
 };

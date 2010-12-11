@@ -39,7 +39,15 @@ SnowGame = (function()
 //			Messy for now, but call proper function on collision
 
 //			console.log(circleA.view.entityType, circleB.view.entityType , EntityModel.ENTITY_MAP);
+			var circleAType = EntityModel.ENTITY_NAME_FRIENDLY[String(circleA.view.entityType)];
+			var circleBType = EntityModel.ENTITY_NAME_FRIENDLY[String(circleB.view.entityType)];
 
+			console.log('aCollision');
+			console.log(circleA.view.entityType === EntityModel.ENTITY_MAP.CHARACTER);
+			console.log(circleB.view.entityType === EntityModel.ENTITY_MAP.CHARACTER);
+
+			console.log(circleA.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE);
+			console.log(circleB.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE);
 			// Player vs projectile collision occured
 			if( (circleA.view.entityType === EntityModel.ENTITY_MAP.CHARACTER || circleB.view.entityType === EntityModel.ENTITY_MAP.CHARACTER) &&
 				(circleA.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE || circleB.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE))
@@ -67,13 +75,13 @@ SnowGame = (function()
 				{ position: { x: 500, y: 300 }, entityType: FieldEntityModel.lakeHorizontalBridge },
 				{ position: { x: 740, y: 300 }, entityType: FieldEntityModel.lakeVerticalBridge },
 				{ position: { x: 100, y: 500 }, entityType: FieldEntityModel.smallPond }
-			]
+			];
 
- 			for( var i = 0; i < entities.length; i++ ) {
-				var nextEntity = entities[ i ];
+ 			for( var i = 0; i < 7; i++ ) {
+				var nextEntity = entities[ 4 ];
 				aFieldEntityModel = nextEntity.entityType;
-				aFieldEntityModel.initialPosition = nextEntity.position;
-				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController)
+				aFieldEntityModel.initialPosition = new Vector(i * 140, 300);
+				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 				this.fieldController.addEntity(aFieldEntity);
 			}
 		}

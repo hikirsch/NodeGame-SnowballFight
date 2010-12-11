@@ -31,6 +31,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 		{
 			this.callSuper();
 			this.collisionCircle.isFixed = true;
+			console.log(this.collisionCircle.radius);
 		}
 	});
 };

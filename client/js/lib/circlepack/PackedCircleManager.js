@@ -121,12 +121,15 @@ var init = function(Vector, PackedCircle)
 	{
 		var len = this.allCircles.length;
 		// push toward target position
-		for(var n = 0; n < this.numberOfCenteringPasses; n++)
+		for(var n = 0; n < len; n++)
 		{
-			var aCircle = this.allCircles[i];
-			if(!aCircle.view) continue;
+			var aCircle = this.allCircles[n];
+			if(!aCircle.view) {
+				continue;
+			}
 
-			aCircle.position.set(aCircle.view.position.y + aCircle.offset.x, aCircle.view.position.y + aCircle.offset.y);
+			aCircle.position.x = aCircle.view.position.x + aCircle.offset.x;
+			aCircle.position.y = aCircle.view.position.y + aCircle.offset.y;
 		}
 	};
 
@@ -200,11 +203,12 @@ var init = function(Vector, PackedCircle)
 
 
 					var dx = cj.position.x - ci.position.x,
-						dy = cj.position.y - ci.position.y,
-						r = (ci.radius + cj.radius) * 1.08, // The distance between the two circles radii, but we're also gonna pad it a tiny bit
+						dy = cj.position.y - ci.position.y;
+
+					// The distance between the two circles radii, but we're also gonna pad it a tiny bit
+					var r = (ci.radius + cj.radius) * 1.08,
 						d = ci.position.distanceSquared(cj.position);
 
-					ci.radius = cj.radius = 20;
 					/**
 					 * Collision detected!
 					 */
@@ -221,20 +225,24 @@ var init = function(Vector, PackedCircle)
 						if(!cj.isFixed)
 						{
 							if(ci.isFixed) v.mul(2.2);	// Double inverse force to make up for the fact that the other object is fixed
-							cj.position.add(v);         // ADD the velocity
+
+							// ADD the velocity
+							(cj.view) ? cj.view.position.add(v) : cj.position.add(v);
 						}
 
 						// Move ci opposite of the collision as long as its not fixed
 						if(!ci.isFixed)
 						{
 							if(cj.isFixed) v.mul(2.2);	// Double inverse force to make up for the fact that the other object is fixed
-							ci.position.sub(v); 		// SUBTRACT the velocity
+
+							 // SUBTRACT the velocity
+							(ci.view) ? ci.view.position.sub(v) : ci.position.sub(v);
 						}
 
 						// Emit the collision event from each circle, with itself as the first parameter
 						if(this.dispatchCollisionEvents && n == this.numberOfCollisionPasses-1)
 						{
-							this.eventEmitter.emit('collision', cj, ci, v);
+//							this.eventEmitter.emit('collision', cj, ci, v);
 						}
 					}
 				}
