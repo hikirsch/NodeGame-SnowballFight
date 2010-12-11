@@ -1,9 +1,10 @@
-var init = function(HTMLFactory, BaseView)
+define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(HTMLFactory, BaseView)
 {
 	return new JS.Class( BaseView,
 	{
 		initialize:  function(controller, theme ) {
 			this.callSuper();
+			this.centerElement();
 		},
 
 		createElement: function() {
@@ -18,9 +19,12 @@ var init = function(HTMLFactory, BaseView)
 		addEntity: function( anEntityView )
 		{
 			anEntityView.getElement().appendTo( this.element );
+		},
+
+		update: function() {
+			this.callSuper();
+			this.centerElement();
 		}
 	});
-};
-
-define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], init);
+});
 

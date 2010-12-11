@@ -14,9 +14,9 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( ['lib/Rectangle', 'view/managers/OverlayManager', 'factories/HTMLFactory', 'lib/jsclass/core'], function(Rectangle, OverlayManager, HTMLFactory )
+define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/jsclass/core'], function(Rectangle, OverlayManager, BaseView, HTMLFactory )
 {
-	return new JS.Class(
+	return new JS.Class( BaseView,
 	{
 		initialize: function( controller, gameModel )
 		{
