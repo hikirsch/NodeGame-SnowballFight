@@ -124,7 +124,7 @@ var init = function(Vector, PackedCircle)
 		for(var n = 0; n < len; n++)
 		{
 			var aCircle = this.allCircles[n];
-			if(!aCircle.view) {
+			if(!aCircle || !aCircle.view) {
 				continue;
 			}
 
