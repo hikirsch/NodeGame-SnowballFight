@@ -56,7 +56,7 @@ SnowGame = (function()
 			//blockOfIce
 			for (var i = 0; i < 8; i++)
 			{
-				aFieldEntityModel = FieldEntityModel.blockOfIce1;
+				aFieldEntityModel = FieldEntityModel.gingerBreadHouse;
 				aFieldEntityModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController)
 				console.gameLog('creating entity');

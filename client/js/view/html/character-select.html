@@ -1,10 +1,55 @@
 <script type="text/html">
-	<div class="site-message" id="join-game">
-		<form action="character-select.html#">
-			<p>Join The Fight!</p>
-			<label for="nickname">Nickname:</label>
-			<input autofocus type="text" name="nickname" id="nickname" />
-			<input type="submit" id="join" value="Join!" />
+	<div class="mainOverlay">
+		<form>
+			<div class="choose">
+				<div class="introText">
+					<img src="img/character-select/txt-choose.png">
+					You've got 5 characters to choose from. Some are smart, but some are dumb. Each has its own strength and weakness.
+				</div>
+
+				<div class="nav">
+					<div class="name">
+					<input type="text" id="nickname" placeholder="Yoo Hoo! What's your name?" onclick="this.value=''">
+					<small>(You can use your real name, or just make one up)</small>
+					</div>
+					<img src="img/global/arrow-left.png" class="chooseArrows arrowLeft" onclick="characterCarousel.move(810,1)">
+					<img src="img/global/arrow.png" class="chooseArrows arrowRight" onclick="characterCarousel.move(-810)">
+					<input type="image" src="img/global/btn-select.png" class="btnSelect" />
+				</div>
+
+				<div class="carousel" id="carouselContainer">
+					<div class="yetiDetails">
+						<img src="img/character-select/big-yeti.png" class="bigYeti">
+						<p><img src="img/character-select/txt-yeti.png"><br><br>As cute and cuddly as a fuzzy doll, until it rips your arm off for lunch. Oh yee of the snow capped mountain, of the gleaming red eyes, of the hiker's hallucination. Though a fierce opponent in the snow fight, the Yeti is spatially challenged and not always able to form a snowball.</p>
+					</div>
+					<div class="treeDetails">
+						<img src="img/character-select/big-tree.png" class="bigTree">
+						<p><img src="img/character-select/txt-tree.png"><br><br>Seemingly benign, this is a conifer with a temper.  All his friends were chopped down in the name of Christmas by an "innocent-looking" family of humans dressed in matching plaid leaving him alone, angry... and armed with ornaments.</p>
+					</div>
+					<div class="penguinDetails">
+						<img src="img/character-select/big-penguin.png" class="bigPenguin">
+						<p><img src="img/character-select/txt-penguin.png"><br><br>Viewing the world with a counter-clockwise attitude, this penguin is ready to show how to throw South Hemi-style. No it doesn't fly, so stop asking.  And yes it does have knees, so stop making fun of it, unless you want to get slapped with a mackerel. </p>
+					</div>
+					<div class="robotDetails">
+						<img src="img/character-select/big-robot.png" class="bigRobot">
+						<p><img src="img/character-select/txt-robot.png"><br><br>It's from the future, or maybe just a toy box of the present, but it's been sent to tell you a message:  gleep gleep.  Throws bolts when angered, which is kind of self-defeating, but it's not the most clever of robots*.<br>
+						<small style="line-height:auto">*may or may not be from the future or an advanced culture.</small></p>
+					</div>
+					<div class="snowDetails">
+						<img src="img/character-select/big-snowman.png" class="bigSnowman">
+						<p><img src="img/character-select/txt-snowman.png"><br><br>The classic. Top hat and spats, buttons and eyes of coal, revealing a deep, dark soul.  Practically invented the game, so don't try to outmaster the master, unless of course, you like a challenge. </p>
+					</div>
+				</div>
+
+				<div class="characters">
+					<div class="yeti" id="yeti"></div>
+					<div class="tree" id="tree"></div>
+					<div class="penguin" id="penguin"></div>
+					<div class="robot" id="robot"></div>
+					<div class="snowman" id="snowman"></div>
+				</div>
+
+			</div>
 		</form>
 	</div>
 </script>

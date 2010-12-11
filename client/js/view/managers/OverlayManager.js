@@ -14,6 +14,9 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 				};
 
 				this.active = null;
+
+				var that = this;
+				$(window).resize(function(){ that.resize(); });
 			},
 
 			createElement: function()
@@ -38,27 +41,39 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 					this.active.remove();
 					this.active = null;
 				}
-				
+
 				if( this.element == null )
 				{
 					this.createElement();
 				}
-				
-				this.element.show();
-
-				$ele
-					.appendTo("body")
-					.css({
-						left: this.settings.left + ( ( this.element.width() - $ele.width() ) / 2 ),
-						top: this.settings.top + ( ( this.element.height() - $ele.height() ) / 2 )
-					});
 
 				this.active = $ele;
 
+				this.element.show();
+
+				this.active.appendTo("body");
+
+				this.resize();
 			},
 
+			resize: function()
+			{
+				this.settings.left = this.controller.getFieldLeft();
+				this.settings.top = this.controller.getFieldTop();
+
+				this.active.css({
+					left: this.settings.left + ( ( this.element.width() - this.active.width() ) / 2 ),
+					top: this.settings.top + ( ( this.element.height() - this.active.height() ) / 2 )
+				});
+
+				this.element.css({
+					left: this.settings.left,
+					top: this.settings.top
+				});
+			},
 			hide: function()
 			{
+				this.active.remove();
 				this.element.hide();
 			}
 		}
