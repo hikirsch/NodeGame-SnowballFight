@@ -95,7 +95,7 @@ ServerNetChannel = (function()
 
 			aWebSocket.onConnect = function(connection)
 			{
-				//that.delegate.log("(ServerNetChannel) UserConnected:", sys.inspect(arguments[0]) );
+				that.delegate.log("(ServerNetChannel) someone connected...");
 			};
 
 			/**
@@ -279,9 +279,14 @@ ServerNetChannel = (function()
 
 			// Create an entity ID for this new player
 			// This is done here, because shouldAddPlayer is the same on client and server, and only the server can define client entities
-			var entityID = this.delegate.getNextEntityID();
+			var entityID = this.delegate.getNextEntityID(),
+                clientID = connection.$clientID,
+                aClient = this.clients.objectForKey( clientID );
 
-			this.delegate.shouldAddPlayer(entityID, connection.$clientID, {theme: '1'});
+            // if set to false then clients will stay in the game
+            aClient.isPlaying = true;
+
+			this.delegate.shouldAddPlayer(entityID, clientID, {theme: '1'});
 
 			connection.send( BISON.encode(aDecodedMessage) );
 		},
