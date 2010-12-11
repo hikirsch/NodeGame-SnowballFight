@@ -59,8 +59,12 @@ SnowGame = (function()
 				aFieldEntityModel = FieldEntityModel.blockOfIce1;
 				aFieldEntityModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController)
+				console.gameLog('creating entity');
+				console.gameLog( SYS.inspect( aFieldEntity) );
 				this.fieldController.addEntity(aFieldEntity);
 			}
+
+
 		}
 	});
 })();

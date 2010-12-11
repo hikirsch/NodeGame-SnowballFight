@@ -1,4 +1,4 @@
-var init = function(HTMLFactory)
+var init = function(HTMLFactory, EntityModel )
 {
 	return new JS.Class(
 	{
@@ -12,6 +12,11 @@ var init = function(HTMLFactory)
 		removeEntity: function( anEntityView )
 		{
 			anEntityView.getElement().remove();
+		},
+
+		getCssClassFromTheme: function( theme )
+		{
+			return EntityModel.THEME_MAP[ theme ];
 		},
 
 		getElement: function() {
@@ -53,8 +58,9 @@ var init = function(HTMLFactory)
 if (typeof window === 'undefined')
 {
 	require('../lib/jsclass/core.js');
-	BaseView = init();
+	require('model/GameModel');
+	BaseView = init( EntityModel );
 } else {
-	define(['factories/HTMLFactory', 'lib/jsclass/core'], init);
+	define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], init);
 }
 

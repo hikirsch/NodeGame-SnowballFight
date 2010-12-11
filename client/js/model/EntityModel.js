@@ -13,13 +13,37 @@
 
 var init = function()
 {
-	// All the different themes that can be applied to the views
+	// All the different themes tha t can be applied to the views
 	var THEME_MAP = {
-		'0': 'default',
-		'1': "smash-tv",
-		'2': "snowballDefault",
-		'3': "fieldEntityDefault",
-		'4': 'yetti'
+		'0':	'default',
+
+		'100':	'ginger-bread-house',
+		'101':	'block-of-ice-1',
+		'102':	'block-of-ice-2',
+		'103':	'block-of-ice-3',
+		'104':	'block-of-ice-4',
+		'105':	'ice-mountain-with-ogilvy-flag',
+		'106':	'igloo-green-flag',
+		'107':	'lake-with-horizontal-bridge',
+		'108':	'lake-with-vertical-bridge',
+		'109':	'small-pong',
+
+		'200':	'character-yeti',
+		'201':	'charactetr-penguin',
+		'202':	'character-robot',
+		'203':	'character-snowman',
+		'204':	'character-tree',
+
+		'300':	'projectile-snowball',
+		'301':	'projectile-carrot',
+		'302':	'projectile-bolts',
+		'303':	'projectile-icicle',
+		'304':	'projectile-fish',
+		'305':	'projectile-ornament',
+		'306':	'projectile-big-snowball',
+
+		// for memories :-)
+		'999':	'smash-tv'
 	};
 
 	// Actual game play object types

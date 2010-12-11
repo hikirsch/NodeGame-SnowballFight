@@ -129,23 +129,6 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		/**
 		 * return {String} This characters nickname
 		 */
-		getNickName: function()
-		{
-			return this.nickName;
-		},
-
-		/**
-		 * Sets the nickname of a particular client, should contain a view already
-		 * @param {String} aNickName
-		 */
-		setNickName: function( aNickName )
-		{
-			this.nickName = aNickName;
-
-			if(this.view)
-				this.view.refresh();
-		},
-
 		setInput: function( anInput )
 		{
 			this.input = anInput;

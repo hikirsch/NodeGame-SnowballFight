@@ -1,7 +1,7 @@
 var init = function()
 { 
 	return {
-	    showStatus: true,
+	    showStatus: false,
 	    recordFile: './../record[date].js',
 	    record: false,
 	    server: null,

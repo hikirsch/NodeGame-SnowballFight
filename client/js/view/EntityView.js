@@ -8,11 +8,10 @@ var init = function(HTMLFactory, BaseView)
 
 		createElement: function() {
 			var options = {
-				nickName: this.theme,
-				theme: this.theme
+				nickName: this.controller.getNickName()
 			};
 
-			this.element = HTMLFactory.entity( options )
+			this.element = HTMLFactory.entity( options, this.getCssClassFromTheme( this.theme ) )
 				.appendTo('body');
 		},
 

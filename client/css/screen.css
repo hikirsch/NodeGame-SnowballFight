@@ -1,7 +1,7 @@
 @import url( reset.css );
 @import url( overlays.css );
 
-html, body { overflow: hidden; height: 100%; font-family: Helvetica, Arial,sans-serif; font-size: 12px;
+html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 	background-color: #f2f7fb; background-image: url( ../img/global/bg-main.png ); background-position: 50% 0;
 	background-repeat: no-repeat;
 }
@@ -63,9 +63,24 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 
 #logger { font-family: monospace; padding: 20px; position: absolute; left: 0; bottom: 0; height: 160px; width: 1000px; background-color: #000; color: #fff; }
 
-.game-container .game-entity-view { background-image: url( '../img/entities/snowball.png' ); position: absolute; height: 32px; width: 32px;}
+.game-container .game-entity-view { position: absolute; }
 
-.game-container .snowballDefault { background-image: url( '../img/entities/snowball.png' ); position: absolute; height: 32px; width: 32px;}
-.game-container .fieldEntityDefault { background-image: url( '../img/entities/field/block-of-ice-4.png' ); position: absolute; height: 99px; width: 88px;}
+
+
+/** field entities */
+.game-container .game-entity-view.field-entity-default { background-image: url( '../img/entities/field/block-of-ice-4.png' ); height: 99px; width: 88px;}
+.game-container .game-entity-view.ginger-bread-house { background-image: url( '../img/entities/field/ginger-bread-house.png' ); height: 32px; width: 32px; }
+.game-container .game-entity-view.block-of-ice-1 { background-image: url( '../img/entities/field/block-of-ice-1.png' ); width: 29px; height: 37px; }
+.game-container .game-entity-view.block-of-ice-2 { background-image: url( '../img/entities/field/block-of-ice-2.png' ); width: 52px; height: 42px; }
+.game-container .game-entity-view.block-of-ice-3 { background-image: url( '../img/entities/field/block-of-ice-3.png' ); width: 42px; height: 38px; }
+.game-container .game-entity-view.block-of-ice-4 { background-image: url( '../img/entities/field/block-of-ice-4.png' ); width: 99px; height: 88px; }
+.game-container .game-entity-view.ice-mountain-with-ogilvy-flag { background-image: url( '../img/entities/field/ice-mountain-with-ogilvy-flag.png' ); width: 173px; height: 223px; }
+.game-container .game-entity-view.igloo-green-flag { background-image: url( '../img/entities/field/igloo-green-flag.png' ); width: 117px; height: 120px; }
+.game-container .game-entity-view.lake-with-horizontal-bridge { background-image: url( '../img/entities/field/lake-with-horizontal-bridge.png' ); width: 164px; height: 137px; }
+.game-container .game-entity-view.lake-with-vertical-bridge { background-image: url( '../img/entities/field/lake-with-vertical-bridge.png' ); width: 246px; height: 160px; }
+.game-container .game-entity-view.small-pond { background-image: url( '../img/entities/field/small-pong.png' ); width: 86px; height: 72px; }
+
+/** projectiles **/
+.game-container .game-entity-view.projectile-snowball { background-image: url( '../img/entities/projectiles/snowball.png' ); height: 10px; width: 20px; }
 
 .overlay-container { z-index: 1000; position: absolute; background-image: url( ../img/global/bg-overlay.png ); }
