@@ -107,9 +107,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			this.collisionCircle = aPackedCircle;
 			aPackedCircle.collisionMask = this.collisionMask;
 			aPackedCircle.collisionGroup = this.collisionGroup;
-			console.gameLog( this.collisionOffset );
 			aPackedCircle.position = this.position.add(this.collisionOffset);
-			console.gameLog( aPackedCircle.position );
 			aPackedCircle.eventEmitter.on("collision", this.onCollision);
 		},
 
