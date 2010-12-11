@@ -87,6 +87,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 			if( len < 2 ) return false; // Nothing to do!
 
+			var newPosition = new Vector(0,0);
+
 			// if the distance between prev and next is too great - don't interpolate
 			var maxInterpolationDistance = 25,
 				maxInterpolationDistanceSquared = maxInterpolationDistance*maxInterpolationDistance;
@@ -142,17 +144,16 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 
 
-			var entityPositionBeforeRenderTime = new Vector(0,0);
-			var entityPositionAfterRenderTime = new Vector(0,0);
-			for( var objectID in nextWorldEDAfterRenderTime )
+			// Note: We want to render at time "B", so grab the position at time "A" (previous), and time "C"(next)
+			var entityPositionPast = new Vector(0,0);
+			var entityPositionFuture = new Vector(0,0);
+
+			// Update players
+			nextWorldEDAfterRenderTime.forEach(function(key, entityDesc)
 			{
-				var entityDesc = nextWorldEDAfterRenderTime[objectID]; // Store the entity description
-
 				// Catch garbage values
-				if(!entityDesc.hasOwnProperty('objectID'))
-					continue;
-
-				 var entity = this.fieldController.getEntityWithObjectID( entityDesc.objectID );
+				var objectID = entityDesc.objectID;
+				var entity = this.fieldController.getEntityWithObjectID( entityDesc.objectID );
 
 				// We don't have this entity - create it!
 				if( !entity )
@@ -181,37 +182,32 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					}
 
 					// Place it where it will be
-					this.fieldController.updateEntity( objectID, {x: entityDesc.x,  y: entityDesc.y});
+					newPosition.set(entityDesc.x, entityDesc.y);
+					this.fieldController.updateEntity( objectID, newPosition);
 				}
 				else // We already have this entity - update it
 				{
-					var prevEntityDesc = previousWorldEDBeforeRenderTime[objectID];
+					var previousEntityDescription = previousWorldEDBeforeRenderTime.objectForKey(objectID);
 
-					// Store positions before and after to compare below
-					// before
-					entityPositionBeforeRenderTime.x = previousWorldEDBeforeRenderTime[ objectID ].x;
-					entityPositionBeforeRenderTime.y = previousWorldEDBeforeRenderTime[ objectID ].y;
-					// after
-					entityPositionAfterRenderTime.x = nextWorldEDAfterRenderTime[ objectID ].x;
-					entityPositionAfterRenderTime.y = nextWorldEDAfterRenderTime[ objectID ].y;
+					// Store past and future positions to compare
+					entityPositionPast.set(previousEntityDescription.x, previousEntityDescription.y);
+					entityPositionFuture.set(entityDesc.x, entityDesc.y);
 
 					// if the distance between prev and next is too great - don't interpolate
-					if(entityPositionBeforeRenderTime.distanceSquared(entityPositionAfterRenderTime) > maxInterpolationDistanceSquared) {
+					if(entityPositionPast.distanceSquared(entityPositionFuture) > maxInterpolationDistanceSquared) {
 						t = 1;
 					}
 
 					// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
-					var newCoordinates = {
-						x: ( (entityPositionAfterRenderTime.x - entityPositionBeforeRenderTime.x) * t ) + entityPositionBeforeRenderTime.x,
-						y: ( (entityPositionAfterRenderTime.y - entityPositionBeforeRenderTime.y) * t ) + entityPositionBeforeRenderTime.y
-					};
+					newPosition.x = ( (entityPositionFuture.x - entityPositionPast.x) * t ) + entityPositionPast.x;
+					newPosition.y = ( (entityPositionFuture.y - entityPositionPast.y) * t ) + entityPositionPast.y;
 
-					this.fieldController.updateEntity( objectID, newCoordinates );
+					this.fieldController.updateEntity( objectID, newPosition );
 				}
 
 				// Entities not processed are considered to have been removed on the server,
 				activeEntities[ objectID ] = true;
-			}
+			}, this);
 
 			// Destroy removed entities
 			this.fieldController.removeExpiredEntities( activeEntities );

@@ -190,30 +190,62 @@ var init = function(Message, config) {
 			while(++i < len)
 			{
 				var singleWorldUpdate = serverMessage.data[i];
-				var timeStamp = singleWorldUpdate.gameTick;
-				var key = this.incomingSequenceNumber++ & this.MESSAGE_BUFFER_MASK;
-				var data = createWorldEntityDescriptionFromString()
+				var worldEntityDescription = this.createWorldEntityDescriptionFromString(singleWorldUpdate)
 
-				debugger;
-				this.incommingCmdBuffer.push(singleWorldUpdate);
-
+				// Add it to the incommingCmdBuffer and drop oldest element
+				this.incommingCmdBuffer.push(worldEntityDescription);
 				if(this.incommingCmdBuffer.length > this.MESSAGE_BUFFER_MASK)
 					this.incommingCmdBuffer.shift();
-
-//				console.log('singleWorldUpdate', singleWorldUpdate.gameTick, singleWorldUpdate.gameClock );
 			}
-
-
-//			this.incomingSequenceNumber++;
-			// Sort them
-//			this.incomingSequenceNumber.so
 		}
 		else // Server wants to tell the gameclient something, not just a regular world update
 		{
+			// Usually the result of an error?
 			this.controller.netChannelDidReceiveMessage(serverMessage);
 		}
 
 		delete serverMessage;
+	};
+
+	/**
+	 * Takes a WorldUpdateMessage that contains the information about all the elements inside of a string
+	 * and creates SortedLookupTable out of it with the objectID's as the keys
+	 * @param aWorldUpdateMessage
+	 */
+	NetChannel.prototype.createWorldEntityDescriptionFromString = function(aWorldUpdateMessage)
+	{
+		// Create a new WorldEntityDescription and store the clock and gametick in it
+		var worldDescription = new SortedLookupTable();
+		worldDescription.gameTick = aWorldUpdateMessage.gameTick;
+		worldDescription.gameClock = aWorldUpdateMessage.gameClock;
+
+		var allEntities = aWorldUpdateMessage.entities.split('|'),
+		  	allEntitiesLen = allEntities.length; //
+
+		// Loop through each entity
+		while(--allEntitiesLen)   // allEntities[0] is garbge, so by using pre
+		{
+			// Loop through the string representing the entities properties
+			var entityDescAsArray = allEntities[allEntitiesLen].split(','),
+				entityDescription = {};
+
+			// GUARANTEED TO BE IN ORDER.
+			// SEE GameEntity.js::constructEntityDescription
+			// Using the unary operator to convert string to number as it is the fastest.
+			entityDescription.objectID = +entityDescAsArray[0];
+			entityDescription.clientID = +entityDescAsArray[1];
+			entityDescription.entityType = entityDescAsArray[2] | 0; // convert to int
+			entityDescription.theme = entityDescAsArray[3];
+			entityDescription.x = +entityDescAsArray[4];
+			entityDescription.y = +entityDescAsArray[5];
+			entityDescription.rotation = +entityDescAsArray[6];
+
+			// Store the final result using the objectID
+			worldDescription.setObjectForKey(entityDescription, entityDescription.objectID);
+		}
+
+
+		return worldDescription;
 	};
 
 	NetChannel.prototype.onConnectionClosed = function (serverMessage)
