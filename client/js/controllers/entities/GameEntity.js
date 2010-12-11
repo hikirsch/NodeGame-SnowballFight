@@ -196,11 +196,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		},
 
 
-		getRotationToTheNearest: function( degrees )
-		{
-			return Math.floor(this.rotation / degrees) * degrees;
-		},
-
 		/**
 		 * Net
 		 */

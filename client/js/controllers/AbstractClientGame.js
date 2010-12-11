@@ -208,10 +208,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					// Interpolate the objects position by multiplying the Delta times T, and adding the previous position
 					newPosition.x = ( (entityPositionFuture.x - entityPositionPast.x) * t ) + entityPositionPast.x;
 					newPosition.y = ( (entityPositionFuture.y - entityPositionPast.y) * t ) + entityPositionPast.y;
-//					newRotation =  ( (entityRotationFuture - entityRotationPast) * t ) + entityRotationPast;
-//					if(newRotation != 0)
-						console.log(newRotation);
-
+					newRotation =  ( (entityRotationFuture - entityRotationPast) * t ) + entityRotationPast;
 					this.fieldController.updateEntity( objectID, newPosition, newRotation );
 				}
 

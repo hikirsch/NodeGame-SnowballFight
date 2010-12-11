@@ -22,14 +22,5 @@ var init = function(HTMLFactory, BaseView)
 	});
 };
 
-if (typeof window === 'undefined')
-{
-	require('../lib/jsclass/core.js');
-	require('./BaseView.js');
-	FieldView = init();
-}
-else
-{
-	define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], init);
-}
+define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], init);
 
