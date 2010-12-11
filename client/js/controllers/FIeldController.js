@@ -28,7 +28,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 		createView: function( gameModel )
 		{
-			this.view = new FieldView( this, gameModel );
+			if( FieldView != null ) {
+				this.view = new FieldView( this, gameModel );
+			}
 		},
 
 		/**
@@ -276,8 +278,7 @@ if (typeof window === 'undefined')
 	require('js/lib/circlepack/PackedCircleManager.js');
 	require('js/lib/circlepack/PackedCircle.js');
 	require('js/lib/Rectangle.js');
-	require('js/view/FieldView.js');
-	FieldController = init(Vector, Rectangle, FieldView, PackedCircle, PackedCircleManager);
+	FieldController = init(Vector, Rectangle, null, PackedCircle, PackedCircleManager);
 }
 else
 {

@@ -1,4 +1,4 @@
-var init = function(HTMLFactory, EntityModel )
+define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], function(HTMLFactory, EntityModel )
 {
 	return new JS.Class(
 	{
@@ -33,13 +33,22 @@ var init = function(HTMLFactory, EntityModel )
 		{
 			// the position
 			this.element.css({
-				left: this.controller.getPosition().x,
-				top: this.controller.getPosition().y
+				'left': this.controller.getPosition().x,
+				'top': this.controller.getPosition().y
 			});
 
 			// the sprite
 			this.adjustSprite();
 		},
+
+		centerElement: function()
+		{
+			this.element.css({
+				'margin-left': - ( this.element.width() / 2 ),
+				'margin-top': - ( this.element.height() / 2 )
+			});
+		},
+
 
 		/**
 		 * Based on our rotation, we should show a different sprite.
@@ -70,8 +79,5 @@ var init = function(HTMLFactory, EntityModel )
 			}
 		}
 	});
-};
-
-
-define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], init);
+});
 

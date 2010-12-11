@@ -65,7 +65,7 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 
 /** field entities */
 .game-container .game-entity-view.field-entity-default { background-image: url( '../img/entities/field/block-of-ice-4.png' ); height: 99px; width: 88px;}
-.game-container .game-entity-view.ginger-bread-house { background-image: url( '../img/entities/field/ginger-bread-house.png' ); width: 146px; height: 157px;  margin-left: -73px; margin-top: -78px; }
+.game-container .game-entity-view.ginger-bread-house { background-image: url( '../img/entities/field/ginger-bread-house.png' ); width: 146px; height: 157px; }
 .game-container .game-entity-view.block-of-ice-1 { background-image: url( '../img/entities/field/block-of-ice-1.png' ); width: 29px; height: 37px; }
 .game-container .game-entity-view.block-of-ice-2 { background-image: url( '../img/entities/field/block-of-ice-2.png' ); width: 52px; height: 42px; }
 .game-container .game-entity-view.block-of-ice-3 { background-image: url( '../img/entities/field/block-of-ice-3.png' ); width: 42px; height: 38px; }
@@ -74,7 +74,7 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .game-entity-view.igloo-green-flag { background-image: url( '../img/entities/field/igloo-green-flag.png' ); width: 117px; height: 120px; }
 .game-container .game-entity-view.lake-with-horizontal-bridge { background-image: url( '../img/entities/field/lake-with-horizontal-bridge.png' ); width: 164px; height: 137px; }
 .game-container .game-entity-view.lake-with-vertical-bridge { background-image: url( '../img/entities/field/lake-with-vertical-bridge.png' ); width: 246px; height: 160px; }
-.game-container .game-entity-view.small-pond { background-image: url( '../img/entities/field/small-pong.png' ); width: 86px; height: 72px; }
+.game-container .game-entity-view.small-pond { background-image: url( '../img/entities/field/small-pond.png' ); width: 86px; height: 72px; }
 
 /** projectiles **/
 .game-container .game-entity-view.projectile-snowball { background-image: url( '../img/entities/projectiles/snowball.png' ); height: 10px; width: 20px; }

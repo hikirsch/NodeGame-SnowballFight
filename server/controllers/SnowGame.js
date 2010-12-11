@@ -53,17 +53,26 @@ SnowGame = (function()
 			var aFieldEntity,
 				aFieldEntityModel;
 
-			//blockOfIce
-			for (var i = 0; i < 1; i++)
-			{
-				aFieldEntityModel = FieldEntityModel.gingerBreadHouse;
-				aFieldEntityModel.initialPosition = {x: 400, y: 300 };
+			var entities = [
+				{ position: { x: 100, y: 100 }, entityType: FieldEntityModel.gingerBreadHouse },
+				{ position: { x: 250, y: 100 }, entityType: FieldEntityModel.blockOfIce1 },
+				{ position: { x: 350, y: 100 }, entityType: FieldEntityModel.blockOfIce2 },
+				{ position: { x: 500, y: 100 }, entityType: FieldEntityModel.blockOfIce3 },
+				{ position: { x: 700, y: 100 }, entityType: FieldEntityModel.blockOfIce4 },
+				{ position: { x: 100, y: 300 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				{ position: { x: 320, y: 300 }, entityType: FieldEntityModel.iglooGreenFlag } ,
+				{ position: { x: 500, y: 300 }, entityType: FieldEntityModel.lakeHorizontalBridge },
+				{ position: { x: 740, y: 300 }, entityType: FieldEntityModel.lakeVerticalBridge },
+				{ position: { x: 100, y: 500 }, entityType: FieldEntityModel.smallPond }
+			]
+
+ 			for( var i = 0; i < entities.length; i++ ) {
+				var nextEntity = entities[ i ];
+				aFieldEntityModel = nextEntity.entityType;
+				aFieldEntityModel.initialPosition = nextEntity.position;
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController)
-				console.gameLog('creating entity');
 				this.fieldController.addEntity(aFieldEntity);
 			}
-
-
 		}
 	});
 })();

@@ -26,7 +26,7 @@ var init = function()
 		'106':	'igloo-green-flag',
 		'107':	'lake-with-horizontal-bridge',
 		'108':	'lake-with-vertical-bridge',
-		'109':	'small-pong',
+		'109':	'small-pond',
 
 		'200':	'character-yeti',
 		'201':	'charactetr-penguin',

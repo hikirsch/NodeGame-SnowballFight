@@ -10,8 +10,6 @@ Abstract:
 Basic Usage: 
  	
 */
-
-
 define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(HTMLFactory, BaseView)
 {
 	return new JS.Class(BaseView,
@@ -20,6 +18,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		{
 			this.destroy();
 			this.createElement();
+			this.centerElement();
 		},
 
 		createElement: function( theme )

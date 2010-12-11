@@ -1,6 +1,6 @@
-var init = function(HTMLFactory)
+define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(HTMLFactory, BaseView)
 {
-	return new JS.Class(
+	return new JS.Class( BaseView,
 	{
 		initialize:  function(controller, model) {
 			this.controller = controller;
@@ -52,13 +52,5 @@ var init = function(HTMLFactory)
 			return this.element.offset().top;
 		}
 	});
-};
-
-if (typeof window === 'undefined')
-{
-	require('../lib/jsclass/core.js');
-	FieldView = init();
-} else {
-	define(['factories/HTMLFactory', 'lib/jsclass/core'], init);
-}
+});
 
