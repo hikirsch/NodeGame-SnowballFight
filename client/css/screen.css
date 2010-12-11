@@ -52,24 +52,20 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 }
 
 .game-container { background-image: url( ../img/global/bg-field.png ); background-position: 0 0; background-repeat: no-repeat; }
-.game-container .character.smash-tv.rotation-0 { background-image: url( '../img/characters/smash-tv/8wayrun/north.png' ); }
-.game-container .character.smash-tv.rotation-45 { background-image: url( '../img/characters/smash-tv/8wayrun/northeast.png' ); }
-.game-container .character.smash-tv.rotation-90 { background-image: url( '../img/characters/smash-tv/8wayrun/east.png' ); }
-.game-container .character.smash-tv.rotation-135 { background-image: url( '../img/characters/smash-tv/8wayrun/southeast.png' ); }
-.game-container .character.smash-tv.rotation-180 { background-image: url( '../img/characters/smash-tv/8wayrun/south.png' ); }
-.game-container .character.smash-tv.rotation-225 { background-image: url( '../img/characters/smash-tv/8wayrun/southwest.png' ); }
-.game-container .character.smash-tv.rotation-270 { background-image: url( '../img/characters/smash-tv/8wayrun/west.png' ); }
-.game-container .character.smash-tv.rotation-315 { background-image: url( '../img/characters/smash-tv/8wayrun/northwest.png' ); }
-
-#logger { font-family: monospace; padding: 20px; position: absolute; left: 0; bottom: 0; height: 160px; width: 1000px; background-color: #000; color: #fff; }
+.game-container .character.smash-tv.rotation-0 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/north.png' ); }
+.game-container .character.smash-tv.rotation-45 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/northeast.png' ); }
+.game-container .character.smash-tv.rotation-90 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/east.png' ); }
+.game-container .character.smash-tv.rotation-135 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/southeast.png' ); }
+.game-container .character.smash-tv.rotation-180 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/south.png' ); }
+.game-container .character.smash-tv.rotation-225 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/southwest.png' ); }
+.game-container .character.smash-tv.rotation-270 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/west.png' ); }
+.game-container .character.smash-tv.rotation-315 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/northwest.png' ); }
 
 .game-container .game-entity-view { position: absolute; }
 
-
-
 /** field entities */
 .game-container .game-entity-view.field-entity-default { background-image: url( '../img/entities/field/block-of-ice-4.png' ); height: 99px; width: 88px;}
-.game-container .game-entity-view.ginger-bread-house { background-image: url( '../img/entities/field/ginger-bread-house.png' ); height: 32px; width: 32px; }
+.game-container .game-entity-view.ginger-bread-house { background-image: url( '../img/entities/field/ginger-bread-house.png' ); width: 146px; height: 157px; }
 .game-container .game-entity-view.block-of-ice-1 { background-image: url( '../img/entities/field/block-of-ice-1.png' ); width: 29px; height: 37px; }
 .game-container .game-entity-view.block-of-ice-2 { background-image: url( '../img/entities/field/block-of-ice-2.png' ); width: 52px; height: 42px; }
 .game-container .game-entity-view.block-of-ice-3 { background-image: url( '../img/entities/field/block-of-ice-3.png' ); width: 42px; height: 38px; }
@@ -84,3 +80,5 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .game-entity-view.projectile-snowball { background-image: url( '../img/entities/projectiles/snowball.png' ); height: 10px; width: 20px; }
 
 .overlay-container { z-index: 1000; position: absolute; background-image: url( ../img/global/bg-overlay.png ); }
+
+#logger { font-family: monospace; padding: 20px; position: absolute; left: 0; bottom: 0; height: 160px; width: 1000px; background-color: #000; color: #fff; }

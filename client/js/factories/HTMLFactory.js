@@ -27,7 +27,7 @@ var init = function( $, overlay, navigation, footer, serverUnavailable, intro, c
 				.tmpl();
 		},
 
-		joinGameDialog: function()
+		characterSelect: function()
 		{
 			return $(characterSelect)
 				.tmpl();

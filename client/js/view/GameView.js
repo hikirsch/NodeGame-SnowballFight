@@ -55,13 +55,13 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'factories/HTMLFactory
 		showJoinGame: function()
 		{
 			var that = this,
-				$joinGameDialog = HTMLFactory.joinGameDialog();
+				$characterSelect = HTMLFactory.characterSelect();
 
-			$joinGameDialog
+			$characterSelect
 				.find("form")
 				.submit( function(e) { return that.joinGame(e); } );
 			
-			this.overlayManager.show( $joinGameDialog );
+			this.overlayManager.show( $characterSelect );
 
 			return false;
 		},
@@ -82,8 +82,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'factories/HTMLFactory
 			}
 
 			this.gameController.joinGame(nickName);
-			
-			$("#join-game").remove();
+
 			this.overlayManager.hide();
 			
 			return false;
