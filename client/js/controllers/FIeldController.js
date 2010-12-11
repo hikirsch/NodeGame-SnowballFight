@@ -116,8 +116,8 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			if(this.packedCircleManager)
 			{
 				// Create the PackedCircle
-				var aPackedCircle = new PackedCircle( anEntity, anEntity.radius );
-				aPackedCircle.collisionMask = anEntity.collisionMask;
+				var aPackedCircle = new PackedCircle(anEntity.radius);
+				anEntity.setCollisionCircleProperties(aPackedCircle);
 
 				// Allow the entity to setup the collision callback, and set some properties inside aPackedCircle
 				// (Note) Entities do not store a reference to packedCircle. (although im set in stone about this one yet)

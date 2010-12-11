@@ -31,6 +31,7 @@ var init = function($)
 							that.keyPressed++;
 						}
 						that.handler( e.keyCode, true );
+						e.preventDefault();
 					}
 				},
 	
@@ -38,6 +39,7 @@ var init = function($)
 					if( e.keyCode in that.keyCodes ) {
 						that.handler( e.keyCode, false );
 						that.keyPressed--;
+						e.preventDefault();
 					}
 				}
 			});

@@ -26,6 +26,7 @@ var init = function(Vector, PackedCircle)
 		this.allCircles = [];
 		this.desiredTarget = new Vector(0,0);
 		this.bounds = {left:0, top:0, right:0, bottom:0};
+		this.boundsRule = options.boundsRule || 0;
 
 		// Number of passes for the centering and collision algorithms - it's (O)logN^2 so use increase at your own risk!
 		// Play with these numbers - see what works best for your project
@@ -109,7 +110,7 @@ var init = function(Vector, PackedCircle)
 		this.allCircles[index].dealloc();
 		this.allCircles[index] = null;
 		//this.allCircles.splice(index, 1);
-	}
+	};
 
 
 	/**
@@ -122,10 +123,10 @@ var init = function(Vector, PackedCircle)
 		// push toward target position
 		for(var n = 0; n < this.numberOfCenteringPasses; n++)
 		{
-			var c = this.allCircles[i];
-			if(!c.view) continue;
+			var aCircle = this.allCircles[i];
+			if(!aCircle.view) continue;
 
-			c.position = c.view.position;
+			aCircle.position.set(aCircle.view.position.y + aCircle.offset.x, aCircle.view.position.y + aCircle.offset.y);
 		}
 	};
 
@@ -195,7 +196,7 @@ var init = function(Vector, PackedCircle)
 				{
 					var cj = circleList[j];
 
-					if( !this.circlesShouldCollide(ci, cj) ) continue;   // It's us!
+				//	if( !this.circlesShouldCollide(ci, cj) ) continue;   // It's us!
 
 
 					var dx = cj.position.x - ci.position.x,
@@ -203,12 +204,12 @@ var init = function(Vector, PackedCircle)
 						r = (ci.radius + cj.radius) * 1.08, // The distance between the two circles radii, but we're also gonna pad it a tiny bit
 						d = ci.position.distanceSquared(cj.position);
 
+					ci.radius = cj.radius = 20;
 					/**
 					 * Collision detected!
 					 */
 					if (d < (r * r) - 0.02 )
 					{
-
 						v.x = dx;
 						v.y = dy;
 						v.normalize();

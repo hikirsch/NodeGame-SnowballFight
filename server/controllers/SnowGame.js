@@ -38,10 +38,13 @@ SnowGame = (function()
 		{
 //			Messy for now, but call proper function on collision
 
+//			console.log(circleA.view.entityType, circleB.view.entityType , EntityModel.ENTITY_MAP);
+
 			// Player vs projectile collision occured
-			if( (circleA.view.entityType === EntityModel.CHARACTER || circleB.view.entityType === EntityModel.CHARACTER) &&
-				(circleA.view.entityType === EntityModel.PROJECTILE || circleB.view.entityType === EntityModel.PROJECTILE))
+			if( (circleA.view.entityType === EntityModel.ENTITY_MAP.CHARACTER || circleB.view.entityType === EntityModel.ENTITY_MAP.CHARACTER) &&
+				(circleA.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE || circleB.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE))
 			{
+				console.log('abc');
 				var player = (circleA.view.entityType === EntityModel.CHARACTER) ? circleA.view : circleB.view;
 				var projectile = (circleA.view.entityType === EntityModel.PROJECTILE) ? circleA.view : circleB.view;
 				this.fieldController.removeEntity(projectile.objectID);

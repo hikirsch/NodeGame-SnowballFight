@@ -102,12 +102,26 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 * Note: This only is called on the server side
 		 * @param aPackedCircle A PackedCircle which is tied to (and represents in the collision system) this entity
 		 */
-		setupCollisionEvents: function(aPackedCircle)
+		setCollisionCircleProperties: function(aPackedCircle)
 		{
 			this.collisionCircle = aPackedCircle;
-			aPackedCircle.collisionMask = this.collisionMask;
-			aPackedCircle.collisionGroup = this.collisionGroup;
-			aPackedCircle.position = this.position.add(this.collisionOffset);
+			this.collisionCircle.view = this;
+			// Collision
+			this.collisionCircle.collisionMask = this.collisionMask;	// Who we want to collide against
+			this.collisionCircle.collisionGroup = this.collisionGroup;	// Which group we are in
+			// Position
+			this.collisionCircle.position = this.position.cp();		//
+			this.collisionCircle.offset = new Vector(this.collisionOffset.x, this.collisionOffset.y);	// Relative location
+			// Radius
+			this.collisionCircle.setRadius(this.radius);
+		},
+
+		/**
+		 * Called by the CollisionCircle if it has an event emitter
+		 * @param aPackedCircle
+		 */
+		setupCollisionEvents: function(aPackedCircle)
+		{
 			aPackedCircle.eventEmitter.on("collision", this.onCollision);
 		},
 
@@ -120,9 +134,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			var combinedVelocity = this.velocity.x + this.velocity.y;
 			// no change
 			if(combinedVelocity > -0.1 && combinedVelocity < 0.1) return;
-
 			this.rotation = Math.atan2(this.velocity.y, this.velocity.x);
-//			this.fieldController.gameController.log("(Character) " + Math.round(this.rotation * 57.2957795) + " | (Velocity) " + this.velocity.toString());
 		},
 
 
@@ -134,7 +146,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		onCollision: function(ourCircle, otherCircle, collisionInverseNormal)
 		{
-			// Console.log("I was involved in a collision!!");
+			console.ourLog('Collision');
 //			otherCircle.view.position.mul(0);
 		},
 
