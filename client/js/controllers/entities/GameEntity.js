@@ -69,13 +69,13 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			 */
 			this.collisionCircle = null; 			// Thing that represents us in collisions
 			this.collisionOffset = anEntityModel.collisionOffset || new Vector(0,0); // Offset of our circle from where we are
+            this.useTransform = anEntityModel.useTransform || false;
 			this.collisionMask = 0; 				// Group we want to collide against
 			this.collisionGroup = 0;				// Group we are in
 			this.radius = 18;
 
 			this.traits = new SortedLookupTable();
 		},
-
 
 		setModel: function( newModel )
 		{
