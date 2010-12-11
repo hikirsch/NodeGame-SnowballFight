@@ -18,15 +18,16 @@
 var init = function(Vector)
 {
 
-	var PackedCircle = function(view, radius)
+	var PackedCircle = function(radius)
 	{
 		// Data
-		this.view = view;
+		this.view = null;
 
 		// Where we would like to be
 		this.targetPosition = new Vector(0,0);
 		// Where we really are
 		this.position = new Vector(0,0);
+		this.offset = new Vector(0,0);
 		this.previousPosition = new Vector(0,0);
 
 		this.setRadius(radius);
