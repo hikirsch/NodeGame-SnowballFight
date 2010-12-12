@@ -76,6 +76,9 @@ var init = function(Vector, PackedCircle)
 	{
 		this.allCircles.push(aCircle);
 
+		aCircle.collisionGroup = aCircle.view.collisionGroup;
+		aCircle.collisionMask = aCircle.view.collisionMask;
+
 		if(this.dispatchCollisionEvents)
 			aCircle.createEventEmitter();
 	};

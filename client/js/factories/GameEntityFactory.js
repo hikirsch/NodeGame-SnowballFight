@@ -52,6 +52,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			aNewCharacter.collisionGroup = this.collisionGroups.CHARACTER;
 			aNewCharacter.collisionMask = this.collisionGroups.CHARACTER | this.collisionGroups.PROJECTILE | this.collisionGroups.FIELD_ENTITY;
 
+			console.log(aNewCharacter.collisionGroup);
 			return aNewCharacter;
 		},
 

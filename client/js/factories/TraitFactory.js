@@ -34,7 +34,7 @@ if (typeof window === 'undefined')
 	// We're in node!
 	require('js/controllers/entities/traits/ClientControlledTrait');
 	require('js/controllers/entities/traits/ProjectileTraitFreeze');
-	TraitFactory = init(ClientControlledTrait,ProjectileTraitFreeze);
+	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze);
 }
 else
 {
