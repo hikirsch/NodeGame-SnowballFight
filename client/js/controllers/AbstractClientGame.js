@@ -36,26 +36,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 		},
 
-		getWidth: function()
-		{
-			return this.fieldController.getWidth();
-		},
-
-		getHeight: function()
-		{
-			return this.fieldController.getHeight();
-		},
-
-		getFieldLeft: function()
-		{
-			return this.fieldController.getLeft();
-		},
-
-		getFieldTop: function()
-		{
-			return this.fieldController.getTop();
-		},
-
 		/**
 		 * A connected browser client's 'main loop'
 		 */
@@ -188,11 +168,17 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					// Place it where it will be
 					newPosition.set(entityDesc.x, entityDesc.y);
 					this.fieldController.updateEntity( objectID, newPosition);
+
+					// Entities not processed are considered to have been removed on the server,
+					activeEntities[objectID] = true;
 				}
 				else // We already have this entity - update it
 				{
 					var previousEntityDescription = previousWorldEDBeforeRenderTime.objectForKey(objectID);
 
+					if(!previousEntityDescription) {
+						return;
+					}
 					// Store past and future positions to compare
 					entityPositionPast.set(previousEntityDescription.x, previousEntityDescription.y);
 					entityRotationPast = previousEntityDescription.rotation;
@@ -210,10 +196,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					newPosition.y = ( (entityPositionFuture.y - entityPositionPast.y) * t ) + entityPositionPast.y;
 					newRotation =  ( (entityRotationFuture - entityRotationPast) * t ) + entityRotationPast;
 					this.fieldController.updateEntity( objectID, newPosition, newRotation );
-				}
 
-				// Entities not processed are considered to have been removed on the server,
-				activeEntities[ objectID ] = true;
+					// Entities not processed are considered to have been removed on the server,
+					activeEntities[objectID] = true;
+				}
 			}, this);
 
 			// Destroy removed entities
@@ -234,7 +220,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		 */
 		joinGame: function(aNickName)
 		{
-			// the message to send to the server
+			// Create the message to send to the server
 			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: '3', nickName: aNickName } );
 
 			// Tell the server!
@@ -248,7 +234,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		 */
 		onClientJoined: function(clientID, data)
 		{
-			console.log( "onClientJoined~!");
 			// Let our super class create the character
 			var newCharacter = this.addClient( clientID, data.nickName, true );
 
@@ -261,12 +246,12 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 		onRemoveClient: function()
 		{
-			console.log( 'onRemoveClient: ', arguments );
+			this.log( 'onRemoveClient: ', arguments );
 		},
 
 		genericCommand: function()
 		{
-			console.log( 'genericCommand: ', arguments );
+			this.log( 'genericCommand: ', arguments );
 		},
 
 		/**
@@ -293,23 +278,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.CMD_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData.id, messageData.cmds.data]);
 		},
 
-		netChannelDidReceiveWorldUpdate: function (messageData)
-		{
-//			console.log( "netChannelDidReceiveWorldUpdate", messageData );
-			// TODO: Handle array of 'cmds'
-			// TODO: prep for cmds: send only the client ID and the message data
-//			this.CMD_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData.id, messageData.cmds.data]);
-		},
-
 		netChannelDidDisconnect: function (messageData)
 		{
 			if(this.view) // If the server was never online, then we never had a view to begin with
 				this.view.serverOffline();
-		},
-
-		log: function(o)
-		{
-			console.log(o);
 		}
 	});
 };

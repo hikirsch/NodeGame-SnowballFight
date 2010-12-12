@@ -240,6 +240,7 @@ var init = function(Message, config) {
 			entityDescription.y = +entityDescAsArray[5];
 			entityDescription.rotation = +entityDescAsArray[6];
 
+
 			// Store the final result using the objectID
 			worldDescription.setObjectForKey(entityDescription, entityDescription.objectID);
 		}

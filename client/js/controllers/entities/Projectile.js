@@ -27,6 +27,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 			this.angle = projectileModel.angle;
 
 			this.damping = 1.0;
+			this.transferedTraits = projectileModel.transferedTraits; // An {String} array of traits that are transfered when this projectile hits a character
 
 			this.velocity = new Vector(Math.cos(this.angle) * this.maxVelocity * this.force, Math.sin(this.angle) * this.maxVelocity * this.force);
 		}

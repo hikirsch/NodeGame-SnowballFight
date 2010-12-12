@@ -53,6 +53,10 @@ var init = function()
 			}
 		},
 
+		/**
+		 * Restores traits that were intercepted.
+		 * Be sure to call this when removing the trait!
+		 */
 		restore: function() {
 			this.interceptedProperties.forEach(function(key, aStoredProperty) {
 				this.attachedEntity[key] = aStoredProperty;

@@ -18,6 +18,7 @@ var init = function(ClientControlledTrait, ProjectileTraitFreeze)
 
 	traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
 	traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
+	traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
 
 	// Return only accessor
 	return {

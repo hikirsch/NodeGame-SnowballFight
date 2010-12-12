@@ -84,6 +84,7 @@ AbstractServerGame = (function()
 
 			// Create a new world-entity-description, could be some room for optimization here but it only happens once per game loop anyway
 			var worldEntityDescription = new WorldEntityDescription( this );
+
 			this.netChannel.tick( this.gameClock, worldEntityDescription );
 
 			this.logger.tick();
@@ -126,7 +127,6 @@ AbstractServerGame = (function()
 			if(aNewCharacter == null) return; // No character created for whatever reason. Room full?
 
 			aNewCharacter.setInput( new Joystick() );
-
 			return aNewCharacter;
 		},
 

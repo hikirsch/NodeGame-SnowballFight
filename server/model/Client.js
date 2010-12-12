@@ -79,7 +79,7 @@ var init = function()
 
 			// Store inside our outgoingMessageBuffer - which holds 'MESSAGE_BUFFER_MASK' lerped number of messages
 			var messageIndex = this.outgoingSequenceNumber & this.MESSAGE_BUFFER_MASK;
-			this.outgoingMessageBuffer[messageIndex] = anEncodedMessage
+			this.outgoingMessageBuffer[messageIndex] = anEncodedMessage;
 
 			// Send and increment our message count
 			this.conn.send( anEncodedMessage );
@@ -110,12 +110,12 @@ var init = function()
 		 */
 		compressDeltaAndQueueMessage: function( worldDescription, gameClock )
 		{
-			entityDescriptionObject = {};
+			var entityDescriptionObject = {};
 			entityDescriptionObject.entities = worldDescription.entities;
 			entityDescriptionObject.gameClock = worldDescription.gameClock;
 			entityDescriptionObject.gameTick = worldDescription.gameTick;
 
-			this.cmdBuffer.push( entityDescriptionObject )
+			this.cmdBuffer.push( entityDescriptionObject );
 			return worldDescription;
 		},
 

@@ -100,7 +100,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			var impulseForce = -20;//aProjectileModel.force * 2;
 			var impulseVector = new Vector(Math.cos(currentAngle) * impulseForce, Math.sin(currentAngle) * impulseForce);
 
-			this.gameController.log(impulseVector);
 			aCharacter.acceleration.add( impulseVector );
 			return aNewProjectile;
 		},
@@ -144,8 +143,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.allEntities.forEach( function(key, entity){
 				entity.tick(speedFactor, gameClock);
 			}, this );
-
-
 		},
 
 		/**
@@ -172,12 +169,14 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		removePlayer: function( connectionID )
 		{
+
 			var player = this.players.objectForKey(connectionID);
 
 			if(!player) {
 				console.log("(FieldController), No 'Character' with connectionID " + connectionID + " ignoring...");
 				return;
 			}
+
 			this.removeEntity( player.objectID );
 			this.players.remove(player);
 		},
@@ -191,8 +190,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			var entityKeysArray = this.allEntities._keys,
 			i = entityKeysArray.length,
-			key;
+			key = ''; // Keys are the objectID's
 
+			// Loop through all keys,
+			// if key exist in 'activeEntities' continue,
+			// otherwise remove the entity
 			while (i--)
 			{
 				key = entityKeysArray[i];
@@ -201,8 +203,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				if( activeEntities[key] )
 					continue;
 
+				console.log('removingEntity', key);
+
 				// This entity is not active - remove
-				console.log("(FieldController) removeEntity", key);
 				this.removeEntity(key);
 			}
 		},
@@ -213,9 +216,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		removeEntity: function( objectID )
 		{
-			console.log("Removing Entity!", objectID);
 			var entity = this.allEntities.objectForKey( objectID );
 
+			console.log('Removing entity:', objectID);
 			// Clients contain a view, server entities contain a collisionCircle.
 			// If this statement is false then something went wrong, so no check on second conditional
 			if( this.view ) {

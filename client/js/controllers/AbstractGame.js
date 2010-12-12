@@ -115,6 +115,35 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		removeEntity: function( objectID )
 		{
 			this.fieldController.removeEntity( objectID );
+		},
+
+
+		log: function(o)
+		{
+			console.log(o);
+		},
+
+		/**
+		 * ACCESSORS
+		 */
+		getWidth: function()
+		{
+			return this.fieldController.getWidth();
+		},
+
+		getHeight: function()
+		{
+			return this.fieldController.getHeight();
+		},
+
+		getFieldLeft: function()
+		{
+			return this.fieldController.getLeft();
+		},
+
+		getFieldTop: function()
+		{
+			return this.fieldController.getTop();
 		}
 	});
 };

@@ -106,7 +106,7 @@ SnowGame = (function()
 
 				var charModel = allCharacterModels[index];
 				charModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
-				this.fieldController.addPlayer(this.getNextEntityID(), 0, charModel);
+				this.shouldAddPlayer(this.getNextEntityID(), 0);
 			}
 		}
 	});
