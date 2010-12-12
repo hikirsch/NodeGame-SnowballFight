@@ -37,26 +37,30 @@ SnowGame = (function()
 		onCollision: function(circleA, circleB, collisionNormal)
 		{
 //			Messy for now, but call proper function on collision
-
-//			console.log(circleA.view.entityType, circleB.view.entityType , EntityModel.ENTITY_MAP);
+			// Debug
 			var circleAType = EntityModel.ENTITY_NAME_FRIENDLY[String(circleA.view.entityType)];
 			var circleBType = EntityModel.ENTITY_NAME_FRIENDLY[String(circleB.view.entityType)];
-
-			console.log('aCollision');
-			console.log(circleA.view.entityType === EntityModel.ENTITY_MAP.CHARACTER);
-			console.log(circleB.view.entityType === EntityModel.ENTITY_MAP.CHARACTER);
-
-			console.log(circleA.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE);
-			console.log(circleB.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE);
-			// Player vs projectile collision occured
-			if( (circleA.view.entityType === EntityModel.ENTITY_MAP.CHARACTER || circleB.view.entityType === EntityModel.ENTITY_MAP.CHARACTER) &&
-				(circleA.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE || circleB.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE))
+			var projectile,
+				character,
+				player,
+				fieldEntity;
+			// Player vs projectile collision ocured
+			if(circleA.view.entityType & (EntityModel.ENTITY_MAP.CHARACTER | EntityModel.ENTITY_MAP.PROJECTILE) &&
+				circleB.view.entityType & (EntityModel.ENTITY_MAP.CHARACTER | EntityModel.ENTITY_MAP.PROJECTILE))
 			{
-				console.log('abc');
-				var player = (circleA.view.entityType === EntityModel.CHARACTER) ? circleA.view : circleB.view;
-				var projectile = (circleA.view.entityType === EntityModel.PROJECTILE) ? circleA.view : circleB.view;
+				player = (circleA.view.entityType === EntityModel.CHARACTER) ? circleA.view : circleB.view;
+				projectile= (circleA.view.entityType === EntityModel.PROJECTILE) ? circleA.view : circleB.view;
+
 				this.fieldController.removeEntity(projectile.objectID);
+			} // One of them is a projectile and one of them is a field entity
+			else if(circleA.view.entityType & (EntityModel.ENTITY_MAP.FIELD_ENTITY | EntityModel.ENTITY_MAP.PROJECTILE) &&
+					circleB.view.entityType & (EntityModel.ENTITY_MAP.FIELD_ENTITY | EntityModel.ENTITY_MAP.PROJECTILE))
+			{
+				projectile = (circleA.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE) ? circleA.view : circleB.view;
+				this.fieldController.removeEntity(projectile.objectID);
+
 			}
+//			else if (circleA.view.entityType === EntityModel.ENTITY_MAP.FIELD_ENTITY || )
 		},
 
 		createLevel: function()
