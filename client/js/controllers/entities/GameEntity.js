@@ -48,7 +48,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			 * Connection Properties
 			 */
 			this.clientID = aClientID;					// Client who created this object, 0 means it has no owner or the owner is the server
-			this.objectID = anObjectID;					// Everything the server creates an object it assigns this number to it
+			this.objectID = anObjectID;					// Everytime the server creates an object it assigns this number to it
 
 			/**
 			 * Movement properties
@@ -59,7 +59,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 
 			// (Acceleration is applied to velocity)
 			this.acceleration = new Vector( 0, 0 );		// All combined forced. reset every tick
-			this.moveSpeed = 0;    						// Apply to acceleration if keys pressed. Note, this number is high because it is applied multiplied by deltaTime
+			this.moveSpeed = 0;    						// Apply to acceleration if keys pressed.
 
 			// Location
 			this.position = new Vector(0, 0);
@@ -77,11 +77,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			this.traits = new SortedLookupTable();
 		},
 
-		setModel: function( newModel )
-		{
-			this.model = newModel;
-		},
-
 		/**
 		 * Creates the 'View' for this character
 		 * This should only be called client side.
@@ -90,10 +85,8 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		createView: function()
 		{
 			// if our game has a view, then create one
-			if( this.fieldController.hasView() )
-			{
+			if( this.fieldController.hasView() ) {
 				this.view = new EntityView(this, this.model.theme );
-				console.log("creating entity view");
 			}
 		},
 
@@ -235,7 +228,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		addTrait: function(aTrait)
 		{
-//			this.removeTraitWithName(aTrait.displayName);
+			this.removeTraitWithName(aTrait.displayName);
 			this.traits.setObjectForKey(aTrait, aTrait.displayName);
 			aTrait.attach(this);
 		},
@@ -256,6 +249,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			var aTrait = this.traits.objectForKey(aTraitName);
 			if(!aTrait) return;
 
+			console.log('RESTORE!');
 			aTrait.detach();
 			this.traits.remove(aTraitName);
 		},
@@ -278,6 +272,11 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 
 			if(this.view)
 				this.view.refresh();
+		},
+
+		setModel: function( newModel )
+		{
+			this.model = newModel;
 		},
 
 		getRotation: function()

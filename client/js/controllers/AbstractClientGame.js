@@ -91,7 +91,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 				newRotation = 0.0;
 
 			// if the distance between prev and next is too great - don't interpolate
-			var maxInterpolationDistance = 25,
+			var maxInterpolationDistance = 150,
 				maxInterpolationDistanceSquared = maxInterpolationDistance*maxInterpolationDistance;
 
 			// Store the next WED before and after the desired render time

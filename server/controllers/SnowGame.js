@@ -22,6 +22,7 @@ Version:
 */
 
 require('controllers/AbstractServerGame');
+require('js/factories/TraitFactory');
 SnowGame = (function()
 {
 	return new JS.Class(AbstractServerGame, {
@@ -29,40 +30,48 @@ SnowGame = (function()
 		{
 			this.callSuper();
 			var that = this;
+
+			this.traitFactory = TraitFactory;
+
+			// Listen for collisions
 			var collisionManager = this.fieldController.getCollisionManager();
 			collisionManager.eventEmitter.on('collision', function() { that.onCollision.apply(that, arguments) });
+
+			// Create the worlds best level of anything ever
 			this.createLevel();
 		},
 
 		onCollision: function(circleA, circleB, collisionNormal)
 		{
-//			Messy for now, but call proper function on collision
+			// Debug, friendly name for when debugging
+			var tAFriendly = EntityModel.ENTITY_NAME_FRIENDLY[String(circleA.view.entityType)];
+			var tBFriendly = EntityModel.ENTITY_NAME_FRIENDLY[String(circleB.view.entityType)];
+
+			var tList = EntityModel.ENTITY_MAP;
+			var tA = circleA.view.entityType;	// circleA entityType
+			var tB = circleB.view.entityType;	// circleB entityType
+			var tC = tA | tB;					// entityType of combined
+
+			// [Character and Projectile]
+			var character, projectile, fieldEntity;
+			if(tC === (tList.CHARACTER | tList.PROJECTILE) ) {
+				character = (tA & tList.CHARACTER) ? circleA : circleB;
+				projectile = (character === circleA)  ? circleB : circleA;
 
 
-			// Debug
-			var circleAType = EntityModel.ENTITY_NAME_FRIENDLY[String(circleA.view.entityType)];
-			var circleBType = EntityModel.ENTITY_NAME_FRIENDLY[String(circleB.view.entityType)];
-			var projectile,
-				character,
-				player,
-				fieldEntity;
-			// Player vs projectile collision ocured
-			if(circleA.view.entityType & (EntityModel.ENTITY_MAP.CHARACTER | EntityModel.ENTITY_MAP.PROJECTILE) &&
-				circleB.view.entityType & (EntityModel.ENTITY_MAP.CHARACTER | EntityModel.ENTITY_MAP.PROJECTILE))
-			{
-				player = (circleA.view.entityType === EntityModel.CHARACTER) ? circleA.view : circleB.view;
-				projectile= (circleA.view.entityType === EntityModel.PROJECTILE) ? circleA.view : circleB.view;
+				// Apply the projectile's trait(s)
+				var Trait = this.traitFactory.createTraitWithName(projectile.view.transferredTraits);
+				character.view.addTraitAndExecute( new Trait(collisionNormal) );
 
-				this.fieldController.removeEntity(projectile.objectID);
-			} // One of them is a projectile and one of them is a field entity
-			else if(circleA.view.entityType & (EntityModel.ENTITY_MAP.FIELD_ENTITY | EntityModel.ENTITY_MAP.PROJECTILE) &&
-					circleB.view.entityType & (EntityModel.ENTITY_MAP.FIELD_ENTITY | EntityModel.ENTITY_MAP.PROJECTILE))
-			{
-				projectile = (circleA.view.entityType === EntityModel.ENTITY_MAP.PROJECTILE) ? circleA.view : circleB.view;
-				this.fieldController.removeEntity(projectile.objectID);
-
+				// Remove the projectile
+				this.fieldController.removeEntity(projectile.view.objectID);
 			}
-//			else if (circleA.view.entityType === EntityModel.ENTITY_MAP.FIELD_ENTITY || )
+			// [Projectile vs FIELD_ENTITY]
+			else if(tC === (tList.FIELD_ENTITY | tList.PROJECTILE) ) {
+				fieldEntity = (tA & tList.FIELD_ENTITY) ? circleA : circleB;
+				projectile = (character === circleA)  ? circleB : circleA;
+				this.fieldController.removeEntity(projectile.view.objectID);
+			}
 		},
 
 		createLevel: function()
@@ -106,7 +115,11 @@ SnowGame = (function()
 
 				var charModel = allCharacterModels[index];
 				charModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
-				this.fieldController.addPlayer(this.getNextEntityID(), 0, charModel);
+
+				var character = this.shouldAddPlayer(this.getNextEntityID(), 0, charModel);
+				character.position.x = charModel.initialPosition.x;
+				character.position.y = charModel.initialPosition.y;
+//				console.log(SYS.inspect(character));
 			}
 		}
 	});
