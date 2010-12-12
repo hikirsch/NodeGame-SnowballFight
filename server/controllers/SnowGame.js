@@ -90,6 +90,22 @@ SnowGame = (function()
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 				this.fieldController.addEntity(aFieldEntity);
 			}
+
+			var allCharacterModels = [];
+			for(var obj in GAMECONFIG.CHARACTER_MODEL) {
+				var model = GAMECONFIG.CHARACTER_MODEL['smashTV'];
+				//allCharacterModels.push(GAMECONFIG.CHARACTER_MODEL[obj]);
+				allCharacterModels.push(model);
+			}
+
+			for(i = 0; i < 3; i++) {
+				var index = Math.random() * allCharacterModels.length;
+					index = Math.floor(index);
+
+				var charModel = allCharacterModels[index];
+				charModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
+				this.fieldController.addPlayer(this.getNextEntityID(), 0, charModel);
+			}
 		}
 	});
 })();

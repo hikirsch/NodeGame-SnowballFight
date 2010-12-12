@@ -1,4 +1,4 @@
-var init = function(EntityModel, ProjectileModel)
+var init = function(EntityModel, ProjectileModel, CharacterModel)
 { 
 	return GAMECONFIG = {
 		HOST: 'localhost',
@@ -57,14 +57,16 @@ var init = function(EntityModel, ProjectileModel)
 		},
 
 		ENTITY_MODEL: EntityModel,
-		PROJECTILE_MODEL: ProjectileModel
+		PROJECTILE_MODEL: ProjectileModel,
+		CHARACTER_MODEL: CharacterModel
 	}
 };
 
 if (typeof window === 'undefined') {
 	require('./model/EntityModel.js');
 	require('./model/ProjectileModel.js');
-	exports.Config = init(EntityModel, ProjectileModel);
+	require('./model/CharacterModel.js');
+	exports.Config = init(EntityModel, ProjectileModel, CharacterModel);
 } else if( typeof define === 'function' ) {
-	define(['model/EntityModel', 'model/ProjectileModel'], init);
+	define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], init);
 }
