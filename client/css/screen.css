@@ -65,11 +65,11 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .character.character-yeti{ height: 27px; width: 20px; background-image: url( ../img/entities/characters/yeti.png ); }
 
 .game-container .character.rotation-0 { background-position: -40px 0; }
-.game-container .character.rotation-45 { background-position: -60px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.rotation-45 { background-position: -20px 0; }
 .game-container .character.rotation-90 { background-position: -0 0; }
 .game-container .character.rotation-135 { background-position: -20px 0; -webkit-transform: scaleX(-1); }
 .game-container .character.rotation-180 { background-position: -40px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.rotation-225 { background-position: -20px 0; }
+.game-container .character.rotation-225 { background-position: -60px 0; -webkit-transform: scaleX(-1);}
 .game-container .character.rotation-270 { background-position: -80px 0;  }
 .game-container .character.rotation-315 { background-position: -60px 0; }
 
