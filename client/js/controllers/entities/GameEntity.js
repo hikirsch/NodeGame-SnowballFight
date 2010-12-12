@@ -72,7 +72,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
             this.useTransform = anEntityModel.useTransform || false;
 			this.collisionMask = 0; 				// Group we want to collide against
 			this.collisionGroup = 0;				// Group we are in
-			this.radius = 18;
+			this.radius = 10;
 
 			this.traits = new SortedLookupTable();
 		},

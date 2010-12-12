@@ -66,6 +66,9 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .character.smash-tv.rotation-270 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/west.png' ); }
 .game-container .character.smash-tv.rotation-315 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/northwest.png' ); }
 
+.game-container .character.smash-tv.rotation-0 { background-image: url( '../img/entities/characters/smash-tv/8wayrun/north.png' ); }
+
+
 /** projectiles **/
 .game-container .game-entity-view.projectile-snowball { background-image: url( '../img/entities/projectiles/snowball.png' ); height: 20px; width: 10px; }
 

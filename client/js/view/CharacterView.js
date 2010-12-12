@@ -14,11 +14,14 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 {
 	return new JS.Class(BaseView,
 	{
+		initialize: function( controller, theme ) {
+			this.callSuper();
+		},
+
 		refresh: function()
 		{
 			this.destroy();
 			this.createElement();
-			this.centerElement();
 		},
 
 		createElement: function( theme )

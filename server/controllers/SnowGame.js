@@ -77,10 +77,10 @@ SnowGame = (function()
 				{ position: { x: 100, y: 500 }, entityType: FieldEntityModel.smallPond }
 			];
 
- 			for( var i = 0; i < 7; i++ ) {
-				var nextEntity = entities[ 4 ];
+ 			for( var i = 0; i < entities.length; i++ ) {
+				var nextEntity = entities[ i ];
 				aFieldEntityModel = nextEntity.entityType;
-				aFieldEntityModel.initialPosition = new Vector(i * 140, 300);
+				aFieldEntityModel.initialPosition = nextEntity.position;
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 				this.fieldController.addEntity(aFieldEntity);
 			}

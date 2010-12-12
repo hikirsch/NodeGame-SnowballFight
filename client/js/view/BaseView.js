@@ -4,7 +4,7 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 	{
 		initialize:  function(controller, theme) {
 			this.controller = controller;
-			this.theme = theme;
+			this.theme = this.getCssClassFromTheme( theme );
 
 			// our default position is north
 			this.currentRotation = 0;
@@ -49,37 +49,36 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 			});
 		},
 
-
 		/**
 		 * Based on our rotation, we should show a different sprite.
 		 */
 		adjustSprite: function()
 		{
-            if( this.controller.useTransform ) {
-                $(this.element).css({'WebkitTransform': 'rotate(' + ( this.controller.getRotation() + 90 ) + 'deg)' });
-            } else {
-                var actualRotation = this.controller.getRotation();
-                if(actualRotation < 0) actualRotation += 360;
+			if( this.controller.useTransform ) {
+				$(this.element).css({'WebkitTransform': 'rotate(' + ( this.controller.getRotation() + 90 ) + 'deg)' });
+			} else {
+				var actualRotation = this.controller.getRotation();
+				if(actualRotation < 0) actualRotation += 360;
 
-                // Round to the number of sprites we have
-                var roundTo = 45,
-                    spriteOffset = 90,
-                    roundedRotation = Math.floor(actualRotation / roundTo) * roundTo + spriteOffset;
+				// Round to the number of sprites we have
+				var roundTo = 45,
+					spriteOffset = 90,
+					roundedRotation = Math.floor(actualRotation / roundTo) * roundTo + spriteOffset;
 
-                if(roundedRotation > 315) // Because our sprite has a 90 degree offset, it causes the value to wrap [45-360] instead of [0-315], so until we fix the sprite we do this
-                    roundedRotation = 0;
+				if(roundedRotation > 315) // Because our sprite has a 90 degree offset, it causes the value to wrap [45-360] instead of [0-315], so until we fix the sprite we do this
+					roundedRotation = 0;
 
 
-                // Only modify the CSS property if it has changed
-                var diff = this.currentRotation - roundedRotation;
-                if(diff < -1 || diff > 1)
-                {
-                    $(this.element)
-                    .removeClass( 'rotation-' + this.currentRotation )
-                    .addClass( 'rotation-' + roundedRotation );
+				// Only modify the CSS property if it has changed
+				var diff = this.currentRotation - roundedRotation;
+				if(diff < -1 || diff > 1)
+				{
+					$(this.element)
+						.removeClass( 'rotation-' + this.currentRotation )
+						.addClass( 'rotation-' + roundedRotation );
 
-                    this.currentRotation = roundedRotation;
-                }
+					this.currentRotation = roundedRotation;
+				}
             }
 		}
 	});

@@ -12,7 +12,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 				nickName: this.controller.getNickName()
 			};
 
-			this.element = HTMLFactory.entity( options, this.getCssClassFromTheme( this.theme ) )
+			this.element = HTMLFactory.entity( options, this.theme )
 				.appendTo('body');
 		},
 
@@ -23,7 +23,6 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 
 		update: function() {
 			this.callSuper();
-			this.centerElement();
 		}
 	});
 });

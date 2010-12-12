@@ -11,7 +11,7 @@
 	 // TODO: FILL OUT
  */
 
-var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldEntity)
+var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldEntity, CharacterModel)
 {
 	return new JS.Class(
 	{
@@ -32,7 +32,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 
 			this.collisionGroups = {
 				'None': 0,
-				'Character':  1 << 0,
+				'Character': 1 << 0,
 				'Projectile': 1 << 1,
 				'FieldEntity': 1 << 2
 			};
@@ -51,7 +51,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 
 		createCharacter: function(anObjectID, aClientID, aCharacterModel, aFieldController)
 		{
-			var aNewCharacter = new Character(anObjectID, aClientID, aCharacterModel, aFieldController);
+			var aNewCharacter = new Character(anObjectID, aClientID, CharacterModel.smashTV, aFieldController);
 
 			// Collide against other characters, projectiles, and level objects
 			aNewCharacter.collisionGroup = this.collisionGroups.Character;
@@ -112,15 +112,15 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 if (typeof window === 'undefined')
 {
 	// We're in node!
-	require('../lib/jsclass/core.js');
-	require('../lib/Vector');
-	require('../lib/Rectangle');
-	require('../controllers/entities/GameEntity');
-	require('../controllers/entities/Character');
-	require('../controllers/entities/Projectile');
-	require('../controllers/entities/FieldEntity');
-
-	GameEntityFactory = init(Vector, Rectangle, GameEntity, Character, Projectile, FieldEntity);
+	require('js/lib/jsclass/core.js');
+	require('js/lib/Vector');
+	require('js/lib/Rectangle');
+	require('js/controllers/entities/GameEntity');
+	require('js/controllers/entities/Character');
+	require('js/controllers/entities/Projectile');
+    require('js/controllers/entities/FieldEntity');
+	require('js/model/CharacterModel');
+	GameEntityFactory = init(Vector, Rectangle, GameEntity, Character, Projectile, FieldEntity, CharacterModel);
 }
 else
 {
@@ -132,5 +132,6 @@ else
 		'controllers/entities/Character',
 		'controllers/entities/Projectile',
 		'controllers/entities/FieldEntity',
+        'model/CharacterModel',
 		'lib/jsclass/core'], init);
 }

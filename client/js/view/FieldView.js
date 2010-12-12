@@ -4,11 +4,15 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 	{
 		initialize:  function(controller, model) {
 			this.controller = controller;
+			this.model = model;
 
-			this.createElement( model.height, model.width );
+			this.createElement();
 		},
 
-		createElement: function( height, width ) {
+		createElement: function() {
+			var height = this.model.height,
+				width = this.model.width;
+
 			this.element = HTMLFactory.field()
 				.show()
 				.insertAfter('nav');
@@ -26,7 +30,10 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 
 		addEntity: function( anEntityView )
 		{
-			anEntityView.getElement().appendTo( this.element );
+			anEntityView.getElement()
+				.appendTo( this.element );
+
+			anEntityView.centerElement();
 		},
 
 		removeEntity: function( anEntityView )
