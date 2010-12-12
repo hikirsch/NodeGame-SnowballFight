@@ -71,8 +71,6 @@ SnowGame = (function()
 				aFieldEntityModel;
 
 			var entities = [
-				{ position: { x: 300, y: 400 }, entityType: FieldEntityModel.smallPond },
-				{ position: { x: 700, y: 400 }, entityType: FieldEntityModel.blockOfIce4 },
 				{ position: { x: 100, y: 100 }, entityType: FieldEntityModel.gingerBreadHouse },
 				{ position: { x: 250, y: 100 }, entityType: FieldEntityModel.blockOfIce1 },
 				{ position: { x: 350, y: 100 }, entityType: FieldEntityModel.blockOfIce2 },
@@ -85,7 +83,7 @@ SnowGame = (function()
 				{ position: { x: 100, y: 500 }, entityType: FieldEntityModel.smallPond }
 			];
 
- 			for( var i = 0; i < 2; i++ ) {
+ 			for( var i = 0; i < entities.length; i++ ) {
 				var nextEntity = entities[ i ];
 				aFieldEntityModel = nextEntity.entityType;
 				aFieldEntityModel.initialPosition = nextEntity.position;
