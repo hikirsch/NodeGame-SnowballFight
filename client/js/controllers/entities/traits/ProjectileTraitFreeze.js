@@ -1,36 +1,56 @@
-var init = function()
+/**
+File:
+	ProjectileTraitFreeze.js
+Created By:
+	Mario Gonzalez
+Project	:
+	Ogilvy Holiday Card 2010
+Abstract:
+	Hijacks the characters position property so that it never changes
+Basic Usage:
+ 	// Let my character be controlled by the KB
+	if(newEntity.connectionID === this.netChannel.connectionID) {
+		aCharacter.addTraitAndExecute( new ClientControlledTrait() );
+		this.clientCharacter = aCharacter;
+	}
+*/
+var init = function(BaseTrait, Vector)
 {
-	return new JS.Class("BaseTrait",
+	return new JS.Class("ProjectileTraitFreeze", BaseTrait,
 	{
-		initialize: function()
-		{
-			that = this;
-			this.attachedEntity = null;
-			this.interceptedProperties = new SortedLookupTable();
-			this.detachTimeout = 0;
-			this.displayName = this.klass.displayName; // Work around for bug, but technically we should be able to just use this.displayName
+		initialize: function(collisionNormal) {
+			this.callSuper();
+
+			this.collisionNormal = collisionNormal;
+			this.collisionNormal.mul(-3); // Messin fools up!
+			this.theme = 101;
 		},
 
 		attach: function(anEntity)
 		{
-			if(this.attachedEntity != null) { throw {name: "Invalid use of trait", message: "Do not reuse trait instances!"}; };
-			this.attachedEntity = anEntity;
+			this.callSuper();
+			this.intercept(['handleInput', 'theme']);
 		},
 
 		execute: function() {
-		   // Override
+			this.attachedEntity.velocity.mul(0);
+			this.detachAfterDelay(1000);
 		},
 
-		detach: function()
+		detach: function() {
+			this.collisionNormal.mul(-10);
+			this.attachedEntity.velocity.add(this.collisionNormal);
+			this.callSuper();
+		},
+
+
+		/**
+		 * Intercepted propertys
+		 */
+		handleInput: function()
 		{
-			clearTimeout(this.detachTimeout);
-
-			delete this.interceptedProperties;
-			this.interceptProperties = null;
-
-			this.attachedEntity.removeTraitWithName(this.displayName);
-			this.attachedEntity = null;
-		},
+			// Do nothing! You're frozen!
+		}
 	});
 };
 
@@ -38,13 +58,13 @@ var init = function()
 if (typeof window === 'undefined')
 {
 	// We're in node!
-	require('js/lib/jsclass/core');
-	require('js/lib/SortedLookupTable');
-	BaseTrait = init();
+	require('js/controllers/entities/traits/BaseTrait');
+	require('js/lib/Vector');
+	ProjectileTraitFreeze = init(BaseTrait, Vector);
 }
 else
 {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/jsclass/core', 'lib/SortedLookupTable'], init);
+	define(['lib/Vector', 'controllers/entities/traits/BaseTrait', 'lib/jsclass/core'], init);
 }

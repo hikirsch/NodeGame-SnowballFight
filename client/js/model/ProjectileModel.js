@@ -13,8 +13,8 @@
 var init = function()
 {
 	return {
-		defaultSnowball	: { initialPosition: null, angle: 0, radius: 10, maxVelocity: 5, force: 1, theme: '300', useTransform: true },
-		superSnowball	: { initialPosition: null, angle: 0, radius: 15, maxVelocity: 8, force: 1, theme: '306', useTransform: true }
+		defaultSnowball	: { transferredTraits: 'ProjectileTraitFreeze', initialPosition: null, angle: 0, radius: 10, maxVelocity: 5, force: 1, theme: '300', useTransform: true },
+		superSnowball	: { transferredTraits: 'ProjectileTraitFreeze', initialPosition: null, angle: 0, radius: 15, maxVelocity: 8, force: 1, theme: '306' }
 	}
 };
 
