@@ -24,8 +24,6 @@ var init = function(Message, config) {
 	 */
 	function NetChannel( config, aController )
 	{
-
-
 		this.controller = aController;	// For callbacks once messages are validated
 		this.config = config;
 		var that = this;
@@ -187,7 +185,7 @@ var init = function(Message, config) {
 			var i = -1;
 
 			// Store all world updates contained in the message.
-			while(++i < len)
+			while(++i < len) // Want to parse through them in correct order, so no fancy --len
 			{
 				var singleWorldUpdate = serverMessage.data[i];
 				var worldEntityDescription = this.createWorldEntityDescriptionFromString(singleWorldUpdate)
@@ -223,7 +221,7 @@ var init = function(Message, config) {
 		  	allEntitiesLen = allEntities.length; //
 
 		// Loop through each entity
-		while(--allEntitiesLen)   // allEntities[0] is garbge, so by using pre
+		while(--allEntitiesLen)   // allEntities[0] is garbge, so by using prefix we avoid it
 		{
 			// Loop through the string representing the entities properties
 			var entityDescAsArray = allEntities[allEntitiesLen].split(','),
@@ -234,8 +232,8 @@ var init = function(Message, config) {
 			// Using the unary operator to convert string to number as it is the fastest.
 			entityDescription.objectID = +entityDescAsArray[0];
 			entityDescription.clientID = +entityDescAsArray[1];
-			entityDescription.entityType = entityDescAsArray[2] | 0; // convert to int
-			entityDescription.theme = entityDescAsArray[3];
+			entityDescription.entityType = +entityDescAsArray[2]; // convert to int
+			entityDescription.theme = +entityDescAsArray[3];
 			entityDescription.x = +entityDescAsArray[4];
 			entityDescription.y = +entityDescAsArray[5];
 			entityDescription.rotation = +entityDescAsArray[6];
@@ -256,11 +254,9 @@ var init = function(Message, config) {
 	};
 
 	/**
-	 * An WS connection hand-shake has occured. We still do not have a clientID.
+	 * A WS connection hand-shake has occurred. We still do not have a clientID.
 	 * Once we receive our first message from the server, it will contain our clientID
-	 *
-	 * @CalledFrom	onConnectionOpened
-	 * @param serverMessage
+	 * @param serverMessage	A message from the server containing our new clientID
 	 */
 	NetChannel.prototype.onServerDidAcceptConnection = function(serverMessage)
 	{

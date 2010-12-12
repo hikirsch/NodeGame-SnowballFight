@@ -196,7 +196,14 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				if( activeEntities[key] )
 					continue;
 
-				// This entity is not active - remove
+				// This entity is not active, check if it belongs to the server
+				var entity = this.allEntities.objectForKey(key);
+				if(entity.clientID == 0)  {
+
+					continue;
+				}
+
+				// Is not active, and does not belong to the server
 				console.log("(FieldController) removeEntity", key);
 				this.removeEntity(key);
 			}

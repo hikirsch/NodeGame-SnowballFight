@@ -206,7 +206,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		constructEntityDescription: function()
 		{
-			var returnString = "|"+this.objectID;
+			var returnString = this.objectID;
 				returnString += ","+this.clientID;
 				returnString += ","+this.entityType;
 				returnString += ","+this.model.theme;

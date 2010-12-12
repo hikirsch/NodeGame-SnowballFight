@@ -53,6 +53,7 @@ var init = function()
 
 			// Every tick store the queued commands here, every CLIENT_CONFIG.updateRate, send the queue
 			this.cmdBuffer = [];
+			this.stagnentEntities = new SortedLookupTable(); // things that are active but haven't changed since before
 
 			// This is used to see if we should send a client a new world state, or should accept a msg from the client (prevent flooding)
 			// Note both are set to -updaterate so next tick garantees a msg send
@@ -110,8 +111,37 @@ var init = function()
 		 */
 		compressDeltaAndQueueMessage: function( worldDescription, gameClock )
 		{
+			var allEntities = worldDescription.entities,
+				len = allEntities.length;
+
+			var resultDescStr = '';
+			while(len--)
+			{
+				var anEntityDescStr = allEntities[len],
+					anEntityDesc = anEntityDescStr.split(','),
+					objectID = +anEntityDesc[0],
+					clientID = +anEntityDesc[1];
+
+				// Server owned
+				var hasNewData = true;
+				if(clientID == 0)
+				{
+				   var previouslySentEntityDescription = this.stagnentEntities.objectForKey(objectID);
+				   if(previouslySentEntityDescription) {
+//					   hasNewData = false;
+				   }
+				}
+
+				// Store for next time
+				this.stagnentEntities.setObjectForKey(anEntityDesc, objectID);
+
+				// Only send if it has new data
+				if(hasNewData) {
+					resultDescStr += "|" + anEntityDescStr;
+				}
+			}
 			var entityDescriptionObject = {};
-			entityDescriptionObject.entities = worldDescription.entities;
+			entityDescriptionObject.entities = resultDescStr;
 			entityDescriptionObject.gameClock = worldDescription.gameClock;
 			entityDescriptionObject.gameTick = worldDescription.gameTick;
 
@@ -134,6 +164,7 @@ var init = function()
 if (typeof window === 'undefined') {
 	require('js/lib/jsclass/core.js');
 	require('js/lib/bison.js');
+	require('js/lib/SortedLookupTable.js');
 	Client = init();
 }
 

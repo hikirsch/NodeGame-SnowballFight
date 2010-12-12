@@ -28,14 +28,14 @@ WorldEntityDescription = (function()
 		initialize: function( aGameInstance )
 		{
 			var fieldController = aGameInstance.fieldController;
-			this.entities = "";
+			this.entities = [];
 			this.gameClock = aGameInstance.gameClock;
 			this.gameTick = aGameInstance.gameTick;
 			
 			// Construct players
 			fieldController.allEntities.forEach( function(key, entity)
 			{
-				this.entities += entity.constructEntityDescription();
+				this.entities.push(entity.constructEntityDescription());
 			}, this );
 		}
 	});
