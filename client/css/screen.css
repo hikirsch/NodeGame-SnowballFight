@@ -57,7 +57,6 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .game-entity-view { position: absolute; z-index: 2000; }
 .game-container .game-entity-view.projectile-snowball { z-index: 3000; }
 
-
 .game-container .character.smash-tv { height: 26px; width: 26px; background-image: url( ../img/entities/characters/smash-tv.png ); background-position: 0 0; }
 .game-container .character.character-snowman { height: 27px; width: 20px; background-image: url( ../img/entities/characters/snowman.png ); }
 .game-container .character.character-robot { height: 27px; width: 20px; background-image: url( ../img/entities/characters/robot.png ); }
@@ -65,34 +64,23 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .character.character-tree { height: 27px; width: 20px; background-image: url( ../img/entities/characters/tree.png ); }
 .game-container .character.character-yeti{ height: 27px; width: 20px; background-image: url( ../img/entities/characters/yeti.png ); }
 
-.game-container .character.rotation-0 { background-position: -80px 0; }
-.game-container .character.rotation-45 { background-position: -60px 0; }
-.game-container .character.rotation-90 { background-position: -40px 0;  }
-.game-container .character.rotation-135 { background-position: -20px 0; }
-.game-container .character.rotation-180 { background-position: 0 0; }
-.game-container .character.rotation-225 { background-position: -20px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.rotation-270 { background-position: -40px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.rotation-315 { background-position: -60px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.rotation-0 { background-position: -40px 0; }
+.game-container .character.rotation-45 { background-position: -60px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.rotation-90 { background-position: -0 0; }
+.game-container .character.rotation-135 { background-position: -20px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.rotation-180 { background-position: -40px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.rotation-225 { background-position: -20px 0; }
+.game-container .character.rotation-270 { background-position: -80px 0;  }
+.game-container .character.rotation-315 { background-position: -60px 0; }
 
-.game-container .character.character-big { height: 35px; width: 28px; background-size: 196px 35px; }
-.game-container .character.character-big.rotation-0 { background-position: -112px 0; }
-.game-container .character.character-big.rotation-45 { background-position: -84px 0; }
-.game-container .character.character-big.rotation-90 { background-position: -56px 0;  }
-.game-container .character.character-big.rotation-135 { background-position: -28px 0; }
-.game-container .character.character-big.rotation-180 { background-position: 0 0; }
-.game-container .character.character-big.rotation-225 { background-position: -28px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.character-big.rotation-270 { background-position: -56px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.character-big.rotation-315 { background-position: -84px 0; -webkit-transform: scaleX(-1); }
-
-
-.game-container .character.smash-tv.rotation-0 { background-position: -104px 0; }
-.game-container .character.smash-tv.rotation-45 { background-position: -78px 0; }
-.game-container .character.smash-tv.rotation-90 { background-position: -52px 0; }
-.game-container .character.smash-tv.rotation-135 { background-position: -26px 0; }
-.game-container .character.smash-tv.rotation-180 { background-position: 0 0; }
-.game-container .character.smash-tv.rotation-225 { background-position: -26px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.smash-tv.rotation-270 { background-position: -52px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.smash-tv.rotation-315 { background-position: -78px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.smash-tv.rotation-0 { background-position: -52px 0; }
+.game-container .character.smash-tv.rotation-45 {  background-position: -26px 0; }
+.game-container .character.smash-tv.rotation-90 { background-position: 0 0; }
+.game-container .character.smash-tv.rotation-135 { background-position: -26px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.smash-tv.rotation-180 { background-position: -52px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.smash-tv.rotation-225 { background-position: -78px 0; -webkit-transform: scaleX(-1);}
+.game-container .character.smash-tv.rotation-270 { background-position: -104px 0; }
+.game-container .character.smash-tv.rotation-315 { background-position: -78px 0; }
 
 
 /** projectiles **/
