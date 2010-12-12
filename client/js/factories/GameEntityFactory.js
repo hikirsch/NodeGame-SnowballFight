@@ -30,12 +30,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			this.entityTypes.setObjectForKey(Projectile, 'Projectile');
 			this.entityTypes.setObjectForKey(FieldEntity, 'FieldEntity');
 
-			this.collisionGroups = {
-				'None': 0,
-				'Character': 1 << 0,
-				'Projectile': 1 << 1,
-				'FieldEntity': 1 << 2
-			};
+			this.collisionGroups = GAMECONFIG.ENTITY_MODEL.COLLISION_GROUPS;
 		},
 		createProjectile: function(anObjectID, aClientID, aProjectileModel, aFieldController)
 		{
@@ -43,8 +38,8 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			var projectile = new Projectile(anObjectID, aClientID, aProjectileModel, aFieldController);
 
 			// Should snowballs collide with one another?
-			projectile.collisionGroup = this.collisionGroups.Projectile;
-			projectile.collisionMask = this.collisionGroups.Character | this.collisionGroups.FieldEntity;
+			projectile.collisionGroup = this.collisionGroups.PROJECTILE;
+			projectile.collisionMask = this.collisionGroups.CHARACTER | this.collisionGroups.FIELD_ENTITY;
 
 			return projectile;
 		},
@@ -54,8 +49,8 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			var aNewCharacter = new Character(anObjectID, aClientID, CharacterModel.smashTV, aFieldController);
 
 			// Collide against other characters, projectiles, and level objects
-			aNewCharacter.collisionGroup = this.collisionGroups.Character;
-			aNewCharacter.collisionMask = this.collisionGroups.Character | this.collisionGroups.Projectile | this.collisionGroups.FieldEntity;
+			aNewCharacter.collisionGroup = this.collisionGroups.CHARACTER;
+			aNewCharacter.collisionMask = this.collisionGroups.CHARACTER | this.collisionGroups.PROJECTILE | this.collisionGroups.FIELD_ENTITY;
 
 			return aNewCharacter;
 		},
@@ -66,9 +61,9 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			aNewFieldEntity.position = new Vector(aFieldEntityModel.initialPosition.x, aFieldEntityModel.initialPosition.y);
 			
 			// Collide against characters and projectiles
-			aNewFieldEntity.collisionGroup = this.collisionGroups.FieldEntity;
-			aNewFieldEntity.collisionMask = this.collisionGroups.Character | this.collisionGroups.Projectile;
-			
+			aNewFieldEntity.collisionGroup = this.collisionGroups.FIELD_ENTITY;
+			aNewFieldEntity.collisionMask = aFieldEntityModel.collisionMask;
+
 			return aNewFieldEntity;
 		},
 

@@ -46,12 +46,23 @@ var init = function()
 		'999':	'smash-tv'
 	};
 
+	var DEFAULT_MODEL = {
+		theme: '0'
+	};
+
 	// Actual game play object types
 	var ENTITY_MAP = {
 		UNKNOWN				: 1 << 0,
 		CHARACTER			: 1 << 1,
 		PROJECTILE			: 1 << 2,
 		FIELD_ENTITY		: 1 << 3
+	};
+
+	var COLLISION_GROUPS = {
+		NONE				: 0,
+		CHARACTER			: 1 << 0,
+		PROJECTILE			: 1 << 1,
+		FIELD_ENTITY		: 1 << 2
 	};
 
 	// For development, friendly names - WILL BE REMOVED
@@ -62,16 +73,16 @@ var init = function()
 		'8' : "FIELD_ENTITY"
 	};
 
-	var DEFAULT_MODEL = {
-		theme: '0'
-	};
+
 
 	// return an object containing both
 	return {
 		'THEME_MAP': THEME_MAP,
+		'DEFAULT_MODEL': DEFAULT_MODEL,
 		'ENTITY_MAP': ENTITY_MAP,
 		'ENTITY_NAME_FRIENDLY': ENTITY_NAME_FRIENDLY,
-		'DEFAULT_MODEL': DEFAULT_MODEL
+		'COLLISION_GROUPS' : COLLISION_GROUPS
+
 	}
 };
 

@@ -125,7 +125,6 @@ var init = function(Vector, PackedCircle)
 		{
 			var aCircle = this.allCircles[n];
 			if(!aCircle || !aCircle.view) {
-				console.log(new Date().getTime(), 'NoCircle!')
 				continue;
 			}
 
@@ -413,6 +412,7 @@ var init = function(Vector, PackedCircle)
 
 		// They dont want to collide
 		if((circleA.collisionGroup & circleB.collisionMask) == 0) return false;
+		if((circleB.collisionGroup & circleA.collisionMask) == 0) return false;
 
 		return true;
 	},
