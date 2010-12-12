@@ -125,6 +125,7 @@ var init = function(Vector, PackedCircle)
 		{
 			var aCircle = this.allCircles[n];
 			if(!aCircle || !aCircle.view) {
+				console.log(new Date().getTime(), 'NoCircle!')
 				continue;
 			}
 
@@ -199,7 +200,7 @@ var init = function(Vector, PackedCircle)
 				{
 					var cj = circleList[j];
 
-				//	if( !this.circlesShouldCollide(ci, cj) ) continue;   // It's us!
+					if( !this.circlesShouldCollide(ci, cj) ) continue;   // It's us!
 
 
 					var dx = cj.position.x - ci.position.x,
@@ -242,7 +243,7 @@ var init = function(Vector, PackedCircle)
 						// Emit the collision event from each circle, with itself as the first parameter
 						if(this.dispatchCollisionEvents && n == this.numberOfCollisionPasses-1)
 						{
-//							this.eventEmitter.emit('collision', cj, ci, v);
+							this.eventEmitter.emit('collision', cj, ci, v);
 						}
 					}
 				}
@@ -410,7 +411,7 @@ var init = function(Vector, PackedCircle)
 		if(circleA.isFixed & circleB.isFixed) return false;
 		if(circleA.view.clientID === circleB.view.clientID) return false; 				// Don't let something collide with stuff it owns
 
-		// They want to collide
+		// They dont want to collide
 		if((circleA.collisionGroup & circleB.collisionMask) == 0) return false;
 
 		return true;

@@ -44,7 +44,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 
 			// Should snowballs collide with one another?
 			projectile.collisionGroup = this.collisionGroups.Projectile;
-			projectile.collisionMask = this.collisionGroups.Character;// | this.collisionGroups.FieldEntity;
+			projectile.collisionMask = this.collisionGroups.Character | this.collisionGroups.FieldEntity;
 
 			return projectile;
 		},
@@ -67,7 +67,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 			
 			// Collide against characters and projectiles
 			aNewFieldEntity.collisionGroup = this.collisionGroups.FieldEntity;
-			aNewFieldEntity.collisionMask = this.collisionGroups.Character;
+			aNewFieldEntity.collisionMask = this.collisionGroups.Character | this.collisionGroups.Projectile;
 			
 			return aNewFieldEntity;
 		},
