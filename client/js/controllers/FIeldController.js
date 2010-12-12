@@ -213,7 +213,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		removeEntity: function( objectID )
 		{
-			console.log("Removing Entity!", objectID);
+			// console.log("Removing Entity!", objectID);
 			var entity = this.allEntities.objectForKey( objectID );
 
 			// Clients contain a view, server entities contain a collisionCircle.

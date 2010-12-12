@@ -26,7 +26,8 @@ var init = function(EntityModel)
 		iglooGreenFlag			: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:-2},	radius: 48, theme: '106' },
 		lakeHorizontalBridge	: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 70, theme: '107' },
 		lakeVerticalBridge		: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 100, theme: '108' },
-		smallPond				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35,	theme: '109' }
+		smallPond				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35
+			,	theme: '109' }
 	}
 };
 

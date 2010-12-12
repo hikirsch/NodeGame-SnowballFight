@@ -29,7 +29,7 @@ var init = function()
 		'109':	'small-pond',
 
 		'200':	'character-yeti',
-		'201':	'charactetr-penguin',
+		'201':	'character-penguin',
 		'202':	'character-robot',
 		'203':	'character-snowman',
 		'204':	'character-tree',
