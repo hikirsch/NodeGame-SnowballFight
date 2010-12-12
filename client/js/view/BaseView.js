@@ -63,8 +63,7 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 
 				// Round to the number of sprites we have
 				var roundTo = 45,
-					spriteOffset = 90,
-					roundedRotation = Math.floor(actualRotation / roundTo) * roundTo + spriteOffset;
+					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
 
 				$("#logger").html(
 					"controller: " + Math.floor( this.controller.getRotation() ) + "<br />" +
