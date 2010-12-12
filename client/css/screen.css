@@ -73,6 +73,9 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .character.rotation-270 { background-position: -80px 0;  }
 .game-container .character.rotation-315 { background-position: -60px 0; }
 
+.game-container .character.stars-1 { background-position: -100px 0; }
+.game-container .character.stars-2 { background-position: -120px 0; }
+
 .game-container .character.smash-tv.rotation-0 { background-position: -52px 0; }
 .game-container .character.smash-tv.rotation-45 {  background-position: -26px 0; }
 .game-container .character.smash-tv.rotation-90 { background-position: 0 0; }
