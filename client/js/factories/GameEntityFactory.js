@@ -46,7 +46,7 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 
 		createCharacter: function(anObjectID, aClientID, aCharacterModel, aFieldController)
 		{
-			var aNewCharacter = new Character(anObjectID, aClientID, CharacterModel.smashTV, aFieldController);
+			var aNewCharacter = new Character(anObjectID, aClientID, CharacterModel.yeti, aFieldController);
 
 			// Collide against other characters, projectiles, and level objects
 			aNewCharacter.collisionGroup = this.collisionGroups.CHARACTER;

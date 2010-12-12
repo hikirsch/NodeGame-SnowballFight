@@ -57,6 +57,7 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 			if( this.controller.useTransform ) {
 				$(this.element).css({'WebkitTransform': 'rotate(' + ( this.controller.getRotation() + 90 ) + 'deg)' });
 			} else {
+
 				var actualRotation = this.controller.getRotation();
 				if(actualRotation < 0) actualRotation += 360;
 
@@ -65,11 +66,12 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 					spriteOffset = 90,
 					roundedRotation = Math.floor(actualRotation / roundTo) * roundTo + spriteOffset;
 
-				console.log('rounded rotation:', roundedRotation);
-				if(roundedRotation > 315) // Because our sprite has a 90 degree offset, it causes the value to wrap [45-360] instead of [0-315], so until we fix the sprite we do this
-					roundedRotation = 0;
+				$("#logger").html(
+					"controller: " + Math.floor( this.controller.getRotation() ) + "<br />" +
 
-
+					"actual: " + Math.floor( actualRotation ) + "<br />" +
+					"rounded: " + roundedRotation
+				);
 				// Only modify the CSS property if it has changed
 				var diff = this.currentRotation - roundedRotation;
 				if(diff < -1 || diff > 1)
