@@ -88,7 +88,7 @@ SnowGame = (function()
 				aFieldEntityModel = nextEntity.entityType;
 				aFieldEntityModel.initialPosition = nextEntity.position;
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
-				// this.fieldController.addEntity(aFieldEntity);
+				this.fieldController.addEntity(aFieldEntity);
 			}
 
 			var allCharacterModels = [];
