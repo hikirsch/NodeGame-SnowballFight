@@ -40,6 +40,12 @@ var init = function()
 		'203':	'character-snowman',
 		'204':	'character-tree',
 
+		'1200':	'character-yeti-stunned',
+		'1201':	'character-penguin-stunned',
+		'1202':	'character-robot-stunned',
+		'1203':	'character-snowman-stunned',
+		'1204':	'character-tree-stunned',
+
 		'300':	'projectile-snowball',
 		'301':	'projectile-carrot',
 		'302':	'projectile-bolts',

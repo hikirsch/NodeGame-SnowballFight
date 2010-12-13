@@ -90,6 +90,15 @@ SnowGame = (function()
 			}
 		},
 
+		getDevelopersLevel: function()
+		{
+			return [
+				// { position: { x: 100, y: 100 }, entityType: FieldEntityModel.gingerBreadHouse },
+				{ position: { x: 450, y: 250 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				{ position: { x: 100, y: 100 }, entityType: FieldEntityModel.blockOfIce1 }
+			];
+		},
+
 		getAllFieldEntitiesAsLevel: function()
 		{
 			return [
