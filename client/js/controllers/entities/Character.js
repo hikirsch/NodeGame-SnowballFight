@@ -63,7 +63,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		{
 			// if our game has a view, then create one
 			if( this.fieldController.hasView() ) {
-				this.view = new CharacterView( this, this.model.theme );
+				this.view = new CharacterView( this, this.model );
 			}
 		},
 

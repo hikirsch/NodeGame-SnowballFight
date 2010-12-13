@@ -11,14 +11,14 @@
 	 // TODO: FILL OUT
  */
 
-var init = function(ClientControlledTrait, ProjectileTraitFreeze)
+var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable)
 {
 	// Private reference
 	var traitTypes = new SortedLookupTable();
 
 	traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
 	traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
-	traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
+	traitTypes.setObjectForKey(CharacterTraitInvulnerable, 'CharacterTraitInvulnerable');
 
 	// Return only accessor
 	return {
@@ -33,6 +33,7 @@ if (typeof window === 'undefined')
 {
 	// We're in node!
 	require('js/controllers/entities/traits/ClientControlledTrait');
+	require('js/controllers/entities/traits/CharacterTraitInvulnerable');
 	require('js/controllers/entities/traits/ProjectileTraitFreeze');
 	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze);
 }
@@ -40,5 +41,8 @@ else
 {
 	// We're on the browser.
 	// Require.js will use this file's name (TraitFactory.js), to create a new
-	define(['controllers/entities/traits/ClientControlledTrait', 'controllers/entities/traits/ClientControlledTrait', 'lib/jsclass/core'], init);
+	define(['controllers/entities/traits/ClientControlledTrait',
+		'controllers/entities/traits/ClientControlledTrait',
+		'controllers/entities/traits/CharacterTraitInvulnerable',
+		'lib/jsclass/core'], init);
 }

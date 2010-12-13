@@ -16,13 +16,11 @@ Basic Usage:
 */
 var init = function(BaseTrait, Vector)
 {
-	return new JS.Class("ProjectileTraitFreeze", BaseTrait,
+	return new JS.Class("CharacterTraitInvulnerable", BaseTrait,
 	{
 		initialize: function(collisionNormal) {
 			this.callSuper();
-
-			this.collisionNormal = collisionNormal;
-			this.collisionNormal.mul(-3); // Messin fools up!
+			this.collisionMask = GAMECONFIG.ENTITY_MODEL.COLLISION_GROUPS.CHARACTER | GAMECONFIG.ENTITY_MODEL.COLLISION_GROUPS.FIELD_ENTITY;
 		},
 
 		attach: function(anEntity)
@@ -31,33 +29,22 @@ var init = function(BaseTrait, Vector)
 
 			// Set our theme, and hijack the characters
 			this.theme = '1' + this.attachedEntity.theme;
-			this.intercept(['handleInput', 'theme']);
+			this.intercept(['collisionMask', 'theme']);
+			this.attachedEntity.collisionCircle.collisionMask = this.collisionMask;
+		},
+
+		detach: function()
+		{
+			var entity = this.attachedEntity;
+			this.callSuper();
+
+			// restore the collisionmask to the circle
+			entity.collisionCircle.collisionMask = entity.collisionMask;
 		},
 
 		execute: function()
 		{
-			this.collisionNormal.mul(-10);
-			// apply
-			this.attachedEntity.velocity.mul(0);
-			this.attachedEntity.velocity.add(this.collisionNormal);
-			this.detachAfterDelay(4500);
-		},
-
-		detach: function() {
-			var entity = this.attachedEntity; // Store in var because the super call below will clear the memory
-			this.callSuper();
-			entity.addTraitAndExecute( new CharacterTraitInvulnerable() );
-
-			console.log("Detach!!!");
-		},
-
-
-		/**
-		 * Intercepted propertys
-		 */
-		handleInput: function()
-		{
-			// Do nothing! You're frozen!
+			this.detachAfterDelay(2500);
 		}
 	});
 };
@@ -67,9 +54,8 @@ if (typeof window === 'undefined')
 {
 	// We're in node!
 	require('js/controllers/entities/traits/BaseTrait');
-	require('js/controllers/entities/traits/CharacterTraitInvulnerable');
 	require('js/lib/Vector');
-	ProjectileTraitFreeze = init(BaseTrait, Vector);
+	CharacterTraitInvulnerable = init(BaseTrait, Vector);
 }
 else
 {

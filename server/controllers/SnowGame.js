@@ -38,8 +38,7 @@ SnowGame = (function()
 			collisionManager.eventEmitter.on('collision', function() { that.onCollision.apply(that, arguments) });
 
 			// Create the worlds best level of anything ever
-//			this.createLevel();
-			this.createDummyPlayers();
+			this.createLevel();
 		},
 
 		onCollision: function(circleA, circleB, collisionNormal)
@@ -87,6 +86,8 @@ SnowGame = (function()
 
 		createLevel: function()
 		{
+			this.createDummyPlayers();
+
 			var aFieldEntity,
 				aFieldEntityModel;
 

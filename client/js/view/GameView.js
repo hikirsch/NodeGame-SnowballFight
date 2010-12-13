@@ -34,7 +34,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				TotalPlayers: "00",
 				Rank: "00/00"
 			};
-
 		},
 
 		createStatusView: function( obj )
@@ -45,7 +44,8 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		update: function()
 		{
-			if( this.statusElement == null ) {
+			if( this.statusElement == null )
+			{
 				this.createStatusView( this.currentStatus );
 				this.tmplItem = this.statusElement.tmplItem();
 				this.tmplItem.data = this.currentStatus;

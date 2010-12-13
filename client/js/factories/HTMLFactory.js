@@ -49,10 +49,10 @@ var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailab
 				.tmpl();
 		},
 
-		entity: function(data, theme) {
+		entity: function(data) {
 			return $(entity)
 				.tmpl(data)
-				.addClass( theme );
+				.addClass( data.theme );
 		},
 		
 		results: function() {
