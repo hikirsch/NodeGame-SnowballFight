@@ -119,4 +119,4 @@ section.game-status dl dt.time-left { background-image: url( '../img/global/txt-
 section.game-status dl dd { font-family: Arial; font-size: 34px; line-height: 34px; width: 100px; margin-right: 20px; }
 
 
-#logger { font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }
+#logger { display: none; font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }

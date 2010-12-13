@@ -50,12 +50,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				this.tmplItem.data = this.currentStatus;
 			}
 
-				$("#logger").html(
-					"gameTick: " + this.gameController.gameTick + "<br />" +
-					"gameClock: " + this.gameController.gameClock + "<br />" +
-					"clockActualTime: " + this.gameController.clockActualTime
-				);
-
 			this.currentStatus.Rank = this.gameController.getRank();
 			this.currentStatus.TotalPlayers = this.gameController.getNumberOfPlayers();
 			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
