@@ -28,7 +28,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			console.log('created NetChannel');
 
 			this.clientCharacter = null; // Special pointer to our own client character
-
+			
 			this.CMD_TO_FUNCTION = {};
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onClientJoined;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
@@ -199,7 +199,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 				// create a message with our characters updated information and send it off
 				this.netChannel.addMessageToQueue( false, newMessage );
-
 				this.view.update();
 			}
 		},

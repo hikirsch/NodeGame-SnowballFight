@@ -27,7 +27,7 @@ var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailab
 		},
 
 		instructions: function()
-		{
+		{		
 			return $(instructions)
 				.tmpl();
 		},
