@@ -92,7 +92,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 			// Apply impulse to character acceleration in opposite angle of the projectile
 			var currentAngle = aNewProjectile.angle;
-			var impulseForce = -20;//aProjectileModel.force * 2;
+			var impulseForce = -10;//aProjectileModel.force * 2;
 			var impulseVector = new Vector(Math.cos(currentAngle) * impulseForce, Math.sin(currentAngle) * impulseForce);
 
 			this.gameController.log(impulseVector);
@@ -209,7 +209,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 					this.removePlayer( entity.clientID );
 				} else {
 					// Is not active, and does not belong to the server
-					console.log("(FieldController) removeEntity", key);
+//					console.log("(FieldController) removeEntity", key);
 					this.removeEntity(key);
 				}
 			}
