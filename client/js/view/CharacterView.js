@@ -43,6 +43,11 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 			this.adjustSprite();
 		},
 
+		update: function()
+        {
+            this.callSuper();
+        },
+
 		getNickName: function()
 		{
 			return this.model.nickName;

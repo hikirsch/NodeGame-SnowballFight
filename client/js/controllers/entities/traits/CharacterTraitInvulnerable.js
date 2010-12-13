@@ -28,7 +28,7 @@ var init = function(BaseTrait, Vector)
 			this.callSuper();
 
 			// Set our theme, and hijack the characters
-			this.theme = '1' + this.attachedEntity.theme;
+			this.theme = '2' + this.attachedEntity.theme;
 			this.intercept(['collisionMask', 'theme']);
 			this.attachedEntity.collisionCircle.collisionMask = this.collisionMask;
 		},
