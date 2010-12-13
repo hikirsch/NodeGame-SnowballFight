@@ -16,6 +16,22 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 			anEntityView.getElement().remove();
 		},
 
+		getThemeCodeFromName: function( themeName )
+		{
+			var key;
+
+			for( key in EntityModel.THEME_MAP ) {
+				if( EntityModel.THEME_MAP.hasOwnProperty( key ) )
+				{
+					if( EntityModel.THEME_MAP[ key ] === themeName ) {
+						return key;
+					}
+				}
+			}
+
+			return null;
+		},
+
 		getCssClassFromTheme: function( theme )
 		{
 			return EntityModel.THEME_MAP[ theme ];
@@ -55,7 +71,7 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 		adjustSprite: function()
 		{
 			if( this.controller.useTransform ) {
-				$(this.element).css({'WebkitTransform': 'rotate(' + ( this.controller.getRotation() + 90 ) + 'deg)' });
+				$(this.element).css({'WebkitTransform': 'rotate(' + ( this.controller.getRotation() ) + 'deg)' });
 			} else {
 
 				var actualRotation = this.controller.getRotation();

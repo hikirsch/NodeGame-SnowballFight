@@ -286,7 +286,9 @@ ServerNetChannel = (function()
             // if set to false then clients will stay in the game
             aClient.isPlaying = true;
 
-			this.delegate.shouldAddPlayer(entityID, clientID, {theme: '1'});
+			var characterModel = {theme: aDecodedMessage.cmds.data.theme, nickname: aDecodedMessage.cmds.data.theme};
+
+			this.delegate.shouldAddPlayer(entityID, clientID, characterModel );
 
 			connection.send( BISON.encode(aDecodedMessage) );
 		},

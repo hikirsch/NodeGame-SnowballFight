@@ -80,8 +80,6 @@ SnowGame = (function()
 				aFieldEntityModel;
 
 			var entities = [
-				{ position: { x: 300, y: 400 }, entityType: FieldEntityModel.smallPond },
-				{ position: { x: 700, y: 400 }, entityType: FieldEntityModel.blockOfIce4 },
 				{ position: { x: 100, y: 100 }, entityType: FieldEntityModel.gingerBreadHouse },
 				{ position: { x: 250, y: 100 }, entityType: FieldEntityModel.blockOfIce1 },
 				{ position: { x: 350, y: 100 }, entityType: FieldEntityModel.blockOfIce2 },
@@ -94,32 +92,12 @@ SnowGame = (function()
 				{ position: { x: 100, y: 500 }, entityType: FieldEntityModel.smallPond }
 			];
 
- 			for( var i = 0; i < 2; i++ ) {
+ 			for( var i = 0; i < entities.length; i++ ) {
 				var nextEntity = entities[ i ];
 				aFieldEntityModel = nextEntity.entityType;
 				aFieldEntityModel.initialPosition = nextEntity.position;
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 				this.fieldController.addEntity(aFieldEntity);
-			}
-
-			var allCharacterModels = [];
-			for(var obj in GAMECONFIG.CHARACTER_MODEL) {
-				var model = GAMECONFIG.CHARACTER_MODEL['smashTV'];
-				//allCharacterModels.push(GAMECONFIG.CHARACTER_MODEL[obj]);
-				allCharacterModels.push(model);
-			}
-
-			for(i = 0; i < 3; i++) {
-				var index = Math.random() * allCharacterModels.length;
-					index = Math.floor(index);
-
-				var charModel = allCharacterModels[index];
-				charModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
-
-				var character = this.shouldAddPlayer(this.getNextEntityID(), 0, charModel);
-				character.position.x = charModel.initialPosition.x;
-				character.position.y = charModel.initialPosition.y;
-//				console.log(SYS.inspect(character));
 			}
 		}
 	});

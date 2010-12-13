@@ -1,7 +1,13 @@
 var init = function(EntityModel, ProjectileModel, CharacterModel)
 { 
 	return GAMECONFIG = {
-		HOST: 'localhost',
+		HOST: function() {
+			if( typeof window === 'undefined' ) {
+				return "localhost"; // game on node runs on localhost
+			} else {
+				return location.hostname;
+			}
+		}(),
 		PORT: 28785,
 		DEBUG_MODE: true,
 

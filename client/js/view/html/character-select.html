@@ -9,11 +9,11 @@
 
 				<div class="nav">
 					<div class="name">
-					<input type="text" id="nickname" placeholder="Yoo Hoo! What's your name?" onclick="this.value=''">
+					<input type="text" id="nickname" placeholder="Yoo Hoo! What's your name?" />
 					<small>(You can use your real name, or just make one up)</small>
 					</div>
-					<img src="img/global/arrow-left.png" class="chooseArrows arrowLeft" onclick="characterCarousel.move(810,1)">
-					<img src="img/global/arrow.png" class="chooseArrows arrowRight" onclick="characterCarousel.move(-810)">
+					<img src="img/global/arrow-left.png" class="chooseArrows arrowLeft" />
+					<img src="img/global/arrow.png" class="chooseArrows arrowRight" />
 					<input type="image" src="img/global/btn-select.png" class="btnSelect" />
 				</div>
 
@@ -39,14 +39,18 @@
 						<img src="img/character-select/big-snowman.png" class="bigSnowman">
 						<p><img src="img/character-select/txt-snowman.png"><br><br>The classic. Top hat and spats, buttons and eyes of coal, revealing a deep, dark soul.  Practically invented the game, so don't try to outmaster the master, unless of course, you like a challenge. </p>
 					</div>
+					<div class="smashTV konami-code-disabled">
+						<img src="img/character-select/big-snowman.png" class="bigSnowman">
+						<p><img src="img/character-select/txt-snowman.png"><br><br>The classic. Top hat and spats, buttons and eyes of coal, revealing a deep, dark soul.  Practically invented the game, so don't try to outmaster the master, unless of course, you like a challenge. </p>
+					</div>
 				</div>
 
-				<div class="characters">
-					<div class="yeti" id="yeti"></div>
-					<div class="tree" id="tree"></div>
-					<div class="penguin" id="penguin"></div>
-					<div class="robot" id="robot"></div>
-					<div class="snowman" id="snowman"></div>
+				<div class="characters" id="character-thumbs">
+					<div data-character-type='yeti' class="yeti"></div>
+					<div data-character-type='tree' class="tree"></div>
+					<div data-character-type='penguin' class="penguin" ></div>
+					<div data-character-type='robot' class="robot"></div>
+					<div data-character-type='snowman' class="snowman"></div>
 				</div>
 
 			</div>
