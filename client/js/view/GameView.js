@@ -61,7 +61,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		showIntro: function()
 		{
 			if( location.href.toLocaleLowerCase().indexOf("playnow") > -1 ) {
-				this.joinGame('200');
+				this.joinGame('999');
 				return false;
 			}
 

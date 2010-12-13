@@ -81,15 +81,20 @@ SnowGame = (function()
 
 			var entities = [
 				{ position: { x: 100, y: 100 }, entityType: FieldEntityModel.gingerBreadHouse },
-				{ position: { x: 250, y: 100 }, entityType: FieldEntityModel.blockOfIce1 },
-				{ position: { x: 350, y: 100 }, entityType: FieldEntityModel.blockOfIce2 },
-				{ position: { x: 500, y: 100 }, entityType: FieldEntityModel.blockOfIce3 },
-				{ position: { x: 700, y: 100 }, entityType: FieldEntityModel.blockOfIce4 },
+				{ position: { x: 250, y: 80 }, entityType: FieldEntityModel.blockOfIce1 },
+				{ position: { x: 320, y: 80 }, entityType: FieldEntityModel.blockOfIce2 },
+				{ position: { x: 380, y: 80 }, entityType: FieldEntityModel.blockOfIce3 },
+				{ position: { x: 500, y: 80 }, entityType: FieldEntityModel.blockOfIce4 },
+				{ position: { x: 620, y: 80 }, entityType: FieldEntityModel.blockOfIce5 },
+				{ position: { x: 740, y: 80 }, entityType: FieldEntityModel.blockOfIce6 },
 				{ position: { x: 100, y: 300 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
 				{ position: { x: 320, y: 300 }, entityType: FieldEntityModel.iglooGreenFlag } ,
-				{ position: { x: 500, y: 300 }, entityType: FieldEntityModel.lakeHorizontalBridge },
-				{ position: { x: 740, y: 300 }, entityType: FieldEntityModel.lakeVerticalBridge },
-				{ position: { x: 100, y: 500 }, entityType: FieldEntityModel.smallPond }
+				{ position: { x: 500, y: 260 }, entityType: FieldEntityModel.lakeHorizontalBridge },
+				{ position: { x: 740, y: 260 }, entityType: FieldEntityModel.lakeVerticalBridge },
+				{ position: { x: 100, y: 500 }, entityType: FieldEntityModel.smallPond1 },
+				{ position: { x: 300, y: 500 }, entityType: FieldEntityModel.smallPond2 },
+				{ position: { x: 500, y: 500 }, entityType: FieldEntityModel.smallPond3 },
+				{ position: { x: 750, y: 480 }, entityType: FieldEntityModel.largePond1 }
 			];
 
  			for( var i = 0; i < entities.length; i++ ) {

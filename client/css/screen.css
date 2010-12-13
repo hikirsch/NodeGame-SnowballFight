@@ -17,8 +17,8 @@ nav.main ul li a {
 }
 nav.main ul li.instructions a { background-image: url( ../img/global/nav-instructions.png ); }
 nav.main ul li.share a { background-image: url( ../img/global/nav-share.png ); }
-nav.main ul li.ogilvy-logo { float: right; }
-nav.main ul li.ogilvy-logo { float: right; background-image: url( ../img/global/logo-ogilvy.png ); }
+nav.main ul li.ogilvy-logo { float: right; width: auto; height: auto; padding-top: 10px; }
+nav.main ul li.ogilvy-logo a { width: 72px; height: 53px; float: right; background-image: url( ../img/global/logo-ogilvy.png ); }
 
 footer { margin: 10px auto; width: 900px; text-align: center; font-size: 11px; color: #6a7073; }
 footer a { font-size: 11px; color: #005072; }
@@ -91,11 +91,17 @@ footer a { font-size: 11px; color: #005072; }
 .game-container .game-entity-view.block-of-ice-2 { background-image: url( '../img/entities/field/block-of-ice-2.png' ); width: 52px; height: 42px; }
 .game-container .game-entity-view.block-of-ice-3 { background-image: url( '../img/entities/field/block-of-ice-3.png' ); width: 42px; height: 38px; }
 .game-container .game-entity-view.block-of-ice-4 { background-image: url( '../img/entities/field/block-of-ice-4.png' ); width: 99px; height: 88px; }
+.game-container .game-entity-view.block-of-ice-5 { background-image: url( '../img/entities/field/block-of-ice-5.png' ); width: 94px; height: 87px; }
+.game-container .game-entity-view.block-of-ice-6 { background-image: url( '../img/entities/field/block-of-ice-6.png' ); width: 84px; height: 72px; }
 .game-container .game-entity-view.ice-mountain-with-ogilvy-flag { background-image: url( '../img/entities/field/ice-mountain-with-ogilvy-flag.png' ); width: 173px; height: 223px; }
 .game-container .game-entity-view.igloo-green-flag { background-image: url( '../img/entities/field/igloo-green-flag.png' ); width: 117px; height: 120px; }
+.game-container .game-entity-view.igloo-red-flag { background-image: url( '../img/entities/field/igloo-red-flag.png' ); width: 117px; height: 120px; }
 .game-container .game-entity-view.lake-with-horizontal-bridge { background-image: url( '../img/entities/field/lake-with-horizontal-bridge.png' ); width: 164px; height: 137px; }
 .game-container .game-entity-view.lake-with-vertical-bridge { background-image: url( '../img/entities/field/lake-with-vertical-bridge.png' ); width: 246px; height: 160px; }
-.game-container .game-entity-view.small-pond { background-image: url( '../img/entities/field/small-pond.png' ); width: 86px; height: 72px; }
+.game-container .game-entity-view.large-pond-1 { background-image: url( '../img/entities/field/large-pond-1.png' ); width: 182px; height: 209px; }
+.game-container .game-entity-view.small-pond-1 { background-image: url( '../img/entities/field/small-pond-1.png' ); width: 86px; height: 72px; }
+.game-container .game-entity-view.small-pond-2 { background-image: url( '../img/entities/field/small-pond-2.png' ); width: 95px; height: 83px; }
+.game-container .game-entity-view.small-pond-3 { background-image: url( '../img/entities/field/small-pond-3.png' ); width: 124px; height: 122px; }
 
 section.game-status { overflow: hidden; width: 900px; margin: -34px auto 2px; position: relative; height: 32px; }
 section.game-status dl dt, section.game-status dl dd { float: left; }

@@ -22,12 +22,17 @@ var init = function(EntityModel)
 		blockOfIce2				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:0},	radius: 14, theme: '102' },
 		blockOfIce3				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:0},	radius: 18, theme: '103' },
 		blockOfIce4				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:2},radius: 48, theme: '104' },
-		iceMountainOgilvyFlag	: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:24},	radius: 82, theme: '105' },
-		iglooGreenFlag			: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:0},	radius: 57, theme: '106' },
-		lakeHorizontalBridge	: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 70, theme: '107' },
-		lakeVerticalBridge		: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 100, theme: '108' },
-		smallPond				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35
-			,	theme: '109' }
+		blockOfIce5				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:2},radius: 48, theme: '105' },
+		blockOfIce6				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:2},radius: 48, theme: '106' },
+		iceMountainOgilvyFlag	: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:24},	radius: 82, theme: '107' },
+		iglooGreenFlag			: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:0},	radius: 57, theme: '108' },
+		iglooRedFlag			: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:0},	radius: 57, theme: '109' },
+		lakeHorizontalBridge	: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 70, theme: '110' },
+		lakeVerticalBridge		: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 100,theme: '111' },
+		largePond1				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:10},	radius: 91,	theme: '112' },
+		smallPond1				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35,	theme: '113' },
+		smallPond2				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35,	theme: '114' },
+		smallPond3				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35,	theme: '115' }
 	}
 };
 
