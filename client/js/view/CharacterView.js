@@ -14,8 +14,14 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 {
 	return new JS.Class(BaseView,
 	{
-		initialize: function( controller, theme ) {
+		initialize: function( controller, model ) {
 			this.callSuper();
+			this.setModel( model );
+		},
+
+		setModel: function( model )
+		{
+			this.model = model;
 		},
 
 		refresh: function()
@@ -24,17 +30,22 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 			this.createElement();
 		},
 
-		createElement: function( theme )
+		createElement: function()
 		{
 			var options = {
-				nickName: this.controller.getNickName(),
-				theme: this.theme
+				theme: this.getCssClassFromTheme( this.model.theme ),
+				nickName: this.model.nickname
 			};
 
-			this.element = HTMLFactory.character(options);
+			this.element = HTMLFactory.character( options );
 
 			// show the right default rotation and sprite class
 			this.adjustSprite();
+		},
+
+		getNickName: function()
+		{
+			return this.model.nickName;
 		}
 	});
 });

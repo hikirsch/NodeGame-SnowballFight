@@ -2,13 +2,19 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 {
 	return new JS.Class(
 	{
-		initialize:  function(controller, theme) {
+		initialize:  function(controller, model) {
+			this.setModel( model );
 			this.controller = controller;
-			this.theme = this.getCssClassFromTheme( theme );
+			this.theme = this.getCssClassFromTheme( this.model.theme );
 
 			// our default position is north
 			this.currentRotation = 0;
 			this.createElement();
+		},
+
+		setModel: function( model )
+		{
+			this.model = model;
 		},
 
 		removeEntity: function( anEntityView )

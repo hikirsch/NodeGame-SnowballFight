@@ -87,7 +87,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		{
 			// if our game has a view, then create one
 			if( this.fieldController.hasView() ) {
-				this.view = new EntityView(this, this.model.theme );
+				this.view = new EntityView(this, this.model );
 			}
 		},
 
@@ -263,10 +263,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		/**
 		 * Accessors
 		 */
-		getNickName: function()
-		{
-			return this.nickName;
-		},
 
 		/**
 		 * Sets the nickname of a particular client, should contain a view already

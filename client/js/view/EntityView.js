@@ -2,17 +2,18 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 {
 	return new JS.Class( BaseView,
 	{
-		initialize:  function(controller, theme ) {
+		initialize:  function(controller, model ) {
 			this.callSuper();
 			this.centerElement();
 		},
 
 		createElement: function() {
-			var options = {
-				nickName: this.controller.getNickName()
+			var options =
+			{
+				theme: this.getCssClassFromTheme( this.model.theme )
 			};
 
-			this.element = HTMLFactory.entity( options, this.theme )
+			this.element = HTMLFactory.entity( options )
 				.appendTo('body');
 		},
 
