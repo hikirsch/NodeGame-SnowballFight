@@ -28,6 +28,24 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.carouselManager = CarouselManager;
 		},
 
+		createStatusView: function()
+		{
+			this.statusElement = HTMLFactory.gameStatus({
+						TimeLeft: "04:36",
+						Score: "123",
+						TotalPlayers: "06",
+						Rank: "02/09"
+					})
+					.insertAfter("nav");
+		},
+
+		update: function()
+		{
+			if( this.statusElement == null ) {
+				this.createStatusView();
+			}
+		},
+
 		showNav: function()
 		{
 	      HTMLFactory.navigation()

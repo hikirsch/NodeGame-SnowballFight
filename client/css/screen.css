@@ -20,7 +20,8 @@ nav.main ul li.share a { background-image: url( ../img/global/nav-share.png ); }
 nav.main ul li.ogilvy-logo { float: right; }
 nav.main ul li.ogilvy-logo { float: right; background-image: url( ../img/global/logo-ogilvy.png ); }
 
-footer { margin: 10px auto; width: 900px; text-align: center; }
+footer { margin: 10px auto; width: 900px; text-align: center; font-size: 11px; color: #6a7073; }
+footer a { font-size: 11px; color: #005072; }
 
 .game-container  { width: 640px; height: 480px; margin: auto; position: relative; overflow: hidden;}
 .game-container .background {
@@ -96,6 +97,20 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .game-entity-view.lake-with-vertical-bridge { background-image: url( '../img/entities/field/lake-with-vertical-bridge.png' ); width: 246px; height: 160px; }
 .game-container .game-entity-view.small-pond { background-image: url( '../img/entities/field/small-pond.png' ); width: 86px; height: 72px; }
 
+section.game-status { overflow: hidden; width: 900px; margin: -34px auto 2px; position: relative; height: 32px; }
+section.game-status dl dt, section.game-status dl dd { float: left; }
+section.game-status dl dt { text-indent: -9999px; overflow: hidden; background-position: 0 100%; background-repeat: no-repeat; height: 18px; margin-top: 11px; padding-right: 6px; }
+
+section.game-status dl .score { color: #20629a }
+section.game-status dl .total-players { color: #03959e; }
+section.game-status dl .rank { color: #546fd3; }
+section.game-status dl .time-left { color: #167392; }
+
+section.game-status dl dt.score { background-image: url( '../img/global/txt-your-score.png' ); width: 31px; }
+section.game-status dl dt.total-players { background-image: url( '../img/global/txt-players-on-map.png' ); width: 43px; }
+section.game-status dl dt.rank { background-image: url( '../img/global/txt-your-rank.png' ); width: 27px; }
+section.game-status dl dt.time-left { background-image: url( '../img/global/txt-time-left.png' ); width: 24px; }
+section.game-status dl dd { font-family: Arial; font-size: 34px; line-height: 34px; width: 100px; margin-right: 20px; }
 
 
 #logger { font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }
