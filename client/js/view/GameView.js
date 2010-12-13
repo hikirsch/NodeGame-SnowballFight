@@ -56,6 +56,8 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 					"clockActualTime: " + this.gameController.clockActualTime
 				);
 
+			this.currentStatus.Rank = this.gameController.getRank();
+			this.currentStatus.TotalPlayers = this.gameController.getNumberOfPlayers();
 			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
 
 			this.tmplItem.update();

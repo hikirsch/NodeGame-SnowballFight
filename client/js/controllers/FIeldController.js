@@ -173,8 +173,10 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				console.log("(FieldController), No 'Character' with connectionID " + connectionID + " ignoring...");
 				return;
 			}
+
+			console.log( "(FieldController) Removing Player" );
 			this.removeEntity( player.objectID );
-			this.players.remove(player);
+			this.players.remove(player.clientID);
 		},
 
 		/**
@@ -198,14 +200,18 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 				// This entity is not active, check if it belongs to the server
 				var entity = this.allEntities.objectForKey(key);
-				if(entity.clientID == 0)  {
 
+				if(entity.clientID == 0)  {
 					continue;
 				}
 
-				// Is not active, and does not belong to the server
-				console.log("(FieldController) removeEntity", key);
-				this.removeEntity(key);
+				if( GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER == entity.entityType ) {
+					this.removePlayer( entity.clientID );
+				} else {
+					// Is not active, and does not belong to the server
+					console.log("(FieldController) removeEntity", key);
+					this.removeEntity(key);
+				}
 			}
 		},
 

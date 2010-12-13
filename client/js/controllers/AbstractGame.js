@@ -52,20 +52,31 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 			return this.view != null;
 		},
 
+		getTwoDigits: function(x) {
+			return ( ( x > 9 ) ? "" : "0") + x;
+		},
+
 		getTimeRemaining: function()
 		{
-			function twoDigits(x) {
-				return ( ( x > 9 ) ? "" : "0") + x;
-			}
-
-			var timeRemaining = GameModel.gameDuration - this.gameClock,
+			var timeRemaining = Math.abs( GameModel.gameDuration - this.gameClock ),
 				time = "",
 				sec = Math.floor( timeRemaining / 1000 ),
 				min = Math.floor( sec / 60 ),
-				seconds = twoDigits( sec % 60 ),
-				minutes = twoDigits( min % 60 );
+				seconds = this.getTwoDigits( sec % 60 ),
+				minutes = this.getTwoDigits( min % 60 ),
+				sign = ( GameModel.gameDuration < this.gameClock ) ? "-" : "";
 
-			return minutes + ":" + seconds;
+			return sign + minutes + ":" + seconds;
+		},
+
+		getNumberOfPlayers: function()
+		{
+			return this.getTwoDigits( this.fieldController.players.count() );
+		},
+
+		getRank: function()
+		{
+			return "00" + "/" + this.getNumberOfPlayers();
 		},
 
 		setModel: function(aGameModel)
