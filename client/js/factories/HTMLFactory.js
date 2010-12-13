@@ -1,4 +1,4 @@
-var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailable, intro, characterSelect, instructions, character, field, entity  ) {
+var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailable, intro, characterSelect, instructions, character, field, entity, results  ) {
 	return {
 		navigation: function() {
 			return $(navigation)
@@ -54,6 +54,12 @@ var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailab
 				.tmpl(data)
 				.addClass( theme );
 		},
+		
+		results: function() {
+			return $(results)
+			.tmpl();
+		},
+		
 		overlay: function() {
 			return $(overlay)
 				.tmpl();
@@ -74,6 +80,7 @@ define([
 		'text!view/html/character.html',
 		'text!view/html/field.html',
 		'text!view/html/entity.html',
+		'text!view/html/results.html',
 		'plugins/jquery.tmpl.min' /** this should be last **/
 ], init);
 
