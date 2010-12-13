@@ -17,13 +17,13 @@ var init = function(EntityModel)
 
 
 	return {
-		gingerBreadHouse		: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:2}, radius: 62, theme: '100' },
-		blockOfIce1				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:2, y:0},	radius: 5, theme: '101' },
+		gingerBreadHouse		: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:4}, radius: 70, theme: '100' },
+		blockOfIce1				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:5},	radius: 13, theme: '101' },
 		blockOfIce2				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:0},	radius: 14, theme: '102' },
 		blockOfIce3				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:0},	radius: 18, theme: '103' },
-		blockOfIce4				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:6},radius: 40, theme: '104' },
-		iceMountainOgilvyFlag	: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:22},	radius: 72, theme: '105' },
-		iglooGreenFlag			: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:-2},	radius: 48, theme: '106' },
+		blockOfIce4				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:2},radius: 48, theme: '104' },
+		iceMountainOgilvyFlag	: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:24},	radius: 82, theme: '105' },
+		iglooGreenFlag			: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:0},	radius: 57, theme: '106' },
 		lakeHorizontalBridge	: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 70, theme: '107' },
 		lakeVerticalBridge		: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 100, theme: '108' },
 		smallPond				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35
