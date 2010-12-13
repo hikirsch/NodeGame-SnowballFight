@@ -205,7 +205,12 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		/**
 		 * Net
 		 */
-		constructEntityDescription: function()
+
+		/**
+		 * Construct an entity description for this object, it is essentually a CSV so you have to know how to read it on the receiving end
+		 * @param wantsFullUpdate	If true, certain things that are only sent when changed are always sent
+		 */
+		constructEntityDescription: function(wantsFullUpdate)
 		{
 			var returnString = this.objectID;
 				returnString += ","+this.clientID;

@@ -145,16 +145,13 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 					// Place it where it will be
 					newPosition.set(entityDesc.x, entityDesc.y);
-					this.fieldController.updateEntity( objectID, newPosition);
-
-					// Entities not processed are considered to have been removed on the server,
-					activeEntities[objectID] = true;
+					newRotation = entityDesc.rotation || 0;
 				}
 				else // We already have this entity - update it
 				{
 					var previousEntityDescription = previousWorldEDBeforeRenderTime.objectForKey(objectID);
 
-					if(!previousEntityDescription) {
+					if(!previousEntityDescription) { // Couldn't find any info for this entity, will try again next render loop
 						return;
 					}
 					// Store past and future positions to compare
@@ -173,15 +170,12 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					newPosition.x = ( (entityPositionFuture.x - entityPositionPast.x) * t ) + entityPositionPast.x;
 					newPosition.y = ( (entityPositionFuture.y - entityPositionPast.y) * t ) + entityPositionPast.y;
 					newRotation =  ( (entityRotationFuture - entityRotationPast) * t ) + entityRotationPast;
-
-					if(entityDesc.entityType == this.config.ENTITY_MODEL.ENTITY_MAP.CHARACTER && Math.random()< 0.2)
-						console.log('Char:' + entityDesc.objectID + ", Theme: " + entityDesc.theme);
-
-					this.fieldController.updateEntity( objectID, newPosition, newRotation );
-
-					// Entities not processed are considered to have been removed on the server,
-					activeEntities[objectID] = true;
 				}
+
+				// Update the entity with the new information, and insert it into the activeEntities array
+				this.fieldController.updateEntity( objectID, newPosition, newRotation, entityDesc );
+				activeEntities[objectID] = true;
+
 			}, this);
 
 			// Destroy removed entities
@@ -224,9 +218,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		 */
 		joinGame: function(aNickName, aCharacterTheme)
 		{
-			console.log(aCharacterTheme);
 			// Create the message to send to the server
-			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: aCharacterTheme, nickName: aNickName } );
+			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: aCharacterTheme, nickname: aNickName } );
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );

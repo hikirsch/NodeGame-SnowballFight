@@ -63,6 +63,11 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			SHIFT	: 1 << 5
 		},
 
+		SCORING: {
+			HIT: 10,
+			MAX_MULTIPLIER: 8
+		},
+
 		ENTITY_MODEL: EntityModel,
 		PROJECTILE_MODEL: ProjectileModel,
 		CHARACTER_MODEL: CharacterModel

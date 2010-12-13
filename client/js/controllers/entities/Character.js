@@ -49,6 +49,9 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.createView();
 
 			this.rotationLocked = false;
+			this.score = 0;
+			this.lastScoreSent = 0;
+			this.scoreMultiplier = 1;
 		},
 
 		/**
@@ -132,12 +135,31 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 				this.callSuper();
 		},
 
+		constructEntityDescription: function(wantsFullUpdate)
+		{
+			wantsFullUpdate = true;
+			var returnString = this.callSuper(wantsFullUpdate);
 
+			if(wantsFullUpdate || this.score != this.lastScoreSent) {
+				returnString += ","+this.score;
+				this.lastScoreSent = this.score;
+			}
+
+			if(wantsFullUpdate) {
+				returnString += ","+this.model.nickname;
+			}
+
+//			console.gameLog(returnString)
+			return returnString;
+		},
+
+
+/**
+ * Accessors
+ **/
 		/**
-		 * Accessors
-		 */
-		/**
-		 * return {String} This characters nickname
+		 * Sets the joystick object that controls this character
+		 * @param {Joystick} anInput A Joystick instance
 		 */
 		setInput: function( anInput )
 		{

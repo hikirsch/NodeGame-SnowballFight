@@ -38,7 +38,7 @@ SnowGame = (function()
 			collisionManager.eventEmitter.on('collision', function() { that.onCollision.apply(that, arguments) });
 
 			// Create the worlds best level of anything ever
-			this.createLevel();
+//			this.createLevel();
 			this.createDummyPlayers();
 		},
 
@@ -55,12 +55,22 @@ SnowGame = (function()
 
 			// [Character and Projectile]
 			var character, projectile, fieldEntity;
-			if(tC === (tList.CHARACTER | tList.PROJECTILE) ) {
+			if(tC === (tList.CHARACTER | tList.PROJECTILE) )
+			{
 				character = (tA & tList.CHARACTER) ? circleA : circleB;
 				projectile = (character === circleA)  ? circleB : circleA;
 
 
-				// Apply the projectile's trait(s)
+				// Give some points to the owner
+				var projectileOwner = this.fieldController.getPlayerWithClientID(projectile.view.clientID);
+				if(projectileOwner) {
+					projectileOwner.score += this.server.gameConfig.SCORING.HIT;
+					projectileOwner.scoreMultiplier = Math.min(projectileOwner.scoreMultiplier, this.server.gameConfig.SCORING.MAX_MULTIPLIER);
+				}
+
+				// Reset the multiplier of the person who was hit
+				character.scoreMultiplier = 1;
+				// Apply the projectile's trait(s) to the character that was hit
 				var Trait = this.traitFactory.createTraitWithName(projectile.view.transferredTraits);
 				character.view.addTraitAndExecute( new Trait(collisionNormal) );
 
@@ -99,7 +109,7 @@ SnowGame = (function()
 				allCharacterModels.push(model);
 			}
 
-			for(var i = 0; i < 1; i++) {
+			for(var i = 0; i < 3; i++) {
 				var index = Math.random() * allCharacterModels.length;
 					index = Math.floor(index);
 

@@ -239,6 +239,9 @@ var init = function(Message, config) {
 			entityDescription.y = +entityDescAsArray[5];
 			entityDescription.rotation = +entityDescAsArray[6];
 
+			// If we were sent a score, or a nickname. When we receive a nickname, it ALWAYS comes after a score
+			if(entityDescAsArray[7]) entityDescription.score = +entityDescAsArray[7];
+			if(entityDescAsArray[8]) entityDescription.nickname = entityDescAsArray[8];
 
 			// Store the final result using the objectID
 			worldDescription.setObjectForKey(entityDescription, entityDescription.objectID);

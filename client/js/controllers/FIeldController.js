@@ -16,30 +16,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.setModel( gameModel );
 		},
 
-		setModel: function(aGameModel)
-		{
-			this.rectangle = new Rectangle(0, 0, aGameModel.width, aGameModel.height);
-
-			if( this.view )
-			{
-				this.view.resize( aGameModel.height, aGameModel.width );
-			}
-		},
-
 		createView: function( gameModel )
 		{
 			if( FieldView != null ) {
 				this.view = new FieldView( this, gameModel );
 			}
-		},
-
-		/**
-		 * Create the PackedCircleManager
-		 * This is only created on the server side
-		 */
-		createFieldFromModel: function(aGameMo)
-		{
-
 		},
 
 		/**
@@ -71,6 +52,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			var aNewCharacter = this.gameController.entityFactory.createCharacter(anObjectID, aClientID, aCharacterModel, this);
 
+			if(typeof window === 'undefined') {
+				console.log(SYS.inspect(aCharacterModel))
+			}
 			// Add internally, and store in a special 'players' SortedLookupTable (via clientID)
 			this.addEntity(aNewCharacter);
 			this.players.setObjectForKey( aNewCharacter, aNewCharacter.clientID );
@@ -147,15 +131,28 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 * Updates the entity based on new information (called by AbstractClientGame::renderAtTime)
 		 * @param {int}		objectID  	ObjectID we want to update
 		 * @param {Vector}	newPosition	position
-		 * @param {Number}	newRotation rotation
+		 * @param {Number}	newRotation	rotation
+		 * @param {EntityDescription}	entityDesc	An object containing new properties for this entity
 		 */
-		updateEntity: function( objectID, newPosition, newRotation ) {
+		updateEntity: function( objectID, newPosition, newRotation, entityDesc ) {
 			var entity = this.allEntities.objectForKey( objectID );
 
 			if( entity != null ) {
 				entity.position.x = newPosition.x;
 				entity.position.y = newPosition.y;
 				entity.rotation = newRotation;
+
+				// Only apply these if they exist in the entity description.
+				//['rotation'] && (entity.rotation = entityDesc.rotation));
+				if(entityDesc == undefined)  {
+					debugger;
+				}
+
+				// Set if sent
+				(entityDesc.score && (entity.score = entityDesc.score));
+				(entityDesc.nickname && (entity.nickname = entityDesc.nickname));
+			} else {
+				console.log("(FieldController)::updateEntity - Error: Cannot find entity with objectID", objectID);
 			}
 		},
 
@@ -244,6 +241,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			return this.allEntities.objectForKey( anEntityObjectID );
 		},
 
+		getPlayerWithClientID: function( aClientID )
+		{
+			return this.players.objectForKey(aClientID);
+		},
+
 		getWidth: function()
 		{
 			return this.rectangle.width;
@@ -267,6 +269,16 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		hasView: function()
 		{
 			return this.view != null;
+		},
+
+	setModel: function(aGameModel)
+		{
+			this.rectangle = new Rectangle(0, 0, aGameModel.width, aGameModel.height);
+
+			if( this.view )
+			{
+				this.view.resize( aGameModel.height, aGameModel.width );
+			}
 		},
 		
 		/**
