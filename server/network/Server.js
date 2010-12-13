@@ -23,10 +23,12 @@ Version:
 */
 
 
+var ws = require('network/ws.js');
 require('js/lib/jsclass/core.js');
 require('js/model/GameModel.js');
 require('controllers/SnowGame.js');
 require('lib/Logger.js');
+
 Server = (function()
 {
 	return new JS.Class(
@@ -36,24 +38,94 @@ Server = (function()
 			this.logger = new Logger( serverConfig, this );
 			this.gameConfig = gameConfig;
 			this.serverConfig = serverConfig;
-
+			this.gameConfig.NEXT_PORT = this.gameConfig.PORT + 1;
 			var loggerOptions = {};
 			this.logger = new Logger( loggerOptions, this );
 			this.games = {};
+			this.initServerChooser( this.gameConfig.PORT );
+		},
 
-			for( var i = 0; i < 1; i += 1 )
+		initServerChooser: function( port ) {
+			var that = this,
+				aWebSocket = this.$ = new ws.Server( null);
+
+			// client will ask for a game in on message
+			aWebSocket.onConnect = function(connection) { };
+
+			aWebSocket.onMessage = function(connection, encodedMessage )
 			{
-				// create our game
-				var aGameInstance = new SnowGame( this, GameModel );
-				// start the game
-				aGameInstance.start();
-				this.games[ i ] = aGameInstance;
+				var decodedMessage = BISON.decode( encodedMessage ),
+					actualPort = that.getGameWithDesiredPort( decodedMessage.desiredPort ),
+					newGame = { 'actualPort': actualPort },
+					newEncodedMessage = BISON.encode(newGame);
+			  	console.log("(Server) player should join: " + actualPort );
+				connection.send( newEncodedMessage );
+			};
+
+			aWebSocket.onClose = function(connection)
+			{
+
+			};
+
+			console.log( 'listening on port: ' + port );
+			aWebSocket.listen( port );
+		},
+
+		getGameWithDesiredPort: function( desiredPort )
+		{
+			if( this.games[ desiredPort ] != null )
+			{
+				if( this.games[ desiredPort].canAddPlayer() )
+				{
+					return desiredPort;
+				}
+				else
+				{
+					return this.getNextAvailableGame();
+				}
 			}
+			else
+			{
+				return this.getNextAvailableGame();
+			}
+		},
+
+		getNextAvailableGame: function()
+		{
+			for( var gamePort in this.games )
+			{
+				if( this.games[gamePort].canAddPlayer() ) {
+					return gamePort;
+				}
+			}
+
+			return this.createNewGame( this.getNextAvailablePort() );
+		},
+
+		createNewGame: function( newPort )
+		{
+			var aGameInstance = new SnowGame( this, newPort );
+			// start the game
+			aGameInstance.start();
+			this.games[ newPort ] = aGameInstance;
+
+			return newPort;
 		},
 
 		getNextAvailablePort: function()
 		{
-			return this.serverConfig.port += 1;
+			var nextPort = this.gameConfig.NEXT_PORT;
+
+			while( this.games[ nextPort ] != null )
+			{
+				nextPort += 1;
+				if( nextPort > this.gameConfig.PORT + this.gameConfig.MAX_PORTS ) {
+					nextPort = this.gameConfig.PORT + 1;
+				}
+			}
+
+			console.log( "(Server) creating new port: " + nextPort );
+			return this.gameConfig.NEXT_PORT = nextPort;
 		},
 
 		log: function( o )

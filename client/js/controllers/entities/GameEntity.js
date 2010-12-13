@@ -42,6 +42,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// Meta information
 			this.fieldController = aFieldController;
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.UNKNOWN;			// Type
+			this.theme = 'NO';
 			this.setModel( anEntityModel );
 
 			/**
@@ -204,12 +205,17 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		/**
 		 * Net
 		 */
-		constructEntityDescription: function()
+
+		/**
+		 * Construct an entity description for this object, it is essentually a CSV so you have to know how to read it on the receiving end
+		 * @param wantsFullUpdate	If true, certain things that are only sent when changed are always sent
+		 */
+		constructEntityDescription: function(wantsFullUpdate)
 		{
 			var returnString = this.objectID;
 				returnString += ","+this.clientID;
 				returnString += ","+this.entityType;
-				returnString += ","+this.model.theme;
+				returnString += ","+this.theme;
 				returnString += ","+Math.round(this.position.x);
 				returnString += ","+Math.round(this.position.y);
 				returnString += ","+Math.round(this.rotation*57.2957795);
@@ -277,6 +283,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		setModel: function( newModel )
 		{
 			this.model = newModel;
+			this.theme = this.model.theme;
 		},
 
 		getRotation: function()

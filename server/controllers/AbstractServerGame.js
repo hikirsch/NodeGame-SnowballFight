@@ -42,7 +42,7 @@ AbstractServerGame = (function()
 
 
 	return new JS.Class(AbstractGame, {
-		initialize: function(aServer, aGameModel)
+		initialize: function(aServer, portNumber)
 		{
 			this.callSuper();
 			this.nextEntityID = 1; 	// Each time we create an entity we increment this
@@ -63,7 +63,7 @@ AbstractServerGame = (function()
 			this.server = aServer;
 
 			// Each ServerNetChannel is owned by a single ServerGameInstance
-			this.netChannel = new ServerNetChannel(this, this.server.gameConfig);
+			this.netChannel = new ServerNetChannel(this, this.server.gameConfig, portNumber);
 
 
 			this.logLevel = LOG_LEVEL.ALL;

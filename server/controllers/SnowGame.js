@@ -26,7 +26,7 @@ require('js/factories/TraitFactory');
 SnowGame = (function()
 {
 	return new JS.Class(AbstractServerGame, {
-		initialize: function(aServer, gameModel)
+		initialize: function(aServer, portNumber)
 		{
 			this.callSuper();
 			var that = this;
@@ -38,7 +38,8 @@ SnowGame = (function()
 			collisionManager.eventEmitter.on('collision', function() { that.onCollision.apply(that, arguments) });
 
 			// Create the worlds best level of anything ever
-			this.createLevel();
+//			this.createLevel();
+			this.createDummyPlayers();
 		},
 
 		onCollision: function(circleA, circleB, collisionNormal)
@@ -54,12 +55,22 @@ SnowGame = (function()
 
 			// [Character and Projectile]
 			var character, projectile, fieldEntity;
-			if(tC === (tList.CHARACTER | tList.PROJECTILE) ) {
+			if(tC === (tList.CHARACTER | tList.PROJECTILE) )
+			{
 				character = (tA & tList.CHARACTER) ? circleA : circleB;
 				projectile = (character === circleA)  ? circleB : circleA;
 
 
-				// Apply the projectile's trait(s)
+				// Give some points to the owner
+				var projectileOwner = this.fieldController.getPlayerWithClientID(projectile.view.clientID);
+				if(projectileOwner) {
+					projectileOwner.score += this.server.gameConfig.SCORING.HIT;
+					projectileOwner.scoreMultiplier = Math.min(projectileOwner.scoreMultiplier, this.server.gameConfig.SCORING.MAX_MULTIPLIER);
+				}
+
+				// Reset the multiplier of the person who was hit
+				character.scoreMultiplier = 1;
+				// Apply the projectile's trait(s) to the character that was hit
 				var Trait = this.traitFactory.createTraitWithName(projectile.view.transferredTraits);
 				character.view.addTraitAndExecute( new Trait(collisionNormal) );
 
@@ -88,6 +99,36 @@ SnowGame = (function()
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 				this.fieldController.addEntity(aFieldEntity);
 			}
+		},
+
+		createDummyPlayers: function()
+		{
+			var allCharacterModels = [];
+			for(var obj in GAMECONFIG.CHARACTER_MODEL) {
+				var model = GAMECONFIG.CHARACTER_MODEL['smashTV'];
+				allCharacterModels.push(model);
+			}
+
+			for(var i = 0; i < 3; i++) {
+				var index = Math.random() * allCharacterModels.length;
+					index = Math.floor(index);
+
+				var charModel = allCharacterModels[index];
+				charModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
+
+				var character = this.shouldAddPlayer(this.getNextEntityID(), 0, charModel);
+				character.position.x = charModel.initialPosition.x;
+				character.position.y = charModel.initialPosition.y;
+			}
+		},
+
+		getDevelopersLevel: function()
+		{
+			return [
+				// { position: { x: 100, y: 100 }, entityType: FieldEntityModel.gingerBreadHouse },
+				{ position: { x: 450, y: 250 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				{ position: { x: 100, y: 100 }, entityType: FieldEntityModel.blockOfIce1 }
+			];
 		},
 
 		getAllFieldEntitiesAsLevel: function()
