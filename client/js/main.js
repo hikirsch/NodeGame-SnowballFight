@@ -10,7 +10,7 @@ Abstract:
 Basic Usage:
  	See index.html // TODO: Update basic usage.
 */
-require(['controllers/AbstractClientGame','config', 'scratchpad/Animal'], function(AbstractClientGame, config) {
+require(['controllers/AbstractClientGame', 'controllers/ClientGameChooser', 'config', 'scratchpad/Animal'], function(AbstractClientGame, ClientGameChooser, config) {
 	// Everything ready - start the game client
     require.ready(function()
 	{
@@ -21,8 +21,12 @@ require(['controllers/AbstractClientGame','config', 'scratchpad/Animal'], functi
 		};
 
 		getTransformProperty();
-		console.log(NGK);
-		var gameController = new AbstractClientGame(config);
+
+
+		function handleJoin( newPort ) {
+			config.PORT = newPort;
+			new AbstractClientGame( config );
+		}
 
 		// From Sprite.js
 		function getTransformProperty()
@@ -48,5 +52,7 @@ require(['controllers/AbstractClientGame','config', 'scratchpad/Animal'], functi
 				}
 			}
 		}
+
+		var gameChooser = new ClientGameChooser(handleJoin);
     });
 });

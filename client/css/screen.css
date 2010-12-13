@@ -103,6 +103,8 @@ footer a { font-size: 11px; color: #005072; }
 .game-container .game-entity-view.small-pond-2 { background-image: url( '../img/entities/field/small-pond-2.png' ); width: 95px; height: 83px; }
 .game-container .game-entity-view.small-pond-3 { background-image: url( '../img/entities/field/small-pond-3.png' ); width: 124px; height: 122px; }
 
+
+
 section.game-status { overflow: hidden; width: 900px; margin: -34px auto 2px; position: relative; height: 32px; }
 section.game-status dl dt, section.game-status dl dd { float: left; }
 section.game-status dl dt { text-indent: -9999px; overflow: hidden; background-position: 0 100%; background-repeat: no-repeat; height: 18px; margin-top: 11px; padding-right: 6px; }

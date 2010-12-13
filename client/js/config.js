@@ -9,7 +9,9 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			}
 		}(),
 		PORT: 28785,
+		MAX_PORTS: 100,
 		DEBUG_MODE: true,
+		MAX_PLAYERS: 8,
 
 		// http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS: {
