@@ -173,6 +173,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					newPosition.x = ( (entityPositionFuture.x - entityPositionPast.x) * t ) + entityPositionPast.x;
 					newPosition.y = ( (entityPositionFuture.y - entityPositionPast.y) * t ) + entityPositionPast.y;
 					newRotation =  ( (entityRotationFuture - entityRotationPast) * t ) + entityRotationPast;
+
+					if(entityDesc.entityType == this.config.ENTITY_MODEL.ENTITY_MAP.CHARACTER && Math.random()< 0.2)
+						console.log('Char:' + entityDesc.objectID + ", Theme: " + entityDesc.theme);
+
 					this.fieldController.updateEntity( objectID, newPosition, newRotation );
 
 					// Entities not processed are considered to have been removed on the server,

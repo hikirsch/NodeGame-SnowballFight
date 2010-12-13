@@ -23,22 +23,27 @@ var init = function(BaseTrait, Vector)
 
 			this.collisionNormal = collisionNormal;
 			this.collisionNormal.mul(-3); // Messin fools up!
-			this.theme = 101;
 		},
 
 		attach: function(anEntity)
 		{
 			this.callSuper();
+
+			// Set our theme, and hijack the characters
+			this.theme = '1' + this.attachedEntity.theme;
 			this.intercept(['handleInput', 'theme']);
 		},
 
-		execute: function() {
+		execute: function()
+		{
+			this.collisionNormal.mul(-10);
+			// apply
 			this.attachedEntity.velocity.mul(0);
-			this.detachAfterDelay(1000);
+			this.attachedEntity.velocity.add(this.collisionNormal);
+			this.detachAfterDelay(1500);
 		},
 
 		detach: function() {
-			this.collisionNormal.mul(-10);
 			this.attachedEntity.velocity.add(this.collisionNormal);
 			this.callSuper();
 		},

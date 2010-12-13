@@ -42,6 +42,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// Meta information
 			this.fieldController = aFieldController;
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.UNKNOWN;			// Type
+			this.theme = 'NO';
 			this.setModel( anEntityModel );
 
 			/**
@@ -209,7 +210,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			var returnString = this.objectID;
 				returnString += ","+this.clientID;
 				returnString += ","+this.entityType;
-				returnString += ","+this.model.theme;
+				returnString += ","+this.theme;
 				returnString += ","+Math.round(this.position.x);
 				returnString += ","+Math.round(this.position.y);
 				returnString += ","+Math.round(this.rotation*57.2957795);
@@ -277,6 +278,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		setModel: function( newModel )
 		{
 			this.model = newModel;
+			this.theme = this.model.theme;
 		},
 
 		getRotation: function()
