@@ -91,7 +91,7 @@ SnowGame = (function()
 			var aFieldEntity,
 				aFieldEntityModel;
 
-			var entities = this.getAllFieldEntitiesAsLevel();
+			var entities = [];//this.getAllFieldEntitiesAsLevel();
 
  			for( var i = 0; i < entities.length; i++ ) {
 				var nextEntity = entities[ i ];
