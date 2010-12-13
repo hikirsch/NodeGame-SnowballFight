@@ -62,11 +62,9 @@ var init = function()
 		},
 
 		/**
-		 * Detaches a trait from an 'attachedEntity'
-		 * Optionally, if isBeingDetachedBySelf is called, it will call 'removeTraitWithName' on the attachedEntity
-		 * @param isBeingDetachedBySelf	Set to true if calling from self, for example detachAfterDelay
+		 * Detaches a trait from an 'attachedEntity' and restores the properties
 		 */
-		detach: function(isBeingDetachedBySelf)
+		detach: function()
 		{
 			clearTimeout(this.detachTimeout);
 
