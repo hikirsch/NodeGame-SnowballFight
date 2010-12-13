@@ -26,24 +26,39 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.showNav();
 			this.showFooter();
 			this.carouselManager = CarouselManager;
+
+			this.currentStatus = {
+				TimeLeft: "00:00",
+				Score: "0",
+				TotalPlayers: "00",
+				Rank: "00/00"
+			};
+
 		},
 
-		createStatusView: function()
+		createStatusView: function( obj )
 		{
-			this.statusElement = HTMLFactory.gameStatus({
-						TimeLeft: "04:36",
-						Score: "123",
-						TotalPlayers: "06",
-						Rank: "02/09"
-					})
-					.insertAfter("nav");
+			this.statusElement = HTMLFactory.gameStatus( obj )
+				.insertAfter("nav");
 		},
 
 		update: function()
 		{
 			if( this.statusElement == null ) {
-				this.createStatusView();
+				this.createStatusView( this.currentStatus );
+				this.tmplItem = this.statusElement.tmplItem();
+				this.tmplItem.data = this.currentStatus;
 			}
+
+				$("#logger").html(
+					"gameTick: " + this.gameController.gameTick + "<br />" +
+					"gameClock: " + this.gameController.gameClock + "<br />" +
+					"clockActualTime: " + this.gameController.clockActualTime
+				);
+
+			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
+
+			this.tmplItem.update();
 		},
 
 		showNav: function()

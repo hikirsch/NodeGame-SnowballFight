@@ -81,12 +81,6 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 				var roundTo = 45,
 					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
 
-				$("#logger").html(
-					"controller: " + Math.floor( this.controller.getRotation() ) + "<br />" +
-
-					"actual: " + Math.floor( actualRotation ) + "<br />" +
-					"rounded: " + roundedRotation
-				);
 				// Only modify the CSS property if it has changed
 				var diff = this.currentRotation - roundedRotation;
 				if(diff < -1 || diff > 1)

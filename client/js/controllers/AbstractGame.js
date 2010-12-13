@@ -14,7 +14,7 @@ Basic Usage:
 	 See subclasses
 */
 
-var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldController, GameEntityFactory, GameEntity, Character)
+var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldController, GameEntityFactory )
 {
 	return new JS.Class(
 	{
@@ -50,6 +50,22 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		hasView: function()
 		{
 			return this.view != null;
+		},
+
+		getTimeRemaining: function()
+		{
+			function twoDigits(x) {
+				return ( ( x > 9 ) ? "" : "0") + x;
+			}
+
+			var timeRemaining = GameModel.gameDuration - this.gameClock,
+				time = "",
+				sec = Math.floor( timeRemaining / 1000 ),
+				min = Math.floor( sec / 60 ),
+				seconds = twoDigits( sec % 60 ),
+				minutes = twoDigits( min % 60 );
+
+			return minutes + ":" + seconds;
 		},
 
 		setModel: function(aGameModel)
