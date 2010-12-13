@@ -15,7 +15,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 
 			this.element = HTMLFactory.field()
 				.show()
-				.insertAfter('nav');
+				.insertBefore('footer');
 
 			this.resize( height, width );
 		},

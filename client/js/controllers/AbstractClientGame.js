@@ -37,26 +37,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		},
 
 		/**
-		 * A connected browser client's 'main loop'
-		 */
-		tick: function()
-		{
-			this.callSuper();
-			this.netChannel.tick( this.gameClock );
-			this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
-
-			// Continuously store information about our input
-			if( this.clientCharacter != null )
-			{
-				var characterStatus = this.clientCharacter.constructEntityDescription();
-				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
-				
-				// create a message with our characters updated information and send it off
-				this.netChannel.addMessageToQueue( false, newMessage );
-			}
-		},
-
-		/**
 		 * Renders back in time between two previously received messages allowing for packet-loss, and a smooth simulation
 		 * @param renderTime
 		 */
@@ -110,20 +90,18 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			 * Example values: timeValue = 5.0f, nextPointTime = 10.0f, lastPointTime = 4.0f
 			 * result:
 			 * duration = 6.0f
-			 * offsetTime = 1.0f             	
+			 * offsetTime = 1.0f
 			 * t = 0.16
 			 */
 
 			var durationBetweenPoints = (nextWorldEDAfterRenderTime.gameClock - previousWorldEDBeforeRenderTime.gameClock);
 			var offsetTime = renderTime - previousWorldEDBeforeRenderTime.gameClock;
 			var activeEntities = {};
-			
+
 			// T is where we fall between, as a function of these two points
 			var t = offsetTime / durationBetweenPoints;
 			if(t > 1.0)  t = 1.0;
 			else if(t < 0) t = 0.0;
-
-
 
 			// Note: We want to render at time "B", so grab the position at time "A" (previous), and time "C"(next)
 			var entityPositionPast = new Vector(0,0),
@@ -204,6 +182,28 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 			// Destroy removed entities
 			this.fieldController.removeExpiredEntities( activeEntities );
+		},
+
+		/**
+		 * A connected browser client's 'main loop'
+		 */
+		tick: function()
+		{
+			this.callSuper();
+			this.netChannel.tick( this.gameClock );
+			this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
+
+			// Continuously store information about our input
+			if( this.clientCharacter != null )
+			{
+				var characterStatus = this.clientCharacter.constructEntityDescription();
+				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
+
+				// create a message with our characters updated information and send it off
+				this.netChannel.addMessageToQueue( false, newMessage );
+
+				this.view.update();
+			}
 		},
 
 		createView: function()
