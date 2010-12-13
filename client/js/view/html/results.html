@@ -19,51 +19,17 @@
 						<th width="130"><img src="img/results/txt-frozen.png"></th>
 						<th width="125"><img src="img/results/txt-ping.png"></td>
 					</tr>
+					{{each ScoreData}}
 					<tr>
-						<td width="70" class="position even">01</td>
-						<td width="140" class="even">PlayaName 0235</td>
+						<td width="70" class="position even">${Rank}</td>
+						<td width="140" class="even">${NickName}</td>
 						<td width="5" class="spacer"></td>
-						<td width="190" class="even center">20,333</td>
-						<td width="140" class="even stun">1,562</td>
-						<td width="130" class="even frozen">579</td>
-						<td width="125" class="even ping">146</td>
+						<td width="190" class="even center">${Score}</td>
+						<td width="140" class="even stun">${Stunned}</td>
+						<td width="130" class="even frozen">${Frozen}</td>
+						<td width="125" class="even ping">${Ping}</td>
 					</tr>
-					<tr>
-						<td width="70" class="position playa">02</td>
-						<td width="140" class="playa">PlayaName 0235</td>
-						<td width="5" class="spacer"></td>
-						<td width="190" class="center playa">20,333</td>
-						<td width="140" class="stun playa">1,562</td>
-						<td width="130" class="frozen playa">579</td>
-						<td width="125" class="ping playa">146</td>
-					</tr>
-					<tr>
-						<td width="70" class="position even">02</td>
-						<td width="140" class="even">PlayaName 0235</td>
-						<td width="5" class="spacer"></td>
-						<td width="190" class="even center">20,333</td>
-						<td width="140" class="even stun">1,562</td>
-						<td width="130" class="even frozen">579</td>
-						<td width="125" class="even ping">146</td>
-					</tr>
-					<tr>
-						<td width="70" class="position even">02</td>
-						<td width="140" class="even">PlayaName 0235</td>
-						<td width="5" class="spacer"></td>
-						<td width="190" class="even center">20,333</td>
-						<td width="140" class="even stun">1,562</td>
-						<td width="130" class="even frozen">579</td>
-						<td width="125" class="even ping">146</td>
-					</tr>
-					<tr>
-						<td width="70" class="position even">02</td>
-						<td width="140" class="even">PlayaName 0235</td>
-						<td width="5" class="spacer"></td>
-						<td width="190" class="even center">20,333</td>
-						<td width="140" class="even stun">1,562</td>
-						<td width="130" class="even frozen">579</td>
-						<td width="125" class="even ping">146</td>
-					</tr>
+					{{/each}}
 				</table>
 			</div>
 		</div>

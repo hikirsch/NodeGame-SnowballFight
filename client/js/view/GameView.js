@@ -26,6 +26,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.showNav();
 			this.showFooter();
 			this.showInstructions();
+			this.shareThis();
 			this.carouselManager = CarouselManager;
 			this.currentStatus = {
 				TimeLeft: "00:00",
@@ -150,6 +151,15 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 					that.show = 0;
 				}
 			});	
+		},
+		
+		shareThis: function()
+		{
+			var that = this;
+			$results = HTMLFactory.results();
+			$("li.share a").click( function() { 
+				that.overlayManager.show( $results );
+			})
 		},
 	
 		serverOffline: function()
