@@ -59,7 +59,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			DOWN	: 1 << 1,
 			LEFT	: 1 << 2,
 			RIGHT	: 1 << 3,
-			SPACE	: 1 << 4
+			SPACE	: 1 << 4,
+			SHIFT	: 1 << 5
 		},
 
 		ENTITY_MODEL: EntityModel,

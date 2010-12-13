@@ -8,8 +8,8 @@ var init = function($)
 	{
 		initialize: function()
 		{
-			this.keyCodes = { '32': 'space', '37': 'left', '38': 'up', '39': 'right', '40': 'down'},
-			this.keys = {'space': false, 'up': false, 'down': false, 'left': false, "right": false },
+			this.keyCodes = { '16': 'shift', '32': 'space', '37': 'left', '38': 'up', '39': 'right', '40': 'down'},
+			this.keys = {'shift': false, 'space': false, 'up': false, 'down': false, 'left': false, "right": false },
 			this.keyPressed = 0;
 
 		},
@@ -70,6 +70,7 @@ var init = function($)
 			if(this.keys['left']) input |= GAMECONFIG.INPUT_BITMASK.LEFT;
 			if(this.keys['right']) input |= GAMECONFIG.INPUT_BITMASK.RIGHT;
 			if(this.keys['space']) input |= GAMECONFIG.INPUT_BITMASK.SPACE;
+			if(this.keys['shift']) input |= GAMECONFIG.INPUT_BITMASK.SHIFT;
 
 			return input;
 		},
@@ -86,6 +87,7 @@ var init = function($)
 			this.keys['left'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.LEFT);
 			this.keys['right'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.RIGHT);
 			this.keys['space'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.SPACE);
+			this.keys['shift'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.SHIFT);
 		},
 
 		/**
@@ -96,7 +98,8 @@ var init = function($)
 		isUp: function() { return this.keys['up']; },
 		isRight: function() { return this.keys['right']; },
 		isDown: function() { return this.keys['down']; },
-		isSpace: function() { return this.keys['space']; }
+		isSpace: function() { return this.keys['space']; },
+		isShift: function() { return this.keys['shift']; }
 	});
 };
 

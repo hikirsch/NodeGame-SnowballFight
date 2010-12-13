@@ -47,6 +47,8 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.fireRate = 500;
 			this.lastFireTime = 0;
 			this.createView();
+
+			this.rotationLocked = false;
 		},
 
 		/**
@@ -99,6 +101,8 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 
 				// Firing
 				if( this.input.isSpace() ) this.fireProjectile( gameClock );
+
+				this.rotationLocked = this.input.isShift();
 			}
 		},
 
@@ -121,6 +125,13 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
 			this.lastFireTime = gameClock;
 		},
+
+		calculateRotation: function()
+		{
+			if(!this.rotationLocked)
+				this.callSuper();
+		},
+
 
 		/**
 		 * Accessors
