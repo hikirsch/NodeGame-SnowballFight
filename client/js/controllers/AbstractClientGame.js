@@ -295,7 +295,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 define(['lib/Vector',
 	'network/NetChannel', 
 	'view/GameView',
-	'lib/joystick',
+	'lib/Joystick',
 	'controllers/AbstractGame',
 	'factories/TraitFactory',
 	'lib/jsclass/core'], init);
