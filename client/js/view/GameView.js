@@ -8,7 +8,7 @@ Project	:
 Abstract:
 	This is class represents the View in the MVC architecture for the game.
 	It must not OWN any data, not even a little :) 
-	It is allowed to HOLD data transiently 
+	It is allowed to HOLD data transiently (but only because it asked nicely?)
 	
 Basic Usage: 
 	this.view = new ClientGameView(this);
@@ -25,8 +25,8 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.overlayManager = new OverlayManager( controller, gameModel );
 			this.showNav();
 			this.showFooter();
+			this.showInstructions();
 			this.carouselManager = CarouselManager;
-
 			this.currentStatus = {
 				TimeLeft: "00:00",
 				Score: "0",
@@ -122,11 +122,33 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				.click( function(e) {
 					that.carouselManager.move(false);
 				});
-
-
 			this.overlayManager.show( $characterSelect );
 
 			return false;
+		},
+		
+		showInstructions: function() 
+		{		
+			var that = this;
+			var show = 0;
+			$instructions = HTMLFactory.instructions();
+			$("li.instructions a").click( function() { 
+				if(that.show != 1) {
+					that.overlayManager.show($instructions); 
+					that.show = 1;
+					$("#playBtn").click( function() {
+						if(that.gameController.clientCharacter == null) {
+							that.showCharacterSelect();
+						} else {
+							that.overlayManager.hide();
+						}
+						that.show = 0;
+					})
+				} else {
+					that.overlayManager.hide();
+					that.show = 0;
+				}
+			});	
 		},
 	
 		serverOffline: function()

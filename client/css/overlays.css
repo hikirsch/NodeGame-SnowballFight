@@ -22,14 +22,15 @@
 .introSteps { position: relative; left: 70px; top: 0px; }
 
 /* how to overlay */
-.howtoOverlay { position: absolute; top: 0px; left: 0px; color: #005072; font-family: "Lucida Grande"; font-size: 12px; -webkit-box-shadow: 0px 0px 10px #999; background: url(../img/instructions/bg-instructions.jpg) no-repeat top left; overflow: hidden; width: 620px; height: 510px; line-height: 120%; }
+.howtoOverlay { position: absolute; top: 0px; left: 0px; color: #005072; font-family: "Lucida Grande"; font-size: 12px; -webkit-box-shadow: 0px 0px 10px #999; background: url(../img/instructions/bg-instructions.jpg) no-repeat top left; overflow: hidden; width: 622px; height: 600px; line-height: 120%;z-index: 8000; }
 .howtoTitle { padding: 20px 0px 5px 20px; }
 .howtoOverlay p { margin: 0px; padding: 0px 60px 20px 20px; line-height: 110%; }
-.howtoOverlay .keyContainers { width: 580px; height: 85px; border-bottom: 1px solid #e2eff1; margin: auto; position: relative; padding-top: 25px; }
+.howtoOverlay .keyContainers { width: 580px; margin: auto; position: relative; padding-top: 30px; }
 .howtoOverlay .keyContainers div { position: absolute; top: 20px; left: 240px; width: 280px; }
-.howtoOverlay .keyContainers div strong { display: block; padding-bottom: 10px; }
-.howtoOverlay .keyContainers.lastRow { border: 0 !important; }
-.howtoOverlay .playButton { -webkit-box-reflect: below 0px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.5,transparent),to(white)); float: right; position: relative; left: -35px; top: -20px}
+.howtoOverlay .keyContainers div strong { display: block; padding-bottom: 5px; }
+.howtoOverlay .keyContainers.lastRow { border-bottom: 1px solid #e2eff1; padding-bottom: 25px; }
+.howtoOverlay .keyContainers .powerUps { position:absolute; left:85px;width:475px}
+.howtoOverlay .playButton { -webkit-box-reflect: below 0px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.5,transparent),to(white)); float: right; position: relative; left: -35px; top: 40px}
 
 /* countdown overlay */
 .countOverlay {
