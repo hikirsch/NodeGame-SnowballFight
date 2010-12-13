@@ -122,7 +122,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		*/
 		addClient: function( aClientID, nickName )
 		{
-		   
+
 		},
 		
 		setNickNameForClientID: function(aNickName, aClientID) 
@@ -140,6 +140,11 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 				// TODO: Check if we can still add new players
 			var aNewCharacter = this.fieldController.addPlayer( anObjectID, aClientID, aCharacterModel );
 			return aNewCharacter;
+		},
+
+		canAddPlayer: function()
+		{
+			return this.config.gameConfig.MAX_PLAYERS > this.fieldController.players.count();
 		},
 
 		removeEntity: function( objectID )

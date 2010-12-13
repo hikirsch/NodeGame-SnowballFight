@@ -41,7 +41,7 @@ ServerNetChannel = (function()
 {
 	return new JS.Class(
 	{
-		initialize: function(aDelegate, config)
+		initialize: function(aDelegate, config, port)
 		{
 			console.log('(ServerNetChannel)::init');
 
@@ -52,7 +52,8 @@ ServerNetChannel = (function()
 			// Connection options
 			this.maxChars = config.maxChars || 128;
 			this.maxClients = config.maxClients || 64;
-			this.port = config.PORT || 8000;
+			this.port = port;
+
 			this.showStatus = config.status !== false;
 
 			this.bytes = {
@@ -91,7 +92,7 @@ ServerNetChannel = (function()
 		{
 			// START THE WEB-SOCKET
 			var that = this;
-			var aWebSocket = this.$ = new ws.Server( null);
+			var aWebSocket = this.$ = new ws.Server(null);
 
 			aWebSocket.onConnect = function(connection)
 			{
@@ -151,7 +152,7 @@ ServerNetChannel = (function()
 			this.delegate.status();
 
 			// Start the websocket
-			this.delegate.log('(ServerNetChannel) Started listening...');
+			this.delegate.log("(ServerNetChannel) Starting listen on port '" + this.port + "'");
 			this.$.listen(this.port);
 
 			// Listen for process termination

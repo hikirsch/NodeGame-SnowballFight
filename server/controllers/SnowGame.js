@@ -26,7 +26,7 @@ require('js/factories/TraitFactory');
 SnowGame = (function()
 {
 	return new JS.Class(AbstractServerGame, {
-		initialize: function(aServer, gameModel)
+		initialize: function(aServer, portNumber)
 		{
 			this.callSuper();
 			var that = this;
