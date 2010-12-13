@@ -40,13 +40,12 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 
 			// Override movement properties
 			this.moveSpeed = 0.4;
-			this.damping = 0.96;
+			this.damping = 0.90;
 			this.maxVelocity = 3.5;
 
 			// Firing
 			this.fireRate = 500;
 			this.lastFireTime = 0;
-
 			this.createView();
 		},
 

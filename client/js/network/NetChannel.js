@@ -70,6 +70,7 @@ var init = function(Message, config) {
 		 * WebSocket connection
 		 */
 		this.clientID = -1;
+		console.log("(NetChannel) Connecting to ws://" + config.HOST + ':' + config.PORT);
 		this.connection = new WebSocket( 'ws://' + config.HOST + ':' + config.PORT );
 		this.connection.onopen = function() { that.onConnectionOpened(); };
 		this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };

@@ -14,16 +14,18 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/jsclass/core'], function(Rectangle, OverlayManager, BaseView, HTMLFactory )
+define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieManager', 'view/managers/CarouselManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/jsclass/core'], function(Rectangle, OverlayManager, CookieManager, CarouselManager, BaseView, HTMLFactory )
 {
 	return new JS.Class( BaseView,
 	{
 		initialize: function( controller, gameModel )
 		{
+			this.cookieManager = CookieManager;
 			this.gameController = controller;
 			this.overlayManager = new OverlayManager( controller, gameModel );
 			this.showNav();
 			this.showFooter();
+			this.carouselManager = CarouselManager;
 		},
 
 		showNav: function()
@@ -40,29 +42,59 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/BaseView', 'fact
 
 		showIntro: function()
 		{
-			this.joinGame();
-			return false;
-			var that = this,
-				$intro = HTMLFactory.intro();
+			if( location.href.toLocaleLowerCase().indexOf("playnow") > -1 ) {
+				this.joinGame('200');
+				return false;
+			}
 
-			$intro
-				.find('a.jumpinLink')
-				.click( function(){ return that.showJoinGame(); } );
+			if( this.cookieManager.getCookie('showIntro') != 'true' )
+			{
+				this.cookieManager.setCookie("showIntro", "true");
 
-			this.overlayManager.show( $intro );
+				var that = this,
+					$intro = HTMLFactory.intro();
+
+				$intro
+					.find('a.jumpinLink')
+					.click( function(){ return that.showCharacterSelect(); } );
+
+				this.overlayManager.show( $intro );
+			}
+			else
+			{
+				this.showCharacterSelect();
+			}
 
 			return false;
 		},
 
-		showJoinGame: function()
+		showCharacterSelect: function()
 		{
 			var that = this,
 				$characterSelect = HTMLFactory.characterSelect();
 
 			$characterSelect
 				.find("form")
-				.submit( function(e) { return that.joinGame(e); } );
-			
+				.submit(function(e) {
+					var characterType = that.getThemeCodeFromName( that.carouselManager.getCharacterType() ) ;
+					console.log('joining as: ' + characterType);
+					return that.joinGame(characterType);
+				});
+
+
+			$characterSelect
+				.find('img.arrowLeft')
+				.click( function() {
+					that.carouselManager.move(true);
+				});
+
+			$characterSelect
+				.find('img.arrowRight')
+				.click( function(e) {
+					that.carouselManager.move(false);
+				});
+
+
 			this.overlayManager.show( $characterSelect );
 
 			return false;
@@ -74,7 +106,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/BaseView', 'fact
 			this.overlayManager.show( $unavailableEle );
 		},
 	
-		joinGame: function(e)
+		joinGame: function( characterType )
 		{	
 			var nickName = $("#nickname").length > 0 ? $("#nickname").val() : "";
 			
@@ -83,10 +115,10 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/BaseView', 'fact
 				nickName = 'NoName' + Math.floor( Math.random() * 1000 );
 			}
 
-			this.gameController.joinGame(nickName);
+			this.gameController.joinGame(nickName, characterType);
 
 			this.overlayManager.hide();
-			
+
 			return false;
 		},
 

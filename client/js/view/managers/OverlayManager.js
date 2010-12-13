@@ -58,7 +58,7 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 
 			resize: function()
 			{
-				if( this.element != null ) {
+				if( this.element == null ) {
 					this.createElement();
 				}
 

@@ -1,6 +1,9 @@
 @import url( reset.css );
 @import url( overlays.css );
 
+.konami-code-disabled { display: none; }
+.konami-code-enabled .konami-code-disabled { display: block; }
+
 html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 	background-color: #f2f7fb; background-image: url( ../img/global/bg-main.png ); background-position: 50% 0;
 	background-repeat: no-repeat;
@@ -19,23 +22,6 @@ nav.main ul li.ogilvy-logo { float: right; background-image: url( ../img/global/
 
 footer { margin: 10px auto; width: 900px; text-align: center; }
 
-.site-message {
-	width: 250px; padding: 11px; color: #7eabba; position: absolute; z-index: 2000;
-	border-radius: 20px; border: 3px solid #ff8e8e; background-color: #f3fcff;
-}
-
-.site-message p { padding-bottom: 10px; font-size: 16px; line-height: 20px; font-weight: bold; }
-.site-message label { display: block; padding: 0 5px; }
-.site-message input[type='text'] { font-size: 16px; padding: 5px; border-radius: 5px; width: 225px; margin-bottom: 10px; }
-.site-message input[type='submit'] { padding: 0 30px; background-color: #f3fcff;
-	border-style: solid; border-color: #ff8e8e; border-radius: 5px; color: #7eabba;
-	border-width: 2px;
-	font-size: 16px; line-height: 20px;
-}
-
-.site-message input[type='button']:hover { background-color: #f3fcff; border-color: #c13b3b; color: #7eabba; }
-.site-message input[type='button']:active { background-color: #f3fcff; border-color: #c13b3b; color: #6398aa; }
-
 .game-container  { width: 640px; height: 480px; margin: auto; position: relative; overflow: hidden;}
 .game-container .background {
 	position: absolute; top: 0; left: 0;
@@ -53,25 +39,34 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 
 .game-container { background-image: url( ../img/global/bg-field.png ); background-position: 0 0; background-repeat: no-repeat; }
 
-.game-container .character { position: absolute; z-index: 1000; }
+.game-container .character { position: absolute; z-index: 1000; width: 32px; height: 50px; }
 .game-container .game-entity-view { position: absolute; z-index: 2000; }
 .game-container .game-entity-view.projectile-snowball { z-index: 3000; }
 
-.game-container .character.smash-tv { height: 26px; width: 26px; background-image: url( ../img/entities/characters/smash-tv.png ); background-position: 0 0; }
-.game-container .character.character-snowman { height: 27px; width: 20px; background-image: url( ../img/entities/characters/snowman.png ); }
-.game-container .character.character-robot { height: 27px; width: 20px; background-image: url( ../img/entities/characters/robot.png ); }
-.game-container .character.character-penguin { height: 27px; width: 20px; background-image: url( ../img/entities/characters/penguin.png ); }
-.game-container .character.character-tree { height: 27px; width: 20px; background-image: url( ../img/entities/characters/tree.png ); }
-.game-container .character.character-yeti{ height: 27px; width: 20px; background-image: url( ../img/entities/characters/yeti.png ); }
+.game-container .character.smash-tv { background-image: url( ../img/entities/characters/smash-tv.png ); height: 26px; width: 26px; }
+.game-container .character.character-snowman { background-image: url( ../img/entities/characters/snowman.png ); }
+.game-container .character.character-robot { background-image: url( ../img/entities/characters/robot.png ); }
+.game-container .character.character-penguin { background-image: url( ../img/entities/characters/penguin.png ); }
+.game-container .character.character-tree {  background-image: url( ../img/entities/characters/tree.png ); }
+.game-container .character.character-yeti { background-image: url( ../img/entities/characters/yeti.png ); }
 
-.game-container .character.rotation-0 { background-position: -40px 0; }
-.game-container .character.rotation-45 { background-position: -20px 0; }
+.game-container .character.rotation-0 { background-position: -64px 0; }
+.game-container .character.rotation-45 { background-position: -32px 0; }
 .game-container .character.rotation-90 { background-position: -0 0; }
-.game-container .character.rotation-135 { background-position: -20px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.rotation-180 { background-position: -40px 0; -webkit-transform: scaleX(-1); }
-.game-container .character.rotation-225 { background-position: -60px 0; -webkit-transform: scaleX(-1);}
-.game-container .character.rotation-270 { background-position: -80px 0;  }
-.game-container .character.rotation-315 { background-position: -60px 0; }
+.game-container .character.rotation-135 { background-position: -32px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.rotation-180 { background-position: -64px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.rotation-225 { background-position: -96px 0; -webkit-transform: scaleX(-1); }
+.game-container .character.rotation-270 { background-position: -128px 0; }
+.game-container .character.rotation-315 { background-position: -96px 0; }
+
+.game-container .big-character.character.rotation-0 { background-position: -60px 0; }
+.game-container .big-character.character.rotation-45 { background-position: -30px 0; }
+.game-container .big-character.character.rotation-90 { background-position: -0 0; }
+.game-container .big-character.character.rotation-135 { background-position: -30px 0; -webkit-transform: scaleX(-1); }
+.game-container .big-character.character.rotation-180 { background-position: -60px 0; -webkit-transform: scaleX(-1); }
+.game-container .big-character.character.rotation-225 { background-position: -90px 0; -webkit-transform: scaleX(-1);}
+.game-container .big-character.character.rotation-270 { background-position: -120px 0;  }
+.game-container .big-character.character.rotation-315 { background-position: -90px 0; }
 
 .game-container .character.stars-1 { background-position: -100px 0; }
 .game-container .character.stars-2 { background-position: -120px 0; }
@@ -85,9 +80,8 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .character.smash-tv.rotation-270 { background-position: -104px 0; }
 .game-container .character.smash-tv.rotation-315 { background-position: -78px 0; }
 
-
 /** projectiles **/
-.game-container .game-entity-view.projectile-snowball { background-image: url( '../img/entities/projectiles/snowball.png' ); height: 20px; width: 10px; }
+.game-container .game-entity-view.projectile-snowball { background-image: url( '../img/entities/projectiles/projectiles.png' ); height: 32px; width: 50px; }
 
 /** field entities */
 .game-container .game-entity-view.field-entity-default { background-image: url( '../img/entities/field/block-of-ice-4.png' ); height: 99px; width: 88px;}
@@ -102,6 +96,6 @@ footer { margin: 10px auto; width: 900px; text-align: center; }
 .game-container .game-entity-view.lake-with-vertical-bridge { background-image: url( '../img/entities/field/lake-with-vertical-bridge.png' ); width: 246px; height: 160px; }
 .game-container .game-entity-view.small-pond { background-image: url( '../img/entities/field/small-pond.png' ); width: 86px; height: 72px; }
 
-.overlay-container { z-index: 1000; position: absolute; background-image: url( ../img/global/bg-overlay.png ); }
+
 
 #logger { font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }

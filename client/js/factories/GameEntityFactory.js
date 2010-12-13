@@ -46,13 +46,12 @@ var init = function(Vector, Rectangle, GameEntity, Character, Projectile, FieldE
 
 		createCharacter: function(anObjectID, aClientID, aCharacterModel, aFieldController)
 		{
-			var aNewCharacter = new Character(anObjectID, aClientID, CharacterModel.penguin, aFieldController);
+			var aNewCharacter = new Character(anObjectID, aClientID, aCharacterModel, aFieldController);
 
 			// Collide against other characters, projectiles, and level objects
 			aNewCharacter.collisionGroup = this.collisionGroups.CHARACTER;
 			aNewCharacter.collisionMask = this.collisionGroups.CHARACTER | this.collisionGroups.PROJECTILE | this.collisionGroups.FIELD_ENTITY;
 
-			console.log(aNewCharacter.collisionGroup);
 			return aNewCharacter;
 		},
 

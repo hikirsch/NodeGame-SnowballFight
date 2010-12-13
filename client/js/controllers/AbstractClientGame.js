@@ -150,7 +150,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					if(isCharacter)
 					{
 						// This character actually belongs to us
-						var aCharacter = this.shouldAddPlayer( objectID, connectionID, this.fieldController );
+						var aCharacter = this.shouldAddPlayer( objectID, connectionID, entityDesc, this.fieldController );
 
 						// If this character is owned by the us, allow it to be controlled by the keyboard
 						if(isOwnedByMe)
@@ -218,10 +218,11 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		 * Called when the user has entered a name, and wants to join the match
 		 * @param aNickName
 		 */
-		joinGame: function(aNickName)
+		joinGame: function(aNickName, aCharacterTheme)
 		{
+			console.log(aCharacterTheme);
 			// Create the message to send to the server
-			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: '3', nickName: aNickName } );
+			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: aCharacterTheme, nickName: aNickName } );
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );
