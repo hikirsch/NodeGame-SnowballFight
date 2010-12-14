@@ -108,7 +108,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				.find("form")
 				.submit(function(e) {
 					var characterType = that.getThemeCodeFromName( that.carouselManager.getCharacterType() ) ;
-					console.log('joining as: ' + characterType);
 					return that.joinGame(characterType);
 				});
 
@@ -182,11 +181,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.overlayManager.hide();
 
 			return false;
-		},
-
-		destroy: function()
-		{
-			this.element.remove();
 		}
 	});
 });

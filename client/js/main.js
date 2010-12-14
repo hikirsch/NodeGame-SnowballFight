@@ -19,13 +19,16 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 
 		// Tripple nested onReady function - awesome!
 		var base = './img/entities/caat/';
-		var themes = GAMECONFIG.ENTITY_MODEL.THEME_MAP;
+		var themes = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP;
 		var imagesToLoad = [];
 		for(var aTheme in themes) {
-			// ignore these
-			if(themes[aTheme].match(/(stunned|default|projectile-)/g))
-				continue;
-			imagesToLoad.push({id: aTheme, url: base + themes[aTheme] + ".png"});
+
+			console.log('theme:', aTheme, themes[aTheme].imageSource);
+			imagesToLoad.push( {id: aTheme, url: base + themes[aTheme].imageSource } );
+			// ignore theseva
+//			if(themes[aTheme].match(/(stunned|default|projectile-)/g))
+//				continue;
+//			imagesToLoad.push({id: aTheme, url: base + themes[aTheme] + ".png"});
 		}
 
 

@@ -30,7 +30,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.clientCharacter = null; // Special pointer to our own client character
 			
 			this.CMD_TO_FUNCTION = {};
-			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onClientJoined;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
@@ -49,34 +48,15 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			GAMECONFIG.CAAT.DIRECTOR = this.director;
 			GAMECONFIG.CAAT.SCENE = this.scene;
 
-			for(var i = 0; i < -3; i++)
-			{
-				var circle = new CAAT.ShapeActor().create();
-				circle.setShape( CAAT.ShapeActor.prototype.SHAPE_RECTANGLE ).
-						setLocation( Math.random() * this.director.canvas.width, Math.random() * this.director.canvas.height).
-						setSize(10,10).
-						setFillStyle('#ff00ff').
-						setStrokeStyle('#00ff00');
 
-				var alphaBehavior = new CAAT.AlphaBehavior();
-				alphaBehavior.startAlpha = 1.0;
-				alphaBehavior.endAlpha = 0.1;
-				alphaBehavior.setFrameTime(Math.random() * 1000, 4000);
-				alphaBehavior.setCycle(true);
-				alphaBehavior.setPingPong(true);
-				circle.addBehavior(alphaBehavior);
-
-				this.scene.addChild(circle);
-			}
-
-
-//			$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
+//			 ../img/global/bg-field.png
+			$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
 
 			// Make accessable
 
 
 			this.director.addScene(this.scene);
-			$(this.director.canvas).appendTo($('body'));
+//			$(this.director.canvas).appendTo($('body'));
 		},
 
 		/**
@@ -99,6 +79,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 				this.view.update();
 			}
 
+
+			this.fieldController.view.sortChildren();
 
 			this.director.render( this.clockActualTime - this.director.timeline );
             this.director.timeline = this.clockActualTime;
@@ -271,23 +253,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 			// Tell the server!
 			this.netChannel.addMessageToQueue( true, message );
-		},
-
-		/**
-		 * Dispatched by the server when a new player joins the match
-		 * @param clientID
-		 * @param data
-		 */
-		onClientJoined: function(clientID, data)
-		{
-			// Let our super class create the character
-			var newCharacter = this.addClient( clientID, data.nickName, true );
-
-			// It's us!
-			if(clientID == this.netChannel.clientID)
-			{
-				 // Special things here
-			}
 		},
 
 		onRemoveClient: function()

@@ -6,7 +6,7 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 			this.frameSkip = 3;
 			this.setModel( model );
 			this.controller = controller;
-			this.theme = this.getCssClassFromTheme( this.model.theme );
+			this.theme = this.getThemeModelByID( this.model.theme );
 
 			// our default position is north
 			this.currentRotation = 0;
@@ -26,27 +26,6 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 			anEntityView.getElement().remove();
 		},
 
-		getThemeCodeFromName: function( themeName )
-		{
-			var key;
-
-			for( key in EntityModel.THEME_MAP ) {
-				if( EntityModel.THEME_MAP.hasOwnProperty( key ) )
-				{
-					if( EntityModel.THEME_MAP[ key ] === themeName ) {
-						return key;
-					}
-				}
-			}
-
-			return null;
-		},
-
-		getCssClassFromTheme: function( theme )
-		{
-			return EntityModel.THEME_MAP[ theme ];
-		},
-
 		getElement: function() {
 			return this.element;
 		},
@@ -57,42 +36,37 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 		
 		update: function()
 		{
-			if(this.CAATSprite) {
-				this.CAATSprite.setLocation(this.controller.getPosition().x, this.controller.getPosition().y);
-				return;
-			}
-
 			// the position
-			this.element.css({
-				'left': this.controller.getPosition().x,
-				'top': this.controller.getPosition().y
-			});
+//			this.element.css({
+//				'left': this.controller.getPosition().x,
+//				'top': this.controller.getPosition().y
+//			});
 
-			if( this.controller.theme != this.model.theme ) {
-				if( this.controller.theme >= 1000 && this.controller.theme < 2000 )
-				{
-					this.hideInvisible();
-					this.showStunned();
-				}
-				else if( this.controller.theme >= 2000 && this.controller.theme < 3000 )
-				{
-					this.hideStunned();
-					this.showInvisible();
-				}
-
-				this.changed = true;
-			}
-			else if( this.changed )
-			{
-				this.hideStunned();
-				this.hideInvisible();
-				this.changed = false;
-				this.frameReadyForAnimation = 0;
-			}
+//			if( this.controller.theme != this.model.theme ) {
+//				if( this.controller.theme >= 1000 && this.controller.theme < 2000 )
+//				{
+//					this.hideInvisible();
+//					this.showStunned();
+//				}
+//				else if( this.controller.theme >= 2000 && this.controller.theme < 3000 )
+//				{
+//					this.hideStunned();
+//					this.showInvisible();
+//				}
+//
+//				this.changed = true;
+//			}
+//			else if( this.changed )
+//			{
+//				this.hideStunned();
+//				this.hideInvisible();
+//				this.changed = false;
+//				this.frameReadyForAnimation = 0;
+//			}
 
 
 			// the sprite
-			this.adjustSprite();
+//			this.adjustSprite();
 		},
 
 		showInvisible: function()
@@ -150,34 +124,9 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 			});
 		},
 
-		/**
-		 * Based on our rotation, we should show a different sprite.
-		 */
-		adjustSprite: function()
+		getThemeModelByID: function(id)
 		{
-
-			if( this.controller.useTransform ) {
-				$(this.element).css({'WebkitTransform': 'rotate(' + ( this.controller.getRotation() ) + 'deg)' });
-			} else {
-
-				var actualRotation = this.controller.getRotation();
-				if(actualRotation < 0) actualRotation += 360;
-
-				// Round to the number of sprites we have
-				var roundTo = 45,
-					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
-
-				// Only modify the CSS property if it has changed
-				var diff = this.currentRotation - roundedRotation;
-				if(diff < -1 || diff > 1)
-				{
-					$(this.element)
-						.removeClass( 'rotation-' + this.currentRotation )
-						.addClass( 'rotation-' + roundedRotation );
-
-					this.currentRotation = roundedRotation;
-				}
-            }
+			return GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP[id];
 		}
 	});
 });

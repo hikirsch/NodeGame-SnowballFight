@@ -10,14 +10,10 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		},
 
 		createElement: function() {
-			var height = this.model.height,
-				width = this.model.width;
-
 			this.element = HTMLFactory.field()
 				.show()
 				.insertBefore('footer');
-
-			this.resize( height, width );
+			this.resize( this.model.height, this.model.width );
 		},
 
 		resize: function( height, width )
@@ -28,17 +24,22 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 			});
 		},
 
+		sortChildren: function()
+		{
+			var childrenList = GAMECONFIG.CAAT.SCENE.childrenList;
+			childrenList.sort(function(a, b) {
+//			 return a.y-b.y;
+			});
+		},
+
 		addEntity: function( anEntityView )
 		{
-			anEntityView.getElement()
-				.appendTo( this.element );
-
-			anEntityView.centerElement();
+//			GAMECONFIG.CAAT.SCENE.addChild(anEntityView.CAATActorContainer);
 		},
 
 		removeEntity: function( anEntityView )
 		{
-			anEntityView.getElement().remove();
+			GAMECONFIG.CAAT.SCENE.removeChild(anEntityView.CAATActorContainer);
 		},
 
 		getElement: function() {
