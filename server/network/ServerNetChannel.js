@@ -185,26 +185,18 @@ ServerNetChannel = (function()
 		},
 
 		/**
-		 * Message Sending
-		 * @param originalClientID		The connectionID of the client this message originated from
-		 * @param anUnencodedMessage	Human readable message data
-		 * @param sendToOriginalClient	If true the client will receive the message it sent. This should be true for 'reliable' events such as joining the game
+		 * Broadcasts a message to all connected Clients (does not ask client if its ok to receive)
+		 * @param aDecodedMessage An object
 		 */
-		broadcastMessage: function(originalClientID, anUnencodedMessage, sendToOriginalClient)
+		broadcastMessage: function(aDecodedMessage)
 		{
-//			var encodedMessage = BISON.encode(anUnencodedMessage);
-//			// this .delegate.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
-//
-//			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
-//			for( var clientID in this.clients )
-//			{
-//				// Don't send to original client
-//				if( sendToOriginalClient == false && clientID == originalClientID )
-//					continue;
-//
-//				this.clients.objectForKey([clientID]).sendMessage(encodedMessage);
-//				this.bytes.sent += encodedMessage.length;
-//			}
+			console.log('(ServerNetChannel)::broadcastMessage');
+
+			var encodedMessage = BISON.encode(aDecodedMessage);
+			this.clients.forEach( function(key, client)
+			{
+				client.sendMessage(encodedMessage, this.gameClock);
+			}, this);
 		},
 
 		// Shut down the server
@@ -311,7 +303,6 @@ ServerNetChannel = (function()
 			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
 
 			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
-			// console.log( aDecodedMessage );
 			connection.send( BISON.encode(aDecodedMessage) );
 		},
 
@@ -327,12 +318,6 @@ ServerNetChannel = (function()
 		onPlayerMoveCommand: function(connection, aDecodedMessage)
 		{
 			this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
-		},
-
-		onEndGame: function( connection, aDecodedMessage )
-		{
-			// this.addMessageToQueue( this, this.composeCommand(this.config.CMDS.END_GAME, null ) );
-			this.delegate.log('(ServerNetChannel) End Game' );
 		},
 
 		/**

@@ -88,6 +88,8 @@ var init = function()
 
 			// Incriment bytes sent by the NetChannel
 			this.netChannel.bytes.sent += anEncodedMessage.length;
+
+			console.log('SentMessageAt', gameClock)
 		},
 
 

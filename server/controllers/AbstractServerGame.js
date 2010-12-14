@@ -110,14 +110,23 @@ AbstractServerGame = (function()
 
 		onEndGame: function()
 		{
-			this.netChannel.onEndGame();
+			console.log('EndGame!')
+			 var endGameMessage = {
+				 seq: 1,
+				 gameClock: this.gameClock,
+				 cmds:{cmd:this.server.gameConfig.CMDS.END_GAME},
+				 data:{port: "1234"}
+			 };
+
+			this.netChannel.broadcastMessage(endGameMessage);
+			clearTimeout(this.gameTickInterval);
 		},
 
 		/**
 		 * Calls super.shouldAddPlayer to create the character and attaches a Joystick to it
 		 * @param anEntityID	An Entity ID for this Character, we created this right before this was called
 		 * @param aClientID		Connection ID of the client
-		 * @param playerType 	Playertype - ServerGame does not use this property
+		 * @param aCharacterModel 	A character model
 		 */
 		shouldAddPlayer: function (anEntityID, aClientID, aCharacterModel)
 		{

@@ -75,7 +75,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		new ServerGameSelector(config, function( newPort, connected ) {
 			that.handleServerGameSelector( newPort, connected );
 		});
-	};
+	}
 
 	NetChannel.prototype.handleServerGameSelector = function( newPort, connected ) {
 		var that = this;
@@ -89,7 +89,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		} else {
 			this.onConnectionClosed();
 		}
-	}
+	};
 
 	/**
 	* Check if a controller conforms to our required methods
@@ -141,11 +141,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		}
 	};
 
-	NetChannel.prototype.onEndGame = function()
-	{
-		this.controller.onEndGame();
-	}
-
 	/**
 	 * Messages from the FROM / SERVER
 	 **/
@@ -164,8 +159,9 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	NetChannel.prototype.onServerMessage = function (messageEvent)
 	{
 		var serverMessage = BISON.decode(messageEvent.data);
+		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", serverMessage);
 
-//		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", serverMessage);
+		console.log('(NetChannel) (receivedCmd) - ', serverMessage.cmds.cmd);
 
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) return;
@@ -179,6 +175,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		{
 			this.onServerDidAcceptConnection(serverMessage);
 		}
+
 
 		// We sent this, clear our reliable buffer que
 		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.fullupdate)
