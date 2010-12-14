@@ -22,7 +22,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	 * @param config  		A game configuration
 	 * @param aController 	The delegate for this NetChannel. One NetChannel per game.
 	 */
-	function NetChannel( config, aController )
+	function NetChannel( config, aController, useServerGameSelector )
 	{
 		var that = this;
 		this.controller = aController;	// For callbacks once messages are validated
@@ -71,10 +71,12 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		 */
 		this.clientID = -1;
 
-		// get a response from the Server and figure out which port we really need to connect to.
-		new ServerGameSelector(config, function( newPort, connected ) {
-			that.handleServerGameSelector( newPort, connected );
-		});
+		if( useServerGameSelector  ) {
+			// get a response from the Server and figure out which port we really need to connect to.
+			new ServerGameSelector(config, function( newPort, connected ) {
+				that.handleServerGameSelector( newPort, connected );
+			});
+		}
 	}
 
 	NetChannel.prototype.handleServerGameSelector = function( newPort, connected ) {
