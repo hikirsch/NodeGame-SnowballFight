@@ -12,7 +12,6 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			// Grab our model info and create a sprite
 			var themeModel = this.getThemeModelByID(this.model.theme);
-			var imageCachedName = themeModel.imageSource;
 			var imageRef = director.getImage(this.model.theme);
 			var caatImage = new CAAT.CompoundImage().
 					initialize(imageRef, themeModel.rowCount, themeModel.columnCount);
