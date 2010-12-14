@@ -55,6 +55,10 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			maxrate: 10000
 		},
 
+		PRESENTS_SETTING: {
+			PRESENTS_MAX: 3,
+		},
+
 		// The client sends this bitmask to the server
 		// See (Joystick.js)
 		INPUT_BITMASK: {

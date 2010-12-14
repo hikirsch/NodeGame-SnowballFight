@@ -36,7 +36,6 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 				this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
 
-
 				this.initializeCaat();
 			},
 

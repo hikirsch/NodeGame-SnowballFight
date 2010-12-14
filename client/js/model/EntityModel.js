@@ -45,7 +45,13 @@ var init = function(ThemeModel)
 	CAAT_THEME_MAP['304'] = new ThemeModel('projectiles.png', 6, 1, 4, 2);
 	CAAT_THEME_MAP['305'] = new ThemeModel('projectiles.png', 6, 1, 5, 2);
 	CAAT_THEME_MAP['306'] = new ThemeModel('projectiles.png', 6, 1, 6, 2);
-	// presents
+
+	// Presents
+	CAAT_THEME_MAP['400'] = new ThemeModel('presents.png', 4, 1, 0, 3);
+	CAAT_THEME_MAP['401'] = new ThemeModel('presents.png', 4, 1, 1, 3);
+	CAAT_THEME_MAP['402'] = new ThemeModel('presents.png', 4, 1, 2, 3);
+	CAAT_THEME_MAP['403'] = new ThemeModel('presents.png', 4, 1, 3, 3);
+
 	// All the different themes tha t can be applied to the views
 	var THEME_MAP = {
 		'0':	'default',

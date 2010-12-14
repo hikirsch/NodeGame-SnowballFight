@@ -44,7 +44,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.maxVelocity = 3.5;
 
 			// Firing
-			this.fireRate = 500;
+			this.fireRate = 550;
 			this.lastFireTime = 0;
 			this.createView();
 

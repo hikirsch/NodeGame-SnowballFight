@@ -23,6 +23,8 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					setSpriteImage(caatImage);
 
 
+			console.log('making thing with theme',this.model.theme, themeModel);
+
 			this.CAATSprite.spriteIndex = themeModel.spriteIndex;
 			this.CAATSprite.setScaleAnchored(1, 1, 0);
 
@@ -113,7 +115,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
     		this.CAATText = new CAAT.TextActor().
             create().
             setFont("bold 12px sans-serif").
-			setAlpha(0.25).
+			setAlpha(0.50).
             setText(text).
             setBaseline("top").
             setOutline(false).

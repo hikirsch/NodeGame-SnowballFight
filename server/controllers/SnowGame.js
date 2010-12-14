@@ -23,6 +23,9 @@ Version:
 
 require('controllers/AbstractServerGame');
 require('js/factories/TraitFactory');
+require('js/model/ProjectileModel');
+require('js/lib/SortedLookupTable');
+require('js/lib/Vector');
 SnowGame = (function()
 {
 	return new JS.Class(AbstractServerGame, {
@@ -39,8 +42,36 @@ SnowGame = (function()
 
 			// Create the worlds best level of anything ever
 			this.createLevel();
+
+
+			this.presentsActive = new SortedLookupTable();
+			this.presentsTimer = 0;
+			this.spawnPresents();
 		},
 
+		/**
+		 * Initialization
+		 */
+		createLevel: function()
+		{
+//			this.createDummyPlayers();
+			var aFieldEntity,
+				aFieldEntityModel;
+
+			var entities = this.getBattlefield2();
+
+ 			for( var i = 0; i < entities.length; i++ ) {
+				var nextEntity = entities[ i ];
+				aFieldEntityModel = nextEntity.entityType;
+				aFieldEntityModel.initialPosition = nextEntity.position;
+				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
+				this.fieldController.addEntity(aFieldEntity);
+			}
+		},
+
+		/**
+		 * Events
+		 */
 		onCollision: function(circleA, circleB, collisionNormal)
 		{
 			// Debug, friendly name for when debugging
@@ -84,22 +115,31 @@ SnowGame = (function()
 			}
 		},
 
-		createLevel: function()
-		{
-//			this.createDummyPlayers();
+		spawnPresents: function() {
 
-			var aFieldEntity,
-				aFieldEntityModel;
+			// restart the timer
+			var that = this;
+			var minTime = 500;
+			var timeRange = 1000;
+			var chance = 1.25;
+			clearTimeout(this.presentsTimer);
+		 	this.presentsTimer = setTimeout( function() { console.log('abc'), that.spawnPresents()}, Math.random() * timeRange + minTime);
 
-			var entities = this.getBattlefield2();
+			// Try to create if possible and luck says so
+			if(Math.random() > chance && this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
+				return;
 
- 			for( var i = 0; i < entities.length; i++ ) {
-				var nextEntity = entities[ i ];
-				aFieldEntityModel = nextEntity.entityType;
-				aFieldEntityModel.initialPosition = nextEntity.position;
-				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
-				this.fieldController.addEntity(aFieldEntity);
-			}
+			// Presents are really just projectiles that don't move
+				// For now always fire the regular snowball
+			var projectileModel = ProjectileModel.present;
+			projectileModel.force = 0 ; // TODO: Use force gauge
+			projectileModel.initialPosition = new Vector(Math.random() * this.model.width, Math.random() * this.model.height);
+			projectileModel.angle = 0;
+
+			var numRows = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP[projectileModel.theme].rowCount-1;
+			projectileModel.theme = 400 + Math.floor( Math.random() * numRows+1 );
+			var projectile = this.entityFactory.createProjectile(this.getNextEntityID(), 0, projectileModel, this);
+			this.fieldController.addEntity(projectile);
 		},
 
 		createDummyPlayers: function()
@@ -123,6 +163,10 @@ SnowGame = (function()
 			}
 		},
 
+
+		/**
+		 * Levels
+		 */
 		getDevelopersLevel: function()
 		{
 			return [

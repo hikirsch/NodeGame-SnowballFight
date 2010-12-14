@@ -73,11 +73,10 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 			// Apply impulse to character acceleration in opposite angle of the projectile
 			var currentAngle = aNewProjectile.angle;
-			var impulseForce = -10;//aProjectileModel.force * 2;
+			var impulseForce = -4.5;
 			var impulseVector = new Vector(Math.cos(currentAngle) * impulseForce, Math.sin(currentAngle) * impulseForce);
 
-			this.gameController.log(impulseVector);
-			// aCharacter.acceleration.add( impulseVector );
+			aCharacter.acceleration.add( impulseVector );
 			return aNewProjectile;
 		},
 
