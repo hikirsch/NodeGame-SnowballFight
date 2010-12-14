@@ -15,14 +15,23 @@ var init = function()
 {
 	return new JS.Class(
 	{
-		initialize: function(imageSource, rowCount, columnCount, spriteIndex, animationTiming)
+		initialize: function(imageSource, rowCount, columnCount, spriteIndex, zIndex, animationTiming)
 		{
 			this.imageSource = imageSource;
+
+			// The id is the image name
 			var extensionIndex = this.imageSource.indexOf('.')
 			this.id = this.imageSource.substring(0, extensionIndex);
+
+			// Sprite sheet consist of rows and columns, of box's
 			this.rowCount = rowCount;
 			this.columnCount = columnCount;
+
+			// Current location in the sprite index to render
 			this.spriteIndex = spriteIndex;
+
+			// zOrdering
+			this.zIndex = zIndex;
 			this.animationTiming = animationTiming || 0;
 		}
 	});

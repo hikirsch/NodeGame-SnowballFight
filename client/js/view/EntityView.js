@@ -4,6 +4,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 	{
 		initialize:  function(controller, model ) {
 			this.callSuper();
+			this.lastTheme = this.controller.theme
 		},
 
 		createElement: function()
@@ -11,14 +12,17 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			var director = GAMECONFIG.CAAT.DIRECTOR;
 
 			// Grab our model info and create a sprite
-			var themeModel = this.getThemeModelByID(this.model.theme);
+			var themeModel = this.themeModel = this.getThemeModelByID(this.model.theme);
 			var imageRef = director.getImage(this.model.theme);
 			var caatImage = new CAAT.CompoundImage().
 					initialize(imageRef, themeModel.rowCount, themeModel.columnCount);
 
-			this.CAATSprite = new CAAT.SpriteActor().
+			var actor = null; // will be either SpriteActor or ActorContainer
+			actor = this.CAATSprite = new CAAT.SpriteActor().
 					create().
 					setSpriteImage(caatImage);
+
+
 			this.CAATSprite.spriteIndex = themeModel.spriteIndex;
 			this.CAATSprite.setScaleAnchored(1, 1, 0);
 
@@ -26,14 +30,14 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			// Don't create an actorcontainer if its not a character
 			if(this.controller.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER)
 			{
-				this.CAATActorContainer = new CAAT.ActorContainer().
+				actor = this.CAATActorContainer = new CAAT.ActorContainer().
 					create().
 					setBounds(0, 0, this.CAATSprite.width, this.CAATSprite.height);
-
-				this.CAATActorContainer.addChild(this.CAATSprite);
+				actor.addChild(this.CAATSprite);
 			}
 
-			GAMECONFIG.CAAT.SCENE.addChild(this.CAATActorContainer || this.CAATSprite);
+			GAMECONFIG.CAAT.SCENE.addChild(actor);
+			actor.zIndex = themeModel.zIndex;
 			this.CAATText = null;
 		},
 
@@ -43,14 +47,36 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		 */
 		update: function()
 		{
-			var CAATObject = this.CAATActorContainer || this.CAATSprite;
-			CAATObject.setLocation(this.controller.getPosition().x - CAATObject.width*0.5,
-					this.controller.getPosition().y-CAATObject.height*0.5);
+			var actor = this.CAATActorContainer || this.CAATSprite;
+			actor.setLocation(this.controller.getPosition().x - actor.width*0.5,
+					this.controller.getPosition().y-actor.height*0.5);
 
-			var actualRotation = this.controller.getRotation();
-			if( this.controller.useTransform )
+			// See if anything fancy has occured
+			var isInSpecialView = false;
+			if(+this.controller.theme > 1000)
 			{
-				this.CAATSprite.setRotation( actualRotation );
+				this.lastTheme = this.controller.theme;
+
+				isInSpecialView = true;
+				// Figure out what its trying to tell us
+				var themeString = this.controller.theme + "";
+				var themeMask = themeString.substr(0, 1);
+
+				// frozen
+				if(themeMask === '1') {
+					this.CAATSprite.spriteIndex = 8;
+				} else if (themeMask === '2') {
+					isInSpecialView = false;
+					this.CAATSprite.alpha = Math.random();
+				}
+
+
+			}
+
+			// Do regular stuff
+			var actualRotation = this.controller.getRotation();
+			if( this.controller.useTransform ) {
+				this.CAATSprite.setRotation( actualRotation * 0.0174532);
 			}
 			else if( actualRotation != 0 )
 			{
@@ -62,14 +88,17 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
 
 				// spriteIndex = 90 / 45 = 2
-				this.CAATSprite.spriteIndex =  ( roundedRotation / roundTo);
+				if(!isInSpecialView) {
+					this.CAATSprite.spriteIndex =  ( roundedRotation / roundTo);
+					this.CAATSprite.alpha = 1;
+				}
 			}
 
-			// TODO: Also check if modified
+			// We got the nickname
 			if(this.controller.nickname && !this.CAATText)
-			{
 				this.createTextfield(this.controller.nickname);
-			}
+
+
 		},
 
 		/**
@@ -80,12 +109,10 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			if(this.CAATText)
 				return this.CAATText;
 
-
-			console.log('creating text');
 			// Create a textfield
     		this.CAATText = new CAAT.TextActor().
             create().
-            setFont("11px sans-serif").
+            setFont("12px sans-serif").
             setText(text).
             setBaseline("top").
             setOutline(false).

@@ -28,13 +28,17 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		{
 			var childrenList = GAMECONFIG.CAAT.SCENE.childrenList;
 			childrenList.sort(function(a, b) {
-				return a.y-b.y;
+				var comparisonResult = 0;
+				if(a.zIndex > b.zIndex) comparisonResult = 1;
+				else if(a.zIndex < b.zIndex) comparisonResult = -1;
+				return comparisonResult;
 			});
 		},
 
 		addEntity: function( anEntityView )
 		{
-//			GAMECONFIG.CAAT.SCENE.addChild(anEntityView.CAATActorContainer);
+//			var actor = anEntityView.CAATActorContainer || anEntityView.CAATSprite;
+//        	GAMECONFIG.CAAT.SCENE.addChild(actor);
 		},
 
 		removeEntity: function( anEntityView )
