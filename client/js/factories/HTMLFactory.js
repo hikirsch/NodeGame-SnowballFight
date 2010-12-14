@@ -1,4 +1,4 @@
-var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailable, intro, characterSelect, instructions, character, field, entity, results  ) {
+var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailable, intro, characterSelect, instructions, character, field, entity, results, invite, credits  ) {
 	return {
 		navigation: function() {
 			return $(navigation)
@@ -60,6 +60,16 @@ var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailab
 				.tmpl( data );
 		},
 		
+		invite: function( data ) {
+			return $(invite)
+			.tmpl()
+		},
+		
+		credits: function(data) {
+			return $(credits)
+			.tmpl()
+		},
+		
 		overlay: function() {
 			return $(overlay)
 				.tmpl();
@@ -81,6 +91,8 @@ define([
 		'text!view/html/field.html',
 		'text!view/html/entity.html',
 		'text!view/html/results.html',
+		'text!view/html/invite.html',
+		'text!view/html/credits.html',
 		'plugins/jquery.tmpl.min' /** this should be last **/
 ], init);
 

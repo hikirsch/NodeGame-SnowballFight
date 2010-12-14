@@ -103,7 +103,7 @@ footer a { font-size: 11px; color: #005072; }
 
 
 
-section.game-status { overflow: hidden; width: 900px; margin: -34px auto 2px; position: relative; height: 32px; }
+section.game-status { overflow: hidden; width: 900px; margin: -34px auto 2px; position: relative; height: 32px; z-index: 2000; }
 section.game-status dl dt, section.game-status dl dd { float: left; }
 section.game-status dl dt { text-indent: -9999px; overflow: hidden; background-position: 0 100%; background-repeat: no-repeat; height: 18px; margin-top: 11px; padding-right: 6px; }
 
@@ -116,6 +116,7 @@ section.game-status dl dt.score { background-image: url( '../img/global/txt-your
 section.game-status dl dt.total-players { background-image: url( '../img/global/txt-players-on-map.png' ); width: 43px; }
 section.game-status dl dt.rank { background-image: url( '../img/global/txt-your-rank.png' ); width: 27px; }
 section.game-status dl dt.time-left { background-image: url( '../img/global/txt-time-left.png' ); width: 24px; }
+section.game-status dd.invite-friend { width:157px; height: 35px;background: url(../img/global/bg-invite-friend.png) no-repeat bottom left; text-indent:-9999px;overflow:hidden;cursor:pointer}
 section.game-status dl dd { font-family: Arial; font-size: 34px; line-height: 34px; width: 100px; margin-right: 20px; }
 
 
