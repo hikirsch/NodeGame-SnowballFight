@@ -94,8 +94,11 @@ Server = (function()
 		{
 			for( var gamePort in this.games )
 			{
-				if( this.games[gamePort].canAddPlayer() ) {
-					return gamePort;
+				if( this.games.hasOwnProperty( gamePort  ) ) {
+					if( gamePort in this.games && this.games[ gamePort ] != null
+						&& this.games[gamePort].canAddPlayer() ) {
+						return gamePort;
+					}
 				}
 			}
 

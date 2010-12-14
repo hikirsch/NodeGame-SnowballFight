@@ -36,18 +36,30 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				TotalPlayers: "00",
 				Rank: "00/00"
 			};
+			this.resultsData = {};
 		},
 
 		onEndGame: function()
 		{
-			$results = HTMLFactory.results({});
-			this.overlayManager.show( $results );
+			this.createResultsView();
+			this.overlayManager.show( this.resultsElement );
+			this.resultsData.NextMatchTime = this.gameController.getNextGameStartTime();
+			this.resultsTmplItem.update();
 		},
 
 		createStatusView: function( obj )
 		{
 			this.statusElement = HTMLFactory.gameStatus( obj )
 				.insertAfter("nav");
+			this.tmplItem = this.statusElement.tmplItem();
+			this.tmplItem.data = this.currentStatus;
+		},
+
+		createResultsView: function( obj )
+		{
+			this.resultsElement = HTMLFactory.results( obj );
+			this.resultsTmplItem = this.resultsElement.tmplItem();
+			this.resultsTmplItem.data = this.resultsData;
 		},
 
 		update: function()
@@ -55,8 +67,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			if( this.statusElement == null )
 			{
 				this.createStatusView( this.currentStatus );
-				this.tmplItem = this.statusElement.tmplItem();
-				this.tmplItem.data = this.currentStatus;
 			}
 
 			this.currentStatus.Score = this.gameController.clientCharacter.score;
@@ -109,17 +119,18 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		showCharacterSelect: function()
 		{
+
 			var that = this,
 				$characterSelect = HTMLFactory.characterSelect();
 
 			$characterSelect
 				.find("form")
 				.submit(function(e) {
-					var characterType = that.getThemeCodeFromName( that.carouselManager.getCharacterType() ) ;
-					console.log('joining as: ' + characterType);
+					var carouselType = that.carouselManager.getCharacterType();
+					var characterType = that.getThemeCodeFromName(carouselType ) ;
+
 					return that.joinGame(characterType);
 				});
-
 
 			$characterSelect
 				.find('img.arrowLeft')
@@ -132,6 +143,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				.click( function(e) {
 					that.carouselManager.move(false);
 				});
+
 			this.overlayManager.show( $characterSelect );
 
 			return false;
@@ -160,37 +172,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				}
 			});	
 		},
-		
-		shareThis: function()
-		{
-			var that = this;
-			$results = HTMLFactory.results();
-			$("li.share a").click( function() { 
-				that.overlayManager.show( $results );
-			});
-		},
-		
-		inviteFriend: function() 
-		{
-			var that = this;
-			var inviteOpen = 0;
-			$invite = HTMLFactory.invite();
-			$("#btn-invite").click( function() { 
-				if(inviteOpen == 0) { that.overlayManager.show( $invite );inviteOpen = 1 } else { that.overlayManager.hide();inviteOpen = 0 }
-			
-			});
-		},
-		
-		credits: function() 
-		{
-			var that = this;
-			var creditOpen = 0;
-			$credits = HTMLFactory.credits();
-			$("#credits-link").click( function() { 
-				if(creditOpen == 0) { that.overlayManager.show( $credits );creditOpen = 1 } else { that.overlayManager.hide();creditOpen = 0 }
-			
-			});
-		},
 	
 		serverOffline: function()
 		{
@@ -213,7 +194,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			return false;
 		},
-			
+
 			 	
 		shareThis: function()	
 		{
@@ -269,6 +250,12 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		destroy: function()
 		{
 			this.element.remove();
+		},
+
+		updateGameOver: function()
+		{
+			this.resultsData.NextMatchTime = this.gameController.getNextGameStartTime();
+			this.resultsTmplItem.update();
 		}
 	});
 });

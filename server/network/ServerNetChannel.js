@@ -105,6 +105,7 @@ ServerNetChannel = (function()
 			* Messages can come as a single message, or grouped into an array of commands.
 			*/
 			aWebSocket.onMessage = function(connection, encodedMessage )
+
 			{
 				var client;
 				try

@@ -48,9 +48,8 @@ AbstractServerGame = (function()
 			};
 
 			this.portNumber = portNumber;
-
 			this.fieldController.createPackedCircleManager();
-
+			
 			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
 			this.server = aServer;
@@ -113,7 +112,7 @@ AbstractServerGame = (function()
 		onEndGame: function()
 		{
 			var that = this,
-				nextGame = this.server.createNewGame();
+				nextGame = this.server.getNextAvailablePort();
 
 			this.gameOver = true;
 
@@ -122,8 +121,10 @@ AbstractServerGame = (function()
 			var endGameMessage = {
 				seq: 1,
 				gameClock: this.gameClock,
-				cmds: { cmd:this.server.gameConfig.CMDS.END_GAME },
-				data: { nextGamePort: nextGame }
+				cmds: {
+					cmd: this.server.gameConfig.CMDS.END_GAME,
+					data: { nextGamePort: nextGame }
+				}
 			};
 
 			this.netChannel.broadcastMessage(endGameMessage);

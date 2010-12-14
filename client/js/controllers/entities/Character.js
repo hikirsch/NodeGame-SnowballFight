@@ -26,7 +26,7 @@ Basic Usage:
 		this.view.addCharacter(newCharacter.initView());
 */
 
-var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileModel, Projectile, CharacterView)
+var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileModel, EntityView)
 {
 	return new JS.Class(GameEntity,
 	{
@@ -52,19 +52,6 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.score = 0;
 			this.lastScoreSent = 0;
 			this.scoreMultiplier = 1;
-		},
-
-		/**
-		 * Creates the 'View' for this character
-		 * This should only be called client side.
-		 * Will throw an error if the field controller does not contain a view
-		 */
-		createView: function()
-		{
-			// if our game has a view, then create one
-			if( this.fieldController.hasView() ) {
-				this.view = new CharacterView( this, this.model );
-			}
 		},
 
 		/**
@@ -148,8 +135,6 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			if(wantsFullUpdate) {
 				returnString += ","+this.model.nickname;
 			}
-
-//			console.gameLog(returnString)
 			return returnString;
 		},
 
@@ -164,14 +149,6 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		setInput: function( anInput )
 		{
 			this.input = anInput;
-		},
-
-		/**
-		 * Deallocation
-		 */
-		dealloc: function()
-		{
-			this.callSuper();
 		}
 	});
 };
@@ -187,7 +164,7 @@ if (typeof window === 'undefined')
 	require('./Projectile');
 	require('./GameEntity');
 
-	Character = init(Vector, Rectangle, FieldController, GameEntity, ProjectileModel, Projectile, undefined);
+	Character = init(Vector, Rectangle, FieldController, GameEntity, ProjectileModel, undefined);
 }
 else
 {
@@ -198,7 +175,6 @@ else
 		'controllers/FieldController',
 		'controllers/entities/GameEntity',
 		'model/ProjectileModel',
-		'controllers/entities/Projectile',
-		'view/CharacterView',
+		'view/EntityView',
 		'lib/jsclass/core'], init);
 }
