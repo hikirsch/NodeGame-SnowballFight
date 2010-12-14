@@ -106,7 +106,7 @@ SnowGame = (function()
 		{
 			var allCharacterModels = [];
 			for(var obj in GAMECONFIG.CHARACTER_MODEL) {
-				var model = GAMECONFIG.CHARACTER_MODEL['smashTV'];
+				var model = GAMECONFIG.CHARACTER_MODEL['snowman'];
 				allCharacterModels.push(model);
 			}
 
