@@ -28,13 +28,15 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			console.log('created NetChannel');
 
 			this.clientCharacter = null; // Special pointer to our own client character
-			
+			this.isGameOver = false;
+
 			this.CMD_TO_FUNCTION = {};
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onClientJoined;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 			this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
+
 		},
 
 		/**
@@ -248,8 +250,11 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		},
 
 		onEndGame: function(){
+			this.isGameOver = true;
+			clearInterval( this.gameTickInterval );
 			this.callSuper();
-			this.netChannel.close();
+			this.view.onEndGame();
+			// this.netChannel.dealloc();
 			console.log("(AbstractClientGame) End Game" );
 		},
 
@@ -284,7 +289,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 		netChannelDidDisconnect: function (messageData)
 		{
-			if(this.view) // If the server was never online, then we never had a view to begin with
+			if(this.view && !this.isGameOver) // If the server was never online, then we never had a view to begin with
 				this.view.serverOffline();
 		}
 	});

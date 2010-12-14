@@ -161,8 +161,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		var serverMessage = BISON.decode(messageEvent.data);
 		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", serverMessage);
 
-		console.log('(NetChannel) (receivedCmd) - ', serverMessage.cmds.cmd);
-
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) return;
 
