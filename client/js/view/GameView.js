@@ -26,7 +26,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.showNav();
 			this.showFooter();
 			this.showInstructions();
-			// this.shareThis();
+			this.shareThis();
+			this.inviteFriend();
+			this.credits();
 			this.carouselManager = CarouselManager;
 			this.currentStatus = {
 				TimeLeft: "00:00",
@@ -191,6 +193,58 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.overlayManager.hide();
 
 			return false;
+		},
+
+			 	
+		shareThis: function()	
+		{
+			var that = this;	
+			$results = HTMLFactory.results();	
+			$("li.share a").click( function() { 
+				that.overlayManager.show( $results );
+			});
+		},
+		 	
+		inviteFriend: function() 
+		{
+			var that = this;
+			var inviteOpen = 0;
+			$invite = HTMLFactory.invite();
+			$("#btn-invite").click( function() { 
+				if(inviteOpen == 0) 
+				{ 
+					that.overlayManager.show( $invite );
+					inviteOpen = 1;
+				} 
+				else
+				{ 
+					that.overlayManager.hide();
+					inviteOpen = 0;
+				}
+			});	
+		},
+
+		credits: function() 	
+		{
+		 	
+			var that = this;
+		 	
+			var creditOpen = 0;
+		 	
+			$credits = HTMLFactory.credits();
+		 	
+			$("#credits-link").click( function() { 
+				if(creditOpen == 0)
+				{
+					that.overlayManager.show( $credits );
+					creditOpen = 1;
+				} 
+				else 
+				{ 
+					that.overlayManager.hide();
+					creditOpen = 0;
+				}
+			});
 		},
 
 		destroy: function()

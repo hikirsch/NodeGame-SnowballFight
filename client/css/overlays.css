@@ -99,3 +99,12 @@
 .choose .carousel .bigSnowman { position: absolute; top: 50px; left: 100px; }
 .choose .carousel div img { position: absolute; top: 0px; left: 0px; }
 .choose .carousel div p { position: absolute; left: 440px; top: 138px; margin: 0; padding: 0; width: 200px; line-height: 130%; }
+
+/* invite overlay */
+
+.inviteOverlay { position: relative; float: right; width: 382px; height: 150px; background: #fff url(../img/invite/bg-invite.jpg) no-repeat top left; -webkit-box-shadow: 0px 0px 10px #999;z-index: 8000; left:-10px;top:0px}
+.inviteOverlay p { margin:30px auto auto 30px; width:320px;color: #005072; line-height:120%}
+.inviteOverlay .invite-button { display: block; -webkit-box-reflect: below 0px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.7,transparent),to(white)); position: absolute; top: 95px; left: 70px; cursor: pointer; overflow: visible; }
+
+/* credits overlay */
+.creditsOverlay { width:300px;height:300px;background:#fff;z-index:8000;position:absolute;top:20%;left:20%;-webkit-box-shadow: 0px 0px 10px #999;line-height:120%}
