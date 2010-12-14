@@ -290,6 +290,11 @@ function Server(flash)
 		$.listen(port);
 		return flash;
 	};
+
+	this.stopListening = function()
+	{
+		$.close();
+	};
 }
 ;
 

@@ -22,14 +22,10 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		var themes = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP;
 		var imagesToLoad = [];
 		for(var aTheme in themes) {
-
-			console.log('theme:', aTheme, themes[aTheme].imageSource);
 			imagesToLoad.push( {id: aTheme, url: base + themes[aTheme].imageSource } );
-			// ignore theseva
-//			if(themes[aTheme].match(/(stunned|default|projectile-)/g))
-//				continue;
-//			imagesToLoad.push({id: aTheme, url: base + themes[aTheme] + ".png"});
 		}
+		// BG Image
+		imagesToLoad.push({id: "gameBackground", url: base + "bg-field.png"});
 
 
 		// Create CAAT accessor

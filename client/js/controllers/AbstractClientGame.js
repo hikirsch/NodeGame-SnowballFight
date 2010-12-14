@@ -16,45 +16,78 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 {
 	return new JS.Class(AbstractGame,
 	{
-
 		initialize: function(config)
 		{
 			this.callSuper();
 
-			console.log('(AbstractClientGame)::intialize');
 			this.netChannel = new NetChannel(config, this);
 
 			this.view = new GameView(this, this.model );
 			this.fieldController.createView( this.model );
 			
+			console.log('created NetChannel');
+
 			this.clientCharacter = null; // Special pointer to our own client character
 			
 			this.CMD_TO_FUNCTION = {};
+			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onClientJoined;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 			this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
+
 
 			this.initializeCaat();
 		},
 
 		initializeCaat: function()
 		{
-			this.director = new CAAT.Director().initialize(900, 600);
+			// Create the director
+			this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 			this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
+			// Init the scene
 			this.scene = new CAAT.Scene().create();
-
+			this.director.addScene(this.scene);
 			// Store
 			GAMECONFIG.CAAT.DIRECTOR = this.director;
 			GAMECONFIG.CAAT.SCENE = this.scene;
 
+			var caatImage = new CAAT.CompoundImage().
+					initialize(this.director.getImage('gameBackground'), 1, 1);
 
-//			 ../img/global/bg-field.png
-			$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
+			// Create a sprite using the CompoundImage
+			var background = new CAAT.SpriteActor().
+					create().
+					setSpriteImage(caatImage);
 
-			this.director.addScene(this.scene);
-			this.director.loop(55);
+			this.scene.addChild(background);
+
+//			this.director.loop(1); // DEBUG: Draw once
 //			$(this.director.canvas).appendTo($('body'));
+			$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
+		},
+
+
+
+		createView: function()
+		{
+			this.view = new GameView(this);
+		},
+
+		/**
+		 * ClientGameView delegate
+		 */
+		/**
+		 * Called when the user has entered a name, and wants to join the match
+		 * @param aNickName
+		 */
+		joinGame: function(aNickName, aCharacterTheme)
+		{
+			// Create the message to send to the server
+			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: aCharacterTheme, nickname: aNickName } );
+
+			// Tell the server!
+			this.netChannel.addMessageToQueue( true, message );
 		},
 
 		/**
@@ -76,12 +109,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 				this.netChannel.addMessageToQueue( false, newMessage );
 				this.view.update();
 			}
-
-
-//			this.fieldController.view.sortChildren();
-
-//			this.director.render( this.clockActualTime - this.director.timeline );
-//            this.director.timeline = this.clockActualTime;
 		},
 
 		/**
@@ -90,7 +117,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		 */
 		renderAtTime: function(renderTime)
 		{
-			var cmdBuffer = this.netChannel.incommingCmdBuffer,
+			var cmdBuffer = this.netChannel.incommingCmdBuffer;
 				len = cmdBuffer.length;
 
 			if( len < 2 ) return false; // Nothing to do!
@@ -228,29 +255,27 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 			// Destroy removed entities
 			this.fieldController.removeExpiredEntities( activeEntities );
-		},
 
-
-
-		createView: function()
-		{
-			this.view = new GameView(this);
+//			this.fieldController.view.sortChildren();
+			this.director.render( this.clockActualTime - this.director.timeline );
+            this.director.timeline = this.clockActualTime;
 		},
 
 		/**
-		 * ClientGameView delegate
+		 * Dispatched by the server when a new player joins the match
+		 * @param clientID
+		 * @param data
 		 */
-		/**
-		 * Called when the user has entered a name, and wants to join the match
-		 * @param aNickName
-		 */
-		joinGame: function(aNickName, aCharacterTheme)
+		onClientJoined: function(clientID, data)
 		{
-			// Create the message to send to the server
-			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: aCharacterTheme, nickname: aNickName } );
+			// Let our super class create the character
+			var newCharacter = this.addClient( clientID, data.nickName, true );
 
-			// Tell the server!
-			this.netChannel.addMessageToQueue( true, message );
+			// It's us!
+			if(clientID == this.netChannel.clientID)
+			{
+				 // Special things here
+			}
 		},
 
 		onRemoveClient: function()
@@ -258,14 +283,15 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.log( 'onRemoveClient: ', arguments );
 		},
 
-		onEndGame: function()
-		{
-			clearInterval(this.gameTickInterval);
-
+		onEndGame: function(){
+			this.isGameOver = true;
+			this.stopGameClock();
 			this.callSuper();
-			this.netChannel.close();
+			this.view.onEndGame();
+			this.netChannel.dealloc();
 			console.log("(AbstractClientGame) End Game" );
 		},
+
 
 		genericCommand: function()
 		{
@@ -311,5 +337,4 @@ define(['lib/Vector',
 	'lib/Joystick',
 	'controllers/AbstractGame',
 	'factories/TraitFactory',
-	'lib/caat',
-	'lib/jsclass/core',], init);
+	'lib/jsclass/core'], init);

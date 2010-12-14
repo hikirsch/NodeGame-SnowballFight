@@ -272,7 +272,16 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			return this.view != null;
 		},
 
-	setModel: function(aGameModel)
+		dealloc: function()
+		{
+			this.allEntities.dealloc();
+			this.players.dealloc();
+
+			delete this.players;
+			delete this.allEntities;
+		},
+
+		setModel: function(aGameModel)
 		{
 			this.rectangle = new Rectangle(0, 0, aGameModel.width, aGameModel.height);
 

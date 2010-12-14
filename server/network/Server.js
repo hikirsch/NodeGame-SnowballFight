@@ -99,10 +99,15 @@ Server = (function()
 				}
 			}
 
-			return this.createNewGame( this.getNextAvailablePort() );
+			return this.createNewGame();
 		},
 
-		createNewGame: function( newPort )
+		createNewGame: function()
+		{
+			return this.createGame( this.getNextAvailablePort() );
+		},
+
+		createGame: function( newPort )
 		{
 			var aGameInstance = new SnowGame( this, newPort );
 			// start the game
@@ -110,6 +115,11 @@ Server = (function()
 			this.games[ newPort ] = aGameInstance;
 
 			return newPort;
+		},
+
+		killGame: function( port )
+		{
+			this.games[ port ] = null;
 		},
 
 		getNextAvailablePort: function()

@@ -55,9 +55,9 @@ var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailab
 				.addClass( data.theme );
 		},
 		
-		results: function() {
+		results: function( data ) {
 			return $(results)
-			.tmpl();
+				.tmpl( data );
 		},
 		
 		overlay: function() {

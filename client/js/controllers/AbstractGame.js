@@ -22,8 +22,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		
 		initialize: function(config)
 		{
-			var that = this;
-
 			this.config = config;
 			this.setModel(GameModel);
 
@@ -44,7 +42,19 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 			this.gameClock = 0; // Our game clock is relative
 			this.gameTick = 0;
 
+			this.startGameClock();
+		},
+
+		startGameClock: function()
+		{
+			var that = this;
+
 			this.gameTickInterval = setInterval(function(){that.tick()}, this.targetDelta);
+		},
+
+		stopGameClock: function()
+		{
+			clearInterval( this.gameTickInterval );
 		},
 
 		hasView: function()
