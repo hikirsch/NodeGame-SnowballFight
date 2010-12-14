@@ -25,8 +25,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.view = new GameView(this, this.model );
 			this.fieldController.createView( this.model );
 			
-			console.log('created NetChannel');
-
 			this.clientCharacter = null; // Special pointer to our own client character
 			
 			this.CMD_TO_FUNCTION = {};
@@ -35,6 +33,44 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 			this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
+
+			this.initializeCaat();
+		},
+
+		initializeCaat: function()
+		{
+			console.log('me');
+			this.director = new CAAT.Director().initialize(900, 600);
+			this.director.timeline = this.gameClock;
+
+			this.scene = new CAAT.Scene().create();
+			console.log( this.fieldController.view.getElement() );
+			//director.addScene(this.scene);
+		},
+
+		/**
+		 * A connected browser client's 'main loop'
+		 */
+		tick: function()
+		{
+			this.callSuper();
+			this.netChannel.tick( this.gameClock );
+			this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
+
+			// Continuously store information about our input
+			if( this.clientCharacter != null )
+			{
+				var characterStatus = this.clientCharacter.constructEntityDescription();
+				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
+
+				// create a message with our characters updated information and send it off
+				this.netChannel.addMessageToQueue( false, newMessage );
+				this.view.update();
+			}
+
+
+			this.director.render( this.gameClock - this.director.timeline );
+            this.director.timeline = this.gameClock;
 		},
 
 		/**
@@ -183,26 +219,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.fieldController.removeExpiredEntities( activeEntities );
 		},
 
-		/**
-		 * A connected browser client's 'main loop'
-		 */
-		tick: function()
-		{
-			this.callSuper();
-			this.netChannel.tick( this.gameClock );
-			this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
 
-			// Continuously store information about our input
-			if( this.clientCharacter != null )
-			{
-				var characterStatus = this.clientCharacter.constructEntityDescription();
-				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
-
-				// create a message with our characters updated information and send it off
-				this.netChannel.addMessageToQueue( false, newMessage );
-				this.view.update();
-			}
-		},
 
 		createView: function()
 		{
@@ -247,7 +264,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.log( 'onRemoveClient: ', arguments );
 		},
 
-		onEndGame: function(){
+		onEndGame: function()
+		{
+			clearInterval(this.gameTickInterval);
+
 			this.callSuper();
 			this.netChannel.close();
 			console.log("(AbstractClientGame) End Game" );
@@ -295,6 +315,7 @@ define(['lib/Vector',
 	'network/NetChannel', 
 	'view/GameView',
 	'lib/Joystick',
+	'lib/caat',
 	'controllers/AbstractGame',
 	'factories/TraitFactory',
 	'lib/jsclass/core'], init);

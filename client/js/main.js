@@ -1,6 +1,6 @@
 /**
 File:
-	Main.js
+	Main.js                                                          Listenin
 Created By:
 	Adam Kirschner
 Project	:
@@ -15,39 +15,17 @@ require(['controllers/AbstractClientGame', 'config', 'scratchpad/Animal'], funct
     require.ready(function()
 	{
 		var NGK = {
-			transformProperty: '',
-			transformMoveStart: '',
-			transformMoveEnd: ''
 		};
 
-		getTransformProperty();
 
-
-		new AbstractClientGame( config );
-
-		// From Sprite.js
-		function getTransformProperty()
-		{
-			//
-			var browserTransform = ['transform', 'WebkitTransform', 'MozTransform', 'OTransform'];
-
-			// Only webkit has transform3d, which turns on opengl rendering!
-			var transformMoveStart = ['translate(', 'translate3d(', 'translate(', 'translate('];
-			var transformMoveEnd = ["px)", "px, 0px)", "px)", "px)"];
-			var p = false;
-			var len = browserTransform.length;
-
-			while (len--) {
-				var transformType = browserTransform[len];
-
-				if (typeof document.body.style[transformType] !== 'undefined') {
-					NGK.transformProperty = transformType;
-					NGK.transformMoveStart = transformMoveStart[len];
-					NGK.transformMoveEnd = transformMoveEnd[len];
-
-					window.NGK = NGK;
-				}
-			}
-		}
+		//
+		// Tripple nested onReady function - awesome!
+		var base = './';
+		new CAAT.ImagePreloader().loadImages(
+			[{id: 'blockOfIce4', url:base + 'img/entities/field/block-of-ice-4.png'}],
+			function(counter, images) {
+				console.log('yo')
+				new AbstractClientGame( config );
+			});
     });
 });
