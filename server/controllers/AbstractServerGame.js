@@ -123,9 +123,9 @@ AbstractServerGame = (function()
 			};
 
 			this.netChannel.broadcastMessage(endGameMessage);
-			clearTimeout(this.gameTickInterval);
+			clearInterval(this.gameTickInterval);
 
-			this.gameTickInterval = setTimeout( function() { that.dealloc(); }, 5000 );
+			this.AnotherTimeout = setTimeout( function() { that.dealloc(); }, 5000 );
 		},
 
 		dealloc: function()

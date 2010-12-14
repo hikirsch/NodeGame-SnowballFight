@@ -335,7 +335,8 @@ ServerNetChannel = (function()
 
 		dealloc: function()
 		{
-			// this.$.close();
+			this.$.stopListening();
+			console.log("(ServerNetChannel) Closing Port: " + this.port );
 		}
 		// Close prototype object
 	});// Close .extend
