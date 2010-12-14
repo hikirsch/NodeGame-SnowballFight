@@ -52,6 +52,11 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 			this.gameTickInterval = setInterval(function(){that.tick()}, this.targetDelta);
 		},
 
+		stopGameClock: function()
+		{
+			clearInterval( this.gameTickInterval );
+		},
+
 		hasView: function()
 		{
 			return this.view != null;

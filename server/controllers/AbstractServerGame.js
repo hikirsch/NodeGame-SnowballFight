@@ -115,6 +115,10 @@ AbstractServerGame = (function()
 			var that = this,
 				nextGame = this.server.createNewGame();
 
+			this.gameOver = true;
+
+			this.stopGameClock();
+
 			var endGameMessage = {
 				seq: 1,
 				gameClock: this.gameClock,
@@ -123,7 +127,6 @@ AbstractServerGame = (function()
 			};
 
 			this.netChannel.broadcastMessage(endGameMessage);
-			clearInterval(this.gameTickInterval);
 
 			this.AnotherTimeout = setTimeout( function() { that.dealloc(); }, 5000 );
 		},

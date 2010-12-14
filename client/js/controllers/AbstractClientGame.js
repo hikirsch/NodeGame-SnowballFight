@@ -251,10 +251,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 		onEndGame: function(){
 			this.isGameOver = true;
-			clearInterval( this.gameTickInterval );
+			this.stopGameClock();
 			this.callSuper();
 			this.view.onEndGame();
-			// this.netChannel.dealloc();
+			this.netChannel.dealloc();
 			console.log("(AbstractClientGame) End Game" );
 		},
 
