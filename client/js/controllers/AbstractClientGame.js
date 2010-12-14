@@ -254,10 +254,13 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 			}, this);
 
-			// Destroy removed entities
-			this.fieldController.removeExpiredEntities( activeEntities );
+			// Don't do this every frame, often
+			if(this.gameClock % 30 == 0) {
+				// Destroy removed entities
+				this.fieldController.removeExpiredEntities( activeEntities );
+				this.fieldController.view.sortChildren();
+			}
 
-//			this.fieldController.view.sortChildren();
 			this.director.render( this.clockActualTime - this.director.timeline );
             this.director.timeline = this.clockActualTime;
 		},
