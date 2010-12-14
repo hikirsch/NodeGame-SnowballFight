@@ -232,17 +232,37 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		/**
 		 * Trait accesors
 		 */
+
+		/**
+		 * Adds and attaches a trait (already created), to this entity.
+		 * The trait is only attached if we already have one of the same type attached, or don't care (aTrait.canStack = true)
+		 * @param {BaseTrait} aTrait A BaseTrait instance
+		 * @return {Boolean} Whether the trait was added
+		 */
 		addTrait: function(aTrait)
 		{
+			// Check if we already have this trait, if we do - make sure the trait allows stacking
+			var existingVersionOfTrait = this.getTraitWithName(aTrait.displayName);
+			if(existingVersionOfTrait && !existingVersionOfTrait.canStack) {
+				return false;
+			}
+
+			//
 			this.removeTraitWithName(aTrait.displayName);
 			this.traits.setObjectForKey(aTrait, aTrait.displayName);
 			aTrait.attach(this);
+
+			return true;
 		},
 
 		addTraitAndExecute: function(aTrait)
 		{
-			this.addTrait(aTrait);
-			aTrait.execute();
+			var wasAdded = this.addTrait(aTrait);
+			if(wasAdded) {
+				aTrait.execute();
+			};
+
+			return wasAdded;
 		},
 
 		getTraitWithName: function(aTraitName)
@@ -255,7 +275,6 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			var aTrait = this.traits.objectForKey(aTraitName);
 			if(!aTrait) return;
 
-			console.log('RESTORE!');
 			aTrait.detach();
 			this.traits.remove(aTraitName);
 		},

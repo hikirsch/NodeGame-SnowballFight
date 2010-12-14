@@ -3,7 +3,7 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 	return new JS.Class(
 	{
 		initialize:  function(controller, model) {
-			this.frameSkip = 7;
+			this.frameSkip = 3;
 			this.setModel( model );
 			this.controller = controller;
 			this.theme = this.getCssClassFromTheme( this.model.theme );

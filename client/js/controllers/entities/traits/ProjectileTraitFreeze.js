@@ -25,7 +25,7 @@ var init = function(BaseTrait, Vector)
 			this.collisionNormal.mul(-3); // Messin fools up!
 		},
 
-		attach: function(anEntity)
+		attach: function()
 		{
 			this.callSuper();
 

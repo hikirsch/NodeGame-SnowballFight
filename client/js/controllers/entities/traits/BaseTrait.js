@@ -47,6 +47,13 @@ var init = function()
 			this.attachedEntity = null;
 			this.interceptedProperties = new SortedLookupTable();
 			this.detachTimeout = 0;
+
+			// If a trait can stack, then it doesn't matter if it's already attached.
+			// If it cannot stack, it is not applied if it's currently active.
+			// For example, you can not be frozen after being frozen.
+			// However you can be sped up multiple timess
+			this.canStack = false;
+
 			this.displayName = this.klass.displayName; // Work around for bug, but technically we should be able to just use this.displayName
 		},
 
