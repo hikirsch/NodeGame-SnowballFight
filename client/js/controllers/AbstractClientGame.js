@@ -34,6 +34,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
+			this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
 		},
 
 		/**
@@ -244,6 +245,12 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		onRemoveClient: function()
 		{
 			this.log( 'onRemoveClient: ', arguments );
+		},
+
+		onEndGame: function(){
+			this.callSuper();
+			this.netChannel.close();
+			console.log("(AbstractClientGame) End Game" );
 		},
 
 		genericCommand: function()

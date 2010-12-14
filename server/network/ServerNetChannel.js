@@ -80,6 +80,7 @@ ServerNetChannel = (function()
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.removeClient;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.onPlayerMoveCommand;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
+			this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
 
 		    this.initAndStartWebSocket(config);
 		},
@@ -192,7 +193,7 @@ ServerNetChannel = (function()
 		broadcastMessage: function(originalClientID, anUnencodedMessage, sendToOriginalClient)
 		{
 //			var encodedMessage = BISON.encode(anUnencodedMessage);
-//			// this.delegate.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
+//			// this .delegate.log('Init Broadcast Message From:' + originalClientID, sys.inspect(anUnencodedMessage));
 //
 //			// Send the message to everyone, except the original client if 'sendToOriginalClient' is true
 //			for( var clientID in this.clients )
@@ -325,9 +326,15 @@ ServerNetChannel = (function()
 
 		onPlayerMoveCommand: function(connection, aDecodedMessage)
 		{
-			  this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
+			this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
 		},
-		 
+
+		onEndGame: function( connection, aDecodedMessage )
+		{
+			// this.addMessageToQueue( this, this.composeCommand(this.config.CMDS.END_GAME, null ) );
+			this.delegate.log('(ServerNetChannel) End Game' );
+		},
+
 		/**
 		 * SETTING CLIENT PROPERTIES
 		 * Called by clients to modify a property.

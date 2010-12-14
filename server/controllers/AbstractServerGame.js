@@ -32,15 +32,6 @@ require('lib/Logger');
 
 AbstractServerGame = (function()
 {
-	var LOG_LEVEL = new function()
-	{
-		this.ERROR = 0;
-		this.DEBUG = 1;
-		this.INFO = 2;
-		this.ALL = 3;
-	};
-
-
 	return new JS.Class(AbstractGame, {
 		initialize: function(aServer, portNumber)
 		{
@@ -65,8 +56,6 @@ AbstractServerGame = (function()
 			// Each ServerNetChannel is owned by a single ServerGameInstance
 			this.netChannel = new ServerNetChannel(this, this.server.gameConfig, portNumber);
 
-
-			this.logLevel = LOG_LEVEL.ALL;
 			this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
 		},
 
@@ -88,6 +77,11 @@ AbstractServerGame = (function()
 			this.netChannel.tick( this.gameClock, worldEntityDescription );
 
 			this.logger.tick();
+
+			if( this.model.gameDuration < this.gameClock )
+			{
+				this.onEndGame();
+			}
 		},
 
 		/**
@@ -114,6 +108,10 @@ AbstractServerGame = (function()
 			playerEntity.input.deconstructInputBitmask( cmdData.input );
 		},
 
+		onEndGame: function()
+		{
+			this.netChannel.onEndGame();
+		},
 
 		/**
 		 * Calls super.shouldAddPlayer to create the character and attaches a Joystick to it
@@ -147,7 +145,6 @@ AbstractServerGame = (function()
 		{
 			this.netChannel.start();
 		},
-
 
 		log: function(aMessage)
 		{

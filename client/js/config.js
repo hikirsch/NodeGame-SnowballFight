@@ -22,7 +22,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 
 			fullupdate: 0x08,				// Request a full world-update from the server. This can happen if a the connection stuttered for a long time
 			PLAYER_MOVE: 0x16,
-			PLAYER_FIRE: 0x32
+			PLAYER_FIRE: 0x32,
+			END_GAME: 0x64
 		},
 
 		CLIENT_SETTING: {

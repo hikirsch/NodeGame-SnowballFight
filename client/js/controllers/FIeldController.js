@@ -77,7 +77,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			var impulseVector = new Vector(Math.cos(currentAngle) * impulseForce, Math.sin(currentAngle) * impulseForce);
 
 			this.gameController.log(impulseVector);
-			aCharacter.acceleration.add( impulseVector );
+			// aCharacter.acceleration.add( impulseVector );
 			return aNewProjectile;
 		},
 
@@ -120,7 +120,10 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.allEntities.forEach( function(key, entity){
 				entity.tick(speedFactor, gameClock);
 			}, this );
+		},
 
+		onEndGame: function()
+		{
 
 		},
 
