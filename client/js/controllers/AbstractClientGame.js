@@ -21,7 +21,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			{
 				this.callSuper();
 
-				this.netChannel = new NetChannel(config, this, true);
+				this.netChannel = new NetChannel(config, this);
 
 				this.view = new GameView(this, this.model );
 				this.fieldController.createView( this.model );
@@ -323,9 +323,10 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 			joinNextGame: function()
 			{
-				this.netChannel = new NetChannel(this.config, this, false);
-				this.netChannel.handleServerGameSelector( this.nextGamePort, true );
 				this.view.hideResultsOverlay();
+				this.config.port = this.nextGamePort;
+				this.netChannel = new NetChannel(this.config, this, true);
+				// this.netChannel.handleServerGameSelector( this.nextGamePort, true );
 				this.startGameClock();
 			},
 
