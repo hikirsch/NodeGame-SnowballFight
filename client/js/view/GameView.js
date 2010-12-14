@@ -36,6 +36,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				Rank: "00/00"
 			};
 			this.resultsData = {};
+			this.myCharacterModel = null;
 		},
 
 		onEndGame: function()
@@ -119,32 +120,39 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		showCharacterSelect: function()
 		{
+			if( this.myCharacterModel != null )
+			{
+				this.gameController.joinGame(this.myCharacterModel.nickName, this.myCharacterModel.characterType);
+			}
+			else
+			{
 
-			var that = this,
-				$characterSelect = HTMLFactory.characterSelect();
+				var that = this,
+					$characterSelect = HTMLFactory.characterSelect();
 
-			$characterSelect
-				.find("form")
-				.submit(function(e) {
-					var carouselType = that.carouselManager.getCharacterType();
-					var characterType = that.getThemeCodeFromName(carouselType ) ;
+				$characterSelect
+					.find("form")
+					.submit(function(e) {
+						var carouselType = that.carouselManager.getCharacterType();
+						var characterType = that.getThemeCodeFromName(carouselType ) ;
 
-					return that.joinGame(characterType);
-				});
+						return that.joinGame(characterType);
+					});
 
-			$characterSelect
-				.find('img.arrowLeft')
-				.click( function() {
-					that.carouselManager.move(true);
-				});
+				$characterSelect
+					.find('img.arrowLeft')
+					.click( function() {
+						that.carouselManager.move(true);
+					});
 
-			$characterSelect
-				.find('img.arrowRight')
-				.click( function(e) {
-					that.carouselManager.move(false);
-				});
+				$characterSelect
+					.find('img.arrowRight')
+					.click( function(e) {
+						that.carouselManager.move(false);
+					});
 
-			this.overlayManager.show( $characterSelect );
+				this.overlayManager.show( $characterSelect );
+			}
 
 			return false;
 		},
@@ -187,6 +195,11 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			{
 				nickName = 'NoName' + Math.floor( Math.random() * 1000 );
 			}
+
+			this.myCharacterModel = {
+				nickName: nickName,
+				characterType: characterType
+			};
 
 			this.gameController.joinGame(nickName, characterType);
 

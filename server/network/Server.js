@@ -62,10 +62,7 @@ Server = (function()
 				connection.send( newEncodedMessage );
 			};
 
-			aWebSocket.onClose = function(connection)
-			{
-
-			};
+			aWebSocket.onClose = function(connection) { };
 
 			console.log( 'listening on port: ' + port );
 			aWebSocket.listen( port );
@@ -73,15 +70,22 @@ Server = (function()
 
 		getGameWithDesiredPort: function( desiredPort )
 		{
-			if( this.games[ desiredPort ] != null )
-			{
-				if( this.games[ desiredPort].canAddPlayer() )
+			if( desiredPort != this.gameConfig.PORT ) {
+				if( this.games[ desiredPort ] != null )
 				{
-					return desiredPort;
+					if( this.games[ desiredPort ].canAddPlayer() )
+					{
+						return desiredPort;
+					}
+					else
+					{
+						return this.getNextAvailableGame();
+					}
 				}
 				else
 				{
-					return this.getNextAvailableGame();
+					return this.createGame( desiredPort );
+					//return this.getNextAvailableGame();
 				}
 			}
 			else

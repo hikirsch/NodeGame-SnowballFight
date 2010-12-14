@@ -12,7 +12,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		MAX_PORTS: 100,
 		DEBUG_MODE: true,
 		MAX_PLAYERS: 8,
-		SERVER_END_GAME_GRACE: 1000,
+		SERVER_END_GAME_GRACE: 50,
 		ROUND_INTERMISSION: 3000,
 		// http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS: {
