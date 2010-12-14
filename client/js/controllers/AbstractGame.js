@@ -48,7 +48,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		startGameClock: function()
 		{
 			var that = this;
-
 			this.gameTickInterval = setInterval(function(){that.tick()}, this.targetDelta);
 		},
 
@@ -130,6 +129,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		onEndGame: function()
 		{
 			// this.fieldController.onEndGame();
+			this.isGameOver = true;
 		},
 		
 		/**

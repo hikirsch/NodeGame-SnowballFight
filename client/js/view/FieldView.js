@@ -28,7 +28,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		{
 			var childrenList = GAMECONFIG.CAAT.SCENE.childrenList;
 			childrenList.sort(function(a, b) {
-//			 return a.y-b.y;
+				return a.y-b.y;
 			});
 		},
 
