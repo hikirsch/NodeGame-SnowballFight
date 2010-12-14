@@ -112,7 +112,8 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			// Create a textfield
     		this.CAATText = new CAAT.TextActor().
             create().
-            setFont("12px sans-serif").
+            setFont("bold 12px sans-serif").
+			setAlpha(0.25).
             setText(text).
             setBaseline("top").
             setOutline(false).
