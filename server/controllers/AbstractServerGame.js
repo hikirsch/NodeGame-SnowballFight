@@ -48,9 +48,8 @@ AbstractServerGame = (function()
 			};
 
 			this.portNumber = portNumber;
-
 			this.fieldController.createPackedCircleManager();
-
+			
 			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
 			this.server = aServer;

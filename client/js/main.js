@@ -1,6 +1,6 @@
 /**
 File:
-	Main.js
+	Main.js                                                          Listenin
 Created By:
 	Adam Kirschner
 Project	:
@@ -10,44 +10,32 @@ Abstract:
 Basic Usage:
  	See index.html // TODO: Update basic usage.
 */
-require(['controllers/AbstractClientGame', 'config', 'scratchpad/Animal'], function(AbstractClientGame, config) {
+require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(AbstractClientGame, config) {
 	// Everything ready - start the game client
     require.ready(function()
 	{
 		var NGK = {
-			transformProperty: '',
-			transformMoveStart: '',
-			transformMoveEnd: ''
 		};
 
-		getTransformProperty();
-
-
-		new AbstractClientGame( config );
-
-		// From Sprite.js
-		function getTransformProperty()
-		{
-			//
-			var browserTransform = ['transform', 'WebkitTransform', 'MozTransform', 'OTransform'];
-
-			// Only webkit has transform3d, which turns on opengl rendering!
-			var transformMoveStart = ['translate(', 'translate3d(', 'translate(', 'translate('];
-			var transformMoveEnd = ["px)", "px, 0px)", "px)", "px)"];
-			var p = false;
-			var len = browserTransform.length;
-
-			while (len--) {
-				var transformType = browserTransform[len];
-
-				if (typeof document.body.style[transformType] !== 'undefined') {
-					NGK.transformProperty = transformType;
-					NGK.transformMoveStart = transformMoveStart[len];
-					NGK.transformMoveEnd = transformMoveEnd[len];
-
-					window.NGK = NGK;
-				}
-			}
+		// Tripple nested onReady function - awesome!
+		var base = './img/entities/caat/';
+		var themes = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP;
+		var imagesToLoad = [];
+		for(var aTheme in themes) {
+			imagesToLoad.push( {id: aTheme, url: base + themes[aTheme].imageSource } );
 		}
+		// BG Image
+		imagesToLoad.push({id: "gameBackground", url: base + "bg-field.png"});
+
+
+		// Create CAAT accessor
+		GAMECONFIG.CAAT = {};
+		GAMECONFIG.CAAT.imagePreloader = new CAAT.ImagePreloader();
+		// Fired when images have been preloaded
+		GAMECONFIG.CAAT.imagePreloader.loadImages(imagesToLoad,
+			function(counter, images) {
+				if(counter != images.length) return; // Wait until last load
+				var game = new AbstractClientGame( config );
+			});
     });
 });

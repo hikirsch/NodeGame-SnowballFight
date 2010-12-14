@@ -117,17 +117,18 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		showCharacterSelect: function()
 		{
+
 			var that = this,
 				$characterSelect = HTMLFactory.characterSelect();
 
 			$characterSelect
 				.find("form")
 				.submit(function(e) {
-					var characterType = that.getThemeCodeFromName( that.carouselManager.getCharacterType() ) ;
-					console.log('joining as: ' + characterType);
+					var carouselType = that.carouselManager.getCharacterType();
+					var characterType = that.getThemeCodeFromName(carouselType ) ;
+
 					return that.joinGame(characterType);
 				});
-
 
 			$characterSelect
 				.find('img.arrowLeft')
@@ -140,6 +141,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				.click( function(e) {
 					that.carouselManager.move(false);
 				});
+
 			this.overlayManager.show( $characterSelect );
 
 			return false;

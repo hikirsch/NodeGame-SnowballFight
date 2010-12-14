@@ -36,6 +36,80 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 			this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
+
+
+			this.initializeCaat();
+		},
+
+		initializeCaat: function()
+		{
+			// Create the director
+			this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
+			this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
+			// Init the scene
+			this.scene = new CAAT.Scene().create();
+			this.director.addScene(this.scene);
+			// Store
+			GAMECONFIG.CAAT.DIRECTOR = this.director;
+			GAMECONFIG.CAAT.SCENE = this.scene;
+
+			var caatImage = new CAAT.CompoundImage().
+					initialize(this.director.getImage('gameBackground'), 1, 1);
+
+			// Create a sprite using the CompoundImage
+			var background = new CAAT.SpriteActor().
+					create().
+					setSpriteImage(caatImage);
+
+			this.scene.addChild(background);
+
+//			this.director.loop(1); // DEBUG: Draw once
+//			$(this.director.canvas).appendTo($('body'));
+			$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
+		},
+
+
+
+		createView: function()
+		{
+			this.view = new GameView(this);
+		},
+
+		/**
+		 * ClientGameView delegate
+		 */
+		/**
+		 * Called when the user has entered a name, and wants to join the match
+		 * @param aNickName
+		 */
+		joinGame: function(aNickName, aCharacterTheme)
+		{
+			// Create the message to send to the server
+			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: aCharacterTheme, nickname: aNickName } );
+
+			// Tell the server!
+			this.netChannel.addMessageToQueue( true, message );
+		},
+
+		/**
+		 * A connected browser client's 'main loop'
+		 */
+		tick: function()
+		{
+			this.callSuper();
+			this.netChannel.tick( this.gameClock );
+			this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
+
+			// Continuously store information about our input
+			if( this.clientCharacter != null )
+			{
+				var characterStatus = this.clientCharacter.constructEntityDescription();
+				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
+
+				// create a message with our characters updated information and send it off
+				this.netChannel.addMessageToQueue( false, newMessage );
+				this.view.update();
+			}
 		},
 
 		/**
@@ -182,50 +256,11 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 			// Destroy removed entities
 			this.fieldController.removeExpiredEntities( activeEntities );
+
+//			this.fieldController.view.sortChildren();
+			this.director.render( this.clockActualTime - this.director.timeline );
+            this.director.timeline = this.clockActualTime;
 		},
-
-		/**
-		 * A connected browser client's 'main loop'
-		 */
-		tick: function()
-		{
-			this.callSuper();
-			this.netChannel.tick( this.gameClock );
-			this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
-
-			// Continuously store information about our input
-			if( this.clientCharacter != null )
-			{
-				var characterStatus = this.clientCharacter.constructEntityDescription();
-				var newMessage = this.netChannel.composeCommand( this.config.CMDS.PLAYER_MOVE, characterStatus );
-
-				// create a message with our characters updated information and send it off
-				this.netChannel.addMessageToQueue( false, newMessage );
-				this.view.update();
-			}
-		},
-
-		createView: function()
-		{
-			this.view = new GameView(this);
-		},
-
-		/**
-		 * ClientGameView delegate
-		 */
-		/**
-		 * Called when the user has entered a name, and wants to join the match
-		 * @param aNickName
-		 */
-		joinGame: function(aNickName, aCharacterTheme)
-		{
-			// Create the message to send to the server
-			var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: aCharacterTheme, nickname: aNickName } );
-
-			// Tell the server!
-			this.netChannel.addMessageToQueue( true, message );
-		},
-
 		/**
 		 * Dispatched by the server when a new player joins the match
 		 * @param clientID
