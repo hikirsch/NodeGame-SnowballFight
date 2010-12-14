@@ -287,7 +287,6 @@ ServerNetChannel = (function()
             // if set to false then clients will stay in the game
             aClient.isPlaying = true;
 
-			console.log(SYS.inspect( aDecodedMessage) )
 			var characterModel = {theme: aDecodedMessage.cmds.data.theme, nickname: aDecodedMessage.cmds.data.nickname};
 			this.delegate.shouldAddPlayer(entityID, clientID, characterModel );
 

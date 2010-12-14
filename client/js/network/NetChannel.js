@@ -16,7 +16,7 @@ Abstract:
 Basic Usage:
 
  */
-var init = function(Message, config) {
+define(['network/Message', 'network/ServerGameSelector', 'config'], function(Message, ServerGameSelector, config) {
 	/**
 	 * NetChannel facilitates communication between the client-game, and the server-game
 	 * @param config  		A game configuration
@@ -24,9 +24,9 @@ var init = function(Message, config) {
 	 */
 	function NetChannel( config, aController )
 	{
+		var that = this;
 		this.controller = aController;	// For callbacks once messages are validated
 		this.config = config;
-		var that = this;
 
 		// Dev flag, turning this on will output tons information to the console
 		this.verboseMode = false;
@@ -70,13 +70,25 @@ var init = function(Message, config) {
 		 * WebSocket connection
 		 */
 		this.clientID = -1;
-		console.log("(NetChannel) Connecting to ws://" + config.HOST + ':' + config.PORT);
-		this.connection = new WebSocket( 'ws://' + config.HOST + ':' + config.PORT );
-		this.connection.onopen = function() { that.onConnectionOpened(); };
-		this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
-		this.connection.onclose = function() { that.onConnectionClosed(); };
 
-		console.log("(NetChannel) Created with socket: ", this.connection);
+		// get a response from the Server and figure out which port we really need to connect to.
+		new ServerGameSelector(config, function( newPort, connected ) {
+			that.handleServerGameSelector( newPort, connected );
+		});
+	};
+
+	NetChannel.prototype.handleServerGameSelector = function( newPort, connected ) {
+		var that = this;
+		if( connected ) {
+			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.PORT);
+			this.connection = new WebSocket( 'ws://' + this.config.HOST + ':' + newPort );
+			this.connection.onopen = function() { that.onConnectionOpened(); };
+			this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
+			this.connection.onclose = function() { that.onConnectionClosed(); };
+			console.log("(NetChannel) Created with socket: ", this.connection);
+		} else {
+			this.onConnectionClosed();
+		}
 	}
 
 	/**
@@ -364,6 +376,5 @@ var init = function(Message, config) {
 	};
 
 	return NetChannel;
-}
+});
 
-define(['network/Message', 'config'], init);

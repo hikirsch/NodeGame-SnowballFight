@@ -23,10 +23,7 @@ require(['controllers/AbstractClientGame', 'controllers/ClientGameChooser', 'con
 		getTransformProperty();
 
 
-		function handleJoin( newPort ) {
-			config.PORT = newPort;
-			new AbstractClientGame( config );
-		}
+		new AbstractClientGame( config );
 
 		// From Sprite.js
 		function getTransformProperty()
@@ -52,7 +49,5 @@ require(['controllers/AbstractClientGame', 'controllers/ClientGameChooser', 'con
 				}
 			}
 		}
-
-		var gameChooser = new ClientGameChooser(handleJoin);
     });
 });
