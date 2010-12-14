@@ -10,7 +10,7 @@ Abstract:
 Basic Usage:
  	See index.html // TODO: Update basic usage.
 */
-require(['controllers/AbstractClientGame', 'config', 'scratchpad/Animal'], function(AbstractClientGame, config) {
+require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(AbstractClientGame, config) {
 	// Everything ready - start the game client
     require.ready(function()
 	{
@@ -18,14 +18,19 @@ require(['controllers/AbstractClientGame', 'config', 'scratchpad/Animal'], funct
 		};
 
 
-		//
-		// Tripple nested onReady function - awesome!
-		var base = './';
-		new CAAT.ImagePreloader().loadImages(
-			[{id: 'blockOfIce4', url:base + 'img/entities/field/block-of-ice-4.png'}],
-			function(counter, images) {
-				console.log('yo')
-				new AbstractClientGame( config );
-			});
+		console.log(AbstractClientGame);
+		var game = new AbstractClientGame( config );
+
+//
+//
+//		//
+//		// Tripple nested onReady function - awesome!
+//		var base = './';
+//		new CAAT.ImagePreloader().loadImages(
+//			[{id: 'blockOfIce4', url:base + 'img/entities/field/block-of-ice-4.png'}],
+//			function(counter, images) {
+//				var game = new AbstractClientGame( config );
+//				console.log(AbstractClientGame);
+//			});
     });
 });

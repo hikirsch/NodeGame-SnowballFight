@@ -16,10 +16,12 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 {
 	return new JS.Class(AbstractGame,
 	{
+
 		initialize: function(config)
 		{
 			this.callSuper();
 
+			console.log('(AbstractClientGame)::intialize');
 			this.netChannel = new NetChannel(config, this);
 
 			this.view = new GameView(this, this.model );
@@ -39,13 +41,12 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 
 		initializeCaat: function()
 		{
-			console.log('me');
 			this.director = new CAAT.Director().initialize(900, 600);
 			this.director.timeline = this.gameClock;
-
+			this.director.loop(30) ;
 			this.scene = new CAAT.Scene().create();
 			console.log( this.fieldController.view.getElement() );
-			//director.addScene(this.scene);
+			$(this.director.canvas).appendTo(  $('body') );
 		},
 
 		/**
@@ -315,7 +316,7 @@ define(['lib/Vector',
 	'network/NetChannel', 
 	'view/GameView',
 	'lib/Joystick',
-	'lib/caat',
 	'controllers/AbstractGame',
 	'factories/TraitFactory',
-	'lib/jsclass/core'], init);
+	'lib/caat',
+	'lib/jsclass/core',], init);

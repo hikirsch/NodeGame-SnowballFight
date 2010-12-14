@@ -119,7 +119,7 @@ AbstractServerGame = (function()
 			 };
 
 			this.netChannel.broadcastMessage(endGameMessage);
-			clearTimeout(this.gameTickInterval);
+			clearInte(this.gameTickInterval);
 		},
 
 		/**
