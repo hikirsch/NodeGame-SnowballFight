@@ -36,6 +36,12 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			};
 		},
 
+		onEndGame: function()
+		{
+			$results = HTMLFactory.results({});
+			this.overlayManager.show( $results );
+		},
+
 		createStatusView: function( obj )
 		{
 			this.statusElement = HTMLFactory.gameStatus( obj )
@@ -158,7 +164,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			$results = HTMLFactory.results();
 			$("li.share a").click( function() { 
 				that.overlayManager.show( $results );
-			})
+			});
 		},
 	
 		serverOffline: function()

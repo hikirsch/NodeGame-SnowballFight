@@ -332,8 +332,13 @@ ServerNetChannel = (function()
 		{
 			var nickname = aDecodedMessage.cmds.data.nickname;
 			this.delegate.log('(ServerNetChannel) Setting nickname for ' + connection.$clientID + ' to ' +  nickname);
-		}
+		},
 
+		dealloc: function()
+		{
+			this.$.stopListening();
+			console.log("(ServerNetChannel) Closing Port: " + this.port );
+		}
 		// Close prototype object
 	});// Close .extend
 })(); // close init()
