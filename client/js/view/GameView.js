@@ -26,7 +26,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.showNav();
 			this.showFooter();
 			this.showInstructions();
-			this.shareThis();
+			// this.shareThis();
 			this.carouselManager = CarouselManager;
 			this.currentStatus = {
 				TimeLeft: "00:00",
@@ -34,18 +34,30 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				TotalPlayers: "00",
 				Rank: "00/00"
 			};
+			this.resultsData = {};
 		},
 
 		onEndGame: function()
 		{
-			$results = HTMLFactory.results({});
-			this.overlayManager.show( $results );
+			this.createResultsView();
+			this.overlayManager.show( this.resultsElement );
+			this.resultsData.NextMatchTime = this.gameController.getNextGameStartTime();
+			this.resultsTmplItem.update();
 		},
 
 		createStatusView: function( obj )
 		{
 			this.statusElement = HTMLFactory.gameStatus( obj )
 				.insertAfter("nav");
+			this.tmplItem = this.statusElement.tmplItem();
+			this.tmplItem.data = this.currentStatus;
+		},
+
+		createResultsView: function( obj )
+		{
+			this.resultsElement = HTMLFactory.results( obj );
+			this.resultsTmplItem = this.resultsElement.tmplItem();
+			this.resultsTmplItem.data = this.resultsData;
 		},
 
 		update: function()
@@ -53,8 +65,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			if( this.statusElement == null )
 			{
 				this.createStatusView( this.currentStatus );
-				this.tmplItem = this.statusElement.tmplItem();
-				this.tmplItem.data = this.currentStatus;
 			}
 
 			this.currentStatus.Score = this.gameController.clientCharacter.score;
@@ -158,15 +168,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				}
 			});	
 		},
-		
-		shareThis: function()
-		{
-			var that = this;
-			$results = HTMLFactory.results();
-			$("li.share a").click( function() { 
-				that.overlayManager.show( $results );
-			});
-		},
 	
 		serverOffline: function()
 		{
@@ -193,6 +194,12 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		destroy: function()
 		{
 			this.element.remove();
+		},
+
+		updateGameOver: function()
+		{
+			this.resultsData.NextMatchTime = this.gameController.getNextGameStartTime();
+			this.resultsTmplItem.update();
 		}
 	});
 });

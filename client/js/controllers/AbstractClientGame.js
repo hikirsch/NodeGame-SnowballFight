@@ -36,7 +36,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 			this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 			this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
-
 		},
 
 		/**
@@ -249,13 +248,47 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			this.log( 'onRemoveClient: ', arguments );
 		},
 
-		onEndGame: function(){
+		onEndGame: function( clientID, data ){
+			var that = this;
 			this.isGameOver = true;
+			console.log( "Game over data: ", data );
 			this.stopGameClock();
 			this.callSuper();
 			this.view.onEndGame();
 			this.netChannel.dealloc();
 			console.log("(AbstractClientGame) End Game" );
+
+			this.gameClock = 0;
+			this.clockActualTime = new Date().getTime();
+
+			this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, 1000/60 );
+		},
+
+		gameOverTick: function()
+		{
+			// Store the previous clockTime, then set it to whatever it is no, and compare time
+			var oldTime = this.clockActualTime;
+			var now = this.clockActualTime = new Date().getTime();
+			var delta = ( now - oldTime ); // Note (var framerate = 1000/delta);
+
+			// Our clock is zero based, so if for example it says 10,000 - that means the game started 10 seconds ago
+			this.gameClock += delta;
+			this.gameTick++;
+
+			this.view.updateGameOver();
+
+			// TODO: put into config
+			if( this.gameClock > 15 * 1000 ) {
+				clearInterval( this.gameTickInterval );
+			}
+		},
+
+		getNextGameStartTime: function()
+		{
+			var t = Math.round( ( 15000 - this.gameClock ) / 1000);
+			var m = Math.floor( t / 60 );
+			var s = t % 60;
+			return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
 		},
 
 		genericCommand: function()
