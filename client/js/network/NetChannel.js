@@ -53,7 +53,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 
 		// array of the last 31 messages sent
 		this.messageBuffer = [];
-		this.MESSAGE_BUFFER_MASK = 31; // This is used in the messageBuffer bitmask - It's the sequence number
+		this.MESSAGE_BUFFER_MASK = 15; // This is used in the messageBuffer bitmask - It's the sequence number
 
 		this.incomingSequenceNumber = 0;
 		this.incommingCmdBuffer = [];

@@ -62,7 +62,6 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 					setSpriteImage(caatImage);
 
 			this.scene.addChild(background);
-
 //			this.director.loop(1); // DEBUG: Draw once
 //			$(this.director.canvas).appendTo($('body'));
 			$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
@@ -118,7 +117,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		 */
 		renderAtTime: function(renderTime)
 		{
-			var cmdBuffer = this.netChannel.incommingCmdBuffer;
+			var cmdBuffer = this.netChannel.incommingCmdBuffer,
 				len = cmdBuffer.length;
 
 			if( len < 2 ) return false; // Nothing to do!

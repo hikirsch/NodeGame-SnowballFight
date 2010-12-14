@@ -24,7 +24,7 @@ var init = function(EntityModel)
 		blockOfIce4				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:2},radius: 48, theme: '104' },
 		blockOfIce5				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:2},radius: 48, theme: '105' },
 		blockOfIce6				: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:2},radius: 48, theme: '106' },
-		iceMountainOgilvyFlag	: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:24},	radius: 82, theme: '107' },
+		iceMountainOgilvyFlag	: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y: 20},	radius: 90, theme: '107' },
 		iglooGreenFlag			: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:-10},	radius:60, theme: '108' },
 		iglooRedFlag			: { initialPosition:{x:5, y:5}, collisionMask: charactersAndProjectiles, collisionOffset: {x:0, y:-10},	radius: 60, theme: '109' },
 		lakeHorizontalBridge	: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 70, theme: '110' },

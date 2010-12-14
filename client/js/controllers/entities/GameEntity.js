@@ -75,6 +75,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			this.collisionGroup = 0;				// Group we are in
 			this.radius = 10;
 
+			this.destroyOnWrap = false;
 			this.traits = new SortedLookupTable();
 		},
 
@@ -177,16 +178,21 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			this.position.y += this.velocity.y * speedFactor;
 
 			// Wrap horizontal
+			var didWrap = false;
 			if(this.position.x > this.fieldController.getWidth()) {
+				didWrap = true;
 				this.position.x = 0;
 			} else if(this.position.x < 0) { // use view width
+				didWrap = true;
 				this.position.x = this.fieldController.getWidth();
 			}
 
 			// Wrap veritical
 			if(this.position.y > this.fieldController.getHeight()) {
+				didWrap = true;
 				this.position.y = 0;
 			} else if(this.position.y < 0) {
+				didWrap = true;
 				this.position.y = this.fieldController.getHeight();
 			}
 
@@ -199,6 +205,11 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 
 			this.calculateRotation();
 			this.acceleration.x = this.acceleration.y = 0;
+
+			if(didWrap && this.destroyOnWrap) {
+				this.position.x = this.position.y = -999
+				this.fieldController.removeEntity(this.objectID);
+			}
 		},
 
 

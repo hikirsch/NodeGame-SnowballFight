@@ -76,7 +76,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			// Do regular stuff
 			var actualRotation = this.controller.getRotation();
 			if( this.controller.useTransform ) {
-				this.CAATSprite.setRotation( actualRotation );
+				this.CAATSprite.setRotation( actualRotation * 0.0174532);
 			}
 			else if( actualRotation != 0 )
 			{
