@@ -17,20 +17,26 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		var NGK = {
 		};
 
+		// Tripple nested onReady function - awesome!
+		var base = './img/entities/caat/';
+		var themes = GAMECONFIG.ENTITY_MODEL.THEME_MAP;
+		var imagesToLoad = [];
+		for(var aTheme in themes) {
+			// ignore these
+			if(themes[aTheme].match(/(stunned|default|projectile-)/g))
+				continue;
+			imagesToLoad.push({id: aTheme, url: base + themes[aTheme] + ".png"});
+		}
 
-		console.log(AbstractClientGame);
-		var game = new AbstractClientGame( config );
 
-//
-//
-//		//
-//		// Tripple nested onReady function - awesome!
-//		var base = './';
-//		new CAAT.ImagePreloader().loadImages(
-//			[{id: 'blockOfIce4', url:base + 'img/entities/field/block-of-ice-4.png'}],
-//			function(counter, images) {
-//				var game = new AbstractClientGame( config );
-//				console.log(AbstractClientGame);
-//			});
+		// Create CAAT accessor
+		GAMECONFIG.CAAT = {};
+		GAMECONFIG.CAAT.imagePreloader = new CAAT.ImagePreloader();
+		// Fired when images have been preloaded
+		GAMECONFIG.CAAT.imagePreloader.loadImages(imagesToLoad,
+			function(counter, images) {
+				if(counter != images.length) return; // Wait until last load
+				var game = new AbstractClientGame( config );
+			});
     });
 });

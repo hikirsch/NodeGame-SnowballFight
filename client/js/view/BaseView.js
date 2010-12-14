@@ -57,6 +57,11 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 		
 		update: function()
 		{
+			if(this.CAATSprite) {
+				this.CAATSprite.setLocation(this.controller.getPosition().x, this.controller.getPosition().y);
+				return;
+			}
+
 			// the position
 			this.element.css({
 				'left': this.controller.getPosition().x,
@@ -150,6 +155,7 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 		 */
 		adjustSprite: function()
 		{
+
 			if( this.controller.useTransform ) {
 				$(this.element).css({'WebkitTransform': 'rotate(' + ( this.controller.getRotation() ) + 'deg)' });
 			} else {

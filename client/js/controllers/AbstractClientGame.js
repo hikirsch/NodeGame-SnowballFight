@@ -42,11 +42,41 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		initializeCaat: function()
 		{
 			this.director = new CAAT.Director().initialize(900, 600);
-			this.director.timeline = this.gameClock;
-			this.director.loop(30) ;
+			this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
 			this.scene = new CAAT.Scene().create();
-			console.log( this.fieldController.view.getElement() );
-			$(this.director.canvas).appendTo(  $('body') );
+
+			// Store
+			GAMECONFIG.CAAT.DIRECTOR = this.director;
+			GAMECONFIG.CAAT.SCENE = this.scene;
+
+			for(var i = 0; i < -3; i++)
+			{
+				var circle = new CAAT.ShapeActor().create();
+				circle.setShape( CAAT.ShapeActor.prototype.SHAPE_RECTANGLE ).
+						setLocation( Math.random() * this.director.canvas.width, Math.random() * this.director.canvas.height).
+						setSize(10,10).
+						setFillStyle('#ff00ff').
+						setStrokeStyle('#00ff00');
+
+				var alphaBehavior = new CAAT.AlphaBehavior();
+				alphaBehavior.startAlpha = 1.0;
+				alphaBehavior.endAlpha = 0.1;
+				alphaBehavior.setFrameTime(Math.random() * 1000, 4000);
+				alphaBehavior.setCycle(true);
+				alphaBehavior.setPingPong(true);
+				circle.addBehavior(alphaBehavior);
+
+				this.scene.addChild(circle);
+			}
+
+
+//			$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
+
+			// Make accessable
+
+
+			this.director.addScene(this.scene);
+			$(this.director.canvas).appendTo($('body'));
 		},
 
 		/**
@@ -70,8 +100,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			}
 
 
-			this.director.render( this.gameClock - this.director.timeline );
-            this.director.timeline = this.gameClock;
+			this.director.render( this.clockActualTime - this.director.timeline );
+            this.director.timeline = this.clockActualTime;
 		},
 
 		/**
@@ -80,7 +110,7 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 		 */
 		renderAtTime: function(renderTime)
 		{
-			var cmdBuffer = this.netChannel.incommingCmdBuffer;
+			var cmdBuffer = this.netChannel.incommingCmdBuffer,
 				len = cmdBuffer.length;
 
 			if( len < 2 ) return false; // Nothing to do!

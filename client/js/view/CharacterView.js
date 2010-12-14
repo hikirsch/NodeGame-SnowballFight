@@ -10,9 +10,9 @@ Abstract:
 Basic Usage: 
  	
 */
-define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(HTMLFactory, BaseView)
+define(['factories/HTMLFactory', 'view/EntityView', 'lib/jsclass/core'], function(HTMLFactory, EntityView)
 {
-	return new JS.Class(BaseView,
+	return new JS.Class(EntityView,
 	{
 		initialize: function( controller, model ) {
 			this.callSuper();
@@ -37,15 +37,23 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 				nickName: this.model.nickname
 			};
 
+			this.callSuper();
 			this.element = HTMLFactory.character( options );
-
-			// show the right default rotation and sprite class
-			this.adjustSprite();
 		},
 
 		update: function()
         {
-            this.callSuper();
+			this.callSuper();
+
+			var actualRotation = this.controller.getRotation() + 90;
+			if(actualRotation < 0) actualRotation += 359;
+
+			// Round to the number of sprites we have
+			var roundTo = 45,
+				roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
+
+			// Only modify the CSS property if it has changed
+			this.CAATSprite.spriteIndex =  ( roundedRotation / roundTo);
         },
 
 		getNickName: function()
