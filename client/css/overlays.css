@@ -107,4 +107,20 @@
 .inviteOverlay .invite-button { display: block; -webkit-box-reflect: below 0px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.7,transparent),to(white)); position: absolute; top: 95px; left: 70px; cursor: pointer; overflow: visible; }
 
 /* credits overlay */
-.creditsOverlay { width:300px;height:300px;background:#fff;z-index:8000;position:absolute;top:20%;left:20%;-webkit-box-shadow: 0px 0px 10px #999;line-height:120%}
+.creditsOverlay { width:815px;height:545px;background:#fff url(../img/global/bg-credits.png);z-index:8000;position:absolute;top:35px;left:40px; -webkit-box-shadow: 0px 0px 10px #999;line-height:120%}
+.creditsOverlay .creditsHeader {position:relative; padding: 25px 0 0 25px; height:65px;}
+.creditsOverlay .creditsHeader h2 {text-indent:-9999px; width:213px; height:22px; background:url(../img/global/txt-meettheteam.png);}
+.creditsOverlay .creditsHeader p {padding:10px 0 0 0;}
+.creditsOverlay a.closeBtn {position:absolute; left:675px; top:-10px;}
+.creditsOverlay .creditsBody {padding:25px 0 0 25px;}
+.creditsOverlay .creditsBody .column {float:left; width:190px; }
+.creditsOverlay .creditsBody .column ul {list-style-type:none; padding:10px 0 0 0;}
+.creditsOverlay .creditsBody .column ul li {line-height:20px; font-size:12px;}
+.creditsOverlay .creditsBody .column ul li.first {padding:25px 0 0 0;}
+.creditsOverlay .creditsBody .column ul li.title {text-transform:uppercase; font-size:10px; font-weight:bold; width:115px; color:#612ec5 !important;}
+
+.creditsOverlay .creditsBody ul.sponsors {color:#0b748d;}
+.creditsOverlay .creditsBody ul.developers {color:#03a69a;}
+.creditsOverlay .creditsBody ul.creatives {color:#9269e4;}
+.creditsOverlay .creditsBody ul.ux {color:#269cd9; padding-bottom:20px;}
+.creditsOverlay .creditsBody ul.corp {color:#089583;}
