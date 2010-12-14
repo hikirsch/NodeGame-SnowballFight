@@ -91,7 +91,7 @@ SnowGame = (function()
 			var aFieldEntity,
 				aFieldEntityModel;
 
-			var entities = this.getBattlefield1();
+			var entities = this.getBattlefield2();
 
  			for( var i = 0; i < entities.length; i++ ) {
 				var nextEntity = entities[ i ];
@@ -165,6 +165,22 @@ SnowGame = (function()
 				  { position: { x: 850, y: 300 }, entityType: FieldEntityModel.blockOfIce4 },
 				  { position: { x: 226, y: 550 }, entityType: FieldEntityModel.blockOfIce2 },
 				  { position: { x: 526, y: 350 }, entityType: FieldEntityModel.smallPond2 }
+				  ];
+
+		},
+
+		getBattlefield2: function()
+		{
+		  return [
+				  { position: { x: 450, y: 275 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				  { position: { x: 350, y: 225 }, entityType: FieldEntityModel.blockOfIce3 },
+				  { position: { x: 550, y: 225 }, entityType: FieldEntityModel.blockOfIce3 },
+				  { position: { x: 100, y: 100 }, entityType: FieldEntityModel.iglooGreenFlag },
+				  { position: { x: 450, y: 170 }, entityType: FieldEntityModel.blockOfIce6 },
+				  { position: { x: 50, y: 320 }, entityType: FieldEntityModel.blockOfIce1 },
+				  { position: { x: 850, y: 300 }, entityType: FieldEntityModel.blockOfIce4 },
+				  { position: { x: 226, y: 550 }, entityType: FieldEntityModel.blockOfIce2 },
+				  { position: { x: 450, y: 540 }, entityType: FieldEntityModel.smallPond2 }
 				  ];
 
 		}
