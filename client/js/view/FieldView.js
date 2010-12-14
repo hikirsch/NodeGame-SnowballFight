@@ -39,7 +39,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 
 		removeEntity: function( anEntityView )
 		{
-			GAMECONFIG.CAAT.SCENE.removeChild(anEntityView.CAATActorContainer);
+			GAMECONFIG.CAAT.SCENE.removeChild(anEntityView.CAATSprite);
 		},
 
 		getElement: function() {

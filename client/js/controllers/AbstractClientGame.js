@@ -52,10 +52,8 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 //			 ../img/global/bg-field.png
 			$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
 
-			// Make accessable
-
-
 			this.director.addScene(this.scene);
+			this.director.loop(55);
 //			$(this.director.canvas).appendTo($('body'));
 		},
 
@@ -80,10 +78,10 @@ var init = function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitF
 			}
 
 
-			this.fieldController.view.sortChildren();
+//			this.fieldController.view.sortChildren();
 
-			this.director.render( this.clockActualTime - this.director.timeline );
-            this.director.timeline = this.clockActualTime;
+//			this.director.render( this.clockActualTime - this.director.timeline );
+//            this.director.timeline = this.clockActualTime;
 		},
 
 		/**
