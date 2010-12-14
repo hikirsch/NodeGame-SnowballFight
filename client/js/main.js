@@ -10,7 +10,7 @@ Abstract:
 Basic Usage:
  	See index.html // TODO: Update basic usage.
 */
-require(['controllers/AbstractClientGame', 'controllers/ClientGameChooser', 'config', 'scratchpad/Animal'], function(AbstractClientGame, ClientGameChooser, config) {
+require(['controllers/AbstractClientGame', 'config', 'scratchpad/Animal'], function(AbstractClientGame, config) {
 	// Everything ready - start the game client
     require.ready(function()
 	{
