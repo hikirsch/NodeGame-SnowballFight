@@ -75,15 +75,24 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 					top: this.settings.top
 				});
 			},
+
 			hide: function()
 			{
 				if( this.active != null ) {
 					this.active.remove();
+					this.active = null;
 				}
 
 				if( this.element != null ) {
 					this.element.hide();
 				}
+			},
+
+			getActiveBoxPosition: function(){
+				return {
+					OverlayLeftStyle: ( ( this.element.width() - this.active.width() ) / 2 ),
+					OverlayTopStyle: ( ( this.element.height() - this.active.height() ) / 2 )
+				};
 			}
 		}
 	);

@@ -26,7 +26,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.showNav();
 			this.showFooter();
 			this.showInstructions();
-			this.shareThis();
 			this.inviteFriend();
 			this.credits();
 			this.carouselManager = CarouselManager;
@@ -43,8 +42,10 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		{
 			this.createResultsView();
 			this.overlayManager.show( this.resultsElement );
+			this.resultsData.OverlayLeftStyle = this.resultsElement.css('left');
+			this.resultsData.OverlayTopStyle = this.resultsElement.css('top');
 			this.resultsData.NextMatchTime = this.gameController.getNextGameStartTime();
-			this.resultsTmplItem.update();
+			// this.resultsTmplItem.update();
 		},
 
 		createStatusView: function( obj )
@@ -55,11 +56,10 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.tmplItem.data = this.currentStatus;
 		},
 
-		createResultsView: function( obj )
+		createResultsView: function()
 		{
-			this.resultsElement = HTMLFactory.results( obj );
+			this.resultsElement = HTMLFactory.results( this.resultsData );
 			this.resultsTmplItem = this.resultsElement.tmplItem();
-			this.resultsTmplItem.data = this.resultsData;
 		},
 
 		update: function()
@@ -195,15 +195,15 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			return false;
 		},
 
-			 	
+		/*
 		shareThis: function()	
 		{
 			var that = this;	
-			$results = HTMLFactory.results();	
+			$results = HTMLFactory.results();
 			$("li.share a").click( function() { 
 				that.overlayManager.show( $results );
 			});
-		},
+		}, */
 		 	
 		inviteFriend: function() 
 		{
@@ -224,9 +224,8 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			});	
 		},
 
-		credits: function() 	
+		credits: function()
 		{
-		 	
 			var that = this;
 		 	
 			var creditOpen = 0;
@@ -245,6 +244,12 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 					creditOpen = 0;
 				}
 			});
+		},
+
+		hideResultsOverlay: function()
+		{
+			this.overlayManager.hide();
+			$("#results").remove();
 		},
 
 		destroy: function()

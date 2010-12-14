@@ -12,7 +12,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		MAX_PORTS: 100,
 		DEBUG_MODE: true,
 		MAX_PLAYERS: 8,
-
+		SERVER_END_GAME_GRACE: 1000,
+		ROUND_INTERMISSION: 3000,
 		// http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS: {
 			// Connection stuff // TODO: These aren't commands, but messages we should treat different
@@ -27,8 +28,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		},
 
 		CLIENT_SETTING: {
-			updaterate: 1000/30, 			// How often to request an update from the server perserver
-			cmdrate:	1000/40,			// How often to send accumalated CMDS to the server
+			updaterate: 1000/25, 			// How often to request an update from the server perserver
+			cmdrate:	1000/30,			// How often to send accumalated CMDS to the server
 			rate: 10000,					// Controls how much data we can receive / sec before we connection suffers  (2500=modem, 10000=fast-broadband)
 
 			// Input prediction
@@ -48,7 +49,6 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 
 		SERVER_SETTING: {
 			tickrate: 1000/66,				// The server runs the game at this FPS - Recommended to not modify,
-
 			minupdaterate: 1000/10,
 			maxupdaterate: 1000/60,
 			minrate: 2500,
