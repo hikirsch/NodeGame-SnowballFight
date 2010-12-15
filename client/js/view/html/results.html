@@ -4,8 +4,8 @@
 			<div class="resultsHeader">
 				<img src="img/results/txt-how-do.png"><br>
 				<p>Lorem ipsum and all that jazz...</p>
-				<div class="nextMatch">${NextMatchTime}</div>
-				<a href="#"><img src="img/global/btn-change.png" class="changeCharacter"></a>
+				<div class="nextMatch ${HideClass}">${NextMatchTime}</div>
+				<a class="${HideClass}" href="#"><img src="img/global/btn-change.png" class="changeCharacter"></a>
 			</div>
 
 			<div class="resultsData">
@@ -17,17 +17,17 @@
 						<th width="190" class="center"><img src="img/results/txt-score.png"></th>
 						<th width="140"><img src="img/results/txt-stunned.png"></th>
 						<th width="130"><img src="img/results/txt-frozen.png"></th>
-						<th width="125"><img src="img/results/txt-ping.png"></td>
+						<th width="125"><img src="img/results/txt-ping.png"></th>
 					</tr>
-					{{each ScoreData}}
+				   {{each PlayerStats}}
 					<tr>
-						<td width="70" class="position even">${Rank}</td>
-						<td width="140" class="even">${NickName}</td>
+						<td width="70" class="position even">${this.Rank}</td>
+						<td width="140" class="even">${this.nickname}</td>
 						<td width="5" class="spacer"></td>
-						<td width="190" class="even center">${Score}</td>
-						<td width="140" class="even stun">${Stunned}</td>
-						<td width="130" class="even frozen">${Frozen}</td>
-						<td width="125" class="even ping">${Ping}</td>
+						<td width="190" class="even center">${this.score}</td>
+						<td width="140" class="even stun">${this.Stunned}</td>
+						<td width="130" class="even frozen">${this.Frozen}</td>
+						<td width="125" class="even ping">${this.Ping}</td>
 					</tr>
 					{{/each}}
 				</table>

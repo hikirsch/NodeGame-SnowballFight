@@ -66,7 +66,10 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
 			},
 
-
+			getResults: function()
+			{
+				return this.fieldController.getPlayerStats();
+			},
 
 			createView: function()
 			{
@@ -322,7 +325,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 			joinNextGame: function()
 			{
-				this.view.hideResultsOverlay();
+				this.view.hideResultsView();
 				this.config.port = this.nextGamePort;
 				this.netChannel = new NetChannel(this.config, this, true);
 				this.fieldController.dealloc();

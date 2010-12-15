@@ -56,7 +56,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		},
 
 		PRESENTS_SETTING: {
-			PRESENTS_MAX: 3,
+			PRESENTS_MAX: 3
 		},
 
 		// The client sends this bitmask to the server
@@ -67,7 +67,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			LEFT	: 1 << 2,
 			RIGHT	: 1 << 3,
 			SPACE	: 1 << 4,
-			SHIFT	: 1 << 5
+			SHIFT	: 1 << 5,
+			TAB		: 1 << 6
 		},
 
 		SCORING: {

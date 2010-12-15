@@ -35,32 +35,54 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				TotalPlayers: "00",
 				Rank: "00/00"
 			};
-			this.resultsData = {};
 			this.myCharacterModel = null;
+			this.resultsOverlayShowing = false;
+			this.resultsData = {};
 		},
 
 		onEndGame: function()
 		{
-			this.createResultsView();
-			this.overlayManager.show( this.resultsElement );
-			this.resultsData.OverlayLeftStyle = this.resultsElement.css('left');
-			this.resultsData.OverlayTopStyle = this.resultsElement.css('top');
-			this.resultsData.NextMatchTime = this.gameController.getNextGameStartTime();
-			// this.resultsTmplItem.update();
+			this.showResultsView();
 		},
 
 		createStatusView: function( obj )
 		{
-			this.statusElement = HTMLFactory.gameStatus( obj )
+			this.statusElement = HTMLFactory.gameStatus( this.currentStatus )
 				.insertAfter("nav");
 			this.tmplItem = this.statusElement.tmplItem();
-			this.tmplItem.data = this.currentStatus;
+		},
+
+		hideResultsView: function()
+		{
+			this.overlayManager.hide();
+			$("#results").remove();
+			this.resultsOverlayShowing = false;
+			this.resultsElement = null;
+		},
+
+		showResultsView: function()
+		{
+			this.createResultsView();
+			this.overlayManager.show( this.resultsElement );
+			this.updateResultsView();
+			this.resultsOverlayShowing = true;
 		},
 
 		createResultsView: function()
 		{
 			this.resultsElement = HTMLFactory.results( this.resultsData );
 			this.resultsTmplItem = this.resultsElement.tmplItem();
+			this.resultsOverlayShowing = false;
+		},
+
+		updateResultsView: function()
+		{
+			this.resultsData.OverlayLeftStyle = this.resultsElement.css('left');
+			this.resultsData.OverlayTopStyle = this.resultsElement.css('top');
+			this.resultsData.NextMatchTime = 'TEST'; // this.gameController.getNextGameStartTime();
+			this.resultsData.HideClass = ! this.gameController.isGameOver ? 'hide' : '';
+			this.resultsData.PlayerStats = this.gameController.getResults();
+			this.resultsTmplItem.update();
 		},
 
 		update: function()
@@ -76,6 +98,25 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
 
 			this.tmplItem.update();
+
+			if( this.gameController.clientCharacter.input.isTab() )
+			{
+				if( ! this.resultsOverlayShowing )
+				{
+					this.showResultsView();
+				}
+				else
+				{
+					this.updateResultsView();
+				}
+			}
+			else
+			{
+				if( this.resultsOverlayShowing )
+				{
+					this.hideResultsView();
+				}
+			}
 		},
 
 		showNav: function()
@@ -93,7 +134,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		showIntro: function()
 		{
 			if( location.href.toLocaleLowerCase().indexOf("playnow") > -1 ) {
-				this.joinGame('999');
+				this.joinGame('201');
 				return false;
 			}
 
@@ -257,12 +298,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 					creditOpen = 0;
 				}
 			});
-		},
-
-		hideResultsOverlay: function()
-		{
-			this.overlayManager.hide();
-			$("#results").remove();
 		},
 
 		destroy: function()

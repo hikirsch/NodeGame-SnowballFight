@@ -8,7 +8,7 @@ var init = function($)
 	{
 		initialize: function()
 		{
-			this.keyCodes = { '16': 'shift', '32': 'space', '37': 'left', '38': 'up', '39': 'right', '40': 'down'},
+			this.keyCodes = { '16': 'shift', '32': 'space', '37': 'left', '38': 'up', '39': 'right', '40': 'down', '9': 'tab'},
 			this.keys = {'shift': false, 'space': false, 'up': false, 'down': false, 'left': false, "right": false },
 			this.keyPressed = 0;
 
@@ -71,6 +71,7 @@ var init = function($)
 			if(this.keys['right']) input |= GAMECONFIG.INPUT_BITMASK.RIGHT;
 			if(this.keys['space']) input |= GAMECONFIG.INPUT_BITMASK.SPACE;
 			if(this.keys['shift']) input |= GAMECONFIG.INPUT_BITMASK.SHIFT;
+			if(this.keys['tab']) input |= GAMECONFIG.INPUT_BITMASK.TAB;
 
 			return input;
 		},
@@ -99,7 +100,8 @@ var init = function($)
 		isRight: function() { return this.keys['right']; },
 		isDown: function() { return this.keys['down']; },
 		isSpace: function() { return this.keys['space']; },
-		isShift: function() { return this.keys['shift']; }
+		isShift: function() { return this.keys['shift']; },
+		isTab: function() { return this.keys['tab']; }
 	});
 };
 

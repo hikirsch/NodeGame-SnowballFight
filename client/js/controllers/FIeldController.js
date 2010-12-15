@@ -233,6 +233,20 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.allEntities.remove( objectID );
 		},
 
+		getPlayerStats: function()
+		{
+			var playerStats = [];
+
+			this.players.forEach( function( clientId, player ) {
+				playerStats.push({
+					nickname: player.nickname,
+					score: player.score
+				});
+			}, this );
+
+			return playerStats;
+		},
+
 		/**
 		 * Accessors
 		 */
