@@ -44,9 +44,9 @@ SnowGame = (function()
 			this.createLevel();
 
 
-			this.presentsActive = new SortedLookupTable();
-			this.presentsTimer = 0;
-			this.spawnPresents();
+			// this.presentsActive = new SortedLookupTable();
+			// this.presentsTimer = 0;
+			// this.spawnPresents();
 		},
 
 		/**
@@ -58,7 +58,7 @@ SnowGame = (function()
 			var aFieldEntity,
 				aFieldEntityModel;
 
-			var entities = this.getBattlefield2();
+			var entities = this.getAllFieldEntitiesAsLevel();
 
  			for( var i = 0; i < entities.length; i++ ) {
 				var nextEntity = entities[ i ];

@@ -12,8 +12,8 @@ Basic Usage:
 	var gameController = new ClientGameController(HOST, PORT) 
 */
 
-define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'controllers/AbstractGame','factories/TraitFactory', 'lib/jsclass/core' ],
-	function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitFactory, QueryStringManager)
+define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'controllers/AbstractGame','factories/TraitFactory', 'controllers/FieldController', 'lib/jsclass/core' ],
+	function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitFactory, FieldController)
 	{
 		return new JS.Class(AbstractGame,
 		{
@@ -325,6 +325,10 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.view.hideResultsOverlay();
 				this.config.port = this.nextGamePort;
 				this.netChannel = new NetChannel(this.config, this, true);
+				this.fieldController.dealloc();
+				this.fieldController = new FieldController( this, this.model );
+				this.fieldController.createView( this.model );
+
 				// this.netChannel.handleServerGameSelector( this.nextGamePort, true );
 				this.startGameClock();
 			},

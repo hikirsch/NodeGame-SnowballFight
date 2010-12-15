@@ -50,8 +50,8 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 			return this.element;
 		},
 
-		destroy: function() {
-			this.element.destroy();
+		dealloc: function() {
+			this.element.remove();
 		},
 
 		getLeft: function()

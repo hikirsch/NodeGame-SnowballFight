@@ -275,7 +275,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			this.allEntities.dealloc();
 			this.players.dealloc();
+			this.view.dealloc();
 
+			delete this.view;
 			delete this.players;
 			delete this.allEntities;
 		},
