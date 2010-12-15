@@ -46,7 +46,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.resultsData.OverlayLeftStyle = this.resultsElement.css('left');
 			this.resultsData.OverlayTopStyle = this.resultsElement.css('top');
 			this.resultsData.NextMatchTime = this.gameController.getNextGameStartTime();
-			// this.resultsTmplItem.update();
 		},
 
 		createStatusView: function( obj )
