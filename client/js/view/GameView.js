@@ -68,11 +68,10 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			{
 				this.createStatusView( this.currentStatus );
 			}
-
 			this.currentStatus.Score = this.gameController.clientCharacter.score;
-			this.currentStatus.Rank = this.gameController.getRank();
 			this.currentStatus.TotalPlayers = this.gameController.getNumberOfPlayers();
 			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
+			this.currentStatus.Rank = "0" + this.gameController.clientCharacter.rank + "/" + this.currentStatus.TotalPlayers;
 
 			this.tmplItem.update();
 		},

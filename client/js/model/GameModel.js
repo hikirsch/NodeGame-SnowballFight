@@ -16,8 +16,8 @@ var init = function()
 	return {
 		width: 900,
 		height: 600,
-		gameDuration: 6 * 1000
-//		gameDuration: 0.25 * 60 * 1000
+//		gameDuration: 6 * 1000
+		gameDuration: 2.5 * 60 * 1000
 	}
 };
 

@@ -274,9 +274,9 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				}, this);
 
 				// Destroy removed entities
-				this.fieldController.removeExpiredEntities( activeEntities );
+				if(this.gameTick % 10 === 0)
+					this.fieldController.removeExpiredEntities( activeEntities );
 
-				this.fieldController.view.sortChildren();
 				this.director.render( this.clockActualTime - this.director.timeline );
 				this.director.timeline = this.clockActualTime;
 			},

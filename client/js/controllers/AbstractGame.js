@@ -80,11 +80,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 			return this.getTwoDigits( this.fieldController.players.count() );
 		},
 
-		getRank: function()
-		{
-			return "00" + "/" + this.getNumberOfPlayers();
-		},
-
 		setModel: function(aGameModel)
 		{
 			this.model = aGameModel;

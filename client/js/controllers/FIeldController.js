@@ -12,6 +12,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			// Might do away with different types of entities tables
 			this.allEntities = new SortedLookupTable();
 			this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (WebSocket connection) not the objectID
+			this.playersArray = []; // Used for ranking, TODO: figure out better way to implement character ranking
 
 			this.setModel( gameModel );
 		},
@@ -56,7 +57,18 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.addEntity(aNewCharacter);
 			this.players.setObjectForKey( aNewCharacter, aNewCharacter.clientID );
 
+			this.resetPlayersArray();
 			return aNewCharacter;
+		},
+
+		resetPlayersArray: function()
+		{
+			var aPlayersArray = [];
+			this.players.forEach( function(key, entity){
+				aPlayersArray.push(entity)
+			}, this );
+
+			this.playersArray = aPlayersArray;
 		},
 
 		/**
@@ -115,10 +127,23 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		tick: function(speedFactor, gameClock)
 		{
-			// Update players
+			// Update entities
 			this.allEntities.forEach( function(key, entity){
 				entity.tick(speedFactor, gameClock);
 			}, this );
+
+			// Rank players
+			this.playersArray.sort(function(a, b) {
+				var comparisonResult = 0;
+				if(a.score < b.score) comparisonResult = 1;
+				else if(a.score > b.score) comparisonResult = -1;
+				return comparisonResult;
+			});
+
+			// Set the players rank to the their index in the sorted array
+			var len = this.playersArray.length;
+			for(var i = 0; i < len; i++)
+				this.playersArray[i].rank = i+1;
 		},
 
 		onEndGame: function()
@@ -206,7 +231,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 					this.removePlayer( entity.clientID );
 				} else {
 					// Is not active, and does not belong to the server
-//					console.log("(FieldController) removeEntity", key);
 					this.removeEntity(key);
 				}
 			}
