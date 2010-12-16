@@ -1,36 +1,15 @@
-var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailable, intro, characterSelect, instructions, character, field, entity, results, invite, credits  ) {
+var init = function( $, browserReq, character, characterSelect, credits, entity, field, footer, gameStatus, instructions, intro, invite, navigation, overlay, results, serverUnavailable ) {
 	return {
-		navigation: function() {
-			return $(navigation)
-				.tmpl();
-		},
+        browserRequirements: function() {
+            return $(browserReq)
+                .tmpl();
+        },
 
-		gameStatus: function(obj) {
-			return $(gameStatus)
-				.tmpl(obj);
-		},
-
-		serverUnavailableDialog: function() {
-			return $(serverUnavailable)
-				.tmpl();
-		},
-
-		footer: function() {
-			return $(footer)
-				.tmpl();
-		},
-
-		intro: function()
-		{
-			return $(intro)
-				.tmpl();
-		},
-
-		instructions: function()
-		{		
-			return $(instructions)
-				.tmpl();
-		},
+        character: function( data ) {
+            return $(character)
+                .tmpl( data )
+                .addClass( data.theme );
+        },
 
 		characterSelect: function()
 		{
@@ -38,61 +17,89 @@ var init = function( $, overlay, navigation, gameStatus, footer, serverUnavailab
 				.tmpl();
 		},
 
-		character: function( data ) {
-			return $(character)
-				.tmpl( data )
-				.addClass( data.theme );
-		},
+        credits: function(data) {
+            return $(credits)
+            .tmpl()
+        },
+
+        entity: function(data) {
+            return $(entity)
+                .tmpl(data)
+                .addClass( data.theme );
+        },
 
 		field: function() {
 			return $(field)
 				.tmpl();
 		},
 
-		entity: function(data) {
-			return $(entity)
-				.tmpl(data)
-				.addClass( data.theme );
+        footer: function() {
+            return $(footer)
+                .tmpl();
+        },
+
+		gameStatus: function(obj) {
+			return $(gameStatus)
+				.tmpl(obj);
 		},
-		
-		results: function( data ) {
-			return $(results)
-				.tmpl( data );
+
+        instructions: function()
+        {
+            return $(instructions)
+                .tmpl();
+        },
+
+		intro: function()
+		{
+			return $(intro)
+				.tmpl();
 		},
-		
-		invite: function( data ) {
-			return $(invite)
-			.tmpl()
-		},
-		
-		credits: function(data) {
-			return $(credits)
-			.tmpl()
-		},
-		
+
+        invite: function( data ) {
+            return $(invite)
+            .tmpl()
+        },
+
+        navigation: function() {
+            return $(navigation)
+                .tmpl();
+        },
+
 		overlay: function() {
 			return $(overlay)
 				.tmpl();
-		}
+		},
+
+        results: function( data ) {
+            return $(results)
+                .tmpl( data );
+        },
+
+        serverUnavailableDialog: function() {
+            return $(serverUnavailable)
+                .tmpl();
+        }
+
 	};
 };
 
 define([
 		'jquery',
-		'text!view/html/overlay.html',
-		'text!view/html/navigation.html',
-		'text!view/html/game-status.html',
+        'text!view/html/browser-req.html',
+        'text!view/html/character.html',
+        'text!view/html/character-select.html',
+        'text!view/html/credits.html',
+        'text!view/html/entity.html',
+        'text!view/html/field.html',
 		'text!view/html/footer.html',
-		'text!view/html/server-unavailable.html',
+        'text!view/html/game-status.html',
+        'text!view/html/instructions.html',
 		'text!view/html/intro.html',
-		'text!view/html/character-select.html',
-		'text!view/html/instructions.html',
-		'text!view/html/character.html',
-		'text!view/html/field.html',
-		'text!view/html/entity.html',
+        'text!view/html/invite.html',
+        'text!view/html/navigation.html',
+        'text!view/html/overlay.html',
 		'text!view/html/results.html',
-		'text!view/html/invite.html',
-		'text!view/html/credits.html',
+        'text!view/html/server-unavailable.html',
 		'plugins/jquery.tmpl.min' /** this should be last **/
 ], init);
 
