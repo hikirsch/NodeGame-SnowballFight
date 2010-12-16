@@ -25,10 +25,10 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.overlayManager = new OverlayManager( controller, gameModel );
 			this.showNav();
 			this.showFooter();
-			this.showInstructions();
-            this.showBrowserReq();
+			this.attachInstructions();
 			this.inviteFriend();
-			this.credits();
+			this.attachCredits();
+			this.attachShare();
 			this.carouselManager = CarouselManager;
 			this.currentStatus = {
 				TimeLeft: "00:00",
@@ -55,7 +55,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		hideResultsView: function()
 		{
-			this.overlayManager.hide();
+			this.overlayManager.popOverlay();
 			$("#results").remove();
 			this.resultsOverlayShowing = false;
 			this.resultsElement = null;
@@ -64,7 +64,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		showResultsView: function()
 		{
 			this.createResultsView();
-			this.overlayManager.show( this.resultsElement );
+			this.overlayManager.pushOverlay( this.resultsElement );
 			this.updateResultsView();
 			this.resultsOverlayShowing = true;
 		},
@@ -92,6 +92,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			{
 				this.createStatusView( this.currentStatus );
 			}
+
 			this.currentStatus.Score = this.gameController.clientCharacter.score;
 			this.currentStatus.TotalPlayers = this.gameController.getNumberOfPlayers();
 			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
@@ -147,9 +148,14 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 				$intro
 					.find('a.jumpinLink')
-					.click( function(){ return that.showCharacterSelect(); } );
+					.click( function(){
+						that.overlayManager.popOverlay();
+						that.showCharacterSelect();
 
-				this.overlayManager.show( $intro );
+						return false;
+					});
+
+				this.overlayManager.pushOverlay( $intro );
 			}
 			else
 			{
@@ -192,57 +198,52 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 						that.carouselManager.move(false);
 					});
 
-				this.overlayManager.show( $characterSelect );
+				this.overlayManager.pushOverlay( $characterSelect );
 			}
-
-			return false;
 		},
-		
-		showInstructions: function() 
-		{		
+
+		attachInstructions: function()
+		{
 			var that = this;
-			var show = 0;
-			$instructions = HTMLFactory.instructions();
-			$("li.instructions a").click( function() { 
-				if(that.show != 1) {
-					that.overlayManager.show($instructions); 
-					that.show = 1;
-					$("#playBtn").click( function() {
-						if(that.gameController.clientCharacter == null) {
-							that.showCharacterSelect();
-						} else {
-							that.overlayManager.hide();
-						}
-						that.show = 0;
-					});
-				} else {
-					that.overlayManager.hide();
-					that.show = 0;
-				}
-			});	
+
+			$("li.instructions a").click(function() {
+				that.showInstructions();
+				return false;
+			});
+		},
+
+		showInstructions: function() 
+		{
+			var that = this,
+				show = false,
+				$instructions;
+
+			if( ! show ) {
+				show = true;
+				$instructions = HTMLFactory.instructions();
+
+				this.overlayManager.pushOverlay($instructions);
+
+				$("#playBtn").click( function() {
+					that.overlayManager.popOverlay();
+					show = false;
+
+					return false;
+				});
+			}
 		},
 	
         showBrowserReq: function()
-        {
-            var that = this;
-            var show = 0;
-            $browserReq = HTMLFactory.browserRequirements();
-            //TODO: replace click with conditional statement testing browser(s)ß
-            $("li.share a").click( function() {
-                if(that.show !== 1) {
-                    that.overlayManager.show($browserReq);
-                    that.show = 1;
-                } else {
-                    that.overlayManager.hide();
-                    that.show = 0;
-                }
-            });
-        },
+		{
+			$browserReq = HTMLFactory.browserRequirements();
+			this.overlayManager.pushOverlay($browserReq);
+			$("html").addClass('unsupported-browser');
+		},
 
 		serverOffline: function()
 		{
 			var $unavailableEle = HTMLFactory.serverUnavailableDialog();
-			this.overlayManager.show( $unavailableEle );
+			this.overlayManager.pushOverlay( $unavailableEle );
 		},
 	
 		joinGame: function( characterType )
@@ -261,7 +262,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.gameController.joinGame(nickName, characterType);
 
-			this.overlayManager.hide();
+			this.overlayManager.popOverlay();
 
 			return false;
 		},
@@ -284,37 +285,55 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			$("#btn-invite").click( function() { 
 				if(inviteOpen == 0) 
 				{ 
-					that.overlayManager.show( $invite );
+					that.overlayManager.pushOverlay( $invite );
 					inviteOpen = 1;
 				} 
 				else
 				{ 
-					that.overlayManager.hide();
+					that.overlayManager.popOverlay();
 					inviteOpen = 0;
 				}
 			});	
 		},
 
-		credits: function()
+		attachShare: function() {
+			$("li.share a").click( function() {
+				return false;
+			})
+		},
+
+		attachCredits: function()
 		{
 			var that = this;
-		 	
-			var creditOpen = 0;
-		 	
-			$credits = HTMLFactory.credits();
-		 	
-			$("#credits-link").click( function() { 
-				if(creditOpen == 0)
-				{
-					that.overlayManager.show( $credits );
-					creditOpen = 1;
-				} 
-				else 
-				{ 
-					that.overlayManager.hide();
-					creditOpen = 0;
-				}
+
+			$("#credits-link").click( function() {
+				that.showCredits();
+				return false;
 			});
+		},
+
+		showCredits: function()
+		{
+			var that = this,
+				creditOpen = false,
+				$credits = HTMLFactory.credits();
+
+			if( ! creditOpen )
+			{
+				that.overlayManager.pushOverlay( $credits );
+				creditOpen = true;
+			}
+			else
+			{
+				that.overlayManager.popOverlay();
+				creditOpen = false;
+			}
+
+			$(".closeBtn").click( function() {
+				that.overlayManager.popOverlay();
+				creditOpen = false;
+			});
+
 		},
 
 		destroy: function()

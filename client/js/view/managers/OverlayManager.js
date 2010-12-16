@@ -13,7 +13,7 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 					left: 0
 				};
 
-				this.active = null;
+				this.active = [];
 
 				var that = this;
 				$(window).resize(function(){ that.resize(); });
@@ -34,12 +34,12 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 					.appendTo("body");
 			},
 
-			show: function( $ele )
+			pushOverlay: function( $ele )
 			{
-				if( this.active != null )
+				if( this.active.length > 0 )
 				{
-					this.active.remove();
-					this.active = null;
+					this.activeElement.remove();
+					this.activeElement = null;
 				}
 
 				if( this.element == null )
@@ -47,27 +47,30 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 					this.createElement();
 				}
 
-				this.active = $ele;
+				this.activeElement = $ele;
+				this.active.push( this.activeElement );
 
 				this.element.show();
 
-				this.active.appendTo("body");
+				this.activeElement.appendTo("body");
 
 				this.resize();
+				console.log( '(OverlayManager) Push', $ele, this.active );
 			},
 
 			resize: function()
 			{
-				if( this.element == null ) {
+				if( this.element == null )
+				{
 					this.createElement();
 				}
 
 				this.settings.left = this.controller.getFieldLeft();
 				this.settings.top = this.controller.getFieldTop();
 
-				this.active.css({
-					left: this.settings.left + ( ( this.element.width() - this.active.width() ) / 2 ),
-					top: this.settings.top + ( ( this.element.height() - this.active.height() ) / 2 )
+				this.activeElement.css({
+					left: this.settings.left + ( ( this.element.width() - this.activeElement.width() ) / 2 ),
+					top: this.settings.top + ( ( this.element.height() - this.activeElement.height() ) / 2 )
 				});
 
 				this.element.css({
@@ -76,16 +79,31 @@ define(['factories/HTMLFactory', 'model/GameModel' ], function( HTMLFactory, gam
 				});
 			},
 
-			hide: function()
+			popOverlay: function()
 			{
-				if( this.active != null ) {
-					this.active.remove();
-					this.active = null;
+				var ele;
+
+				if( this.activeElement != null )
+				{
+					ele = this.active.pop();
+					this.activeElement.remove();
+					this.activeElment = null;
 				}
 
-				if( this.element != null ) {
+				console.log( '(OverlayManager) Popped', ele, this.active );
+
+				if( this.active.length > 0 )
+				{
+					ele = this.active.pop();
+					console.log('(OverlayManager) Pushing back on: ', ele );
+					this.pushOverlay( ele );
+				}
+				else if( this.element != null )
+				{
 					this.element.hide();
 				}
+
+
 			},
 
 			getActiveBoxPosition: function(){

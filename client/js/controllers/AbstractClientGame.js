@@ -36,7 +36,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.director.addScene(this.scene);
 
 				this.view = new GameView(this, this.model );
-
+				this.supportedBrowser = false;
 
 				this.initializeGame();
 			},
@@ -52,13 +52,19 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 					this.fieldController = new FieldController( this, this.model );
 				}
 
-				this.netChannel = new NetChannel(this.config, this);
-
-
 				this.fieldController.createView( this.model );
 
-				this.initializeCaat();
-				this.startGameClock();
+
+				if( typeof WebSocket !== "undefined" ) {
+					this.supportedBrowser = true;
+					this.netChannel = new NetChannel(this.config, this);
+					this.initializeCaat();
+					this.startGameClock();
+				}
+				else
+				{
+					this.view.showBrowserReq();
+				}
 			},
 
 			initializeCaat: function()
