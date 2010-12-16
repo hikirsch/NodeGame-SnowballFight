@@ -29,7 +29,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		this.config = config;
 
 		// Dev flag, turning this on will output tons information to the console
-		this.verboseMode = true;
+		this.verboseMode = false;
 
 		// Make sure this controller is valid before moving forward, the controller must contain certain methods we can rely on being callable
 		if( this.validateController(aController) === false)
@@ -376,6 +376,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		var ready = this.gameClock > this.lastSentTime + this.cmdrate;
 		return ready;
 	};
+
 	/**
 	 * disconnect the client and we're done
 	 */

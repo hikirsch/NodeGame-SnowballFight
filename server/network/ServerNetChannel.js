@@ -283,7 +283,6 @@ ServerNetChannel = (function()
 			aDecodedMessage.gameClock = this.delegate.gameClock;
 			aDecodedMessage.gameModel = this.delegate.model;
 
-			debugger;
 			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
 
 			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
@@ -319,6 +318,7 @@ ServerNetChannel = (function()
 
 		onPlayerMoveCommand: function(connection, aDecodedMessage)
 		{
+
 			this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
 		},
 
@@ -337,6 +337,11 @@ ServerNetChannel = (function()
 
 		dealloc: function()
 		{
+
+			for(var aClient in this.clients)
+			{
+				try { this.clients[aClient].close(); } catch( e ) { }
+			}
 			this.$.stopListening();
 			console.log("(ServerNetChannel) Closing Port: " + this.port );
 		}

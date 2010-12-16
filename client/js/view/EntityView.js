@@ -27,7 +27,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			this.CAATSprite.spriteIndex = themeModel.spriteIndex;
 			this.CAATSprite.setScaleAnchored(1, 1, 0);
-
+		   this.CAATSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
 
 			// Don't create an actorcontainer if its not a character
 			if(this.controller.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER)
@@ -39,6 +39,8 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			}
 
 			GAMECONFIG.CAAT.SCENE.addChild(actor);
+
+			actor.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
 			actor.zIndex = themeModel.zIndex;
 			this.CAATText = null;
 		},
@@ -50,8 +52,8 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		update: function()
 		{
 			var actor = this.CAATActorContainer || this.CAATSprite;
-			actor.setLocation(this.controller.getPosition().x - actor.width*0.5,
-					this.controller.getPosition().y-actor.height*0.5);
+			actor.setLocation(this.controller.getPosition().x,
+					this.controller.getPosition().y);
 
 			// See if anything fancy has occured
 			var isInSpecialView = false;
