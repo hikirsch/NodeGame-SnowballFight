@@ -101,7 +101,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			this.allEntities.setObjectForKey( anEntity, anEntity.objectID );
 
-			// If we have a circle collision manager - create a acked circle and add it to that
+			console.log('(FieldController) Adding entity');
+
+			// If we have a circle collision manager - create a acked circle and a it to that
 			if(this.packedCircleManager)
 			{
 				// Create the PackedCircle
@@ -242,7 +244,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		removeEntity: function( objectID )
 		{
-			// console.log("Removing Entity!", objectID);
+			console.log("(FieldController) removingEntity");
 			var entity = this.allEntities.objectForKey( objectID );
 
 			// Clients contain a view, server entities contain a collisionCircle.
@@ -311,6 +313,15 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 		dealloc: function()
 		{
+			this.players.forEach( function(key, entity){
+				this.removePlayer(entity.clientID);
+			}, this );
+
+			this.allEntities.forEach( function(key, entity){
+				this.removeEntity(entity.objectID);
+			}, this );
+
+
 			this.allEntities.dealloc();
 			this.players.dealloc();
 

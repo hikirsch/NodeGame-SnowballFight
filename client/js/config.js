@@ -54,7 +54,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			minupdaterate: 1000/10,
 			maxupdaterate: 1000/60,
 			minrate: 2500,
-			maxrate: 10000
+			maxrate: 10000,
+			NEXT_GAME_ID: 1
 		},
 
 		PRESENTS_SETTING: {

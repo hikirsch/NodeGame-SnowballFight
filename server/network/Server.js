@@ -125,6 +125,7 @@ Server = (function()
 
 		createGame: function( newPort )
 		{
+			this.gameConfig.SERVER_SETTING.NEXT_GAME_ID++;
 			var aGameInstance = new SnowGame( this, newPort );
 			// start the game
 			aGameInstance.start();

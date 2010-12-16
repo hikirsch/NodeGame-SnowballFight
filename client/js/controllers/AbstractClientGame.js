@@ -32,7 +32,11 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
 
+				this.scene = new CAAT.Scene().create();
+				this.director.addScene(this.scene);
+
 				this.view = new GameView(this, this.model );
+
 
 				this.initializeGame();
 			},
@@ -59,18 +63,16 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 			initializeCaat: function()
 			{
-				this.director.emptyScenes();
+//				this.director.emptyScenes();
 
 				// Init the scene for this match
-				this.scene = new CAAT.Scene().create();
-				this.director.addScene(this.scene);
 
 				// Store
 				GAMECONFIG.CAAT.DIRECTOR = this.director;
 				GAMECONFIG.CAAT.SCENE = this.scene;
 
 				var caatImage = new CAAT.CompoundImage().
-						initialize(this.director.getImage('gameBackground'), 1, 1);
+						initialize(this.director.getImage('gameBackground'), Math.floor(Math.random() * 6), 1);
 
 				// Create a sprite using the CompoundImage
 				var background = new CAAT.SpriteActor().
@@ -79,6 +81,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 				this.scene.addChild(background);
 
+//				this.director.switchToNextScene( 1000, true, true);
 	//			this.director.loop(1); // DEBUG: Draw once
 	//			$(this.director.canvas).appendTo($('body'));
 				$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
@@ -278,6 +281,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 				}, this);
 
+
 				// Destroy removed entities
 				if(this.gameTick % 10 === 0)
 					this.fieldController.removeExpiredEntities( activeEntities );
@@ -311,7 +315,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			{
 				this.callSuper();
 
-
+				this.director.emptyScenes();
 				this.view.onEndGame();
 				this.stopGameClock();
 
