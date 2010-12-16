@@ -83,7 +83,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	NetChannel.prototype.onSeverGameSelectorResponse = function( newPort, connected ) {
 		var that = this;
 		this.newPort = newPort;
-
 		if( connected ) {
 			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.GAME_PORT);
 			this.connection = new WebSocket( 'ws://' + this.config.HOST + ':' + newPort );
