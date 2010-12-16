@@ -32,6 +32,7 @@ footer a { font-size: 11px; color: #005072; }
 	height: 100%; width: 100%;
 }
 
+.server-offline .game-container,
 .unsupported-browser .game-container { background-image: url( '../img/entities/caat/bg-field.png'); background-repeat: no-repeat; }
 
 

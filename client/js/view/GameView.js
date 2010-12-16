@@ -244,6 +244,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		{
 			var $unavailableEle = HTMLFactory.serverUnavailableDialog();
 			this.overlayManager.pushOverlay( $unavailableEle );
+			$("html").addClass('server-offline');
 		},
 	
 		joinGame: function( characterType )
