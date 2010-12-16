@@ -28,7 +28,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			this.CAATSprite.spriteIndex = themeModel.spriteIndex;
 			this.CAATSprite.setScaleAnchored(1, 1, 0);
 		  	this.CAATSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
-
+			this.CAATText = null;
 			// Don't create an actorcontainer if its not a character
 			if(this.controller.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER)
 			{
@@ -43,10 +43,10 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			this.actorWidth = actor.width*0.5;
 			this.actorHeight = actor.height*0.5;
 			actor.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
-			actor.zIndex = themeModel.zIndex;
+			this.CAATSprite.zIndex = actor.zIndex = themeModel.zIndex;
 			this.CAATSprite.mouseEnabled = actor.mouseEnabled = false;
-			this.CAATText = null;
 
+//			GAMECONFIG.CAAT.SCENE.setZOrder(actor, actor.zIndex);
 			// We previously had a theme applied - reset it
 			this.isDirtyTheme = false;
 		},
@@ -85,8 +85,11 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					this.CAATSprite.setAnimationImageIndex( [8,9] );
                 	this.CAATSprite.changeFPS= 300;
 				} else if (themeMask === '2') {
-					isInSpecialView = false;
-					actor.alpha = Math.random();
+					isInSpecialView = true;
+					// TODO: HACK - we shouldn't have to reset animation index here
+					this.CAATSprite.spriteIndex = 1;
+					this.CAATSprite.setAnimationImageIndex([1]);
+					this.CAATSprite.setAlpha(Math.random());
 				}
 
 				this.isDirtyTheme = true;
@@ -95,7 +98,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			// This is true if we had a theme applied, and its done, but we didn't remove some of its stuff yet
 			if(!isInSpecialView && this.isDirtyTheme) {
 				this.CAATSprite.setAnimationImageIndex([1]);
-				actor.alpha = 1;
+				this.CAATSprite.alpha = 5;
 				this.isDirtyTheme = false;
 			}
 
@@ -135,8 +138,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		 */
 		createTextfield: function(text)
 		{
-			if(this.CAATText)
-				return this.CAATText;
+			if(this.CAATText) return this.CAATText;
 
 			// Create a textfield
     		this.CAATText = new CAAT.TextActor().

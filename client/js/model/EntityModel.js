@@ -14,28 +14,30 @@
 var init = function(ThemeModel)
 {
 	var CAAT_THEME_MAP = {};
-	CAAT_THEME_MAP['100'] = new ThemeModel('ginger-bread-house.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['101'] = new ThemeModel('block-of-ice-1.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['102'] = new ThemeModel('block-of-ice-2.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['103'] = new ThemeModel('block-of-ice-3.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['104'] = new ThemeModel('block-of-ice-4.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['105'] = new ThemeModel('block-of-ice-5.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['106'] = new ThemeModel('block-of-ice-6.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['107'] = new ThemeModel('ice-mountain-with-ogilvy-flag.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['108'] = new ThemeModel('igloo-green-flag.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['109'] = new ThemeModel('igloo-red-flag.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['110'] = new ThemeModel('lake-with-horizontal-bridge.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['111'] = new ThemeModel('lake-with-vertical-bridge.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['112'] = new ThemeModel('large-pond-1.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['113'] = new ThemeModel('small-pond-1.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['114'] = new ThemeModel('small-pond-2.png', 1, 1, 0, 1);
-	CAAT_THEME_MAP['115'] = new ThemeModel('small-pond-3.png', 1, 1, 0, 1);
+	CAAT_THEME_MAP['100'] = new ThemeModel('ginger-bread-house.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['101'] = new ThemeModel('block-of-ice-1.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['102'] = new ThemeModel('block-of-ice-2.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['103'] = new ThemeModel('block-of-ice-3.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['104'] = new ThemeModel('block-of-ice-4.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['105'] = new ThemeModel('block-of-ice-5.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['106'] = new ThemeModel('block-of-ice-6.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['107'] = new ThemeModel('ice-mountain-with-ogilvy-flag.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['108'] = new ThemeModel('igloo-green-flag.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['109'] = new ThemeModel('igloo-red-flag.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['110'] = new ThemeModel('lake-with-horizontal-bridge.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['111'] = new ThemeModel('lake-with-vertical-bridge.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['112'] = new ThemeModel('large-pond-1.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['113'] = new ThemeModel('small-pond-1.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['114'] = new ThemeModel('small-pond-2.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['115'] = new ThemeModel('small-pond-3.png', 1, 1, 0, 0);
 	// Characters
-	CAAT_THEME_MAP['200'] = new ThemeModel('character-yeti.png', 1, 10, 0, 0);
-	CAAT_THEME_MAP['201'] = new ThemeModel('character-penguin.png', 1, 10, 0, 0);
-	CAAT_THEME_MAP['202'] = new ThemeModel('character-robot.png', 1, 10, 0, 0);
-	CAAT_THEME_MAP['203'] = new ThemeModel('character-snowman.png', 1, 10, 0, 0);
-	CAAT_THEME_MAP['204'] = new ThemeModel('character-tree.png', 1, 10, 0, 0);
+	//		initialize: function(imageSource, rowCount, columnCount, spriteIndex, zIndex, animationTiming)
+
+	CAAT_THEME_MAP['200'] = new ThemeModel('character-yeti.png', 1, 10, 0, 1);
+	CAAT_THEME_MAP['201'] = new ThemeModel('character-penguin.png', 1, 10, 0, 1);
+	CAAT_THEME_MAP['202'] = new ThemeModel('character-robot.png', 1, 10, 0, 1);
+	CAAT_THEME_MAP['203'] = new ThemeModel('character-snowman.png', 1, 10, 0, 1);
+	CAAT_THEME_MAP['204'] = new ThemeModel('character-tree.png', 1, 10, 0, 1);
 	CAAT_THEME_MAP['999'] = new ThemeModel('character-smash-tv.png', 3, 16, 1);
 	// Projectiles
 	CAAT_THEME_MAP['300'] = new ThemeModel('projectiles.png', 6, 1, 0, 2);

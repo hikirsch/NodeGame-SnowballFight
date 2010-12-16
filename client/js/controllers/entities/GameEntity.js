@@ -354,6 +354,11 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			delete this.traits;
 
 			this.fieldController = null;
+
+			if(this.view) {
+				this.view.CAATSprite.destroy();
+				if(this.view.CAATActorContainer) this.CAATActorContainer.destroy();
+			}
 		}
 	});
 };
