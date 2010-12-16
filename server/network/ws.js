@@ -169,11 +169,16 @@ function Connection($, req, socket, headers, upgradeHeader)
 
 	this.close = function()
 	{
+		that.doClose();
+		$.remove(that);
+	};
+
+	this.doClose = function()
+	{
 		write(null);
 		socket.end();
 		socket.destroy();
-		$.remove(that);
-	};
+	}
 
 	// Events
 	req.socket.addListener('data', function(data)

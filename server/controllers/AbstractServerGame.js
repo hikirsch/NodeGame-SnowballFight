@@ -132,7 +132,7 @@ AbstractServerGame = (function()
 
 			this.netChannel.broadcastMessage(endGameMessage);
 
-			this.AnotherTimeout = setTimeout( function() { that.dealloc(); }, this.server.gameConfig.SERVER_END_GAME_GRACE );
+			setTimeout( function() { that.dealloc(); }, this.server.gameConfig.SERVER_END_GAME_GRACE );
 		},
 
 		dealloc: function()

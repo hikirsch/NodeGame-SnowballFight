@@ -70,7 +70,7 @@ Server = (function()
 			};
 
 			aWebSocket.onClose = function(connection) {
-				// connection.close(); // this should work but causes recursive loop
+				connection.doClose(); // this should work but causes recursive loop
 			};
 
 			console.log( 'listening on port: ' + port );

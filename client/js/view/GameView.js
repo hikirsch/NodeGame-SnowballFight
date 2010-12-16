@@ -80,7 +80,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		{
 			this.resultsData.OverlayLeftStyle = this.resultsElement.css('left');
 			this.resultsData.OverlayTopStyle = this.resultsElement.css('top');
-			this.resultsData.NextMatchTime = 'TEST'; // this.gameController.getNextGameStartTime();
+			this.resultsData.NextMatchTime = ''; // this.gameController.getNextGameStartTime();
 			this.resultsData.HideClass = ! this.gameController.isGameOver ? 'hide' : '';
 			this.resultsData.PlayerStats = this.gameController.getResults();
 			this.resultsTmplItem.update();
