@@ -21,14 +21,6 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			{
 				this.callSuper();
 
-				this.netChannel = new NetChannel(config, this);
-
-				this.view = new GameView(this, this.model );
-				this.fieldController.createView( this.model );
-
-				this.clientCharacter = null; // Special pointer to our own client character
-				this.isGameOver = false;
-
 				this.CMD_TO_FUNCTION = {};
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onClientJoined;
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
@@ -36,17 +28,43 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 				this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
 
+				// Create the director - there's only one ever. Each game is a new 'scene'
+				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
+				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
+
+				this.view = new GameView(this, this.model );
+
+				this.initializeGame();
+			},
+
+			initializeGame: function()
+			{
+				console.log(">>> INIT GAME");
+				this.clientCharacter = null; // Special pointer to our own client character
+				this.isGameOver = false;
+
+				// On endgame this.fieldController is deallocated
+				if(!this.fieldController) {
+					this.fieldController = new FieldController( this, this.model );
+				}
+
+				this.netChannel = new NetChannel(this.config, this);
+
+
+				this.fieldController.createView( this.model );
+
 				this.initializeCaat();
+				this.startGameClock();
 			},
 
 			initializeCaat: function()
 			{
-				// Create the director
-				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
-				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
-				// Init the scene
+				this.director.emptyScenes();
+
+				// Init the scene for this match
 				this.scene = new CAAT.Scene().create();
 				this.director.addScene(this.scene);
+
 				// Store
 				GAMECONFIG.CAAT.DIRECTOR = this.director;
 				GAMECONFIG.CAAT.SCENE = this.scene;
@@ -81,12 +99,16 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			 */
 			/**
 			 * Called when the user has entered a name, and wants to join the match
-			 * @param aNickName
+			 * @param aNickname
 			 */
-			joinGame: function(aNickName, aCharacterTheme)
+			joinGame: function(aNickname, aCharacterTheme)
 			{
+				console.log('JOINING GAME')
+				this.nickname = aNickname;
+				this.theme = aCharacterTheme;
+
 				// Create the message to send to the server
-				var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: aCharacterTheme, nickname: aNickName } );
+				var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: this.theme, nickname: this.nickname } );
 
 				// Tell the server!
 				this.netChannel.addMessageToQueue( true, message );
@@ -119,7 +141,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			 */
 			renderAtTime: function(renderTime)
 			{
-				var cmdBuffer = this.netChannel.incommingCmdBuffer;
+				var cmdBuffer = this.netChannel.incommingCmdBuffer,
 					len = cmdBuffer.length;
 
 				if( len < 2 ) return false; // Nothing to do!
@@ -207,6 +229,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 							// This character actually belongs to us
 							var aCharacter = this.shouldAddPlayer( objectID, connectionID, entityDesc, this.fieldController );
 
+							console.log("MAKING A CHARACTER", 'isowned', isOwnedByMe, objectID, connectionID, entityDesc, this.fieldController);
 							// If this character is owned by the us, allow it to be controlled by the keyboard
 							if(isOwnedByMe)
 							{
@@ -256,9 +279,9 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				}, this);
 
 				// Destroy removed entities
-				this.fieldController.removeExpiredEntities( activeEntities );
+				if(this.gameTick % 10 === 0)
+					this.fieldController.removeExpiredEntities( activeEntities );
 
-				this.fieldController.view.sortChildren();
 				this.director.render( this.clockActualTime - this.director.timeline );
 				this.director.timeline = this.clockActualTime;
 			},
@@ -284,22 +307,27 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.log( 'onRemoveClient: ', arguments );
 			},
 
-			onEndGame: function( clientID, data ){
+			onEndGame: function( clientID, data )
+			{
 				this.callSuper();
 
-				var that = this;
-				this.stopGameClock();
-				this.clientCharacter = null;
-				this.netChannel.dealloc();
 
 				this.view.onEndGame();
+				this.stopGameClock();
+
+				this.netChannel.dealloc();
+				this.netChannel = null;
+
+				this.fieldController.dealloc();
+				this.fieldController = null;
+				this.clientCharacter = null;
 
 				this.nextGamePort = data.nextGamePort;
 				console.log("(AbstractClientGame) End Game" );
 
-				this.gameClock = 0;
-				this.clockActualTime = new Date().getTime();
-
+				// Start waiting for the next game
+				var that = this;
+				this.gameClock = 0; // Will be used to know when to join the next game
 				this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
 			},
 
@@ -316,24 +344,27 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 				this.view.updateGameOver();
 
-				// TODO: put into config
+				// Enough time has passed, join the next game
 				if( this.gameClock > this.config.ROUND_INTERMISSION ) {
 					clearInterval( this.gameTickInterval );
 					this.joinNextGame();
 				}
 			},
 
+			/**
+			 * Called after a match once enough time has elapsed
+			 */
 			joinNextGame: function()
 			{
 				this.view.hideResultsView();
-				this.config.port = this.nextGamePort;
-				this.netChannel = new NetChannel(this.config, this, true);
-				this.fieldController.dealloc();
-				this.fieldController = new FieldController( this, this.model );
-				this.fieldController.createView( this.model );
+				this.config.GAME_PORT = this.nextGamePort;
 
-				// this.netChannel.handleServerGameSelector( this.nextGamePort, true );
-				this.startGameClock();
+				this.initializeGame();
+
+				var that = this;
+				setTimeout(function(){
+					that.joinGame(that.nickname, that.theme);
+				}, 2000);
 			},
 
 			getNextGameStartTime: function()

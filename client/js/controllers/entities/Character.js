@@ -50,6 +50,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 
 			this.rotationLocked = false;
 			this.score = 0;
+			this.rank = 0;
 			this.lastScoreSent = 0;
 			this.scoreMultiplier = 1;
 		},

@@ -29,7 +29,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		this.config = config;
 
 		// Dev flag, turning this on will output tons information to the console
-		this.verboseMode = false;
+		this.verboseMode = true;
 
 		// Make sure this controller is valid before moving forward, the controller must contain certain methods we can rely on being callable
 		if( this.validateController(aController) === false)
@@ -60,6 +60,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 
 		// We will send these out as controlled by the config
 		this.outgoingSequenceNumber = 0;
+
 		this.outgoingCmdBuffer = new SortedLookupTable();
 
 		// We send this, and we wait for the server to send back matching seq.number before we empty this.
@@ -73,14 +74,16 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 
 		// get a response from the Server and figure out which port we really need to connect to.
 		new ServerGameSelector(config, function( newPort, connected ) {
-			that.handleServerGameSelector( newPort, connected );
+			that.onSeverGameSelectorResponse( newPort, connected );
 		});
+
+		console.log('(NetChannel)::Initialize')
 	}
 
-	NetChannel.prototype.handleServerGameSelector = function( newPort, connected ) {
+	NetChannel.prototype.onSeverGameSelectorResponse = function( newPort, connected ) {
 		var that = this;
 		if( connected ) {
-			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.PORT);
+			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.GAME_PORT);
 			this.connection = new WebSocket( 'ws://' + this.config.HOST + ':' + newPort );
 			this.connection.onopen = function() { that.onConnectionOpened(); };
 			this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
@@ -126,11 +129,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 				this.sendMessage(message);
 				break;
 			}
-//			else
-//			{
-//				console.log("MessageIndex:", aMessageIndex);
-//				firstUnreliableMessageFound = message;
-//			}
 		}
 
 		// No reliable messages waiting, enough time has passed to send an update
@@ -159,7 +157,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	NetChannel.prototype.onServerMessage = function (messageEvent)
 	{
 		var serverMessage = BISON.decode(messageEvent.data);
-		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", serverMessage);
+		if( this.verboseMode ) console.log("(NetChannel) onServerMessage", messageEvent);
 
 		// Catch garbage
 		if(serverMessage === undefined || messageEvent.data === undefined || serverMessage.seq === undefined) return;
@@ -307,6 +305,12 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 
 	NetChannel.prototype.sendMessage = function(aMessageInstance)
 	{
+		if(this.connection == undefined) {
+			console.log("connection is undefined!");
+			return;
+
+		}
+
 		if(this.connection.readyState == WebSocket.CLOSED) {
 			return;      //some error here
 		}
@@ -379,20 +383,20 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		this.connection.close();
 		this.outgoingCmdBuffer.dealloc();
 
-		delete this.connection;
-		delete this.latency;
-		delete this.gameClock;
-		delete this.lastSentTime;
-		delete this.lastRecievedTime;
-		delete this.clearTime;
-		delete this.messageBuffer;
-		delete this.MESSAGE_BUFFER_MASK;
-		delete this.incomingSequenceNumber;
-		delete this.incommingCmdBuffer;
-		delete this.outgoingSequenceNumber;
-		delete this.outgoingCmdBuffer;
-		delete this.reliableBuffer;
-		delete this.clientID;
+//		delete this.connection;
+//		delete this.latency;
+//		delete this.gameClock;
+//		delete this.lastSentTime;
+//		delete this.lastRecievedTime;
+//		delete this.clearTime;
+//		delete this.messageBuffer;
+//		delete this.MESSAGE_BUFFER_MASK;
+//		delete this.incomingSequenceNumber;
+//		delete this.incommingCmdBuffer;
+//		delete this.outgoingSequenceNumber;
+//		delete this.outgoingCmdBuffer;
+//		delete this.reliableBuffer;
+//		delete this.clientID;
 	};
 
 	return NetChannel;

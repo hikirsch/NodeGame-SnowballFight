@@ -100,7 +100,9 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			if(this.controller.nickname && !this.CAATText)
 				this.createTextfield(this.controller.nickname);
 
-
+			if(this.CAATText) {
+				this.CAATText.setText("#"  + this.controller.rank + " " + this.controller.nickname);
+			}
 		},
 
 		/**
