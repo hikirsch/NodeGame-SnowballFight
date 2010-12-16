@@ -7,14 +7,14 @@ Project	:
 	Ogilvy Holiday Card 2010
 Abstract:
 	This is class represents the View in the MVC architecture for the game.
-	It must not OWN any data, not even a little :) 
+	It must not OWN any data, not even a little :)
 	It is allowed to HOLD data transiently (but only because it asked nicely?)
-	
-Basic Usage: 
+
+Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieManager', 'view/managers/CarouselManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/jsclass/core'], function(Rectangle, OverlayManager, CookieManager, CarouselManager, BaseView, HTMLFactory )
+define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieManager', 'view/managers/CarouselManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/Stats', 'lib/jsclass/core'], function(Rectangle, OverlayManager, CookieManager, CarouselManager, BaseView, HTMLFactory )
 {
 	return new JS.Class( BaseView,
 	{
@@ -25,10 +25,10 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.overlayManager = new OverlayManager( controller, gameModel );
 			this.showNav();
 			this.showFooter();
-			this.showInstructions();
-            this.showBrowserReq();
+			this.attachInstructions();
 			this.inviteFriend();
-			this.credits();
+			this.attachCredits();
+			this.attachShare();
 			this.carouselManager = CarouselManager;
 			this.currentStatus = {
 				TimeLeft: "00:00",
@@ -39,6 +39,18 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.myCharacterModel = null;
 			this.resultsOverlayShowing = false;
 			this.resultsData = {};
+
+			var showStats = true;
+			if(showStats) {
+				var stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.left = '0px';
+				stats.domElement.style.top = '0px';
+				$(stats.domElement).appendTo( $('body') );
+				setInterval( function () {
+					stats.update();
+				}, 1000 / 30 );
+			}
 		},
 
 		onEndGame: function()
@@ -55,7 +67,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		hideResultsView: function()
 		{
-			this.overlayManager.hide();
+			this.overlayManager.popOverlay();
 			$("#results").remove();
 			this.resultsOverlayShowing = false;
 			this.resultsElement = null;
@@ -64,7 +76,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		showResultsView: function()
 		{
 			this.createResultsView();
-			this.overlayManager.show( this.resultsElement );
+			this.overlayManager.pushOverlay( this.resultsElement );
 			this.updateResultsView();
 			this.resultsOverlayShowing = true;
 		},
@@ -80,7 +92,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		{
 			this.resultsData.OverlayLeftStyle = this.resultsElement.css('left');
 			this.resultsData.OverlayTopStyle = this.resultsElement.css('top');
-			this.resultsData.NextMatchTime = 'TEST'; // this.gameController.getNextGameStartTime();
+			this.resultsData.NextMatchTime = ''; // this.gameController.getNextGameStartTime();
 			this.resultsData.HideClass = ! this.gameController.isGameOver ? 'hide' : '';
 			this.resultsData.PlayerStats = this.gameController.getResults();
 			this.resultsTmplItem.update();
@@ -92,6 +104,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			{
 				this.createStatusView( this.currentStatus );
 			}
+
 			this.currentStatus.Score = this.gameController.clientCharacter.score;
 			this.currentStatus.TotalPlayers = this.gameController.getNumberOfPlayers();
 			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
@@ -147,9 +160,14 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 				$intro
 					.find('a.jumpinLink')
-					.click( function(){ return that.showCharacterSelect(); } );
+					.click( function(){
+						that.overlayManager.popOverlay();
+						that.showCharacterSelect();
 
-				this.overlayManager.show( $intro );
+						return false;
+					});
+
+				this.overlayManager.pushOverlay( $intro );
 			}
 			else
 			{
@@ -163,7 +181,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		{
 			if( this.myCharacterModel != null )
 			{
-				this.gameController.joinGame(this.myCharacterModel.nickName, this.myCharacterModel.characterType);
+//				debugger
 			}
 			else
 			{
@@ -192,63 +210,59 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 						that.carouselManager.move(false);
 					});
 
-				this.overlayManager.show( $characterSelect );
+				this.overlayManager.pushOverlay( $characterSelect );
 			}
+		},
 
-			return false;
-		},
-		
-		showInstructions: function() 
-		{		
+		attachInstructions: function()
+		{
 			var that = this;
-			var show = 0;
-			$instructions = HTMLFactory.instructions();
-			$("li.instructions a").click( function() { 
-				if(that.show != 1) {
-					that.overlayManager.show($instructions); 
-					that.show = 1;
-					$("#playBtn").click( function() {
-						if(that.gameController.clientCharacter == null) {
-							that.showCharacterSelect();
-						} else {
-							that.overlayManager.hide();
-						}
-						that.show = 0;
-					});
-				} else {
-					that.overlayManager.hide();
-					that.show = 0;
-				}
-			});	
+
+			$("li.instructions a").click(function() {
+				that.showInstructions();
+				return false;
+			});
 		},
-	
+
+		showInstructions: function()
+		{
+			var that = this,
+				show = false,
+				$instructions;
+
+			if( ! show ) {
+				show = true;
+				$instructions = HTMLFactory.instructions();
+
+				this.overlayManager.pushOverlay($instructions);
+
+				$("#playBtn").click( function() {
+					that.overlayManager.popOverlay();
+					show = false;
+
+					return false;
+				});
+			}
+		},
+
         showBrowserReq: function()
-        {
-            var that = this;
-            var show = 0;
-            $browserReq = HTMLFactory.browserRequirements();
-            //TODO: replace click with conditional statement testing browser(s)ß
-            $("li.share a").click( function() {
-                if(that.show !== 1) {
-                    that.overlayManager.show($browserReq);
-                    that.show = 1;
-                } else {
-                    that.overlayManager.hide();
-                    that.show = 0;
-                }
-            });
-        },
+		{
+			$browserReq = HTMLFactory.browserRequirements();
+			this.overlayManager.pushOverlay($browserReq);
+			$("html").addClass('unsupported-browser');
+		},
 
 		serverOffline: function()
 		{
 			var $unavailableEle = HTMLFactory.serverUnavailableDialog();
-			this.overlayManager.show( $unavailableEle );
+			this.overlayManager.pushOverlay( $unavailableEle );
+			$("html").addClass('server-offline');
 		},
-	
+
 		joinGame: function( characterType )
-		{	
+		{
 			var nickName = $("#nickname").length > 0 ? $("#nickname").val() : "";
-			
+
 			if( nickName.length <= 0)
 			{
 				nickName = 'NoName' + Math.floor( Math.random() * 1000 );
@@ -267,54 +281,72 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		},
 
 		/*
-		shareThis: function()	
+		shareThis: function()
 		{
-			var that = this;	
+			var that = this;
 			$results = HTMLFactory.results();
-			$("li.share a").click( function() { 
+			$("li.share a").click( function() {
 				that.overlayManager.show( $results );
 			});
 		}, */
-		 	
-		inviteFriend: function() 
+
+		inviteFriend: function()
 		{
 			var that = this;
 			var inviteOpen = 0;
 			$invite = HTMLFactory.invite();
-			$("#btn-invite").click( function() { 
-				if(inviteOpen == 0) 
-				{ 
-					that.overlayManager.show( $invite );
+			$("#btn-invite").click( function() {
+				if(inviteOpen == 0)
+				{
+					that.overlayManager.pushOverlay( $invite );
 					inviteOpen = 1;
-				} 
+				}
 				else
-				{ 
-					that.overlayManager.hide();
+				{
+					that.overlayManager.popOverlay();
 					inviteOpen = 0;
 				}
-			});	
+			});
 		},
 
-		credits: function()
+		attachShare: function() {
+			$("li.share a").click( function() {
+				return false;
+			})
+		},
+
+		attachCredits: function()
 		{
 			var that = this;
-		 	
-			var creditOpen = 0;
-		 	
-			$credits = HTMLFactory.credits();
-		 	
-			$("#credits-link").click( function() { 
-				if(creditOpen == 0)
-				{
-					that.overlayManager.show( $credits );
-					creditOpen = 1;
-				} 
-				else 
-				{ 
-					that.overlayManager.hide();
-					creditOpen = 0;
-				}
+
+			$("#credits-link").click( function() {
+				that.showCredits();
+				return false;
 			});
+		},
+
+		showCredits: function()
+		{
+			var that = this,
+				creditOpen = false,
+				$credits = HTMLFactory.credits();
+
+			if( ! creditOpen )
+			{
+				that.overlayManager.pushOverlay( $credits );
+				creditOpen = true;
+			}
+			else
+			{
+				that.overlayManager.popOverlay();
+				creditOpen = false;
+			}
+
+			$(".closeBtn").click( function() {
+				that.overlayManager.popOverlay();
+				creditOpen = false;
+			});
+
 		},
 
 		destroy: function()

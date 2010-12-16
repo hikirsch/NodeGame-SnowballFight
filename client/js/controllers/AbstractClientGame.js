@@ -32,24 +32,22 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
 
-				this.scene = new CAAT.Scene().create();
-				this.director.addScene(this.scene);
+			// Create the director - there's only one ever. Each game is a new 'scene'
+				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
+				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
 
 				this.view = new GameView(this, this.model );
 
 				this.initializeGame();
+
 			},
 
 			initializeGame: function()
 			{
-				console.log(">>> INIT GAME");
 				this.clientCharacter = null; // Special pointer to our own client character
 				this.isGameOver = false;
 
-				// On endgame this.fieldController is deallocated
-				if(!this.fieldController) {
-					this.fieldController = new FieldController( this, this.model );
-				}
+				this.fieldController = new FieldController( this, this.model );
 
 				this.netChannel = new NetChannel(this.config, this);
 
@@ -62,16 +60,15 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 			initializeCaat: function()
 			{
-//				this.director.emptyScenes();
-
-				// Init the scene for this match
-
+				// Init 				the scene for this match
+				this.scene = new CAAT.Scene().create();
+				this.director.addScene(this.scene);
 				// Store
 				GAMECONFIG.CAAT.DIRECTOR = this.director;
 				GAMECONFIG.CAAT.SCENE = this.scene;
 
 				var caatImage = new CAAT.CompoundImage().
-						initialize(this.director.getImage('gameBackground'), Math.floor(Math.random() * 6), 1);
+						initialize(this.director.getImage('gameBackground'), 1, 1);
 
 				// Create a sprite using the CompoundImage
 				var background = new CAAT.SpriteActor().
@@ -80,11 +77,11 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 				this.scene.addChild(background);
 
-//				this.director.switchToNextScene( 1000, true, true);
-	//			this.director.loop(1); // DEBUG: Draw once
-	//			$(this.director.canvas).appendTo($('body'));
-				$(this.director.canvas).appendTo(  this.fieldController.view.getElement() );
+				this.director.switchToNextScene( 1000, true, true);
+				$(this.director.canvas).prependTo(  this.fieldController.view.getElement() );
+
 			},
+
 
 			getResults: function()
 			{
@@ -390,6 +387,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			 **/
 			netChannelDidConnect: function (messageData)
 			{
+				console.log("<<NETCHANNEL");
 				// Copy the game properties from the server
 				this.gameClock = messageData.gameClock;
 
