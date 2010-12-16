@@ -355,10 +355,10 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 
 			this.fieldController = null;
 
-			if(this.view) {
-				this.view.CAATSprite.destroy();
-				if(this.view.CAATActorContainer) this.CAATActorContainer.destroy();
-			}
+//			if(this.view) {
+//				this.view.CAATSprite.destroy();
+//				if(this.view.CAATActorContainer) this.view.CAATActorContainer.destroy();
+//			}
 		}
 	});
 };
