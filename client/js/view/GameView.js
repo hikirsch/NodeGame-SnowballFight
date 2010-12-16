@@ -26,6 +26,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.showNav();
 			this.showFooter();
 			this.showInstructions();
+            this.showBrowserReq();
 			this.inviteFriend();
 			this.credits();
 			this.carouselManager = CarouselManager;
@@ -214,7 +215,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 							that.overlayManager.hide();
 						}
 						that.show = 0;
-					})
+					});
 				} else {
 					that.overlayManager.hide();
 					that.show = 0;
@@ -222,6 +223,23 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			});	
 		},
 	
+        showBrowserReq: function()
+        {
+            var that = this;
+            var show = 0;
+            $browserReq = HTMLFactory.browserRequirements();
+            //TODO: replace click with conditional statement testing browser(s)ß
+            $("li.share a").click( function() {
+                if(that.show !== 1) {
+                    that.overlayManager.show($browserReq);
+                    that.show = 1;
+                } else {
+                    that.overlayManager.hide();
+                    that.show = 0;
+                }
+            });
+        },
+
 		serverOffline: function()
 		{
 			var $unavailableEle = HTMLFactory.serverUnavailableDialog();
