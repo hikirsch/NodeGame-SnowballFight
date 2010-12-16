@@ -176,10 +176,10 @@ AbstractServerGame = (function()
 
 		log: function(aMessage)
 		{
-			this.logger.log(aMessage);
-//			console.log('ll', this.logLevel);
-			// console.log( o );
-//			this.server.log(o);
+			if(this.logger.options.showStatus)
+				this.logger.log(aMessage);
+			else
+				console.log(aMessage);
 		},
 
 		status: function()

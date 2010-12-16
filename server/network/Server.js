@@ -38,11 +38,11 @@ Server = (function()
 			this.logger = new Logger( serverConfig, this );
 			this.gameConfig = gameConfig;
 			this.serverConfig = serverConfig;
-			this.gameConfig.NEXT_PORT = this.gameConfig.PORT + 1;
+			this.gameConfig.NEXT_PORT = this.gameConfig.GAME_PORT + 1;
 			var loggerOptions = {};
 			this.logger = new Logger( loggerOptions, this );
 			this.games = {};
-			this.initServerChooser( this.gameConfig.PORT );
+			this.initServerChooser( this.gameConfig.GAME_PORT );
 		},
 
 		initServerChooser: function( port ) {
@@ -70,7 +70,7 @@ Server = (function()
 
 		getGameWithDesiredPort: function( desiredPort )
 		{
-			if( desiredPort != this.gameConfig.PORT ) {
+			if( desiredPort != this.gameConfig.GAME_PORT ) {
 				if( this.games[ desiredPort ] != null )
 				{
 					if( this.games[ desiredPort ].canAddPlayer() )
@@ -136,8 +136,8 @@ Server = (function()
 			while( this.games[ nextPort ] != null )
 			{
 				nextPort += 1;
-				if( nextPort > this.gameConfig.PORT + this.gameConfig.MAX_PORTS ) {
-					nextPort = this.gameConfig.PORT + 1;
+				if( nextPort > this.gameConfig.GAME_PORT + this.gameConfig.MAX_PORTS ) {
+					nextPort = this.gameConfig.GAME_PORT + 1;
 				}
 			}
 

@@ -8,12 +8,14 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 				return location.hostname;
 			}
 		}(),
-		PORT: 28785,
-		MAX_PORTS: 100,
+
+		MASTERSERVER_PORT: 10000,
+		GAME_PORT: 10000,
+		MAX_PORTS: 1000,
 		DEBUG_MODE: true,
 		MAX_PLAYERS: 8,
-		SERVER_END_GAME_GRACE: 50,
-		ROUND_INTERMISSION: 3000,
+		SERVER_END_GAME_GRACE: 0.5,
+		ROUND_INTERMISSION: 7000,
 		// http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS: {
 			// Connection stuff // TODO: These aren't commands, but messages we should treat different

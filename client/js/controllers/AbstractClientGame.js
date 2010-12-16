@@ -32,6 +32,8 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
 
+				this.view = new GameView(this, this.model );
+
 				this.initializeGame();
 			},
 
@@ -48,7 +50,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 				this.netChannel = new NetChannel(this.config, this);
 
-				this.view = new GameView(this, this.model );
+
 				this.fieldController.createView( this.model );
 
 				this.initializeCaat();
@@ -355,10 +357,14 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			joinNextGame: function()
 			{
 				this.view.hideResultsView();
-				this.config.port = this.nextGamePort;
+				this.config.GAME_PORT = this.nextGamePort;
 
 				this.initializeGame();
-				this.joinGame(this.nickname, this.theme);
+
+				var that = this;
+				setTimeout(function(){
+					that.joinGame(that.nickname, that.theme);
+				}, 2000);
 			},
 
 			getNextGameStartTime: function()

@@ -29,7 +29,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		this.config = config;
 
 		// Dev flag, turning this on will output tons information to the console
-		this.verboseMode = false;
+		this.verboseMode = true;
 
 		// Make sure this controller is valid before moving forward, the controller must contain certain methods we can rely on being callable
 		if( this.validateController(aController) === false)
@@ -83,7 +83,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	NetChannel.prototype.onSeverGameSelectorResponse = function( newPort, connected ) {
 		var that = this;
 		if( connected ) {
-			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.PORT);
+			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.GAME_PORT);
 			this.connection = new WebSocket( 'ws://' + this.config.HOST + ':' + newPort );
 			this.connection.onopen = function() { that.onConnectionOpened(); };
 			this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };

@@ -97,7 +97,7 @@ ServerNetChannel = (function()
 
 			aWebSocket.onConnect = function(connection)
 			{
-				that.delegate.log("(ServerNetChannel) someone connected...");
+				that.delegate.log("(ServerNetChannel)::onConnect" + SYS.inspect(connection));
 			};
 
 			/**
@@ -246,31 +246,13 @@ ServerNetChannel = (function()
 		},
 
 		/**
-		 * Client Addition -
-		 * Added client to connected users - player is not in the game yet
-		 */
-		addClient: function(connection)
-		{
-			var clientID = this.nextClientID++;
-			this.clientCount++;
-
-			connection.$clientID = clientID;
-			var aClient = new Client(this, connection, this.config, this.bytes);
-
-			// Add to our list of connected users
-			this.clients.setObjectForKey( aClient, clientID);
-
-			return clientID;
-		},
-
-		/**
 		 * Player has joined the match
 		 * @param connection		The clients WebSocket connection
 		 * @param aDecodedMessage	A message containing client information
 		 */
 		onPlayerJoined: function(connection, aDecodedMessage)
 		{
-			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID);
+			this.delegate.log('(ServerNetChannel) Player joined from connection #' + SYS.inspect(connection));
 
 			// Create an entity ID for this new player
 			// This is done here, because shouldAddPlayer is the same on client and server, and only the server can define client entities
@@ -300,11 +282,30 @@ ServerNetChannel = (function()
 			aDecodedMessage.id = newClientID;
 			aDecodedMessage.gameClock = this.delegate.gameClock;
 			aDecodedMessage.gameModel = this.delegate.model;
-			
+
+			debugger;
 			this.delegate.log('(ServerNetChannel) Adding new client to listeners with ID: ' + newClientID );
 
 			// Send only the connecting client a special connect message by modifying the message it sent us, to send it - 'SERVER_CONNECT'
 			connection.send( BISON.encode(aDecodedMessage) );
+		},
+
+		/**
+		 * Client Addition -
+		 * Added client to connected users - player is not in the game yet
+		 */
+		addClient: function(connection)
+		{
+			var clientID = this.nextClientID++;
+			this.clientCount++;
+
+			connection.$clientID = clientID;
+			var aClient = new Client(this, connection, this.config, this.bytes);
+
+			// Add to our list of connected users
+			this.clients.setObjectForKey( aClient, clientID);
+
+			return clientID;
 		},
 
 		/**
