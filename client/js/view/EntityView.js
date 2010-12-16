@@ -27,7 +27,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			this.CAATSprite.spriteIndex = themeModel.spriteIndex;
 			this.CAATSprite.setScaleAnchored(1, 1, 0);
-		   this.CAATSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
+		  	this.CAATSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
 
 			// Don't create an actorcontainer if its not a character
 			if(this.controller.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER)
@@ -40,8 +40,11 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			GAMECONFIG.CAAT.SCENE.addChild(actor);
 
+			this.actorWidth = actor.width*0.5;
+			this.actorHeight = actor.height*0.5;
 			actor.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
 			actor.zIndex = themeModel.zIndex;
+			this.CAATSprite.mouseEnabled = actor.mouseEnabled = false;
 			this.CAATText = null;
 		},
 
@@ -52,9 +55,15 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		update: function()
 		{
 			var actor = this.CAATActorContainer || this.CAATSprite;
-			actor.setLocation(this.controller.getPosition().x,
-					this.controller.getPosition().y);
 
+			var fixOffset = true;
+			if(fixOffset)
+			{
+				actor.setLocation(this.controller.getPosition().x - this.actorWidth, this.controller.getPosition().y - this.actorWidth );
+			} else {
+				actor.setLocation(this.controller.getPosition().x, this.controller.getPosition().y);
+
+			}
 			// See if anything fancy has occured
 			var isInSpecialView = false;
 			if(+this.controller.theme > 1000)
@@ -67,8 +76,9 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				var themeMask = themeString.substr(0, 1);
 
 				// frozen
-				if(themeMask === '1') {
-					this.CAATSprite.spriteIndex = 8;
+				if(themeMask === '1' && this.CAATSprite.animationImageIndex) {
+					this.CAATSprite.setAnimationImageIndex( [8,9] );
+                	this.CAATSprite.changeFPS= 300;
 				} else if (themeMask === '2') {
 					isInSpecialView = false;
 					this.CAATSprite.alpha = Math.random();

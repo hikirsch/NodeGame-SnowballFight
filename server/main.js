@@ -7,6 +7,8 @@ SYS = require('sys');  // This is a really good example of when a global, is act
 * Optionally creates an HTTP server if dictated in args
 **/
 var createHTTPServer = ArgHelper.getArgumentByNameOrSetDefault( 'createHTTPServer', false );
+var configLocation = ArgHelper.getArgumentByNameOrSetDefault( 'configLocation', 'js/config.js' );
+
 if( createHTTPServer ) {
 	var port = ArgHelper.getArgumentByNameOrSetDefault( 'port', 12345 );
 	var httpServer = require('./network/SimpleHTTPServer.js' );
@@ -23,7 +25,7 @@ require.paths.unshift('../client'); // We still want to know when we're going in
 
 
 require('network/Server.js');
-var config = require('js/config.js').Config;
+var config = require(configLocation).Config;
 var serverConfig = require('serverConfig.js').Config;
 var serverInstance = new Server(config, serverConfig);
 

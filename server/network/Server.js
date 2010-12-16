@@ -70,6 +70,7 @@ Server = (function()
 			};
 
 			aWebSocket.onClose = function(connection) {
+
 				// connection.close(); // this should work but causes recursive loop
 			};
 

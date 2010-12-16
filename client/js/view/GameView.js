@@ -14,7 +14,7 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieManager', 'view/managers/CarouselManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/jsclass/core'], function(Rectangle, OverlayManager, CookieManager, CarouselManager, BaseView, HTMLFactory )
+define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieManager', 'view/managers/CarouselManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/Stats', 'lib/jsclass/core'], function(Rectangle, OverlayManager, CookieManager, CarouselManager, BaseView, HTMLFactory )
 {
 	return new JS.Class( BaseView,
 	{
@@ -39,6 +39,18 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.myCharacterModel = null;
 			this.resultsOverlayShowing = false;
 			this.resultsData = {};
+
+			var showStats = true;
+			if(showStats) {
+				var stats = new Stats();
+				stats.domElement.style.position = 'absolute';
+				stats.domElement.style.left = '0px';
+				stats.domElement.style.top = '0px';
+				$(stats.domElement).appendTo( $('body') );
+				setInterval( function () {
+					stats.update();
+				}, 1000 / 30 );
+			}
 		},
 
 		onEndGame: function()
@@ -163,7 +175,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		{
 			if( this.myCharacterModel != null )
 			{
-				this.gameController.joinGame(this.myCharacterModel.nickName, this.myCharacterModel.characterType);
+//				debugger;
 			}
 			else
 			{
@@ -260,7 +272,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			};
 
 			this.gameController.joinGame(nickName, characterType);
-
 			this.overlayManager.hide();
 
 			return false;
