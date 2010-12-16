@@ -24,7 +24,14 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 			this.position = projectileModel.initialPosition;
 			this.maxVelocity = projectileModel.maxVelocity;
 			this.radius = projectileModel.radius;
-			this.angle = projectileModel.angle;
+			this.angle = projectileModel.angle * 57.2957795;
+
+//			if(this.angle < 0)  this.angle += 359; // Wrap
+			// Round to the number of sprites we have
+			var roundTo = 45;
+			this.angle = Math.round(this.angle / roundTo) * roundTo;
+			this.angle *= 0.0174532925;
+			this.rotation = this.angle;
 
 			this.damping = 1;
 			this.transferedTraits = projectileModel.transferedTraits; // An {String} array of traits that are transfered when this projectile hits a character

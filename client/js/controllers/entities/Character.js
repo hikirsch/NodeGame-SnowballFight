@@ -111,6 +111,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			var projectileModel = ProjectileModel.defaultSnowball;
 			projectileModel.force = 1.0 ; // TODO: Use force gauge
 			projectileModel.initialPosition = this.position.cp();
+			projectileModel.initialPosition.y += 19; // half our height, this should be read instead of a magic number - TODO: remove magic number
 			projectileModel.angle = this.rotation;// * 0.0174532925;
 
 			this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);

@@ -46,6 +46,9 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			actor.zIndex = themeModel.zIndex;
 			this.CAATSprite.mouseEnabled = actor.mouseEnabled = false;
 			this.CAATText = null;
+
+			// We previously had a theme applied - reset it
+			this.isDirtyTheme = false;
 		},
 
 
@@ -56,6 +59,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		{
 			var actor = this.CAATActorContainer || this.CAATSprite;
 
+			// dev test
 			var fixOffset = true;
 			if(fixOffset)
 			{
@@ -75,17 +79,27 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				var themeString = this.controller.theme + "";
 				var themeMask = themeString.substr(0, 1);
 
+
 				// frozen
-				if(themeMask === '1' && this.CAATSprite.animationImageIndex) {
+				if(themeMask === '1' && this.CAATSprite.animationImageIndex.length == 1) {
 					this.CAATSprite.setAnimationImageIndex( [8,9] );
                 	this.CAATSprite.changeFPS= 300;
 				} else if (themeMask === '2') {
 					isInSpecialView = false;
-					this.CAATSprite.alpha = Math.random();
+					actor.alpha = Math.random();
 				}
 
-
+				this.isDirtyTheme = true;
 			}
+
+			// This is true if we had a theme applied, and its done, but we didn't remove some of its stuff yet
+			if(!isInSpecialView && this.isDirtyTheme) {
+				this.CAATSprite.setAnimationImageIndex([1]);
+				actor.alpha = 1;
+				this.isDirtyTheme = false;
+			}
+
+
 
 			// Do regular stuff
 			var actualRotation = this.controller.getRotation();
@@ -104,7 +118,6 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				// spriteIndex = 90 / 45 = 2
 				if(!isInSpecialView) {
 					this.CAATSprite.spriteIndex =  ( roundedRotation / roundTo);
-					this.CAATSprite.alpha = 1;
 				}
 			}
 
