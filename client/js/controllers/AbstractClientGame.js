@@ -366,6 +366,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			getNextGameStartTime: function()
 			{
 				var t = Math.round( ( this.config.ROUND_INTERMISSION - this.gameClock ) / 1000);
+				if( t < 0 ) t = 0;
 				var m = Math.floor( t / 60 );
 				var s = t % 60;
 				return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
