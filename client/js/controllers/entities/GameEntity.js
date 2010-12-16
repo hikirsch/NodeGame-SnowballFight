@@ -357,7 +357,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 
 			if(this.view) {
 				this.view.CAATSprite.destroy();
-				if(this.view.CAATActorContainer) this.CAATActorContainer.destroy();
+				if(this.view.CAATActorContainer) this.view.CAATActorContainer.destroy();
 			}
 		}
 	});
