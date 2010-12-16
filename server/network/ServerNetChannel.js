@@ -97,7 +97,7 @@ ServerNetChannel = (function()
 
 			aWebSocket.onConnect = function(connection)
 			{
-				that.delegate.log("(ServerNetChannel)::onConnect" + SYS.inspect(connection));
+				that.delegate.log("(ServerNetChannel)::onConnect");
 			};
 
 			/**
@@ -243,6 +243,7 @@ ServerNetChannel = (function()
 			// Free the slot
 			this.clients.remove(clientID);
 			this.clientCount--;
+			connection.close();
 		},
 
 		/**
@@ -252,7 +253,7 @@ ServerNetChannel = (function()
 		 */
 		onPlayerJoined: function(connection, aDecodedMessage)
 		{
-			this.delegate.log('(ServerNetChannel) Player joined from connection #' + SYS.inspect(connection));
+			this.delegate.log('(ServerNetChannel) Player joined from connection #' + connection.$clientID );
 
 			// Create an entity ID for this new player
 			// This is done here, because shouldAddPlayer is the same on client and server, and only the server can define client entities
@@ -337,6 +338,10 @@ ServerNetChannel = (function()
 
 		dealloc: function()
 		{
+			for(var aClient in this.clients)
+			{
+				try { this.clients[aClient].close(); } catch( e ) { }
+			}
 			this.$.stopListening();
 			console.log("(ServerNetChannel) Closing Port: " + this.port );
 		}

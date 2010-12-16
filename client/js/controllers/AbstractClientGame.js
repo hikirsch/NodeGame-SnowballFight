@@ -103,7 +103,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			 */
 			joinGame: function(aNickname, aCharacterTheme)
 			{
-				console.log('JOINING GAME')
+				console.log('JOINING GAME');
 				this.nickname = aNickname;
 				this.theme = aCharacterTheme;
 

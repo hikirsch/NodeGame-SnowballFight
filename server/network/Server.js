@@ -35,6 +35,7 @@ Server = (function()
 	{
 		initialize: function( gameConfig, serverConfig )
 		{
+			this.gameID = 1;
 			this.logger = new Logger( serverConfig, this );
 			this.gameConfig = gameConfig;
 			this.serverConfig = serverConfig;
@@ -47,13 +48,19 @@ Server = (function()
 
 		initServerChooser: function( port ) {
 			var that = this,
-				aWebSocket = this.$ = new ws.Server( null);
+				aWebSocket = this.$ = new ws.Server(null),
+				clientID = 0;
 
 			// client will ask for a game in on message
-			aWebSocket.onConnect = function(connection) { };
+			aWebSocket.onConnect = function(connection) {
+				console.log("(Server) connected!");
+				connection.__CONNECTED = true;
+			};
 
 			aWebSocket.onMessage = function(connection, encodedMessage )
 			{
+				clientID++;
+				connection.$clientID = clientID;
 				var decodedMessage = BISON.decode( encodedMessage ),
 					actualPort = that.getGameWithDesiredPort( decodedMessage.desiredPort ),
 					newGame = { 'actualPort': actualPort },
@@ -62,7 +69,9 @@ Server = (function()
 				connection.send( newEncodedMessage );
 			};
 
-			aWebSocket.onClose = function(connection) { };
+			aWebSocket.onClose = function(connection) {
+				// connection.close(); // this should work but causes recursive loop
+			};
 
 			console.log( 'listening on port: ' + port );
 			aWebSocket.listen( port );

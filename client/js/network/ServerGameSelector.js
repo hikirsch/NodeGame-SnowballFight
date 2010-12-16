@@ -33,6 +33,7 @@ define( [ 'view/managers/QueryStringManager', 'lib/jsclass/core'], function( Que
 		},
 
 		onConnectionClosed: function() {
+			console.log("(ServerGameSelector) socket closed");
 			this.callback( this.actualPort, this.hasConnected );
 		}
 	});
