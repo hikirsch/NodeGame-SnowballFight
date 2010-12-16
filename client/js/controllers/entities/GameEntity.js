@@ -283,6 +283,10 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 
 		removeTraitWithName: function(aTraitName)
 		{
+			// TODO: Remove check - this should not be called if traits is null - clear timeouts
+
+			if(!this.traits) return;
+
 			var aTrait = this.traits.objectForKey(aTraitName);
 			if(!aTrait) return;
 
@@ -345,6 +349,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			delete this.velocity;
 			delete this.acceleration;
 
+//			this.traits.forEach(this)
 			this.traits.dealloc();
 			delete this.traits;
 
