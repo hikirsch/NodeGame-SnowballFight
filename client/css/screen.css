@@ -25,12 +25,16 @@ nav.main ul li.ogilvy-logo a { width: 72px; height: 53px; float: right; backgrou
 footer { margin: 10px auto; width: 900px; text-align: center; font-size: 11px; color: #6a7073; }
 footer a { font-size: 11px; color: #005072; }
 
-.game-container  { width: 640px; height: 480px; margin: auto; position: relative; overflow: hidden;}
+.game-container  { width: 900px; height: 600px; margin: auto; position: relative; overflow: hidden;}
 .game-container .background {
 	position: absolute; top: 0; left: 0;
 	background-color: #ffffff; opacity: 1;
 	height: 100%; width: 100%;
 }
+
+.server-offline .game-container,
+.unsupported-browser .game-container { background-image: url( '../img/entities/caat/bg-field.png'); background-repeat: no-repeat; }
+
 
 .game-container .character p {
 	position: absolute; bottom: -10px; left: 0;

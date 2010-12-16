@@ -9,8 +9,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			}
 		}(),
 
-		MASTERSERVER_PORT: 30000,
-		GAME_PORT: 30000,
+		MASTERSERVER_PORT: 10000,
+		GAME_PORT: 10000,
 		MAX_PORTS: 5,
 		DEBUG_MODE: true,
 		MAX_PLAYERS: 8,
