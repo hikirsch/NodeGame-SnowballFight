@@ -192,16 +192,23 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		removePlayer: function( connectionID )
 		{
-			var player = this.players.objectForKey(connectionID);
+			// TODO: we shouldn't be checking undefined here
+			if( this.players ) {
+				var player = this.players.objectForKey(connectionID);
 
-			if(!player) {
-				console.log("(FieldController), No 'Character' with connectionID " + connectionID + " ignoring...");
-				return;
+				if(!player) {
+					console.log("(FieldController), No 'Character' with connectionID " + connectionID + " ignoring...");
+					return;
+				}
+
+				console.log( "(FieldController) Removing Player" );
+				this.removeEntity( player.objectID );
+				this.players.remove(player.clientID);
 			}
-
-			console.log( "(FieldController) Removing Player" );
-			this.removeEntity( player.objectID );
-			this.players.remove(player.clientID);
+			else
+			{
+				console.log("(FieldController) this.players was undefined!");
+			}
 		},
 
 		/**
