@@ -27,7 +27,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 
 			// our game takes place in a field
 			this.fieldController = new FieldController( this, this.model );
-			// this.fieldController.tick();
 
 			// This is the Factory that will create all the entities for us
 			this.entityFactory = new GameEntityFactory(this.fieldController, config.ENTITY_MODEL);
@@ -41,8 +40,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 			this.clockActualTime = new Date().getTime();
 			this.gameClock = 0; // Our game clock is relative
 			this.gameTick = 0;
-
-			this.startGameClock();
 		},
 
 		startGameClock: function()
@@ -81,11 +78,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		getNumberOfPlayers: function()
 		{
 			return this.getTwoDigits( this.fieldController.players.count() );
-		},
-
-		getRank: function()
-		{
-			return "00" + "/" + this.getNumberOfPlayers();
 		},
 
 		setModel: function(aGameModel)

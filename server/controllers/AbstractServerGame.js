@@ -58,6 +58,8 @@ AbstractServerGame = (function()
 			this.netChannel = new ServerNetChannel(this, this.server.gameConfig, portNumber);
 
 			this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
+
+			this.startGameClock();
 		},
 
 		/**
