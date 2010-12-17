@@ -14,7 +14,7 @@ Basic Usage:
 	 See subclasses
 */
 
-var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldController, GameEntityFactory )
+var init = function( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory )
 {
 	return new JS.Class(
 	{
@@ -23,7 +23,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 		initialize: function(config)
 		{
 			this.config = config;
-			this.setModel(GameModel);
+			this.setModel(GAMECONFIG.GAME_MODEL);
 
 			// our game takes place in a field
 			this.fieldController = new FieldController( this, this.model );
@@ -64,13 +64,13 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 
 		getTimeRemaining: function()
 		{
-			var timeRemaining = Math.abs( GameModel.gameDuration - this.gameClock ),
+			var timeRemaining = Math.abs( GAMECONFIG.GAME_MODEL.gameDuration - this.gameClock ),
 				time = "",
 				sec = Math.floor( timeRemaining / 1000 ),
 				min = Math.floor( sec / 60 ),
 				seconds = this.getTwoDigits( sec % 60 ),
 				minutes = this.getTwoDigits( min % 60 ),
-				sign = ( GameModel.gameDuration < this.gameClock ) ? "-" : "";
+				sign = ( GAMECONFIG.GAME_MODEL.gameDuration < this.gameClock ) ? "-" : "";
 
 			return sign + minutes + ":" + seconds;
 		},
@@ -148,7 +148,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 
 		canAddPlayer: function()
 		{
-			return this.config.gameConfig.MAX_PLAYERS > this.fieldController.players.count();
+			return this.config.gameConfig.GAME_MODEL.MAX_PLAYERS > this.fieldController.players.count();
 		},
 
 		removeEntity: function( objectID )
@@ -191,25 +191,19 @@ if (typeof window === 'undefined')
 	require('../lib/Vector.js');
 	require('../lib/Rectangle.js');
 	require('../lib/SortedLookupTable.js');
-	require('js/model/GameModel.js');
 	require('./FieldController.js');
 	require('../factories/GameEntityFactory');
-	require('./entities/GameEntity');
-	require('./entities/Character');
 	require('../lib/jsclass/core.js');
 	require('js/controllers/entities/traits/BaseTrait.js');
-	
-	AbstractGame = init( Vector, Rectangle, SortedLookupTable, GameModel, FieldController, GameEntityFactory, GameEntity, Character );
+
+	AbstractGame = init( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory);
 }
 else 
 {
 	define(['lib/Vector',
 		'lib/Rectangle',
 		'lib/SortedLookupTable',
-		'model/GameModel',
 		'controllers/FieldController',
 		'factories/GameEntityFactory',
-		'controllers/entities/GameEntity',
-		'controllers/entities/Character',
 		'lib/jsclass/core'], init);
 }

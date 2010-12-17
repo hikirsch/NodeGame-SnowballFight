@@ -24,6 +24,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	 */
 	function NetChannel( config, aController )
 	{
+		debugger;
 		var that = this;
 		this.controller = aController;	// For callbacks once messages are validated
 		this.config = config;
@@ -84,7 +85,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		var that = this;
 		this.newPort = newPort;
 		if( connected ) {
-			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.GAME_PORT);
+			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.SERVER_SETTING.GAME_PORT);
 			this.connection = new WebSocket( 'ws://' + this.config.HOST + ':' + newPort );
 			this.connection.onopen = function() { that.onConnectionOpened(); };
 			this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
