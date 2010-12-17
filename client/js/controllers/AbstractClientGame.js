@@ -28,13 +28,21 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 				this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
 
+
+				// Create the view first, we need a place to show the browser req.
+				this.view = new GameView(this, this.model );
+
+				// You cannot play!
+				if( typeof WebSocket === "undefined" ) {
+					this.view.showBrowserReq();
+					return;
+				}
+
 				// Create the director - there's only one ever. Each game is a new 'scene'
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
-
 				__GlobalDisableEvents();
 
-				this.view = new GameView(this, this.model );
 				this.initializeGame();
 
 			},
@@ -46,17 +54,9 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 				this.fieldController = new FieldController( this, this.model );
 				this.fieldController.createView( this.model );
-
-				if( typeof WebSocket !== "undefined" ) {
-					this.supportedBrowser = true;
-					this.netChannel = new NetChannel(this.config, this);
-					this.initializeCaat();
-					this.startGameClock();
-				}
-				else
-				{
-					this.view.showBrowserReq();
-				}
+				this.netChannel = new NetChannel(this.config, this);
+				this.initializeCaat();
+				this.startGameClock();
 			},
 
 			initializeCaat: function()
