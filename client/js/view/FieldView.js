@@ -37,7 +37,8 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 
 		addEntity: function( anEntityView )
 		{
-			this.sortChildren();
+//			GAMECONFIG.CAAT.SCENE.getA
+//			this.sortChildren();
 //			var actor = anEntityView.CAATActorContainer || anEntityView.CAATSprite;
 //        	GAMECONFIG.CAAT.SCENE.addChild(actor);
 		},

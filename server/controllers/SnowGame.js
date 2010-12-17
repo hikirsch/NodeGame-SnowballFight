@@ -58,7 +58,7 @@ SnowGame = (function()
 		 */
 		createLevel: function()
 		{
-//			this.createDummyPlayers();
+			this.createDummyPlayers();
 			var aFieldEntity,
 				aFieldEntityModel;
 
@@ -113,15 +113,20 @@ SnowGame = (function()
 					character.scoreMultiplier = 1;
 
 				} else { // It's a present, (which also means it's owned by the server
-					projectile.view.transferredTraits = this.traitFactory.getRandomPresentTrait();
+
 					projectile.view.clientID = -1; // Set to clientID -1, which will cause it to be removed by connected clients
 					this.presentsActive.remove(projectile.view.objectID);
 				}
 
 
+//				console.log("(SnowGame) Char:", SYS.inspect(projectileOwner), projectile.view.transferredTraits);
+
+
 				// Apply the projectile's trait(s) to the character that was hit
 				var Trait = this.traitFactory.createTraitWithName(projectile.view.transferredTraits);
-				character.view.addTraitAndExecute( new Trait(collisionNormal) );
+				// TODO: HACK should never be undefined
+				if(Trait !== undefined)
+					character.view.addTraitAndExecute( new Trait(collisionNormal) );
 
 				this.fieldController.removeEntity(projectile.view.objectID);
 			}
@@ -155,6 +160,7 @@ SnowGame = (function()
 			projectileModel.force = 0 ; // TODO: Use force gauge
 			projectileModel.initialPosition = this.fieldController.positionEntityAtRandomNonOverlappingLocation( 65 );
 			projectileModel.angle = 0;
+			projectileModel.transferredTraits = this.traitFactory.getRandomPresentTrait();
 
 			// Seit to so that it goes to 1 of x random sprites in the sheet
 			var numRows = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP[projectileModel.theme].rowCount-1;
@@ -260,6 +266,13 @@ SnowGame = (function()
 				  { position: { x: 810, y: 250 }, entityType: FieldEntityModel.iglooRedFlag },
 				  ];
 
-		}
+		},
+
+		dealloc: function()
+        {
+			console.log('(Snowgame) >>>>>>GAME HAS ENDED<<<<<');
+            this.callSuper();
+            clearTimeout( this.presentsTimer );
+        }
 	});
 })();

@@ -39,9 +39,9 @@ var init = function(BaseTrait)
 
 		execute: function()
 		{
-			var amount = 3;
+			var amount = 12;
 			var angleOffset = Math.random() * Math.PI * 2;
-			for(var i = 0; i < 3; i++)
+			for(var i = 0; i <amount; i++)
 			{
 				// For now always fire the regular snowball
 				var projectileModel = ProjectileModel['powerupModeTheme'+this.attachedEntity.theme];

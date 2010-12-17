@@ -25,7 +25,6 @@ Version:
 
 var ws = require('network/ws.js');
 require('js/lib/jsclass/core.js');
-require('js/model/GameModel.js');
 require('controllers/SnowGame.js');
 require('lib/Logger.js');
 
@@ -39,11 +38,18 @@ Server = (function()
 			this.logger = new Logger( serverConfig, this );
 			this.gameConfig = gameConfig;
 			this.serverConfig = serverConfig;
-			this.gameConfig.NEXT_PORT = this.gameConfig.GAME_PORT + 1;
+
+			console.log("(Server) GAMECONFIG", SYS.inspect(this.gameConfig.SERVER_SETTING), serverConfig)
+
+			this.gameConfig.SERVER_SETTING.NEXT_PORT = this.gameConfig.SERVER_SETTING.GAME_PORT + 1;
+
+//			console.log("(Server) GAMECONFIG", SYS.inspect(this.gameConfig.SERVER_SETTING), serverConfig)
+
 			var loggerOptions = {};
 			this.logger = new Logger( loggerOptions, this );
 			this.games = {};
-			this.initServerChooser( this.gameConfig.GAME_PORT );
+
+			this.initServerChooser( this.gameConfig.SERVER_SETTING.GAME_PORT );
 		},
 
 		initServerChooser: function( port ) {
@@ -79,7 +85,7 @@ Server = (function()
 
 		getGameWithDesiredPort: function( desiredPort )
 		{
-			if( desiredPort != this.gameConfig.GAME_PORT ) {
+			if( desiredPort != this.gameConfig.SERVER_SETTING.GAME_PORT ) {
 				if( this.games[ desiredPort ] != null )
 				{
 					if( this.games[ desiredPort ].canAddPlayer() )
@@ -141,18 +147,18 @@ Server = (function()
 
 		getNextAvailablePort: function()
 		{
-			var nextPort = this.gameConfig.NEXT_PORT;
+			var nextPort = this.gameConfig.SERVER_SETTING.NEXT_PORT;
 
 			while( this.games[ nextPort ] != null )
 			{
 				nextPort += 1;
-				if( nextPort > this.gameConfig.GAME_PORT + this.gameConfig.MAX_PORTS ) {
-					nextPort = this.gameConfig.GAME_PORT + 1;
+				if( nextPort > this.gameConfig.SERVER_SETTING.GAME_PORT + this.gameConfig.SERVER_SETTING.MAX_PORTS ) {
+					nextPort = this.gameConfig.SERVER_SETTING.GAME_PORT + 1;
 				}
 			}
 
-			console.log( "(Server) creating new port: " + nextPort );
-			return this.gameConfig.NEXT_PORT = nextPort;
+			this.gameConfig.SERVER_SETTING.NEXT_PORT = nextPort;
+			return this.gameConfig.SERVER_SETTING.NEXT_PORT ;
 		},
 
 		log: function( o )

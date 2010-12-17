@@ -9,14 +9,6 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			}
 		}(),
 
-		MASTERSERVER_PORT: 10000,
-		GAME_PORT: 10000,
-		MAX_PORTS: 5,
-		DEBUG_MODE: true,
-		MAX_PLAYERS: 8,
-		SERVER_END_GAME_GRACE: 1500,
-		ROUND_INTERMISSION: 5000,
-
 		// See: http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS:
 		{
@@ -52,12 +44,31 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 
 		SERVER_SETTING:
 		{
+			// Connection related
 			tickrate: 1000/66,				// The server runs the game at this FPS - Recommended to not modify,
 			minupdaterate: 1000/10,
 			maxupdaterate: 1000/60,
 			minrate: 2500,
 			maxrate: 10000,
-			NEXT_GAME_ID: 1
+
+			// "Server server" settings
+			MASTERSERVER_PORT: 10000,
+			NEXT_GAME_ID: 1,
+			GAME_PORT: 10000,
+			NEXT_PORT: 10000 + 1, // 1 more than GAME_PORT
+			MAX_PORTS: 5,
+			DEBUG_MODE: true,
+			SERVER_END_GAME_GRACE: 1500
+		},
+
+
+		GAME_MODEL:
+		{
+			width: 900,
+			height: 600,
+			MAX_PLAYERS: 8,
+			gameDuration: 10000,
+			ROUND_INTERMISSION_DURATION: 5000
 		},
 
 		PRESENTS_SETTING:
