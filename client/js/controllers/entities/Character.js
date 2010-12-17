@@ -128,7 +128,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 
 		constructEntityDescription: function(gameClock, wantsFullUpdate)
 		{
-			wantsFullUpdate = gameClock % 30 === 0;
+			wantsFullUpdate = (gameClock % 30) == 0;
 
 
 			var returnString = this.callSuper(wantsFullUpdate);
