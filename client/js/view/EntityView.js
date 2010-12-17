@@ -4,12 +4,13 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 	{
 		initialize:  function(controller, model ) {
 			this.callSuper();
-			this.lastTheme = this.controller.theme
+			this.themeMask = this.controller.themeMask;
 		},
 
 		createElement: function()
 		{
 			var director = GAMECONFIG.CAAT.DIRECTOR;
+			this.themeMaskList = GAMECONFIG.SPRITE_THEME_MASK;
 
 			// Grab our model info and create a sprite
 			var themeModel = this.themeModel = this.getThemeModelByID(this.model.theme);
@@ -21,9 +22,6 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			actor = this.CAATSprite = new CAAT.SpriteActor().
 					create().
 					setSpriteImage(caatImage);
-
-
-			console.log('making thing with theme',this.model.theme, themeModel);
 
 			this.CAATSprite.spriteIndex = themeModel.spriteIndex;
 			this.CAATSprite.setScaleAnchored(1, 1, 0);
@@ -46,8 +44,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			this.CAATSprite.zIndex = actor.zIndex = themeModel.zIndex;
 			this.CAATSprite.mouseEnabled = actor.mouseEnabled = false;
 
-//			GAMECONFIG.CAAT.SCENE.setZOrder(actor, actor.zIndex);
-			// We previously had a theme applied - reset it
+			// We previously had a theme applied - but now we don't want one anymore - clear
 			this.isDirtyTheme = false;
 		},
 
@@ -68,48 +65,47 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				actor.setLocation(this.controller.getPosition().x, this.controller.getPosition().y);
 
 			}
+
+			console.log("(EntityView) this.controller.themeMask:", this.controller.themeMask)
 			// See if anything fancy has occured
-			var isInSpecialView = false;
-			if(+this.controller.theme > 1000)
+			if(this.controller.themeMask) // 1 means no
 			{
-				this.lastTheme = this.controller.theme;
-
-				isInSpecialView = true;
-				// Figure out what its trying to tell us
-				var themeString = this.controller.theme + "";
-				var themeMask = themeString.substr(0, 1);
+				this.themeMask = this.controller.themeMask;
+				this.isDirtyTheme = true;
 
 
-				// frozen
-				if(themeMask === '1' && this.CAATSprite.animationImageIndex.length == 1) {
+				// TODO: Switch to function-object lookup instead of giant if/else
+				// FROZEN
+				if( this.themeMask & this.themeMaskList.FROZEN && this.CAATSprite.animationImageIndex.length == 1)
+				{
 					this.CAATSprite.setAnimationImageIndex( [8,9] );
                 	this.CAATSprite.changeFPS= 300;
-				} else if (themeMask === '2') {
-					isInSpecialView = true;
+				}
+				// Flashing
+				else if (this.themeMask & this.themeMaskList.FLASHING)
+				{
 					// TODO: HACK - we shouldn't have to reset animation index here
 					this.CAATSprite.spriteIndex = 1;
 					this.CAATSprite.setAnimationImageIndex([1]);
 					this.CAATSprite.setAlpha(Math.random());
 				}
 
-				this.isDirtyTheme = true;
+
 			}
 
 			// This is true if we had a theme applied, and its done, but we didn't remove some of its stuff yet
-			if(!isInSpecialView && this.isDirtyTheme) {
+			if( this.controller.themeMask === 0 && this.isDirtyTheme) {
 				this.CAATSprite.setAnimationImageIndex([1]);
-				this.CAATSprite.alpha = 5;
+				this.CAATSprite.alpha = 1;
 				this.isDirtyTheme = false;
 			}
-
-
 
 			// Do regular stuff
 			var actualRotation = this.controller.getRotation();
 			if( this.controller.useTransform ) {
 				this.CAATSprite.setRotation( actualRotation * 0.0174532);
 			}
-			else if( actualRotation != 0 )
+			else if( this.themeMask === 0 && actualRotation != 0 )
 			{
 				actualRotation += 90;
 				if(actualRotation < 0)  actualRotation += 359; // Wrap
@@ -119,9 +115,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
 
 				// spriteIndex = 90 / 45 = 2
-				if(!isInSpecialView) {
-					this.CAATSprite.spriteIndex =  ( roundedRotation / roundTo);
-				}
+				this.CAATSprite.spriteIndex =  ( roundedRotation / roundTo);
 			}
 
 			// We got the nickname

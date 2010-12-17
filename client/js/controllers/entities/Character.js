@@ -53,6 +53,8 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.rank = 0;
 			this.lastScoreSent = 0;
 			this.scoreMultiplier = 1;
+
+			this.radius = 13;
 		},
 
 		/**
@@ -124,9 +126,11 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 				this.callSuper();
 		},
 
-		constructEntityDescription: function(wantsFullUpdate)
+		constructEntityDescription: function(gameClock, wantsFullUpdate)
 		{
-			wantsFullUpdate = true;
+			wantsFullUpdate = gameClock % 60 === 0;
+
+
 			var returnString = this.callSuper(wantsFullUpdate);
 
 			if(wantsFullUpdate || this.score != this.lastScoreSent) {
@@ -137,6 +141,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			if(wantsFullUpdate) {
 				returnString += ","+this.model.nickname;
 			}
+
 			return returnString;
 		},
 

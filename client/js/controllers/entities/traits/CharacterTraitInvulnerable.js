@@ -26,10 +26,10 @@ var init = function(BaseTrait, Vector)
 		attach: function(anEntity)
 		{
 			this.callSuper();
+			this.attachedEntity.themeMask |= this.themeMaskList.FLASHING;
 
 			// Set our theme, and hijack the characters
-			this.theme = '2' + this.attachedEntity.theme;
-			this.intercept(['collisionMask', 'theme']);
+			this.intercept(['collisionMask']);
 			this.attachedEntity.collisionCircle.collisionMask = this.collisionMask;
 		},
 
@@ -38,7 +38,10 @@ var init = function(BaseTrait, Vector)
 			var entity = this.attachedEntity;
 			this.callSuper();
 
+			console.log("1DEATACH!!!", entity.themeMask)
 			// restore the collisionmask to the circle
+			entity.themeMask &= ~this.themeMaskList.FLASHING;
+			console.log("2DEATACH!!!", entity.themeMask)
 			entity.collisionCircle.collisionMask = entity.collisionMask;
 		},
 

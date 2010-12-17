@@ -22,7 +22,6 @@ var init = function(BaseTrait, Vector)
 			this.callSuper();
 
 			this.collisionNormal = collisionNormal;
-			this.collisionNormal.mul(-3); // Messin fools up!
 		},
 
 		attach: function()
@@ -30,13 +29,13 @@ var init = function(BaseTrait, Vector)
 			this.callSuper();
 
 			// Set our theme, and hijack the characters
-			this.theme = '1' + this.attachedEntity.theme;
-			this.intercept(['handleInput', 'theme']);
+			this.attachedEntity.themeMask |= this.themeMaskList.FROZEN;
+			this.intercept(['handleInput']);
 		},
 
 		execute: function()
 		{
-			this.collisionNormal.mul(-10);
+			this.collisionNormal.mul(-5);
 			// apply
 			this.attachedEntity.velocity.mul(0);
 			this.attachedEntity.velocity.add(this.collisionNormal);
@@ -46,9 +45,12 @@ var init = function(BaseTrait, Vector)
 		detach: function() {
 			var entity = this.attachedEntity; // Store in var because the super call below will clear the memory
 			this.callSuper();
-			entity.addTraitAndExecute( new CharacterTraitInvulnerable() );
 
-			console.log("Detach!!!");
+			// turn off bitmask
+			entity.themeMask &= ~this.themeMaskList.FROZEN;
+
+			// Add an invulnerability trait
+			entity.addTraitAndExecute( new CharacterTraitInvulnerable() );
 		},
 
 

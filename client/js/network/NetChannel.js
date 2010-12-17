@@ -175,7 +175,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 
 
 		// We sent this, clear our reliable buffer que
-		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.fullupdate)
+		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.FULL_UPDATE)
 		{
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
@@ -189,7 +189,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 			delete this.messageBuffer[messageIndex];
 			delete message;
 		}
-		else if (serverMessage.cmds.cmd == config.CMDS.fullupdate) // World update!
+		else if (serverMessage.cmds.cmd == config.CMDS.FULL_UPDATE) // World update!
 		{
 			var len = serverMessage.data.length;
 			var i = -1;
@@ -244,13 +244,15 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 			entityDescription.clientID = +entityDescAsArray[1];
 			entityDescription.entityType = +entityDescAsArray[2]; // convert to int
 			entityDescription.theme = +entityDescAsArray[3];
-			entityDescription.x = +entityDescAsArray[4];
-			entityDescription.y = +entityDescAsArray[5];
-			entityDescription.rotation = +entityDescAsArray[6];
+			entityDescription.themeMask = +entityDescAsArray[4];
+			entityDescription.x = +entityDescAsArray[5];
+			entityDescription.y = +entityDescAsArray[6];
+			entityDescription.rotation = +entityDescAsArray[7];
 
-			// If we were sent a score, or a nickname. When we receive a nickname, it ALWAYS comes after a score
-			if(entityDescAsArray[7]) entityDescription.score = +entityDescAsArray[7];
-			if(entityDescAsArray[8]) entityDescription.nickname = entityDescAsArray[8];
+			// If we were sent a score, or a nickname use them
+			// If we receive a nickname, it ALWAYS comes after a score
+			if(entityDescAsArray[8]) entityDescription.score = +entityDescAsArray[8];
+			if(entityDescAsArray[9]) entityDescription.nickname = entityDescAsArray[9];
 
 			// Store the final result using the objectID
 			worldDescription.setObjectForKey(entityDescription, entityDescription.objectID);

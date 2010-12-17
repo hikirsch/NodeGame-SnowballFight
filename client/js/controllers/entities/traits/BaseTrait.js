@@ -47,6 +47,7 @@ var init = function()
 			this.attachedEntity = null;
 			this.interceptedProperties = new SortedLookupTable();
 			this.detachTimeout = 0;
+			this.themeMaskList = GAMECONFIG.SPRITE_THEME_MASK;
 
 			// If a trait can stack, then it doesn't matter if it's already attached.
 			// If it cannot stack, it is not applied if it's currently active.

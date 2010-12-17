@@ -44,9 +44,15 @@ SnowGame = (function()
 			this.createLevel();
 
 
-			// this.presentsActive = new SortedLookupTable();
-			// this.presentsTimer = 0;
-			// this.spawnPresents();
+			this.initPresents();
+		},
+
+		initPresents: function()
+		{
+			this.presentsActive = new SortedLookupTable();
+			this.presentsTimer = 0;
+			this.presentsTotalSpawned = 0;
+			this.spawnPresents();
 		},
 
 		/**
@@ -95,41 +101,52 @@ SnowGame = (function()
 
 				// Give some points to the owner
 				var projectileOwner = this.fieldController.getPlayerWithClientID(projectile.view.clientID);
-				if(projectileOwner) {
+				if(projectileOwner)
+				{
 					projectileOwner.score += this.server.gameConfig.SCORING.HIT;
 					projectileOwner.scoreMultiplier = Math.min(projectileOwner.scoreMultiplier, this.server.gameConfig.SCORING.MAX_MULTIPLIER);
+
+					// Reset the multiplier of the person who was hit
+					character.scoreMultiplier = 1;
+
+				}
+				else
+				{ 	// owned by the server
+					projectile.view.clientID = -1;
 				}
 
-				// Reset the multiplier of the person who was hit
-				character.scoreMultiplier = 1;
+
+
+
 				// Apply the projectile's trait(s) to the character that was hit
 				var Trait = this.traitFactory.createTraitWithName(projectile.view.transferredTraits);
 				character.view.addTraitAndExecute( new Trait(collisionNormal) );
 
-				// Remove the projectile
 				this.fieldController.removeEntity(projectile.view.objectID);
 			}
 			// [Projectile vs FIELD_ENTITY]
 			else if(tC === (tList.FIELD_ENTITY | tList.PROJECTILE) ) {
+
 				fieldEntity = (tA & tList.FIELD_ENTITY) ? circleA : circleB;
 				projectile = (fieldEntity === circleA)  ? circleB : circleA;
 				this.fieldController.removeEntity(projectile.view.objectID);
 			}
 		},
 
-		spawnPresents: function() {
-
+		spawnPresents: function()
+		{
 			// restart the timer
 			var that = this;
 			var minTime = 500;
 			var timeRange = 1000;
-			var chance = 1.25;
+			var chance = 0;
 			clearTimeout(this.presentsTimer);
-		 	this.presentsTimer = setTimeout( function() { console.log('abc'), that.spawnPresents()}, Math.random() * timeRange + minTime);
+		 	this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
 
 			// Try to create if possible and luck says so
-			if(Math.random() > chance && this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
+//			if(Math.random() > chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
 				return;
+
 
 			// Presents are really just projectiles that don't move
 				// For now always fire the regular snowball
@@ -138,10 +155,14 @@ SnowGame = (function()
 			projectileModel.initialPosition = new Vector(Math.random() * this.model.width, Math.random() * this.model.height);
 			projectileModel.angle = 0;
 
+			// Create a theme for it
 			var numRows = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP[projectileModel.theme].rowCount-1;
 			projectileModel.theme = 400 + Math.floor( Math.random() * numRows+1 );
 			var projectile = this.entityFactory.createProjectile(this.getNextEntityID(), 0, projectileModel, this);
 			this.fieldController.addEntity(projectile);
+
+			// Add to our list
+			this.presentsActive.setObjectForKey(projectile, ++this.presentsTotalSpawned);
 		},
 
 		createDummyPlayers: function()

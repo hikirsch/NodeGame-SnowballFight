@@ -14,7 +14,7 @@ var init = function()
 {
 	return {
 		defaultSnowball	: { transferredTraits: 'ProjectileTraitFreeze', initialPosition: null, angle: 0, radius: 10, maxVelocity: 5.5, force: 1, theme: '300', spriteIndex: 0, useTransform: true },
-		present			: { transferredTraits: 'ProjectileTraitFreeze', initialPosition: null, angle: 0, radius: 10, maxVelocity: 9, force: 0, theme: '400', spriteIndex: 0, useTransform: false },
+		present			: { transferredTraits: 'PresentTraitHyperShot', initialPosition: null, angle: 0, radius: 10, maxVelocity: 9, force: 0, theme: '400', spriteIndex: 0, useTransform: false },
 		superSnowball	: { transferredTraits: 'ProjectileTraitFreeze', initialPosition: null, angle: 0, radius: 15, maxVelocity: 9, force: 1, theme: '306', spriteIndex: 0, useTransform: true }
 	}
 };

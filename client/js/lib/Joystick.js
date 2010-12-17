@@ -72,7 +72,6 @@ var init = function($)
 			if(this.keys['space']) input |= GAMECONFIG.INPUT_BITMASK.SPACE;
 			if(this.keys['shift']) input |= GAMECONFIG.INPUT_BITMASK.SHIFT;
 			if(this.keys['tab']) input |= GAMECONFIG.INPUT_BITMASK.TAB;
-
 			return input;
 		},
 

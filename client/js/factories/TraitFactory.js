@@ -11,7 +11,7 @@
 	 // TODO: FILL OUT
  */
 
-var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable)
+var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot)
 {
 	// Private reference
 	var traitTypes = new SortedLookupTable();
@@ -19,6 +19,7 @@ var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTrait
 	traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
 	traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
 	traitTypes.setObjectForKey(CharacterTraitInvulnerable, 'CharacterTraitInvulnerable');
+	traitTypes.setObjectForKey(PresentTraitHyperShot, 'PresentTraitHyperShot');
 
 	// Return only accessor
 	return {
@@ -35,7 +36,8 @@ if (typeof window === 'undefined')
 	require('js/controllers/entities/traits/ClientControlledTrait');
 	require('js/controllers/entities/traits/CharacterTraitInvulnerable');
 	require('js/controllers/entities/traits/ProjectileTraitFreeze');
-	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze);
+	require('js/controllers/entities/traits/PresentTraitHyperShot');
+	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot);
 }
 else
 {
@@ -44,5 +46,6 @@ else
 	define(['controllers/entities/traits/ClientControlledTrait',
 		'controllers/entities/traits/ClientControlledTrait',
 		'controllers/entities/traits/CharacterTraitInvulnerable',
+		'controllers/entities/traits/PresentTraitHyperShot',
 		'lib/jsclass/core'], init);
 }

@@ -175,9 +175,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 					debugger;
 				}
 
+				entity.themeMask = entityDesc.themeMask;
+
 				// Set if sent
-				(entityDesc.score && (entity.score = entityDesc.score));
 				(entityDesc.theme && (entity.theme = entityDesc.theme));
+				(entityDesc.score && (entity.score = entityDesc.score));
 				(entityDesc.nickname && (entity.nickname = entityDesc.nickname));
 			} else {
 				console.log("(FieldController)::updateEntity - Error: Cannot find entity with objectID", objectID);
@@ -233,9 +235,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				// This entity is not active, check if it belongs to the server
 				var entity = this.allEntities.objectForKey(key);
 
-				if(entity.clientID == 0)  {
-					continue;
-				}
+//				if(entity.clientID == 0)  {
+//					continue;
+//				}
 
 				if( GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER == entity.entityType ) {
 					this.removePlayer( entity.clientID );
@@ -265,6 +267,20 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 			entity.dealloc();
 			this.allEntities.remove( objectID );
+		},
+
+		getRandomSafeLocation: function()
+		{
+
+			var position = new Vector(Math.random() * this.model.width, Math.random() * this.model.height);
+			var attempts = 0;
+
+			// Attempt to find a spot to place this present that is not above stuff
+			while(this.fieldController.packedCircleManager.getCircleAt( position.x, position.y, 50*50))
+			{
+				attempts++;
+				position.set(Math.random() * this.model.width, Math.random() * this.model.height)
+			}
 		},
 
 		getPlayerStats: function()

@@ -2,7 +2,7 @@
 	  ####  #####  ##### ####    ###  #   # ###### ###### ##     ##  #####  #     #      ########    ##    #  #  #####
 	 #   # #   #  ###   #   #  #####  ###    ##     ##   ##  #  ##    #    #     #     #   ##   #  #####  ###   ###
 	 ###  #   #  ##### ####   #   #   #   ######   ##   #########  #####  ##### ##### #   ##   #  #   #  #   # #####
- Ð
+ ï¿½
  File:
  	PackedCircleManager.js
  Created By:
@@ -351,16 +351,17 @@ var init = function(Vector, PackedCircle)
 	 * Given an x,y position finds circle underneath and sets it to the currently grabbed circle
 	 * @param xpos
 	 * @param ypos
+	 * @param buffer	A radiusSquared around the point in question where something is considered to match
 	 */
-	PackedCircleManager.prototype.grabCircleAt = function(xpos, ypos)
+	PackedCircleManager.prototype.getCircleAt = function(xpos, ypos, buffer)
 	{
 		var circleList = this.allCircles;
 		var len = circleList.length;
 		var grabVector = new Vector(xpos, ypos);
 
 		// These are set every time a better match i found
-		var closestCircle = undefined;
-		var closestDistance = Number.MAX_VALUE; // i could really just use 999 but i look cool
+		var closestCircle = null;
+		var closestDistance = Number.MAX_VALUE;
 
 		// Loop thru and find the closest match
 		for(var i = 0; i < len; i++)
@@ -368,17 +369,18 @@ var init = function(Vector, PackedCircle)
 			var aCircle = circleList[i];
 			var distanceSquared = aCircle.position.distanceSquared(grabVector);
 
-			if(distanceSquared < closestDistance && distanceSquared < aCircle.radiusSquared)
+			if(distanceSquared < closestDistance && distanceSquared < aCircle.radiusSquared + buffer)
 			{
 				closestDistance = distanceSquared;
 				closestCircle = aCircle;
 			}
 		}
 
-		if(closestCircle == undefined) return;
-		this.setDraggedCircle(closestCircle);
+		if(closestCircle === null) return null;
 
-		this.draggedCircle.radius = this.draggedCircle.originalRadius*2;
+
+//		this.setDraggedCircle(closestCircle);
+//		this.draggedCircle.radius = this.draggedCircle.originalRadius*2;
 		return closestCircle;
 	};
 
