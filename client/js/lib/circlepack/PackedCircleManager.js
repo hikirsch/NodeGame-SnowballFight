@@ -367,6 +367,7 @@ var init = function(Vector, PackedCircle)
 		for(var i = 0; i < len; i++)
 		{
 			var aCircle = circleList[i];
+			if(!aCircle) continue;
 			var distanceSquared = aCircle.position.distanceSquared(grabVector);
 
 			if(distanceSquared < closestDistance && distanceSquared < aCircle.radiusSquared + buffer)

@@ -11,7 +11,7 @@
 	 // TODO: FILL OUT
  */
 
-var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot)
+var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, EntityTraitAnimateIn)
 {
 	// Private reference
 	var traitTypes = new SortedLookupTable();
@@ -19,13 +19,30 @@ var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTrait
 	traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
 	traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
 	traitTypes.setObjectForKey(CharacterTraitInvulnerable, 'CharacterTraitInvulnerable');
+	traitTypes.setObjectForKey(EntityTraitAnimateIn, 'EntityTraitAnimateIn');
+
+	// presents
+	traitTypes.setObjectForKey(PresentTrait360Shot, 'PresentTrait360Shot');
 	traitTypes.setObjectForKey(PresentTraitHyperShot, 'PresentTraitHyperShot');
+
+	// Present traits
+	var presentTraits = [];
+	presentTraits.push('PresentTraitHyperShot');
+	presentTraits.push('PresentTrait360Shot');
 
 	// Return only accessor
 	return {
 		createTraitWithName: function(aTraitName)
 		{
 			return traitTypes.objectForKey(aTraitName);
+		},
+
+		/**
+		 * Returns one of the present traits at random
+		 */
+		getRandomPresentTrait: function()
+		{
+			return presentTraits[ Math.floor(Math.random() * presentTraits.length) ];
 		}
 	};
 };
@@ -37,7 +54,9 @@ if (typeof window === 'undefined')
 	require('js/controllers/entities/traits/CharacterTraitInvulnerable');
 	require('js/controllers/entities/traits/ProjectileTraitFreeze');
 	require('js/controllers/entities/traits/PresentTraitHyperShot');
-	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot);
+	require('js/controllers/entities/traits/PresentTrait360Shot');
+	require('js/controllers/entities/traits/EntityTraitAnimateIn');
+	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, EntityTraitAnimateIn);
 }
 else
 {
@@ -47,5 +66,7 @@ else
 		'controllers/entities/traits/ClientControlledTrait',
 		'controllers/entities/traits/CharacterTraitInvulnerable',
 		'controllers/entities/traits/PresentTraitHyperShot',
+		'controllers/entities/traits/PresentTrait360Shot',
+		'controllers/entities/traits/EntityTraitAnimateIn',
 		'lib/jsclass/core'], init);
 }

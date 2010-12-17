@@ -115,7 +115,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 			var speedFactor = delta / ( this.targetDelta );
 			if (speedFactor <= 0) speedFactor = 1;
 
-			this.fieldController.tick(speedFactor, this.clockActualTime)
+			this.fieldController.tick(speedFactor, this.clockActualTime, this.gameTick)
 		},
 
 		onEndGame: function()

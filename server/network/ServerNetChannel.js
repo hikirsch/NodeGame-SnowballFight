@@ -151,7 +151,6 @@ ServerNetChannel = (function()
 			var that = this;
 			this.startTime = this.delegate.gameClock;
 			this.time = this.startTime;
-			this.delegate.status();
 
 			// Start the websocket
 			this.delegate.log("(ServerNetChannel) Starting listen on port '" + this.port + "'");
@@ -213,7 +212,6 @@ ServerNetChannel = (function()
 
 				// that.saveRecording();
 				that.delegate.log('>> Shutting down...');
-				that.delegate.status(true);
 				process.exit(0);
 			}, 100);
 		},

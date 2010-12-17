@@ -30,7 +30,8 @@ var init = function(BaseTrait, Vector)
 
 			// Set our theme, and hijack the characters
 			this.attachedEntity.themeMask |= this.themeMaskList.FROZEN;
-			this.intercept(['handleInput']);
+			this.damping = 0.98; // Make us slide-y
+			this.intercept(['handleInput', 'damping']);
 		},
 
 		execute: function()

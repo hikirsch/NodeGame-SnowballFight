@@ -14,21 +14,20 @@ Basic Usage:
 		this.clientCharacter = aCharacter;
 	}
 */
-var init = function(BaseTrait, EntityModel)
+var init = function(BaseTrait)
 {
-	return new JS.Class("PresentTraitHypershot", BaseTrait,
+	return new JS.Class("PresentTrait360Shot", BaseTrait,
 	{
 		initialize: function(collisionNormal)
 		{
 			this.callSuper();
-			this.fireRate = 250;
 		},
 
 		attach: function()
 		{
 			this.callSuper();
+
 			// Set our theme, and hijack the characters
-			this.intercept(['fireRate', 'getProjectileModel']);
 			this.attachedEntity.themeMask |= this.themeMaskList.HAS_POWERUP;
 		},
 
@@ -40,27 +39,35 @@ var init = function(BaseTrait, EntityModel)
 
 		execute: function()
 		{
-			this.detachAfterDelay(4000);
-		},
+			var amount = 3;
+			var angleOffset = Math.random() * Math.PI * 2;
+			for(var i = 0; i < 3; i++)
+			{
+				// For now always fire the regular snowball
+				var projectileModel = ProjectileModel['powerupModeTheme'+this.attachedEntity.theme];
+				projectileModel.force = 1.5; // slower is actually more deadly!
+				projectileModel.initialPosition = this.attachedEntity.position.cp();
+				projectileModel.initialPosition.y += 19;
+				projectileModel.angle = i/amount * (Math.PI*2) + angleOffset;
 
-		/**
-		 * Hijacked methods
-		 */
-		getProjectileModel: function()
-		{
-			return ProjectileModel['powerupModeTheme'+this.theme];
+				this.attachedEntity.fieldController.fireProjectileFromCharacterUsingProjectileModel( this.attachedEntity, projectileModel);
+			}
+
+			this.detachAfterDelay(500);
 		}
 	});
 };
 
 
-if (typeof window === 'undefined') {
+if (typeof window === 'undefined')
+{
 	// We're in node!
 	require('js/controllers/entities/traits/BaseTrait');
-	require('js/model/EntityModel');
-	PresentTraitHyperShot = init(BaseTrait, EntityModel);
-} else {
+	PresentTrait360Shot = init(BaseTrait);
+}
+else
+{
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['controllers/entities/traits/BaseTrait', 'model/EntityModel', 'lib/jsclass/core'], init);
+	define(['lib/Vector', 'controllers/entities/traits/BaseTrait', 'lib/jsclass/core'], init);
 }

@@ -80,16 +80,19 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		fireProjectileFromCharacterUsingProjectileModel: function( aCharacter, aProjectileModel )
 		{
 			var objectID = this.gameController.getNextEntityID();
+
+			aProjectileModel.initialPosition.addXY(Math.cos(aCharacter.rotation) * 20, Math.sin(aCharacter.rotation) * 20)
 			var aNewProjectile = this.gameController.entityFactory.createProjectile(objectID, aCharacter.clientID, aProjectileModel, this);
 			this.addEntity( aNewProjectile );
 
 			// Apply impulse to character acceleration in opposite angle of the projectile
 			var currentAngle = aNewProjectile.angle;
 
-			var impulseForce = -4.5;
-			var impulseVector = new Vector(Math.cos(currentAngle) * impulseForce, Math.sin(currentAngle) * impulseForce);
+//			var impulseForce = -0.3;
+//			var impulseVector = new Vector(Math.cos(currentAngle) * impulseForce, Math.sin(currentAngle) * impulseForce);
 
-			aCharacter.acceleration.add( impulseVector );
+			aCharacter.velocity.mul(0);
+//			aCharacter.acceleration.add( impulseVector );
 			return aNewProjectile;
 		},
 
@@ -102,7 +105,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		{
 			this.allEntities.setObjectForKey( anEntity, anEntity.objectID );
 
-			console.log('(FieldController) Adding entity');
+//			console.log('(FieldController) Adding entity');
 
 			// If we have a circle collision manager - create a acked circle and a it to that
 			if(this.packedCircleManager)
@@ -128,11 +131,11 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 * Mainloop
 		 * @param speedFactor A number that tells us how close to the desired framerate the game is running. 1.0 means perfectly accurate
 		 */
-		tick: function(speedFactor, gameClock)
+		tick: function(speedFactor, gameClock, gameTick)
 		{
 			// Update entities
 			this.allEntities.forEach( function(key, entity){
-				entity.tick(speedFactor, gameClock);
+				entity.tick(speedFactor, gameClock, gameTick);
 			}, this );
 
 			// Rank players
@@ -172,7 +175,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				// Only apply these if they exist in the entity description.
 				//['rotation'] && (entity.rotation = entityDesc.rotation));
 				if(entityDesc == undefined)  {
-					debugger;
+//					debugger;
 				}
 
 				entity.themeMask = entityDesc.themeMask;
@@ -194,23 +197,15 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		removePlayer: function( connectionID )
 		{
-			// TODO: we shouldn't be checking undefined here
-			if( this.players ) {
-				var player = this.players.objectForKey(connectionID);
+			var player = this.players.objectForKey(connectionID);
 
-				if(!player) {
-					console.log("(FieldController), No 'Character' with connectionID " + connectionID + " ignoring...");
-					return;
-				}
+			if(!player) {
+				console.log("(FieldController), No 'Character' with connectionID " + connectionID + " ignoring...");
+				return;
+			}
 
-				console.log( "(FieldController) Removing Player" );
-				this.removeEntity( player.objectID );
-				this.players.remove(player.clientID);
-			}
-			else
-			{
-				console.log("(FieldController) this.players was undefined!");
-			}
+			this.removeEntity( player.objectID );
+			this.players.remove(player.clientID);
 		},
 
 		/**
@@ -223,6 +218,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			var entityKeysArray = this.allEntities._keys,
 			i = entityKeysArray.length,
 			key;
+			var totalRemoved = 0;
 
 			while (i--)
 			{
@@ -245,7 +241,10 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 					// Is not active, and does not belong to the server
 					this.removeEntity(key);
 				}
+
+				totalRemoved++;
 			}
+
 		},
 
 		/**
@@ -269,18 +268,24 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.allEntities.remove( objectID );
 		},
 
-		getRandomSafeLocation: function()
-		{
 
-			var position = new Vector(Math.random() * this.model.width, Math.random() * this.model.height);
+		/**
+		 * Places an entity safely on the map by checking if it collides with any other entities
+		 * @param anEntity
+		 */
+		positionEntityAtRandomNonOverlappingLocation: function( buffer )
+		{
+			var position = new Vector(Math.random() * this.rectangle.width, Math.random() * this.rectangle.height);
 			var attempts = 0;
 
-			// Attempt to find a spot to place this present that is not above stuff
-			while(this.fieldController.packedCircleManager.getCircleAt( position.x, position.y, 50*50))
+			// Attempt to find a spot to place this present that is not above other entities
+			while(attempts < 10 && this.packedCircleManager.getCircleAt( position.x, position.y, buffer*buffer ) )
 			{
+				position.set(Math.random() * this.rectangle.width, Math.random() * this.rectangle.height)
 				attempts++;
-				position.set(Math.random() * this.model.width, Math.random() * this.model.height)
 			}
+
+			return position;
 		},
 
 		getPlayerStats: function()

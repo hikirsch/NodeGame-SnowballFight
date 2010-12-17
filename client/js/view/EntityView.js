@@ -11,6 +11,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		{
 			var director = GAMECONFIG.CAAT.DIRECTOR;
 			this.themeMaskList = GAMECONFIG.SPRITE_THEME_MASK;
+			this.animatedIn = false;
 
 			// Grab our model info and create a sprite
 			var themeModel = this.themeModel = this.getThemeModelByID(this.model.theme);
@@ -24,9 +25,10 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					setSpriteImage(caatImage);
 
 			this.CAATSprite.spriteIndex = themeModel.spriteIndex;
-			this.CAATSprite.setScaleAnchored(1, 1, 0);
+
 		  	this.CAATSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
 			this.CAATText = null;
+
 			// Don't create an actorcontainer if its not a character
 			if(this.controller.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER)
 			{
@@ -34,9 +36,26 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					create().
 					setBounds(0, 0, this.CAATSprite.width, this.CAATSprite.height);
 				actor.addChild(this.CAATSprite);
-			}
 
-			GAMECONFIG.CAAT.SCENE.addChild(actor);
+				/**
+				 * Create a sprite to show the powerup state
+				 */
+				var powerupThemeModel= this.getThemeModelByID('500');
+				imageRef = director.getImage('500');
+				caatImage = new CAAT.CompoundImage().
+						initialize(imageRef, powerupThemeModel.rowCount, powerupThemeModel.columnCount);
+
+				this.CAATPowerupSprite = new CAAT.SpriteActor().
+						create().
+						setSpriteImage(caatImage);
+
+				this.CAATPowerupSprite.spriteIndex = powerupThemeModel.spriteIndex;
+				this.CAATPowerupSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
+				this.CAATPowerupSprite.setLocation(4, -10);
+
+				this.CAATPowerupSprite.setAnimationImageIndex( [0, 1, 2, 3, 2, 1] );
+                this.CAATPowerupSprite.changeFPS = 60;
+			}
 
 			this.actorWidth = actor.width*0.5;
 			this.actorHeight = actor.height*0.5;
@@ -46,6 +65,9 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			// We previously had a theme applied - but now we don't want one anymore - clear
 			this.isDirtyTheme = false;
+
+			this.update();
+			GAMECONFIG.CAAT.SCENE.addChild(actor);
 		},
 
 
@@ -69,19 +91,22 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			// See if anything fancy has occured
 			if(this.controller.themeMask) // 1 means no
 			{
-				this.themeMask = this.controller.themeMask;
-				this.isDirtyTheme = true;
-
 
 				// TODO: Switch to function-object lookup instead of giant if/else
+				// Animate IN
+				if((this.controller.themeMask & this.themeMaskList.ANIMATE_IN) && !(this.themeMask & this.themeMaskList.ANIMATE_IN))
+				{
+					this.animatedIn = true;
+					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time, Math.random() * 500 + 300, 4, 1 );
+				}
 				// FROZEN
-				if( this.themeMask & this.themeMaskList.FROZEN && this.CAATSprite.animationImageIndex.length == 1)
+				else if( this.controller.themeMask & this.themeMaskList.FROZEN && this.CAATSprite.animationImageIndex.length == 1)
 				{
 					this.CAATSprite.setAnimationImageIndex( [8,9] );
                 	this.CAATSprite.changeFPS= 300;
 				}
 				// Flashing
-				else if (this.themeMask & this.themeMaskList.FLASHING)
+				else if (this.controller.themeMask & this.themeMaskList.FLASHING)
 				{
 					// TODO: HACK - we shouldn't have to reset animation index here
 					this.CAATSprite.spriteIndex = 1;
@@ -89,20 +114,34 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					this.CAATSprite.setAlpha(Math.random());
 				}
 
+				// Powerup
+				if( (this.controller.themeMask & this.themeMaskList.HAS_POWERUP) && !(this.themeMask & this.themeMaskList.HAS_POWERUP) ) // and we don't have it yet
+				{
+					this.CAATActorContainer.addChild(this.CAATPowerupSprite);
 
+					// Turn the animation back on
+					this.CAATPowerupSprite.setFrameTime(this.CAATActorContainer.time, this.CAATActorContainer.time+10000);
+
+					// Scale me up!
+					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time, 700, 2, 1);
+				}
+
+				// Set to dirty, and remember new mask
+				this.isDirtyTheme = true;
 			}
 
+			this.themeMask = this.controller.themeMask;
 			// This is true if we had a theme applied, and its done, but we didn't remove some of its stuff yet
-			if( this.controller.themeMask === 0 && this.isDirtyTheme) {
-				this.CAATSprite.setAnimationImageIndex([1]);
-				this.CAATSprite.alpha = 1;
-				this.isDirtyTheme = false;
+			if( this.controller.themeMask === 0 && this.isDirtyTheme)
+			{
+				this.restoreFromThemeMask();
 			}
 
 			// Do regular stuff
 			var actualRotation = this.controller.getRotation();
 			if( this.controller.useTransform ) {
 				this.CAATSprite.setRotation( actualRotation * 0.0174532);
+
 			}
 			else if( this.themeMask === 0 && actualRotation != 0 )
 			{
@@ -114,10 +153,10 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
 
 				// spriteIndex = 90 / 45 = 2
-				this.CAATSprite.spriteIndex =  ( roundedRotation / roundTo);
+				this.CAATSprite.spriteIndex = ( roundedRotation / roundTo);
 			}
 
-			// We got the nickname
+			// We got the nickname but no textfield, create textfield
 			if(this.controller.nickname && !this.CAATText)
 				this.createTextfield(this.controller.nickname);
 
@@ -127,25 +166,62 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		},
 
 		/**
+		 * Restores properties to the CAAT sprite instances
+		 * Will be called if 'isDirtyTheme' = true if themeMask is zero.
+		 */
+		restoreFromThemeMask: function()
+		{
+			// Remove animation
+			if(this.CAATSprite.animationImageIndex.length > 1)
+				this.CAATSprite.setAnimationImageIndex([1]);
+
+			// Hide 'powerupsprite'
+			if(this.CAATActorContainer && this.CAATPowerupSprite) {
+				this.CAATPowerupSprite.setOutOfFrameTime();
+			}
+
+			// Restore alpha and turn unset isDirtyTheme
+			this.CAATSprite.alpha = 1;
+			this.isDirtyTheme = false;
+		},
+
+		/**
+		 * Adds a CAAT.ScaleBehavior to the entity, used on animate in
+		 */
+		animateInUsingScale: function(actor, starTime, endTime, startScale, endScale)
+		{
+		   var scaleBehavior = new CAAT.ScaleBehavior();
+			scaleBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
+			scaleBehavior.startScaleX = scaleBehavior.startScaleY = startScale;  // Fall from the 'sky' !
+			scaleBehavior.endScaleX = scaleBehavior.endScaleY = endScale;
+			scaleBehavior.setFrameTime( starTime, endTime );
+			scaleBehavior.setCycle(false);
+			scaleBehavior.setInterpolator( new CAAT.Interpolator().createBounceOutInterpolator(false) );
+			actor.addBehavior(scaleBehavior);
+		},
+
+		/**
 		 * ACCESSORS
 		 */
 		createTextfield: function(text)
 		{
 			if(this.CAATText) return this.CAATText;
 
+			var isClient = this.controller === GAMECONFIG.CAAT.CLIENT_CHARACTER;
+
 			// Create a textfield
     		this.CAATText = new CAAT.TextActor().
             create().
-            setFont("bold 12px sans-serif").
-			setAlpha(0.50).
+            setFont("bold 11px sans-serif").
+			setAlpha(0.6).
             setText(text).
             setBaseline("top").
             setOutline(false).
-			setFillStyle("#274b87");
+			setFillStyle(isClient ? "#9E0000" : "#274b87");
 
 			this.CAATText.textAlign = "center";
 			this.CAATText.calcTextSize(GAMECONFIG.CAAT.DIRECTOR);
-			this.CAATText.setLocation((this.CAATSprite.width-this.CAATText.width/2 - 5), this.CAATSprite.height+5);
+			this.CAATText.setLocation((this.CAATSprite.width-this.CAATText.width/2 - 8), this.CAATSprite.height-1);
 			this.CAATActorContainer.addChild(this.CAATText);
 			return this.CAATText;
 		}

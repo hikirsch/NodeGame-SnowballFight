@@ -35,7 +35,7 @@ var init = function(Joystick, BaseTrait)
 		/**
 		 * Implement our own intercepted version of the methods/properties
 		 */
-		constructEntityDescription: function(gameClock, wantsFullUpdate)
+		constructEntityDescription: function(gameTick, wantsFullUpdate)
 		{
 			return {
 				objectID: this.objectID,

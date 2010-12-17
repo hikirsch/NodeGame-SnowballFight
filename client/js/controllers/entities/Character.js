@@ -36,12 +36,14 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		initialize: function(anObjectID, aClientID, aCharacterModel, aFieldController)
 		{
 			this.callSuper();
+
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER;			// Type
 
+			console.log("ID:",this.model);
 			// Override movement properties
 			this.moveSpeed = 0.4;
 			this.damping = 0.90;
-			this.maxVelocity = 3.5;
+			this.maxVelocity = 3.35;
 
 			// Firing
 			this.fireRate = 550;
@@ -110,7 +112,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 				return;
 
 			// For now always fire the regular snowball
-			var projectileModel = ProjectileModel.defaultSnowball;
+			var projectileModel = this.getProjectileModel();
 			projectileModel.force = 1.0 ; // TODO: Use force gauge
 			projectileModel.initialPosition = this.position.cp();
 			projectileModel.initialPosition.y += 19; // half our height, this should be read instead of a magic number - TODO: remove magic number
@@ -120,15 +122,23 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.lastFireTime = gameClock;
 		},
 
+		/**
+		 * Return the type of projectile to throw, powerups should hi-jack this accessor in order to point to a different projectile type
+		 */
+		getProjectileModel: function()
+		{
+			return ProjectileModel.defaultSnowball
+		},
+
 		calculateRotation: function()
 		{
 			if(!this.rotationLocked)
 				this.callSuper();
 		},
 
-		constructEntityDescription: function(gameClock, wantsFullUpdate)
+		constructEntityDescription: function(gameTick, wantsFullUpdate)
 		{
-			wantsFullUpdate = (gameClock % 60) == 0;
+			wantsFullUpdate = (gameTick % 5) == 0;
 
 
 			var returnString = this.callSuper(wantsFullUpdate);

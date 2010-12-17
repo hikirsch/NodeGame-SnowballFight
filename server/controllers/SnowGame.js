@@ -42,12 +42,10 @@ SnowGame = (function()
 
 			// Create the worlds best level of anything ever
 			this.createLevel();
-
-
-			this.initPresents();
+			this.initializePresents();
 		},
 
-		initPresents: function()
+		initializePresents: function()
 		{
 			this.presentsActive = new SortedLookupTable();
 			this.presentsTimer = 0;
@@ -68,11 +66,16 @@ SnowGame = (function()
 
 			var entities = this['getBattlefield'+rand]();
 
+
  			for( var i = 0; i < entities.length; i++ ) {
 				var nextEntity = entities[ i ];
 				aFieldEntityModel = nextEntity.entityType;
 				aFieldEntityModel.initialPosition = nextEntity.position;
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
+
+				 var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateIn');
+				aFieldEntity.addTraitAndExecute( new animateInTrait() );
+
 				this.fieldController.addEntity(aFieldEntity);
 			}
 		},
@@ -109,13 +112,11 @@ SnowGame = (function()
 					// Reset the multiplier of the person who was hit
 					character.scoreMultiplier = 1;
 
+				} else { // It's a present, (which also means it's owned by the server
+					projectile.view.transferredTraits = this.traitFactory.getRandomPresentTrait();
+					projectile.view.clientID = -1; // Set to clientID -1, which will cause it to be removed by connected clients
+					this.presentsActive.remove(projectile.view.objectID);
 				}
-				else
-				{ 	// owned by the server
-					projectile.view.clientID = -1;
-				}
-
-
 
 
 				// Apply the projectile's trait(s) to the character that was hit
@@ -125,7 +126,8 @@ SnowGame = (function()
 				this.fieldController.removeEntity(projectile.view.objectID);
 			}
 			// [Projectile vs FIELD_ENTITY]
-			else if(tC === (tList.FIELD_ENTITY | tList.PROJECTILE) ) {
+			else if(tC === (tList.FIELD_ENTITY | tList.PROJECTILE) )
+			{
 
 				fieldEntity = (tA & tList.FIELD_ENTITY) ? circleA : circleB;
 				projectile = (fieldEntity === circleA)  ? circleB : circleA;
@@ -137,32 +139,38 @@ SnowGame = (function()
 		{
 			// restart the timer
 			var that = this;
-			var minTime = 500;
-			var timeRange = 1000;
-			var chance = 0;
+			var minTime = 1000;
+			var timeRange = 6000;
+			var chance = 0.25;
 			clearTimeout(this.presentsTimer);
 		 	this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
 
-			// Try to create if possible and luck says so
-//			if(Math.random() > chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
+//			Try to create if possible and luck says so
+			if(Math.random() < chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
 				return;
 
-
 			// Presents are really just projectiles that don't move
-				// For now always fire the regular snowball
+			// For now always fire the regular snowball
 			var projectileModel = ProjectileModel.present;
 			projectileModel.force = 0 ; // TODO: Use force gauge
-			projectileModel.initialPosition = new Vector(Math.random() * this.model.width, Math.random() * this.model.height);
+			projectileModel.initialPosition = this.fieldController.positionEntityAtRandomNonOverlappingLocation( 65 );
 			projectileModel.angle = 0;
 
-			// Create a theme for it
+			// Seit to so that it goes to 1 of x random sprites in the sheet
 			var numRows = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP[projectileModel.theme].rowCount-1;
 			projectileModel.theme = 400 + Math.floor( Math.random() * numRows+1 );
-			var projectile = this.entityFactory.createProjectile(this.getNextEntityID(), 0, projectileModel, this);
-			this.fieldController.addEntity(projectile);
 
+			// Create the present
+			var present = this.entityFactory.createProjectile(this.getNextEntityID(), 0, projectileModel, this);
+			this.fieldController.addEntity(present);
+
+			
+			var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateIn');
+			present.addTraitAndExecute( new animateInTrait() );
+
+			
 			// Add to our list
-			this.presentsActive.setObjectForKey(projectile, ++this.presentsTotalSpawned);
+			this.presentsActive.setObjectForKey(present, present.objectID);
 		},
 
 		createDummyPlayers: function()

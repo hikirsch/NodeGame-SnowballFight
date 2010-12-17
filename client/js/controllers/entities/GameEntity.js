@@ -222,7 +222,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 * Construct an entity description for this object, it is essentually a CSV so you have to know how to read it on the receiving end
 		 * @param wantsFullUpdate	If true, certain things that are only sent when changed are always sent
 		 */
-		constructEntityDescription: function(gameClock, wantsFullUpdate)
+		constructEntityDescription: function(gameTick, wantsFullUpdate)
 		{
 			var returnString = this.objectID;
 				returnString += ","+this.clientID;
@@ -287,6 +287,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		{
 			// TODO: Remove check - this should not be called if traits is null - clear timeouts
 
+			console.log("(GameEntity)::removingTraitWithName ", aTraitName);
 			if(!this.traits) return;
 
 			var aTrait = this.traits.objectForKey(aTraitName);

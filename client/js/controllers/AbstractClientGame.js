@@ -99,7 +99,6 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			 */
 			joinGame: function(aNickname, aCharacterTheme)
 			{
-				console.log('JOINING GAME');
 				this.nickname = aNickname;
 				this.theme = aCharacterTheme;
 
@@ -188,7 +187,6 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				 * offsetTime = 1.0f
 				 * t = 0.16
 				 */
-
 				var durationBetweenPoints = (nextWorldEDAfterRenderTime.gameClock - previousWorldEDBeforeRenderTime.gameClock);
 				var offsetTime = renderTime - previousWorldEDBeforeRenderTime.gameClock;
 				var activeEntities = {};
@@ -225,13 +223,12 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 							// This character actually belongs to us
 							var aCharacter = this.shouldAddPlayer( objectID, connectionID, entityDesc, this.fieldController );
 
-							console.log("MAKING A CHARACTER", 'isowned', isOwnedByMe, objectID, connectionID, entityDesc, this.fieldController);
 							// If this character is owned by the us, allow it to be controlled by the keyboard
 							if(isOwnedByMe)
 							{
 								var clientControlledTrait = TraitFactory.createTraitWithName('ClientControlledTrait');
 								aCharacter.addTraitAndExecute( new clientControlledTrait() );
-								this.clientCharacter = aCharacter;
+								GAMECONFIG.CAAT.CLIENT_CHARACTER = this.clientCharacter = aCharacter;
 							}
 						}
 						else // Every other kind of entity - is just a glorified view as far as the client game is concerned
@@ -385,7 +382,6 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			 **/
 			netChannelDidConnect: function (messageData)
 			{
-				console.log("<<NETCHANNEL");
 				// Copy the game properties from the server
 				this.gameClock = messageData.gameClock;
 

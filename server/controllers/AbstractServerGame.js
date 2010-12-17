@@ -154,6 +154,7 @@ AbstractServerGame = (function()
 			if(aNewCharacter == null) return; // No character created for whatever reason. Room full?
 
 			aNewCharacter.setInput( new Joystick() );
+			aNewCharacter.position = this.fieldController.positionEntityAtRandomNonOverlappingLocation(20);
 			return aNewCharacter;
 		},
 
@@ -168,7 +169,6 @@ AbstractServerGame = (function()
 
 		/**
 		 * Start the netChannel and start the game.
-		 * TODO: zero out character health and projectiles etc
 		 */
 		start: function()
 		{
@@ -181,11 +181,6 @@ AbstractServerGame = (function()
 				this.logger.log(aMessage);
 			else
 				console.log(aMessage);
-		},
-
-		status: function()
-		{
-			//this.logger.status();
 		},
 
 		/**

@@ -62,7 +62,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 
 		PRESENTS_SETTING:
 		{
-			PRESENTS_MAX: 15
+			PRESENTS_MAX: 2
 		},
 
 		// The client sends this bitmask to the server
@@ -88,10 +88,11 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		// For example - 'im currently frozen, i should be flashing'
 		SPRITE_THEME_MASK:
 		{
-			FROZEN		: 1 << 0,
-			FLASHING	: 1 << 1,
-			HAVE_HAT	: 1 << 2,
-			HAVE_POWERUP: 1 << 3
+			ANIMATE_IN	: 1 << 0,
+			FROZEN		: 1 << 1,
+			FLASHING	: 1 << 2, // invulnerable
+			IS_LEADER	: 1 << 3,
+			HAS_POWERUP	: 1 << 4
 		},
 
 		ENTITY_MODEL: EntityModel,

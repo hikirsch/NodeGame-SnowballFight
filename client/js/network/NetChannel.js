@@ -135,7 +135,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		// No reliable messages waiting, enough time has passed to send an update
 		if(!hasReliableMessages && this.canSend() && this.nextUnreliable != null)
 		{
-//			console.log('SendUnreliable!');
 			this.sendMessage( this.nextUnreliable )
 		}
 	};
@@ -226,6 +225,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		var worldDescription = new SortedLookupTable();
 		worldDescription.gameTick = aWorldUpdateMessage.gameTick;
 		worldDescription.gameClock = aWorldUpdateMessage.gameClock;
+
 
 		var allEntities = aWorldUpdateMessage.entities.split('|'),
 		  	allEntitiesLen = allEntities.length; //
