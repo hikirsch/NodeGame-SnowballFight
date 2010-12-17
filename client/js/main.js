@@ -18,7 +18,7 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		};
 
 		// Tripple nested onReady function - awesome!
-		var base = './img/entities/caat/';
+		var base = './img/entities/';
 		var themes = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP;
 		var imagesToLoad = [];
 		for(var aTheme in themes) {
@@ -27,6 +27,8 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		// BG Image
 		imagesToLoad.push({id: "gameBackground", url: base + "bg-field.png"});
 
+
+		// Disable CAAT from capturing events
 
 		// Create CAAT accessor
 		GAMECONFIG.CAAT = {};
@@ -39,3 +41,5 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 			});
     });
 });
+
+

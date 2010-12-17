@@ -66,7 +66,6 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			}
 
-			console.log("(EntityView) this.controller.themeMask:", this.controller.themeMask)
 			// See if anything fancy has occured
 			if(this.controller.themeMask) // 1 means no
 			{
