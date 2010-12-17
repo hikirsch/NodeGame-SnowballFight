@@ -69,10 +69,9 @@ var init = function( Vector, Rectangle, SortedLookupTable, GameModel, FieldContr
 				sec = Math.floor( timeRemaining / 1000 ),
 				min = Math.floor( sec / 60 ),
 				seconds = this.getTwoDigits( sec % 60 ),
-				minutes = this.getTwoDigits( min % 60 ),
-				sign = ( GameModel.gameDuration < this.gameClock ) ? "-" : "";
+				minutes = this.getTwoDigits( min % 60 );
 
-			return sign + minutes + ":" + seconds;
+			return minutes + ":" + seconds;
 		},
 
 		getNumberOfPlayers: function()

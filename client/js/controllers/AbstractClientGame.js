@@ -31,7 +31,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				// Create the director - there's only one ever. Each game is a new 'scene'
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
-				// __GlobalDisableEvents();
+				__GlobalDisableEvents();
 
 				this.view = new GameView(this, this.model );
 

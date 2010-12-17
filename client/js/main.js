@@ -25,6 +25,13 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		});
 	};
 
+	// thanks IE for not having trim(), i appreciate that.
+	if(typeof String.prototype.trim !== 'function') {
+		String.prototype.trim = function() {
+			return this.replace(/^\s+|\s+$/g, '');
+		};
+	}
+
 	// Everything ready - start the game client
     require.ready(function()
 	{
