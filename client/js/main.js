@@ -11,11 +11,31 @@ Basic Usage:
  	See index.html // TODO: Update basic usage.
 */
 require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(AbstractClientGame, config) {
+	/**
+	 * we do a lot of logging, some browsers don't have a console, so i create this fake one so it swallows any calls
+	 */
+	function ignoreConsoleIfUndefined()
+	{
+		var Void = function(){};
+		if(!("console" in window)){
+			window.console={};
+		}
+		$.each(["groupCollapsed","groupEnd","group","warn","info","dir","warn","error","log"], function(i,s) {
+			if (!( s in console ) ) { window.console[s] = Void; }
+		});
+	};
+
 	// Everything ready - start the game client
     require.ready(function()
 	{
-		var NGK = {
-		};
+		CFInstall.check({
+			mode: "overlay",
+			destination: location.href.toString()
+		});
+
+		ignoreConsoleIfUndefined();
+
+		var NGK = {};
 
 		// Tripple nested onReady function - awesome!
 		var base = './img/entities/';

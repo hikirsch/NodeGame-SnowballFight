@@ -31,7 +31,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				// Create the director - there's only one ever. Each game is a new 'scene'
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
-				__GlobalDisableEvents();
+				// __GlobalDisableEvents();
 
 				this.view = new GameView(this, this.model );
 
@@ -45,14 +45,18 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.isGameOver = false;
 
 				this.fieldController = new FieldController( this, this.model );
-
-				this.netChannel = new NetChannel(this.config, this);
-
-
 				this.fieldController.createView( this.model );
 
-				this.initializeCaat();
-				this.startGameClock();
+				if( typeof WebSocket !== "undefined" ) {
+					this.supportedBrowser = true;
+					this.netChannel = new NetChannel(this.config, this);
+					this.initializeCaat();
+					this.startGameClock();
+				}
+				else
+				{
+					this.view.showBrowserReq();
+				}
 			},
 
 			initializeCaat: function()
