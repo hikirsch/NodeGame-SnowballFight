@@ -110,7 +110,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
 			this.currentStatus.Rank = "0" + this.gameController.clientCharacter.rank + "/" + this.currentStatus.TotalPlayers;
 
-			//this.tmplItem.update();
+			this.tmplItem.update();
 
 			if( this.gameController.clientCharacter.input.isTab() )
 			{
