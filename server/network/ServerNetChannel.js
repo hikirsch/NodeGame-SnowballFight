@@ -43,8 +43,8 @@ ServerNetChannel = (function()
 	{
 		initialize: function(aDelegate, config, port)
 		{
-			console.log('(ServerNetChannel)::init');
-
+			console.log('(ServerNetChannel)::init', config, port);
+			debugger;
 			// Delegation pattern, avoid subclassing ServerNetChannel
 			this.delegate = aDelegate;
 			this.config = config;

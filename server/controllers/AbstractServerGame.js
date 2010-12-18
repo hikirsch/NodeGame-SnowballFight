@@ -132,7 +132,8 @@ AbstractServerGame = (function()
 
 			this.netChannel.broadcastMessage(endGameMessage);
 
-			setTimeout( function() { that.dealloc(); }, this.server.gameConfig.SERVER_END_GAME_GRACE );
+			// TODO: This should be removed. When the game ends - drop all clients
+			setTimeout( function() { that.dealloc(); }, this.server.gameConfig.SERVER_SETTING.SERVER_END_GAME_GRACE );
 		},
 
 		dealloc: function()

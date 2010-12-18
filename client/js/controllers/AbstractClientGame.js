@@ -28,12 +28,20 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 				this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
 
+
+				// Create the view first, we need a place to show the browser req.
+				this.view = new GameView(this, this.model );
+
+				// You cannot play!
+				if( typeof WebSocket === "undefined" ) {
+					this.view.showBrowserReq();
+					return;
+				}
+
 				// Create the director - there's only one ever. Each game is a new 'scene'
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
 				__GlobalDisableEvents();
-
-				this.view = new GameView(this, this.model );
 
 				this.initializeGame();
 
@@ -45,21 +53,22 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.isGameOver = false;
 
 				this.fieldController = new FieldController( this, this.model );
-
-				this.netChannel = new NetChannel(this.config, this);
-
-
 				this.fieldController.createView( this.model );
-
+				this.netChannel = new NetChannel(this.config, this);
 				this.initializeCaat();
 				this.startGameClock();
 			},
 
 			initializeCaat: function()
 			{
+				if(this.scene) {
+					this.scene.emptyChildren();
+				}
+
 				// Init 				the scene for this match
 				this.scene = new CAAT.Scene().create();
 				this.director.addScene(this.scene);
+
 				// Store
 				GAMECONFIG.CAAT.DIRECTOR = this.director;
 				GAMECONFIG.CAAT.SCENE = this.scene;
@@ -339,7 +348,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.view.updateGameOver();
 
 				// Enough time has passed, join the next game
-				if( this.gameClock > this.config.ROUND_INTERMISSION ) {
+				if( this.gameClock > this.config.GAME_MODEL.ROUND_INTERMISSION_DURATION ) {
 					clearInterval( this.gameTickInterval );
 					this.joinNextGame();
 				}
@@ -351,7 +360,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			joinNextGame: function()
 			{
 				this.view.hideResultsView();
-				this.config.GAME_PORT = this.nextGamePort;
+				this.config.SERVER_SETTING.GAME_PORT = this.nextGamePort;
 
 				this.initializeGame();
 
@@ -363,7 +372,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 			getNextGameStartTime: function()
 			{
-				var t = Math.round( ( this.config.ROUND_INTERMISSION - this.gameClock ) / 1000);
+				var t = Math.round( ( this.config.GAME_MODEL.ROUND_INTERMISSION_DURATION - this.gameClock ) / 1000);
 				if( t < 0 ) t = 0;
 				var m = Math.floor( t / 60 );
 				var s = t % 60;
