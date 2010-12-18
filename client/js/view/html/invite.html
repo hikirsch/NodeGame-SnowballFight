@@ -1,8 +1,34 @@
 <script type="text/html">
-<div class="mainOverlay">
-	<div class="inviteOverlay">
-		<p>Everything's better with friends. Have your pals join you in this game. Just copy and paste the link to send away! You have till the end of the match.</p>
-		<img src="img/invite/btn-copy-link.png" class="invite-button">
+<div class="inviteOverlay" id="inviteFriends">
+	<div class="overlayContent">
+        <img src="img/invite/txt-invite-a-friend.png" alt="Invite a Friend" class="overlayTitle">
+		<p>You know there’s someone out there you want to fight. Now you can invite them to a friendly little competition.</p>
+
+        <form id="" action="">
+            <fieldset>
+                <div class="formControl">
+                    <label for="emailList">
+                        Friend’s email address(es): 
+                        <span>Use a comma to separate each email address.</span>
+                    </label>
+                    <textarea id="emailList" rows="10" cols="30"></textarea>
+                </div>
+                <div class="formControls">
+                    <div class="formControl emailField">
+                        <label for="player_email">Your Email Address:</label>
+                        <input id="player_email" type="text" value="">
+                    </div>
+
+                    <div class="formControl">
+                        <label for="player_name">Your Name:</label>
+                        <input id="player_name" type="text" value="">
+                    </div>
+                </div>
+            </fieldset>
+            <div class="buttonContainer">
+                <input class="invite-button" type="image" src="img/invite/btn-submit.png">
+            </div>
+        </form>
 	</div>
 </div>
 </script>

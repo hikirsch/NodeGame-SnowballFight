@@ -57,7 +57,7 @@ var init = function( $, browserReq, character, characterSelect, credits, entity,
 
         invite: function( data ) {
             return $(invite)
-            .tmpl()
+            .tmpl();
         },
 
         navigation: function() {
