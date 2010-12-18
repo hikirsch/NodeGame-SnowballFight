@@ -35,6 +35,9 @@ footer a { font-size: 11px; color: #005072; }
 }
 */
 
+
+textarea.error, input.error { border: 1px solid red; }
+
 .server-offline .game-container,
 .unsupported-browser .game-container { background-image: url( '../img/entities/bg-field.png'); background-repeat: no-repeat; }
 

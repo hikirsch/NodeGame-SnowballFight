@@ -14,7 +14,7 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieManager', 'view/managers/CarouselManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/Stats', 'lib/jsclass/core'], function(Rectangle, OverlayManager, CookieManager, CarouselManager, BaseView, HTMLFactory )
+define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieManager', 'view/managers/CarouselManager', 'view/managers/EmailServiceManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/Stats', 'lib/jsclass/core'], function(Rectangle, OverlayManager, CookieManager, CarouselManager, EmailServiceManager, BaseView, HTMLFactory )
 {
 	return new JS.Class( BaseView,
 	{
@@ -313,6 +313,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			var that = this,
 			    inviteOpen = 0,
 			    $invite = HTMLFactory.invite();
+
+			$invite.submit( function() { return EmailServiceManager.validateFormAndSendEmail( this ); } );
+
 			$("#btn-invite").live( 'click', function() {
  				if(inviteOpen === 0)
 				{

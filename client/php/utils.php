@@ -35,55 +35,17 @@ Basic Usage:
 
 	function sendMail($inf)
 	{
-		echo "Hello";
-			$databaseName = "`lola`.`lola_users_uk`";
-		if(strpos($_SERVER["SERVER_NAME"], "co.uk") == false)
-			$baseLink = "http://www.lolamarcjacobs.com";
-		else
-			$baseLink = "http://www.lolamarcjacobs.co.uk";
-
-		$t_name		= $inf['toName'];
 		$t_email	= $inf['toEmail'];
 		$f_name		= $inf['fromName'];
 		$f_email	= $inf['fromEmail'];
-		$message	= $inf['message'];
-		$base_url	= "http://google.com";
 		$subject	= "$f_name wants you to check out the new Holiday Snowball Fight!";
 
-		$body	= <<<HTML
-		<!doctype html>
-<html>
-	<head>
-		<title>Ogilvy Holiday 2010 - Node Snowball</title>
-		<meta http-equiv="pragma" content="no-cache">
-		<meta http-equiv="expires" content="-1">
-	</head>
-	<body>
-	<div id="email">
-	Hi there, {$t_name},<br><br>
-
-	Your friend <b>{$f_name}</b>, wants you to check out<br>
-	Holiday Snowball Fight, at {$base_url}:<br>
-	<b>{$message}</b><br>
-
-	<img src="http://holiday2010.stage.ogilvy.com/client/img/character-select/big-yeti.png" />
-	<br><br><br>Have fun and stuff!
-	</div>
-	</body>
-</html>
-HTML;
+		$body	= file("email.html");
 
 		$headers = "Content-Type: text/html; charset=iso-8859-1\n";
 		$headers .= "From: Ogilvy Holiday Card Team <$f_email>\r\n";
 		mail($t_email, $subject, $body, $headers);
 
-		echo "<result success='true' />";
-		echo "<![CDATA[";
-		var_dump($inf);
-		echo "]]>";
-		echo "</result>";
+		echo "{ 'result': true }";
 	}
-
-
-
 ?>
