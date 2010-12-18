@@ -23,19 +23,20 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.cookieManager = CookieManager;
 			this.gameController = controller;
 			this.overlayManager = new OverlayManager( controller, gameModel );
+            this.currentStatus = {
+                TimeLeft: this.gameController.getTimeRemaining() || "00:00",
+                Score: "0",
+                TotalPlayers: this.gameController.getNumberOfPlayers() || "00",
+                Rank: "00/00"
+            };
 			this.showNav();
+            this.showGameStatus();
 			this.showFooter();
 			this.attachInstructions();
 			this.inviteFriend();
 			this.attachCredits();
 			this.attachShare();
 			this.carouselManager = CarouselManager;
-			this.currentStatus = {
-				TimeLeft: "00:00",
-				Score: "0",
-				TotalPlayers: "00",
-				Rank: "00/00"
-			};
 			this.myCharacterModel = null;
 			this.resultsOverlayShowing = false;
 			this.resultsData = {};
@@ -60,8 +61,8 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		createStatusView: function( obj )
 		{
-			this.statusElement = HTMLFactory.gameStatus( this.currentStatus )
-				.insertAfter("nav");
+			this.statusElement = HTMLFactory.statusUpdates( obj )
+				.appendTo("#status-updates");
 			this.tmplItem = this.statusElement.tmplItem();
 		},
 
@@ -100,7 +101,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		update: function()
 		{
-			if( this.statusElement == null )
+			if( this.statusElement === null )
 			{
 				this.createStatusView( this.currentStatus );
 			}
@@ -137,6 +138,14 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 	      HTMLFactory.navigation()
 			.appendTo("body");
 		},
+
+        showGameStatus: function()
+        {
+          HTMLFactory.gameStatus()
+            .appendTo("body");
+
+           this.createStatusView( this.currentStatus );
+        },
 
 		showFooter: function()
 		{

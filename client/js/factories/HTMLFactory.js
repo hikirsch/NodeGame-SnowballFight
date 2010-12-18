@@ -1,4 +1,4 @@
-var init = function( $, browserReq, character, characterSelect, credits, entity, field, footer, gameStatus, instructions, intro, invite, navigation, overlay, results, serverUnavailable ) {
+var init = function( $, browserReq, character, characterSelect, credits, entity, field, footer, gameStatus, instructions, intro, invite, navigation, overlay, results, serverUnavailable, statusUpdates ) {
 	return {
         browserRequirements: function() {
             return $(browserReq)
@@ -38,9 +38,9 @@ var init = function( $, browserReq, character, characterSelect, credits, entity,
                 .tmpl();
         },
 
-		gameStatus: function(obj) {
+		gameStatus: function() {
 			return $(gameStatus)
-				.tmpl(obj);
+				.tmpl();
 		},
 
         instructions: function()
@@ -78,8 +78,13 @@ var init = function( $, browserReq, character, characterSelect, credits, entity,
         serverUnavailableDialog: function() {
             return $(serverUnavailable)
                 .tmpl();
-        }
+        },
 
+        statusUpdates: function(data) {
+            console.log('[Status Data]', data);
+            return $(statusUpdates)
+                .tmpl(data);
+        }
 	};
 };
 
@@ -100,6 +105,7 @@ define([
         'text!view/html/overlay.html',
 		'text!view/html/results.html',
         'text!view/html/server-unavailable.html',
+        'text!view/html/status-updates.html',
 		'plugins/jquery.tmpl.min' /** this should be last **/
 ], init);
 

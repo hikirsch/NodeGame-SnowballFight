@@ -10,7 +10,7 @@ html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 	background-color: #f2f7fb; background-image: url( ../img/global/bg-main.png ); background-position: 50% 0;
 	background-repeat: no-repeat;
 }
-nav.main { width: 900px; margin: 0 auto 40px; }
+nav.main { width: 900px; margin: 0 auto 9px; }
 nav.main ul { overflow: hidden; }
 nav.main ul li { float: left; }
 nav.main ul li a {
@@ -88,9 +88,10 @@ footer a { font-size: 11px; color: #005072; }
 */
 
 /** projectiles **/
-.game-container .game-entity-view.projectile-snowball { background-image: url( '../img/entities/projectiles/projectiles.png' ); height: 32px; width: 50px; }
+/*.game-container .game-entity-view.projectile-snowball { background-image: url( '../img/entities/projectiles/projectiles.png' ); height: 32px; width: 50px; }*/
 
 /** field entities */
+/*
 .game-container .game-entity-view.field-entity-default { background-image: url( '../img/entities/field/block-of-ice-4.png' ); height: 99px; width: 88px;}
 .game-container .game-entity-view.ginger-bread-house { background-image: url( '../img/entities/field/ginger-bread-house.png' ); width: 146px; height: 157px; }
 .game-container .game-entity-view.block-of-ice-1 { background-image: url( '../img/entities/field/block-of-ice-1.png' ); width: 29px; height: 37px; }
@@ -108,24 +109,20 @@ footer a { font-size: 11px; color: #005072; }
 .game-container .game-entity-view.small-pond-1 { background-image: url( '../img/entities/field/small-pond-1.png' ); width: 86px; height: 72px; }
 .game-container .game-entity-view.small-pond-2 { background-image: url( '../img/entities/field/small-pond-2.png' ); width: 95px; height: 83px; }
 .game-container .game-entity-view.small-pond-3 { background-image: url( '../img/entities/field/small-pond-3.png' ); width: 124px; height: 122px; }
+*/
 
 
+section.game-status { position: relative; width: 900px; height: 34px; margin: 0 auto; overflow: hidden; z-index: 2000; }
+section.game-status dl { float: left; padding-top: 1px; overflow: hidden; }
+section.game-status dl dt { position: absolute; margin-left: -9999px; }
+section.game-status dl dd { float: left; height: 28px; font-family: arial, sans-serif; font-size: 26px; line-height: 26px; background-position: 0 0; background-repeat: no-repeat; padding-top: 6px; overflow: hidden; }
 
-section.game-status { overflow: hidden; width: 900px; margin: -34px auto 2px; position: relative; height: 32px; z-index: 2000; }
-section.game-status dl dt, section.game-status dl dd { float: left; }
-section.game-status dl dt { text-indent: -9999px; overflow: hidden; background-position: 0 100%; background-repeat: no-repeat; height: 18px; margin-top: 11px; padding-right: 6px; }
+section.game-status dl .score { width: 114px; color: #20629a; background-image: url( '../img/global/txt-your-score.png' ); padding-left: 46px; }
+section.game-status dl .time-left { width: 118px; color: #167392; background-image: url( '../img/global/txt-time-left.png' ); padding-left: 42px; }
+section.game-status dl .total-players { width: 100px; color: #03959e; background-image: url( '../img/global/txt-players-on-map.png' ); padding-left: 60px; }
+section.game-status dl .rank { width: 114px; color: #546fd3; background-image: url( '../img/global/txt-your-rank.png' ); padding-left: 46px; }
 
-section.game-status dl .score { color: #20629a }
-section.game-status dl .total-players { color: #03959e; }
-section.game-status dl .rank { color: #546fd3; }
-section.game-status dl .time-left { color: #167392; }
-
-section.game-status dl dt.score { background-image: url( '../img/global/txt-your-score.png' ); width: 31px; }
-section.game-status dl dt.total-players { background-image: url( '../img/global/txt-players-on-map.png' ); width: 43px; }
-section.game-status dl dt.rank { background-image: url( '../img/global/txt-your-rank.png' ); width: 27px; }
-section.game-status dl dt.time-left { background-image: url( '../img/global/txt-time-left.png' ); width: 24px; }
-section.game-status dd.invite-friend { width:157px; height: 35px;background: url(../img/global/bg-invite-friend.png) no-repeat bottom left; text-indent:-9999px;overflow:hidden;cursor:pointer}
-section.game-status dl dd { font-family: Arial; font-size: 34px; line-height: 34px; width: 100px; margin-right: 20px; }
+section.game-status .invite-friend { float: left; width:157px; height: 35px;background: url(../img/global/bg-invite-friend.png) no-repeat bottom left; text-indent:-9999px;overflow:hidden;cursor:pointer}
 
 
 #logger { display: none; font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }
