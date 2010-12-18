@@ -245,11 +245,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 				this.overlayManager.pushOverlay($instructions);
 
-				$("#playBtn").click( function() {
+				$("#playBtn").live('click', function(e) {
 					that.overlayManager.popOverlay();
 					show = false;
-
-					return false;
 				});
 			}
 		},

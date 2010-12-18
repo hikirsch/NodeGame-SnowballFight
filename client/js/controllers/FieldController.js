@@ -56,7 +56,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		addPlayer: function( anObjectID, aClientID, aCharacterModel )
 		{
-			debugger;
+//			debugger;
 			var aNewCharacter = this.gameController.entityFactory.createCharacter(anObjectID, aClientID, aCharacterModel, this);
 
 			// Add internally, and store in a special 'players' SortedLookupTable (via clientID)
