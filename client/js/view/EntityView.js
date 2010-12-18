@@ -138,11 +138,13 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			// Do regular stuff
 			var actualRotation = this.controller.getRotation();
+			var untouchedRotation = actualRotation;
+
 			if( this.controller.useTransform ) {
 				this.CAATSprite.setRotation( actualRotation * 0.0174532);
 
 			}
-			else if( this.themeMask === 0 && actualRotation != 0 )
+			else if(actualRotation != 0 )
 			{
 				actualRotation += 90;
 				if(actualRotation < 0)  actualRotation += 359; // Wrap
@@ -152,7 +154,11 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
 
 				// spriteIndex = 90 / 45 = 2
+
 				this.CAATSprite.spriteIndex = ( roundedRotation / roundTo);
+
+				if(this.CAATSprite.spriteIndex === 8) // When we are at 360 degrees, interpret as zero
+					this.CAATSprite.spriteIndex = 0;
 			}
 
 			// We got the nickname but no textfield, create textfield
