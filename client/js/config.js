@@ -1,14 +1,6 @@
 var init = function(EntityModel, ProjectileModel, CharacterModel)
 { 
 	return GAMECONFIG = {
-		HOST: function() {
-			if( typeof window === 'undefined' ) {
-				return "localhost"; // game on node runs on localhost
-			} else {
-				return location.hostname;
-			}
-		}(),
-
 		// See: http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS:
 		{
@@ -67,7 +59,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			width: 900,
 			height: 600,
 			MAX_PLAYERS: 8,
-			gameDuration: 10000,
+			gameDuration: 2 * 60 * 1000,
 			ROUND_INTERMISSION_DURATION: 5000
 		},
 
@@ -103,12 +95,23 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			FROZEN		: 1 << 1,
 			FLASHING	: 1 << 2, // invulnerable
 			IS_LEADER	: 1 << 3,
-			HAS_POWERUP	: 1 << 4
+			HAS_POWERUP	: 1 << 4,
+			DESTROY_ON_FIELD_ENTITY_HIT	: 1 << 5,
+			BOUNCE_ON_FIELD_ENTITY_HIT : 1 << 6
 		},
 
 		ENTITY_MODEL: EntityModel,
 		PROJECTILE_MODEL: ProjectileModel,
-		CHARACTER_MODEL: CharacterModel
+		CHARACTER_MODEL: CharacterModel,
+
+		// GET HOST
+		HOST: function() {
+			if( typeof window === 'undefined' ) {
+				return "localhost"; // game on node runs on localhost
+			} else {
+				return location.hostname;
+			}
+		}()
 	}
 };
 

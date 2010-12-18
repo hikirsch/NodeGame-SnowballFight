@@ -114,14 +114,13 @@ SnowGame = (function()
 
 				} else { // It's a present, (which also means it's owned by the server
 
+					console.log("own present");
 					projectile.view.clientID = -1; // Set to clientID -1, which will cause it to be removed by connected clients
 					this.presentsActive.remove(projectile.view.objectID);
 				}
 
 
-//				console.log("(SnowGame) Char:", SYS.inspect(projectileOwner), projectile.view.transferredTraits);
-
-
+				console.log("(SnowGame) projectileOwner", projectileOwner);
 				// Apply the projectile's trait(s) to the character that was hit
 				var Trait = this.traitFactory.createTraitWithName(projectile.view.transferredTraits);
 				// TODO: HACK should never be undefined
@@ -133,10 +132,15 @@ SnowGame = (function()
 			// [Projectile vs FIELD_ENTITY]
 			else if(tC === (tList.FIELD_ENTITY | tList.PROJECTILE) )
 			{
-
 				fieldEntity = (tA & tList.FIELD_ENTITY) ? circleA : circleB;
 				projectile = (fieldEntity === circleA)  ? circleB : circleA;
-				this.fieldController.removeEntity(projectile.view.objectID);
+
+				if(projectile.view.themeMask & GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT)
+					this.fieldController.removeEntity(projectile.view.objectID);
+				else if(projectile.view.themeMask & GAMECONFIG.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT) {
+					projectile.view.velocity.mul(-1);
+					projectile.view.velocity.rotate(Math.random() * 0.2 + 0.2)
+				}
 			}
 		},
 
@@ -151,6 +155,8 @@ SnowGame = (function()
 		 	this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
 
 //			Try to create if possible and luck says so
+
+			console.log("Presents", this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
 			if(Math.random() < chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
 				return;
 
@@ -194,7 +200,7 @@ SnowGame = (function()
 				var charModel = allCharacterModels[index];
 				charModel.initialPosition = {x: Math.random() * this.model.width, y: Math.random() * this.model.height};
 
-				var character = this.shouldAddPlayer(this.getNextEntityID(), 0, charModel);
+				var character = this.shouldAddPlayer(this.getNextEntityID(), this.netChannel.getNextClientID(), charModel);
 				character.position.x = charModel.initialPosition.x;
 				character.position.y = charModel.initialPosition.y;
 			}

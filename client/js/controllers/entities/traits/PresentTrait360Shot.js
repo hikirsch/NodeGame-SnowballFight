@@ -29,17 +29,19 @@ var init = function(BaseTrait)
 
 			// Set our theme, and hijack the characters
 			this.attachedEntity.themeMask |= this.themeMaskList.HAS_POWERUP;
+			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN;
 		},
 
 		detach: function()
 		{
 			this.attachedEntity.themeMask &= ~this.themeMaskList.HAS_POWERUP;
+			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN;
 			this.callSuper();
 		},
 
 		execute: function()
 		{
-			var amount = 12;
+			var amount = Math.random() * 10 + 8;
 			var angleOffset = Math.random() * Math.PI * 2;
 			for(var i = 0; i <amount; i++)
 			{
@@ -50,7 +52,10 @@ var init = function(BaseTrait)
 				projectileModel.initialPosition.y += 19;
 				projectileModel.angle = i/amount * (Math.PI*2) + angleOffset;
 
-				this.attachedEntity.fieldController.fireProjectileFromCharacterUsingProjectileModel( this.attachedEntity, projectileModel);
+				var projectile = this.attachedEntity.fieldController.fireProjectileFromCharacterUsingProjectileModel( this.attachedEntity, projectileModel);
+				// Make the projectile bounce around
+				projectile.themeMask &= ~GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
+				projectile.themeMask |= GAMECONFIG.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT;
 			}
 
 			this.detachAfterDelay(500);

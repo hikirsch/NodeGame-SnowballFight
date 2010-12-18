@@ -17,7 +17,10 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 		initialize: function(anObjectID, aClientID, projectileModel, aFieldController)
 		{
 			this.callSuper();
-			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.PROJECTILE; // 			
+			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.PROJECTILE; //
+
+			// By default all projectiles are destroyed when they hit a field-entity
+			this.themeMask |= GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
 
 			this.force = projectileModel.force;
 			// Get information from the projectile model
@@ -26,7 +29,6 @@ var init = function(Vector, Rectangle, FieldController, GameEntity)
 			this.radius = projectileModel.radius;
 			this.angle = projectileModel.angle * 57.2957795;
 
-//			if(this.angle < 0)  this.angle += 359; // Wrap
 			// Round to the number of sprites we have
 			var roundTo = 45;
 			this.angle = Math.round(this.angle / roundTo) * roundTo;

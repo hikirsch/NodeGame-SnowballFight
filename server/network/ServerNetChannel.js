@@ -44,7 +44,6 @@ ServerNetChannel = (function()
 		initialize: function(aDelegate, config, port)
 		{
 			console.log('(ServerNetChannel)::init', config, port);
-			debugger;
 			// Delegation pattern, avoid subclassing ServerNetChannel
 			this.delegate = aDelegate;
 			this.config = config;
@@ -63,8 +62,7 @@ ServerNetChannel = (function()
 			
 		    // Connections
 		    this.clients = new SortedLookupTable();		// Everyone connected
-		    this.clientCount = 0;	// Length of above
-		    this.nextClientID = 1;		// UUID for next client - ZERO IS RESERVED FOR THE SERVER
+		    this.nextClientID = 1;						// UUID for next client - ZERO IS RESERVED FOR THE SERVER
 
 		    // Recording
 		    this.record = config.record || false;
@@ -240,7 +238,6 @@ ServerNetChannel = (function()
 
 			// Free the slot
 			this.clients.remove(clientID);
-			this.clientCount--;
 			connection.close();
 		},
 
@@ -294,16 +291,13 @@ ServerNetChannel = (function()
 		 */
 		addClient: function(connection)
 		{
-			var clientID = this.nextClientID++;
-			this.clientCount++;
-
-			connection.$clientID = clientID;
+			connection.$clientID = this.getNextClientID();
 			var aClient = new Client(this, connection, this.config, this.bytes);
 
 			// Add to our list of connected users
-			this.clients.setObjectForKey( aClient, clientID);
+			this.clients.setObjectForKey( aClient, connection.$clientID);
 
-			return clientID;
+			return connection.$clientID ;
 		},
 
 		/**
@@ -317,8 +311,12 @@ ServerNetChannel = (function()
 
 		onPlayerMoveCommand: function(connection, aDecodedMessage)
 		{
-
 			this.delegate.onPlayerMoveCommand(connection.$clientID, aDecodedMessage);
+		},
+
+		getNextClientID: function()
+		{
+			return this.nextClientID++;
 		},
 
 		/**

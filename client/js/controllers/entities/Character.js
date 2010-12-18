@@ -118,8 +118,11 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			projectileModel.initialPosition.y += 19; // half our height, this should be read instead of a magic number - TODO: remove magic number
 			projectileModel.angle = this.rotation;// * 0.0174532925;
 
-			this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
+			var projectile = this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
 			this.lastFireTime = gameClock;
+
+			this.onProjectileFired(projectile);
+			return projectile;
 		},
 
 		/**
@@ -130,11 +133,12 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			return ProjectileModel.defaultSnowball
 		},
 
-		calculateRotation: function()
-		{
-			if(!this.rotationLocked)
-				this.callSuper();
-		},
+		/**
+		 * A projectile has been fired, allows us to do post init stuff to it.
+		 * Mostly exist to allow traits to hi-jack this function
+		 * @param projectile A projectile just fired by us
+		 */
+		onProjectileFired: function(projectile){},
 
 		constructEntityDescription: function(gameTick, wantsFullUpdate)
 		{
@@ -166,6 +170,12 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 		setInput: function( anInput )
 		{
 			this.input = anInput;
+		},
+
+		calculateRotation: function()
+		{
+			if(!this.rotationLocked)
+				this.callSuper();
 		}
 	});
 };

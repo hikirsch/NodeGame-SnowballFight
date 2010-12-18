@@ -16,12 +16,12 @@ Basic Usage:
 */
 var init = function(BaseTrait, EntityModel)
 {
-	return new JS.Class("PresentTraitHypershot", BaseTrait,
+	return new JS.Class("PresentTraitDeflectorShot", BaseTrait,
 	{
 		initialize: function(collisionNormal)
 		{
 			this.callSuper();
-			this.fireRate = 400;
+			this.fireRate = 200;
 		},
 
 		attach: function()
@@ -56,7 +56,9 @@ var init = function(BaseTrait, EntityModel)
 
 		onProjectileFired: function(projectile)
 		{
+			console.log('a',projectile.themeMask);
 		  	projectile.themeMask &= ~GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
+		  	projectile.themeMask |= GAMECONFIG.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT;
 		}
 	});
 };
@@ -66,8 +68,7 @@ if (typeof window === 'undefined') {
 	// We're in node!
 	require('js/controllers/entities/traits/BaseTrait');
 	require('js/model/EntityModel');
-	PresentTraitHyperShot = init(BaseTrait, EntityModel);
-
+	PresentTraitDeflectorShot = init(BaseTrait, EntityModel);
 } else {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
