@@ -101,9 +101,22 @@
 .choose .carousel div p { position: absolute; left: 440px; top: 138px; margin: 0; padding: 0; width: 200px; line-height: 130%; }
 
 /* invite overlay */
-.inviteOverlay { position: relative; float: right; width: 382px; height: 150px; background: #fff url(../img/invite/bg-invite.jpg) no-repeat top left; -webkit-box-shadow: 0px 0px 10px #999; z-index: 8000; left:-10px;top:0px}
-.inviteOverlay p { margin:30px auto auto 30px; width:320px;color: #005072; line-height:120%}
-.inviteOverlay .invite-button { display: block; -webkit-box-reflect: below 0px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.7,transparent),to(white)); position: absolute; top: 95px; left: 70px; cursor: pointer; overflow: visible; }
+.inviteOverlay { position: absolute; left: -10px; top: 0px; width: 623px; height: 461px; background: #fff url(../img/invite/bg-invite.jpg) no-repeat top left; -webkit-box-shadow: 0px 0px 10px #999; z-index: 8000;}
+.inviteOverlay .overlayContent { padding: 16px 20px 20px; }
+.inviteOverlay .overlayTitle { margin: 0 0 12px; }
+.inviteOverlay p { font-size: 13px; font-family: "Lucida Grande", sans-serif; line-height: 1.4; color: #005072; margin: 0 0 10px; }
+.inviteOverlay fieldset { padding: 24px 0 0; }
+.inviteOverlay .formControl { padding: 0 0 22px; }
+.inviteOverlay .formControls { overflow: hidden; }
+.inviteOverlay .formControls .formControl { float: left; width: 270px; }
+.inviteOverlay .formControls .emailField { width: 290px; margin-right: 20px; }
+.inviteOverlay label { display: block; font-weight: bold; line-height: 1.4; color: #005072; padding: 0 0 8px; }
+.inviteOverlay label span { display: block; font-weight: normal; }
+.inviteOverlay input, .inviteOverlay textarea { font-size: 12px; color: #989898; border: 1px solid #c9cccd; }
+.inviteOverlay input { width: 100%; height: 28px; }
+.inviteOverlay textarea { width: 580px; height: 89px; }
+.inviteOverlay .buttonContainer { text-align: right; padding: 22px 0 0; }
+.inviteOverlay .invite-button { width: auto; height: auto; -webkit-box-reflect: below 0px -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.7,transparent),to(white)); }
 
 /* credits overlay */
 .creditsOverlay { width:815px;height:545px;background:#fff url(../img/global/bg-credits.png);z-index:8000;position:absolute;top:35px;left:40px; -webkit-box-shadow: 0px 0px 10px #999;line-height:120%}

@@ -247,7 +247,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
         showBrowserReq: function()
 		{
-			$browserReq = HTMLFactory.browserRequirements();
+			var $browserReq = HTMLFactory.browserRequirements();
 			this.overlayManager.pushOverlay($browserReq);
 			$("html").addClass('unsupported-browser');
 		},
@@ -292,11 +292,11 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		inviteFriend: function()
 		{
-			var that = this;
-			var inviteOpen = 0;
-			$invite = HTMLFactory.invite();
-			$("#btn-invite").click( function() {
-				if(inviteOpen == 0)
+			var that = this,
+			    inviteOpen = 0,
+			    $invite = HTMLFactory.invite();
+			$("#btn-invite").live( 'click', function() {
+ 				if(inviteOpen === 0)
 				{
 					that.overlayManager.pushOverlay( $invite );
 					inviteOpen = 1;
