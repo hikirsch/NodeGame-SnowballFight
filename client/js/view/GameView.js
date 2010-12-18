@@ -41,6 +41,8 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.resultsOverlayShowing = false;
 			this.resultsData = {};
 
+			this.statHTML = null;
+
 			var showStats = true;
 			if(showStats) {
 				var stats = new Stats();
@@ -101,17 +103,26 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		update: function()
 		{
-			if( this.statusElement === null )
-			{
+			if( this.statusElement === null ) {
 				this.createStatusView( this.currentStatus );
 			}
 
-			this.currentStatus.Score = this.gameController.clientCharacter.score;
-			this.currentStatus.TotalPlayers = this.gameController.getNumberOfPlayers();
-			this.currentStatus.TimeLeft = this.gameController.getTimeRemaining();
-			this.currentStatus.Rank = "0" + this.gameController.clientCharacter.rank + "/" + this.currentStatus.TotalPlayers;
+			// grab it on first run
+			if(!this.statHTML) {
+				this.statHTML = {};
+				var statelement = this.statHTML.root = document.querySelector("#status-updates");
+				this.statHTML.score = statelement.querySelector("dd.score");
+				this.statHTML.timeLeft = statelement.querySelector("dd.time-left");
+				this.statHTML.totalPlayers = statelement.querySelector("dd.total-players");
+				this.statHTML.rank = statelement.querySelector("dd.rank");
+			}
 
-			this.tmplItem.update();
+			// Update stats
+			this.statHTML.score.innerHTML = this.gameController.clientCharacter.score;
+			this.statHTML.totalPlayers.innerHTML = this.gameController.getNumberOfPlayers();
+			this.statHTML.timeLeft.innerHTML = this.gameController.getTimeRemaining();
+			this.statHTML.innerHTML = "0" + this.gameController.clientCharacter.rank + "/" + this.currentStatus.TotalPlayers;
+
 
 			if( this.gameController.clientCharacter.input.isTab() )
 			{

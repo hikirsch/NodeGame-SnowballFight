@@ -139,7 +139,10 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 					// create a message with our characters updated information and send it off
 					this.netChannel.addMessageToQueue( false, newMessage );
-					this.view.update();
+
+					// Don't update html TOO often
+					if(this.gameTick % 10 == 0)
+						this.view.update();
 				}
 			},
 

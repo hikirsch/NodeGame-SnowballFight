@@ -112,7 +112,12 @@ footer a { font-size: 11px; color: #005072; }
 */
 
 
-section.game-status { position: relative; width: 900px; height: 34px; margin: 0 auto; overflow: hidden; z-index: 2000; }
+section.game-status {
+	position: relative;
+	width: 900px;
+	height: 34px;
+	margin: 2px auto;
+}
 section.game-status dl { float: left; padding-top: 1px; overflow: hidden; }
 section.game-status dl dt { position: absolute; margin-left: -9999px; }
 section.game-status dl dd { float: left; height: 28px; font-family: arial, sans-serif; font-size: 26px; line-height: 26px; background-position: 0 0; background-repeat: no-repeat; padding-top: 6px; overflow: hidden; }
