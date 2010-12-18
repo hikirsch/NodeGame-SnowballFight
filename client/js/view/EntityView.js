@@ -67,7 +67,6 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			this.isDirtyTheme = false;
 
 			this.update();
-			GAMECONFIG.CAAT.SCENE.addChild(actor);
 		},
 
 
@@ -97,7 +96,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				if((this.controller.themeMask & this.themeMaskList.ANIMATE_IN) && !(this.themeMask & this.themeMaskList.ANIMATE_IN))
 				{
 					this.animatedIn = true;
-					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time, Math.random() * 500 + 300, 4, 1 );
+					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 4.5, 1 );
 				}
 				// FROZEN
 				else if( this.controller.themeMask & this.themeMaskList.FROZEN && this.CAATSprite.animationImageIndex.length == 1)
@@ -224,9 +223,15 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			this.CAATText.setLocation((this.CAATSprite.width-this.CAATText.width/2 - 8), this.CAATSprite.height-1);
 			this.CAATActorContainer.addChild(this.CAATText);
 			return this.CAATText;
+		},
+
+		/**
+		 * Returns the actor for this entity.
+		 * Characters have an ActorContainer, other objects are just Sprites
+		 */
+		getCAATActor: function() {
+			return this.CAATActorContainer || this.CAATSprite;
 		}
-
-
 	});
 });
 

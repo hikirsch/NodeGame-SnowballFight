@@ -24,7 +24,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	 */
 	function NetChannel( config, aController )
 	{
-		debugger;
 		var that = this;
 		this.controller = aController;	// For callbacks once messages are validated
 		this.config = config;

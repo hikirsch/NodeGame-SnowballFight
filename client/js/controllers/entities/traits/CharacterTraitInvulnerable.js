@@ -30,6 +30,8 @@ var init = function(BaseTrait, Vector)
 
 			// Set our theme, and hijack the characters
 			this.intercept(['collisionMask']);
+
+			this.attachedEntity.collisionCircle.collisionMask = this.collisionMask;
 			this.attachedEntity.collisionCircle.collisionMask = this.collisionMask;
 		},
 

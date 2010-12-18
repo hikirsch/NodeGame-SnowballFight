@@ -9,6 +9,24 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 			this.createElement();
 		},
 
+		onCAATInitialized:function(aCATDirector)
+		{
+			console.log("CREATED!~")
+			// create 3 layers, zero based
+			this.CAATLayers = [this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector)]
+		},
+
+		createCAATLayer: function(aCATDirector)
+		{
+	       var layer = new CAAT.ActorContainer().
+				   create().
+				   setBounds(0, 0, aCATDirector.width, aCATDirector.height);
+
+			GAMECONFIG.CAAT.SCENE.addChild(layer);
+
+			return layer;
+		},
+
 		createElement: function() {
 			this.element = HTMLFactory.field()
 				.show()
@@ -24,8 +42,14 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 			});
 		},
 
+		/**
+		 * @depricated
+		 */
 		sortChildren: function()
 		{
+			console.warn("(FieldView) This function is depricated!");
+			return;
+
 			var childrenList = GAMECONFIG.CAAT.SCENE.childrenList;
 			childrenList.sort(function(a, b) {
 				var comparisonResult = 0;
@@ -37,15 +61,16 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 
 		addEntity: function( anEntityView )
 		{
-//			GAMECONFIG.CAAT.SCENE.getA
-//			this.sortChildren();
-//			var actor = anEntityView.CAATActorContainer || anEntityView.CAATSprite;
-//        	GAMECONFIG.CAAT.SCENE.addChild(actor);
+			var layer = this.CAATLayers[anEntityView.theme.zIndex];
+			if(!layer) debugger;
+
+
+        	layer.addChild(anEntityView.getCAATActor());
 		},
 
 		removeEntity: function( anEntityView )
 		{
-			GAMECONFIG.CAAT.SCENE.removeChild(anEntityView.CAATSprite);
+			anEntityView.getCAATActor().parent.removeChild(anEntityView.getCAATActor())
 		},
 
 		getElement: function() {
@@ -53,6 +78,12 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		},
 
 		dealloc: function() {
+
+			// Remove all the CAAT layers
+			for(var i = 0; i < this.CAATLayers.length; i++) {
+				this.CAATLayers[i].emptyChildren();
+				GAMECONFIG.CAAT.SCENE.removeChild(this.CAATLayers[i]);
+			}
 			this.element.remove();
 		},
 

@@ -11,7 +11,7 @@
 	 // TODO: FILL OUT
  */
 
-var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, EntityTraitAnimateIn)
+var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateIn)
 {
 	// Private reference
 	var traitTypes = new SortedLookupTable();
@@ -22,13 +22,16 @@ var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTrait
 	traitTypes.setObjectForKey(EntityTraitAnimateIn, 'EntityTraitAnimateIn');
 
 	// presents
+
 	traitTypes.setObjectForKey(PresentTrait360Shot, 'PresentTrait360Shot');
 	traitTypes.setObjectForKey(PresentTraitHyperShot, 'PresentTraitHyperShot');
+	traitTypes.setObjectForKey(PresentTraitDeflectorShot, 'PresentTraitDeflectorShot');
 
 	// Present traits
 	var presentTraits = [];
 	presentTraits.push('PresentTraitHyperShot');
 	presentTraits.push('PresentTrait360Shot');
+	presentTraits.push('PresentTraitDeflectorShot');
 
 	// Return only accessor
 	return {
@@ -55,8 +58,9 @@ if (typeof window === 'undefined')
 	require('js/controllers/entities/traits/ProjectileTraitFreeze');
 	require('js/controllers/entities/traits/PresentTraitHyperShot');
 	require('js/controllers/entities/traits/PresentTrait360Shot');
+	require('js/controllers/entities/traits/PresentTraitDeflectorShot');
 	require('js/controllers/entities/traits/EntityTraitAnimateIn');
-	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, EntityTraitAnimateIn);
+	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateIn);
 }
 else
 {
@@ -67,6 +71,7 @@ else
 		'controllers/entities/traits/CharacterTraitInvulnerable',
 		'controllers/entities/traits/PresentTraitHyperShot',
 		'controllers/entities/traits/PresentTrait360Shot',
+		'controllers/entities/traits/PresentTraitDeflectorShot',
 		'controllers/entities/traits/EntityTraitAnimateIn',
 		'lib/jsclass/core'], init);
 }

@@ -50,7 +50,7 @@ var init = function(ThemeModel)
 	CAAT_THEME_MAP['402'] = new ThemeModel('presents.png', 4, 1, 2, 1);
 	CAAT_THEME_MAP['403'] = new ThemeModel('presents.png', 4, 1, 3, 1);
 	// fanfare
-	CAAT_THEME_MAP['500'] = new ThemeModel('fanfareElements.png', 8, 2, 1, 3);
+	CAAT_THEME_MAP['500'] = new ThemeModel('fanfareElements.png', 8, 2, 1, 2);
 
 	var DEFAULT_MODEL = {
 		theme: '0'

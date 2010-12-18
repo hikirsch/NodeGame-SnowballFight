@@ -1,6 +1,6 @@
 /**
 File:
-	Main.js                                                          Listenin
+	Main.js
 Created By:
 	Adam Kirschner
 Project	:

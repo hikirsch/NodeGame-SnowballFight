@@ -28,6 +28,8 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 				this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
 
+				this.clientCharacter = null; // Special pointer to our own client character
+				this.isGameOver = false;
 
 				// Create the view first, we need a place to show the browser req.
 				this.view = new GameView(this, this.model );
@@ -41,7 +43,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				// Create the director - there's only one ever. Each game is a new 'scene'
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
-				__GlobalDisableEvents();
+				CAAT.GlobalDisableEvents();
 
 				this.initializeGame();
 
@@ -56,6 +58,8 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.fieldController.createView( this.model );
 				this.netChannel = new NetChannel(this.config, this);
 				this.initializeCaat();
+
+				this.fieldController.onCAATInitialized(this.director);
 				this.startGameClock();
 			},
 
