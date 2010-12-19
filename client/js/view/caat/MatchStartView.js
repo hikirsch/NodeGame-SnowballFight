@@ -31,8 +31,8 @@ define(['lib/jsclass/core'], function()
 				actor.setLocation(director.width/2-actor.width/2, director.height/2-actor.height/2);
 				actor.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 
-				var duration = 500,
-					startTime = i*(duration*1.5),
+				var duration = 600,
+					startTime = i*(duration*1.4),
 					isLastAnimation = i === len-1;
 
 				actor.alpha = 0;

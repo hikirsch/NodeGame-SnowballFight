@@ -100,10 +100,10 @@ SnowGame = (function()
 			aNewCharacter.position = this.fieldController.positionEntityAtRandomNonOverlappingLocation(20);
 
 			// Freeze players for 3 seconds if the game just started
-			if(this.gameClock < 995000)
+			if(this.gameClock < 5000)
 			{
 				var Trait = this.traitFactory.createTraitWithName("ProjectileTraitFreeze");
-				aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 3000 ) );
+				aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 4000 ) );
 
 				/**
 				 * Send that player a message to start its MatchStart animation
@@ -124,7 +124,7 @@ SnowGame = (function()
 
 			} else {
 				// always make new characters invulnerable
-				new CharacterTraitInvulnerable(1500)
+				aNewCharacter.addTraitAndExecute( new CharacterTraitInvulnerable(2500) );
 			}
 			return aNewCharacter;
 		},

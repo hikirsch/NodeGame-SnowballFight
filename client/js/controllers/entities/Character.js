@@ -124,7 +124,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			projectileModel.angle = this.rotation;// * 0.0174532925;
 
 			var projectile = this.fieldController.fireProjectileFromCharacterUsingProjectileModel( this, projectileModel);
-			this.lastFireTime = gameClock;
+			this.lastFireTime = gameClock - (Math.random() * this.fireRate * 0.15);
 
 			this.onProjectileFired(projectile);
 			return projectile;
