@@ -158,10 +158,27 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
         showGameStatus: function()
         {
-          HTMLFactory.gameStatus()
-            .appendTo("body");
+            HTMLFactory.gameStatus()
+                .appendTo("body");
 
-           this.createStatusView( this.currentStatus );
+            this.createStatusView( this.currentStatus );
+
+            var that = this,
+                $soundToggle = $('#sound-toggle'),
+                $audio = $('#audio');
+
+            $soundToggle
+                .click(function(e) {
+                    $this = $(this);
+
+                    if( ! $(this).is('.playing') ) {
+                        $audio.get(0).play();
+                    } else {
+                        $audio.get(0).pause();
+                    }
+
+                    $this.toggleClass('playing');
+                });
         },
 
 		showFooter: function()
