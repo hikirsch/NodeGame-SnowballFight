@@ -43,7 +43,7 @@ define(['lib/Vector',
 
 				// You cannot play!
 				if( typeof WebSocket === "undefined" ) {
-					this.view.showBrowserReq();
+					this.view.showBrowserReq( true );
 					return;
 				}
 

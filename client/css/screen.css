@@ -3,6 +3,8 @@
 
 .hide { display: none; }
 
+.chromeFrameOverlayContent { z-index: 9999; }
+
 .konami-code-disabled { display: none; }
 .konami-code-enabled .konami-code-disabled { display: block; }
 
@@ -10,20 +12,20 @@ html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 	background-color: #f2f7fb; background-image: url( ../img/global/bg-main.png ); background-position: 50% 0;
 	background-repeat: no-repeat;
 }
-nav.main { width: 900px; margin: 0 auto 9px; }
-nav.main ul { overflow: hidden; }
-nav.main ul li { float: left; }
-nav.main ul li a {
+.main-nav { width: 900px; margin: 0 auto 9px; }
+.main-nav ul { overflow: hidden; list-style-type: none; }
+.main-nav ul li { float: left; }
+.main-nav ul li a {
 	overflow: hidden; text-indent: -9999px; width: 160px; height: 58px;
 	float: left; background-repeat: no-repeat; background-position: 0 0;
 }
-nav.main ul li.instructions a { background-image: url( ../img/global/nav-instructions.png ); }
-nav.main ul li.share a { background-image: url( ../img/global/nav-share.png ); }
-nav.main ul li.ogilvy-logo { float: right; width: auto; height: auto; padding-top: 10px; }
-nav.main ul li.ogilvy-logo a { width: 72px; height: 53px; float: right; background-image: url( ../img/global/logo-ogilvy.png ); }
+.main-nav ul li.instructions a { background-image: url( ../img/global/nav-instructions.png ); }
+.main-nav ul li.share a { background-image: url( ../img/global/nav-share.png ); }
+.main-nav ul li.ogilvy-logo { float: right; width: auto; height: auto; padding-top: 10px; }
+.main-nav ul li.ogilvy-logo a { width: 72px; height: 53px; float: right; background-image: url( ../img/global/logo-ogilvy.png ); }
 
-footer { margin: 10px auto; width: 900px; text-align: center; font-size: 11px; color: #6a7073; }
-footer a { font-size: 11px; color: #005072; }
+.footer { margin: 10px auto; width: 900px; text-align: center; font-size: 11px; color: #6a7073; }
+.footer a { font-size: 11px; color: #005072; }
 
 .game-container  { width: 900px; height: 600px; margin: auto; position: relative; overflow: hidden;}
 

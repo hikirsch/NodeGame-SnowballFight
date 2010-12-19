@@ -48,7 +48,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.statHTML = null;
 
-			var showStats = true;
+			var showStats = "getContext" in document.createElement("canvas");
 			if(showStats) {
 				var stats = new Stats();
 				stats.domElement.style.position = 'absolute';
@@ -268,10 +268,14 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.overlayManager.pushOverlay( $characterSelect );
 		},
 
-        showBrowserReq: function()
+        showBrowserReq: function( dontUseField )
 		{
-			var $browserReq = HTMLFactory.browserRequirements();
-			this.overlayManager.pushOverlay($browserReq);
+			var $browserReq = HTMLFactory.browserRequirements(),
+				$fakeField = HTMLFactory.field();
+
+			$fakeField.insertAfter("#game-status");
+
+			this.overlayManager.pushOverlay($browserReq, $fakeField);
 			$("html").addClass('unsupported-browser');
 		},
 

@@ -19,14 +19,32 @@ define(['factories/HTMLFactory'], function( HTMLFactory ) {
 				$(window).resize(function(){ that.resize(); });
 			},
 
-			createElement: function()
+			createElement: function( relativeElement )
 			{
-				this.settings = {
-					height: this.controller.model.height,
-					width: this.controller.model.width,
-					left: this.controller.getFieldLeft(),
-					top: this.controller.getFieldTop()
-				};
+				if( relativeElement != null || this.relativeElement != null )
+				{
+					if( relativeElement != null )
+					{
+						this.relativeElement = relativeElement;
+					}
+
+					this.settings = {
+						height: this.controller.model.height,
+						width: this.controller.model.width,
+						margin: 'auto',
+						top: this.relativeElement.position().top
+					};
+
+				}
+				else
+				{
+					this.settings = {
+						height: this.controller.model.height,
+						width: this.controller.model.width,
+						left: this.controller.getFieldLeft(),
+						top: this.controller.getFieldTop()
+					};
+				}
 
 				this.element = HTMLFactory.overlay()
 					.hide()
@@ -34,7 +52,7 @@ define(['factories/HTMLFactory'], function( HTMLFactory ) {
 					.appendTo("body");
 			},
 
-			pushOverlay: function( $ele )
+			pushOverlay: function( $ele, relativeElement )
 			{
 				if( this.active.length > 0 )
 				{
@@ -44,7 +62,7 @@ define(['factories/HTMLFactory'], function( HTMLFactory ) {
 
 				if( this.element == null )
 				{
-					this.createElement();
+					this.createElement( relativeElement );
 				}
 
 				this.activeElement = $ele;
@@ -68,10 +86,13 @@ define(['factories/HTMLFactory'], function( HTMLFactory ) {
 				this.settings.left = ( document.body.offsetWidth - this.controller.model.width ) / 2;
 //				this.settings.top = this.controller.getFieldTop();
 
-				this.activeElement.css({
-					left: this.settings.left + ( ( this.element.width() - this.activeElement.width() ) / 2 ),
-					top: this.settings.top + ( ( this.element.height() - this.activeElement.height() ) / 2 )
-				});
+				if( this.activeElement != null )
+				{
+					this.activeElement.css({
+						left: this.settings.left + ( ( this.element.width() - this.activeElement.width() ) / 2 ),
+						top: this.settings.top + ( ( this.element.height() - this.activeElement.height() ) / 2 )
+					});
+				}
 
 				this.element.css({
 					left: this.settings.left,
