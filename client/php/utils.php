@@ -45,7 +45,7 @@ Basic Usage:
 		$f_name		= 'Ogilvy & Mather Holiday Card 2010';
 		$f_email	= 'holiday2010@ogilvy.com';
 		$playerName = $inf['fromName'];
-		$subject	= "$playerName wants you to check out the new Holiday Snowball Fight!";
+		$subject	= "$playerName has sent you a Holiday game from Ogilvy. Enjoy!";
 
 		$body = implode( file("emails/omg_invite_external.html") );
 		$body = str_replace( "{{GAME_ID}}", $gameID, $body);
