@@ -82,9 +82,9 @@ AbstractServerGame = (function()
 
 			this.logger.tick();
 
-			if( this.model.gameDuration < this.gameClock )
+			if( this.gameClock > this.model.gameDuration)
 			{
-				this.onEndGame();
+				this.shouldEndGame();
 			}
 		},
 
@@ -112,34 +112,37 @@ AbstractServerGame = (function()
 			playerEntity.input.deconstructInputBitmask( cmdData.input );
 		},
 
-		onEndGame: function()
+		/**
+		 * Called when the gameClock has passed model.gameDuration
+		 */
+		shouldEndGame: function()
 		{
-			var that = this,
-				nextGame = this.server.getNextAvailablePort();
+			var nextGamePort = this.server.getNextAvailablePort();
 
 			this.gameOver = true;
-
 			this.stopGameClock();
 
+			// Create a message to send to all clients
 			var endGameMessage = {
 				seq: 1,
 				gameClock: this.gameClock,
 				cmds: {
-					cmd: this.server.gameConfig.CMDS.END_GAME,
-					data: { nextGamePort: nextGame }
+					cmd: this.server.gameConfig.CMDS.SERVER_END_GAME,
+					data: { nextGamePort: nextGamePort }
 				}
 			};
 
 			this.netChannel.broadcastMessage(endGameMessage);
 
-			// TODO: This should be removed. When the game ends - drop all clients
-			setTimeout( function() { that.dealloc(); }, this.server.gameConfig.SERVER_SETTING.SERVER_END_GAME_GRACE );
+//			Allow for the broadcasted message to be sent before  closing the connection
+			this.dealloc();
+//			setTimeout( function() { that.dealloc(); }, this.server.gameConfig.SERVER_SETTING.SERVER_END_GAME_GRACE );
 		},
 
 		dealloc: function()
 		{
-			this.fieldController.dealloc();
 			this.netChannel.dealloc();
+			this.fieldController.dealloc();
 			this.server.killGame( this.portNumber );
 		},
 

@@ -117,12 +117,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			this.fieldController.tick(speedFactor, this.clockActualTime, this.gameTick)
 		},
 
-		onEndGame: function()
-		{
-			// this.fieldController.onEndGame();
-			this.isGameOver = true;
-		},
-		
 		/**
 		* Adding and removing players
 		*/
@@ -147,7 +141,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 
 		canAddPlayer: function()
 		{
-			return this.config.gameConfig.GAME_MODEL.MAX_PLAYERS > this.fieldController.players.count();
+			return (this.gameClock < this.model.gameDuration) && (this.config.gameConfig.GAME_MODEL.MAX_PLAYERS > this.fieldController.players.count());
 		},
 
 		removeEntity: function( objectID )

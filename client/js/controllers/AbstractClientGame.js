@@ -26,7 +26,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
-				this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
+				this.CMD_TO_FUNCTION[config.CMDS.SERVER_END_GAME] = this.onShouldEndGame;
 
 				this.clientCharacter = null; // Special pointer to our own client character
 				this.isGameOver = false;
@@ -317,10 +317,9 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.log( 'onRemoveClient: ', arguments );
 			},
 
-			onEndGame: function( clientID, data )
+			onShouldEndGame: function( clientID, data )
 			{
-				this.callSuper();
-
+				this.isGameOver = true;
 
 				this.view.onEndGame();
 				this.stopGameClock();

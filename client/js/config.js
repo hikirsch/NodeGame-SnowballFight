@@ -5,11 +5,12 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		CMDS:
 		{
 			SERVER_CONNECT	: 1 << 0, 			// Not yet playing
-			PLAYER_JOINED	: 1 << 1,            // This is when you're in the game
+			SERVER_END_GAME	: 1 << 1,
+			PLAYER_JOINED	: 1 << 2,            // This is when you're in the game
 			FULL_UPDATE		: 1 << 3,
 			PLAYER_MOVE		: 1 << 4,
-			PLAYER_FIRE		: 1 << 5,
-			END_GAME		: 1 << 6
+			PLAYER_FIRE		: 1 << 5
+
 		},
 
 		CLIENT_SETTING:
@@ -59,7 +60,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			width: 900,
 			height: 600,
 			MAX_PLAYERS: 8,
-			gameDuration: 2 * 60 * 1000,
+//			gameDuration: 2 * 60 * 1000,
+			gameDuration: 6000,
 			ROUND_INTERMISSION_DURATION: 5000
 		},
 
