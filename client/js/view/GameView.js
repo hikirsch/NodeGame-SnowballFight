@@ -310,11 +310,18 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		inviteFriend: function()
 		{
+
 			var that = this,
 			    inviteOpen = 0,
-			    $invite = HTMLFactory.invite();
+			    $invite = HTMLFactory.invite(),
+				$thankYou = HTMLFactory.inviteThankYou();
 
-			$invite.submit( function() { return EmailServiceManager.validateFormAndSendEmail( this ); } );
+			$invite.submit( function() {
+				EmailServiceManager.validateFormAndSendEmail( this );
+				that.overlayManager.popOverlay();
+				that.overlayManager.pushOverlay( $thankYou );
+				return false;
+			});
 
 			$("#btn-invite").live( 'click', function() {
  				if(inviteOpen === 0)

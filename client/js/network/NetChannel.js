@@ -90,6 +90,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 			this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
 			this.connection.onclose = function() { that.onConnectionClosed(); };
 			console.log("(NetChannel) Created with socket: ", this.connection);
+			history.pushState(null, "game-" + newPort, "?game=" + newPort);
 		} else {
 			this.onConnectionClosed();
 		}
