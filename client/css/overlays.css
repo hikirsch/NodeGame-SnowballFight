@@ -86,7 +86,7 @@
 .choose .nav .chooseArrows.arrowRight { left: 715px; }
 .choose .nav .btnSelect { position: absolute; cursor: pointer; top: 325px; left: 445px; }
 .choose .characters { width: 810px; position: relative; height: 100px; margin-top: 20px; }
-.choose .characters div { float: left; height: 82px; width: 89px; margin-right: 65px; overflow: hidden; }
+.choose .characters div { float: left; height: 84px; width: 89px; margin-right: 65px; overflow: hidden; }
 .choose .characters .yeti { background: url(../img/character-select/yeti.png) no-repeat bottom left; margin-left: 65px; }
 .choose .characters .tree { background: url(../img/character-select/tree.png) no-repeat top left; }
 .choose .characters .penguin { background: url(../img/character-select/penguin.png) no-repeat top left; }
