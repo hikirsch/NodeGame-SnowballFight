@@ -32,7 +32,10 @@ var init = function(EntityModel)
 		largePond1				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:10},radius: 91,	theme: '112' },
 		smallPond1				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35,	theme: '113' },
 		smallPond2				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:-12},	radius: 42,	theme: '114' },
-		smallPond3				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 35,	theme: '115' }
+		brownReindeer			: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 15,	theme: '115' },
+		greenReindeer			: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 15,	theme: '116' },
+		candyCane				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 24,	theme: '117' },
+		sleighInGround			: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 25,	theme: '118' }
 	}
 };
 
