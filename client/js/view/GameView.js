@@ -35,7 +35,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.attachInstructions();
 			this.inviteFriend();
 			this.attachCredits();
-			this.attachShare();
+			this.addThis();
 			this.carouselManager = CarouselManager;
 			this.myCharacterModel = null;
 			this.resultsOverlayShowing = false;
@@ -297,16 +297,28 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			return false;
 		},
-
-		/*
-		shareThis: function()
+		addThis: function()
 		{
 			var that = this;
 			$results = HTMLFactory.results();
-			$("li.share a").click( function() {
-				that.overlayManager.show( $results );
-			});
-		}, */
+
+			function open()
+			{
+				var url = "http://holiday2010.ogilvy.com",
+					title = "#OgilvySnowballFight";
+
+				addthis_open(this, '', url, title);
+			}
+
+			function close()
+			{
+				addthis_close();
+			}
+
+			$("li.share a")
+				.attr('href', 'javascript:Void()')
+				.hover( open, close );
+		},
 
 		inviteFriend: function()
 		{
@@ -347,12 +359,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 					inviteOpen = 0;
 				}
 			});
-		},
-
-		attachShare: function() {
-			$("li.share a").click( function() {
-				return false;
-			})
 		},
 
 		attachCredits: function()
