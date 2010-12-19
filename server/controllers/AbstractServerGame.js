@@ -133,10 +133,7 @@ AbstractServerGame = (function()
 			};
 
 			this.netChannel.broadcastMessage(endGameMessage);
-
-//			Allow for the broadcasted message to be sent before  closing the connection
 			this.dealloc();
-//			setTimeout( function() { that.dealloc(); }, this.server.gameConfig.SERVER_SETTING.SERVER_END_GAME_GRACE );
 		},
 
 		dealloc: function()

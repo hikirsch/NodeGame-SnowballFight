@@ -51,7 +51,6 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			NEXT_PORT: 10000 + 1, // 1 more than GAME_PORT
 			MAX_PORTS: 5,
 			DEBUG_MODE: true,
-			SERVER_END_GAME_GRACE: 1500
 		},
 
 
@@ -60,8 +59,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			width: 900,
 			height: 600,
 			MAX_PLAYERS: 8,
-//			gameDuration: 2 * 60 * 1000,
-			gameDuration: 6000,
+			gameDuration: 2 * 60 * 1000,
+//			gameDuration: 6000,
 			ROUND_INTERMISSION_DURATION: 5000
 		},
 
