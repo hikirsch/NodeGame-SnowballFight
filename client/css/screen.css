@@ -41,7 +41,7 @@ textarea.error, input.error { border: 1px solid red; }
 	background-repeat: no-repeat; background-position: 50% 50%; font-size: 10px; font-weight: bold;
 }
 
-section.game-status {
+#game-status {
 	position: relative;
 	width: 900px;
 	height: 34px;
@@ -49,16 +49,17 @@ section.game-status {
 	/*overflow: hidden; */
 	/*z-index: 2000;*/
 }
-section.game-status dl { float: left; padding-top: 1px; overflow: hidden; }
-section.game-status dl dt { position: absolute; margin-left: -9999px; }
-section.game-status dl dd { float: left; height: 28px; font-family: arial, sans-serif; font-size: 26px; line-height: 26px; background-position: 0 0; background-repeat: no-repeat; padding-top: 6px; overflow: hidden; }
+#game-status dl { float: left; padding-top: 1px; overflow: hidden; }
+#game-status dl dt { position: absolute; margin-left: -9999px; }
+#game-status dl dd { float: left; height: 28px; font-family: arial, sans-serif; font-size: 26px; line-height: 26px; background-position: 0 0; background-repeat: no-repeat; padding-top: 6px; overflow: hidden; }
 
-section.game-status dl .score { width: 114px; color: #20629a; background-image: url( '../img/global/txt-your-score.png' ); padding-left: 46px; }
-section.game-status dl .time-left { width: 118px; color: #167392; background-image: url( '../img/global/txt-time-left.png' ); padding-left: 42px; }
-section.game-status dl .total-players { width: 100px; color: #03959e; background-image: url( '../img/global/txt-players-on-map.png' ); padding-left: 60px; }
-section.game-status dl .rank { width: 114px; color: #546fd3; background: url( '../img/global/txt-your-rank.png' ); padding-left: 46px; }
+#game-status dl .score { width: 114px; color: #20629a; background-image: url( '../img/global/txt-your-score.png' ); padding-left: 46px; }
+#game-status dl .time-left { width: 118px; color: #167392; background-image: url( '../img/global/txt-time-left.png' ); padding-left: 42px; }
+#game-status dl .total-players { width: 100px; color: #03959e; background-image: url( '../img/global/txt-players-on-map.png' ); padding-left: 60px; }
+#game-status dl .rank { width: 114px; color: #546fd3; background: url( '../img/global/txt-your-rank.png' ); padding-left: 46px; }
 
-section.game-status .invite-friend { float: left; width:157px; height: 35px; background: url(../img/global/bg-invite-friend.png) 0 0 no-repeat; text-indent:-9999px; overflow:hidden; cursor:pointer; }
+#game-status .invite-friend { float: left; width:157px; height: 35px; background: url(../img/global/bg-invite-friend.png) 0 0 no-repeat; text-indent:-9999px; overflow:hidden; cursor:pointer; }
 #sound-toggle { float: right; width: 90px; height: 19px; background: url( '../img/global/btn-sound.png' ) 0 0 no-repeat; margin-top: 16px; overflow:hidden; cursor:pointer; }
+#game-status .playing { background-position: left bottom; }
 
 #logger { display: none; font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }

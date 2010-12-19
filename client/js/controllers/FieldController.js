@@ -158,9 +158,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				this.playersArray[i].rank = i+1;
 		},
 
-		onEndGame: function()
+		onEndGame: function(stats)
 		{
-
+			console.log("FROM SERVER: ", stats);
 		},
 
 		/**
