@@ -152,10 +152,10 @@ AbstractServerGame = (function()
 		shouldAddPlayer: function (anEntityID, aClientID, aCharacterModel)
 		{
 			var aNewCharacter = this.callSuper();
-			if(aNewCharacter == null) return; // No character created for whatever reason. Room full?
+			if(aNewCharacter == null) return; // No charactnode node mainer created for whatever reason. Room full?
 
 			aNewCharacter.setInput( new Joystick() );
-			aNewCharacter.position = this.fieldController.positionEntityAtRandomNonOverlappingLocation(20);
+
 			return aNewCharacter;
 		},
 

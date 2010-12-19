@@ -81,6 +81,37 @@ SnowGame = (function()
 		},
 
 		/**
+		 * OVERRIDES
+		 */
+
+		/**
+		 * Calls super.shouldAddPlayer to create the character and attaches a Joystick to it
+		 * @param anEntityID	An Entity ID for this Character, we created this right before this was called
+		 * @param aClientID		Connection ID of the client
+		 * @param aCharacterModel 	A character model
+		 */
+		shouldAddPlayer: function (anEntityID, aClientID, aCharacterModel)
+		{
+			var aNewCharacter = this.callSuper();
+			if(aNewCharacter == null) return; // No charactnode node mainer created for whatever reason. Room full?
+
+			aNewCharacter.setInput( new Joystick() );
+
+			// Place randomly in the field
+			aNewCharacter.position = this.fieldController.positionEntityAtRandomNonOverlappingLocation(20);
+
+			// Freeze players for 3 seconds if the game just started
+			if(this.gameClock < 5000) {
+				var Trait = this.traitFactory.createTraitWithName("ProjectileTraitFreeze");
+				aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 1500 ) );
+			} else {
+				// always make new characters invulnerable
+				new CharacterTraitInvulnerable(1500)
+			}
+			return aNewCharacter;
+		},
+
+		/**
 		 * Events
 		 */
 		onCollision: function(circleA, circleB, collisionNormal)
@@ -276,9 +307,8 @@ SnowGame = (function()
 
 		dealloc: function()
         {
-			console.log('(Snowgame) >>>>>>GAME HAS ENDED<<<<<');
+			clearTimeout( this.presentsTimer );
             this.callSuper();
-            clearTimeout( this.presentsTimer );
         }
 	});
 })();
