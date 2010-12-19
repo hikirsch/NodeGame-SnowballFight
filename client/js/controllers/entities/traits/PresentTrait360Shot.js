@@ -41,7 +41,7 @@ var init = function(BaseTrait)
 
 		execute: function()
 		{
-			var amount = Math.random() * 10 + 8;
+			var amount = Math.random() * 3 + 6;
 			var angleOffset = Math.random() * Math.PI * 2;
 			for(var i = 0; i <amount; i++)
 			{
