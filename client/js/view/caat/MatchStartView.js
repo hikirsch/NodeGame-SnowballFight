@@ -36,7 +36,7 @@ define(['lib/jsclass/core'], function()
 					isLastAnimation = i === len-1;
 
 				actor.alpha = 0;
-				scene.addChild(actor);
+				this.CAATActorContainer.addChild(actor);
 				this.addScaleBehavior(actor, startTime, duration, 5, 1);
 				this.addFadeBehavior(actor, startTime, duration, 0.1, 1);
 
@@ -57,7 +57,9 @@ define(['lib/jsclass/core'], function()
 						that.dealloc();
 				}});
 			}
+
 			this.CAATActorContainer.mouseEnabled = false;
+			scene.addChild(this.CAATActorContainer)
 		},
 
 		/**
@@ -69,7 +71,7 @@ define(['lib/jsclass/core'], function()
 			scaleBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 			scaleBehavior.startScaleX = scaleBehavior.startScaleY = startScale;  // Fall from the 'sky' !
 			scaleBehavior.endScaleX = scaleBehavior.endScaleY = endScale;
-			scaleBehavior.setFrameTime( starTime, endTime );
+			scaleBehavior.setFrameTime(GAMECONFIG.CAAT.SCENE.time + starTime, endTime );
 			scaleBehavior.setCycle(false);
 			scaleBehavior.setInterpolator( new CAAT.Interpolator().createBounceOutInterpolator(false) );
 			actor.addBehavior(scaleBehavior);
@@ -86,7 +88,7 @@ define(['lib/jsclass/core'], function()
 			fadeBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 			fadeBehavior.startAlpha = startAlpha;  // Fall from the 'sky' !
 			fadeBehavior.endAlpha = endAlpha;
-			fadeBehavior.setFrameTime( starTime, endTime );
+			fadeBehavior.setFrameTime( GAMECONFIG.CAAT.SCENE.time + starTime, endTime );
 			fadeBehavior.setCycle(false);
 			fadeBehavior.setInterpolator( new CAAT.Interpolator().createExponentialOutInterpolator(2, false) );
 			actor.addBehavior(fadeBehavior);
@@ -114,7 +116,13 @@ define(['lib/jsclass/core'], function()
 		 */
 		dealloc: function()
 		{
+		   if(!this.CAATActorContainer || !this.CAATActorContainer.parent)
+		   {
+			   throw "Does not have parent!"
+		   }
 
+			console.log("(MatchStartView)::dealloc!");
+			this.CAATActorContainer.parent.removeChild(this.CAATActorContainer);
 		}
 	});
 });

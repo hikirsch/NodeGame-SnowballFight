@@ -320,8 +320,6 @@ define(['lib/Vector',
 
 			onShouldEndGame: function( clientID, data )
 			{
-				console.log('nextTick callback', clientConnection);
-
 				this.isGameOver = true;
 
 				this.view.onEndGame();
