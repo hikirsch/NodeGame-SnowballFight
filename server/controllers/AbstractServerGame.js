@@ -109,6 +109,10 @@ AbstractServerGame = (function()
 		{
 			var cmdData = aDecodedMessage.cmds.data;
 			var playerEntity = this.fieldController.allEntities.objectForKey(cmdData.objectID);
+
+			var ping = this.gameClock - aDecodedMessage.t;
+			if(ping < 10) ping = 10;
+			playerEntity.stats.ping = ping;
 			playerEntity.input.deconstructInputBitmask( cmdData.input );
 		},
 
@@ -128,7 +132,10 @@ AbstractServerGame = (function()
 				gameClock: this.gameClock,
 				cmds: {
 					cmd: this.server.gameConfig.CMDS.SERVER_END_GAME,
-					data: { nextGamePort: nextGamePort }
+					data: {
+						nextGamePort: nextGamePort,
+						stats: this.fieldController.getPlayerStats()
+					}
 				}
 			};
 

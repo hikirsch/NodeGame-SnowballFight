@@ -65,8 +65,8 @@ define(['factories/HTMLFactory'], function( HTMLFactory ) {
 					this.createElement();
 				}
 
-				this.settings.left = this.controller.getFieldLeft();
-				this.settings.top = this.controller.getFieldTop();
+				this.settings.left = ( document.body.offsetWidth - this.controller.model.width ) / 2;
+//				this.settings.top = this.controller.getFieldTop();
 
 				this.activeElement.css({
 					left: this.settings.left + ( ( this.element.width() - this.activeElement.width() ) / 2 ),

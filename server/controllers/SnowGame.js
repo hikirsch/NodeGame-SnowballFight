@@ -155,21 +155,23 @@ SnowGame = (function()
 				var projectileOwner = this.fieldController.getPlayerWithClientID(projectile.view.clientID);
 				if(projectileOwner)
 				{
-					projectileOwner.score += this.server.gameConfig.SCORING.HIT;
-					projectileOwner.scoreMultiplier = Math.min(projectileOwner.scoreMultiplier, this.server.gameConfig.SCORING.MAX_MULTIPLIER);
+					projectileOwner.score += (this.server.gameConfig.SCORING.HIT * projectileOwner.scoreMultiplier);
+					projectileOwner.scoreMultiplier = Math.min(++projectileOwner.scoreMultiplier, this.server.gameConfig.SCORING.MAX_MULTIPLIER);
 
 					// Reset the multiplier of the person who was hit
-					character.scoreMultiplier = 1;
+					character.view.scoreMultiplier = 1;
+
+					// incriment stats
+					character.view.stats.numberOfTimesWasHit++;
+					projectileOwner.stats.numberOfTimesDidHit++;
 
 				} else { // It's a present, (which also means it's owned by the server
 
-					console.log("own present");
 					projectile.view.clientID = -1; // Set to clientID -1, which will cause it to be removed by connected clients
 					this.presentsActive.remove(projectile.view.objectID);
 				}
 
 
-				console.log("(SnowGame) projectileOwner", projectileOwner);
 				// Apply the projectile's trait(s) to the character that was hit
 				var Trait = this.traitFactory.createTraitWithName(projectile.view.transferredTraits);
 				// TODO: HACK should never be undefined
