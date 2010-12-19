@@ -106,7 +106,7 @@ define(['lib/Vector',
 			getResults: function()
 			{
 				return {
-					PlayerStats: this.fieldController.getPlayerStats(),
+					PlayerStats: this.parsePlayerStats( this.fieldController.getPlayerStats() ),
 					IsGameActive: this.isGameActive(),
 					ShowNextMatchTime: false
 				};
@@ -344,10 +344,12 @@ define(['lib/Vector',
 				if(isInGame)
 				{
 					this.endGameStats = {
-						PlayerStats: data.stats,
+						PlayerStats: this.parsePlayerStats( data.stats ),
 						ShowNextMatchTime: true,
 						NextMatchTime: this.getNextGameStartTime()
 					};
+
+					console.log( this.endGameStats );
 
 					this.view.onEndGame(this.endGameStats);
 
@@ -356,6 +358,38 @@ define(['lib/Vector',
 					this.gameClock = 0; // Will be used to know when to join the next game
 					this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
 				}
+			},
+
+			parsePlayerStats: function( data ) {
+				var allPlayersStats = [],
+					allEntities = data.split('|').reverse(),
+					allEntitiesLen = allEntities.length;
+
+				// Loop through each entity
+				while(--allEntitiesLen > -1) // allEntities[0] is garbge, so by using prefix we avoid it
+				{
+					var allStats = allEntities[allEntitiesLen],
+						splitStats = allStats.split("&").reverse(),
+						playerStats = {},
+						splitStatsLength = splitStats.length, i;
+					console.log( "FULL STAT: ", allEntities[allEntitiesLen]);
+					while(--splitStatsLength > -1)
+					{
+						var splitPiece = splitStats[splitStatsLength].split("="),
+							name = splitPiece[0].trim(),
+							value = decodeURI( splitPiece.length > 1 ? splitPiece[1].trim() : "" );
+
+						playerStats[ name ] = value;
+					}
+
+					// Store the final result using the objectID
+					allPlayersStats.push( playerStats );
+
+				}
+
+				console.log("AFTER PARSE!", allPlayersStats );
+
+				return allPlayersStats;
 			},
 
 			onServerMatchStart: function( clientID, data )
