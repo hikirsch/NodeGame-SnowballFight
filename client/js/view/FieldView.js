@@ -11,7 +11,6 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 
 		onCAATInitialized:function(aCATDirector)
 		{
-			console.log("CREATED!~")
 			// create 3 layers, zero based
 			GAMECONFIG.CAAT.LAYERS = this.CAATLayers = [this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector)]
 		},
@@ -30,7 +29,8 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		createElement: function() {
 			this.element = HTMLFactory.field()
 				.show()
-				.insertBefore('footer');
+				.insertAfter('#game-status');
+
 			this.resize( this.model.height, this.model.width );
 		},
 
