@@ -16,12 +16,13 @@ define(['lib/Vector',
 	'network/NetChannel',
 	'view/GameView',
 	'view/caat/MatchStartView',
+	'view/caat/PowerupAnnounceView',
 	'lib/Joystick',
 	'controllers/AbstractGame',
 	'factories/TraitFactory',
 	'controllers/FieldController',
 	'lib/jsclass/core' ],
-	function(Vector, NetChannel, GameView, MatchStartView, Joystick, AbstractGame, TraitFactory, FieldController)
+	function(Vector, NetChannel, GameView, MatchStartView, PowerupAnnounceView, Joystick, AbstractGame, TraitFactory, FieldController)
 	{
 		return new JS.Class(AbstractGame,
 		{
@@ -363,9 +364,10 @@ define(['lib/Vector',
 				var matchViewCountdown = new MatchStartView();
 			},
 
-			onPowerupAquired: function()
+			onPowerupAquired: function(data)
 			{
 				console.log("(AbstractClientGame)::onPowerupAquired", arguments);
+				var powerupAnnounce = new PowerupAnnounceView(arguments)
 			},
 
 			gameOverTick: function()

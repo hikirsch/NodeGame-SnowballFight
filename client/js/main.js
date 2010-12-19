@@ -23,7 +23,7 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		$.each(["groupCollapsed","groupEnd","group","warn","info","dir","warn","error","log"], function(i,s) {
 			if (!( s in console ) ) { window.console[s] = Void; }
 		});
-	};
+	}
 
 	// thanks IE for not having trim(), i appreciate that.
 	if(typeof String.prototype.trim !== 'function') {
