@@ -66,6 +66,11 @@ define(['lib/Vector',
 				this.initializeCaat();
 
 				this.fieldController.onCAATInitialized(this.director);
+
+				// Listen for when new powerups are aquired
+				window.addEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
+
+				// Start the game timer
 				this.startGameClock();
 			},
 
@@ -321,7 +326,6 @@ define(['lib/Vector',
 
 			onShouldEndGame: function( clientID, data )
 			{
-
 				// We have a clientCharacter - thus we're in the game
 				var isInGame = this.clientCharacter != null;
 				this.isGameOver = true;
@@ -351,6 +355,11 @@ define(['lib/Vector',
 			onServerMatchStart: function( clientID, data )
 			{
 				var matchViewCountdown = new MatchStartView();
+			},
+
+			onPowerupAquired: function()
+			{
+				console.log("(AbstractClientGame)::onPowerupAquired", arguments);
 			},
 
 			gameOverTick: function()

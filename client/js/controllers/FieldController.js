@@ -297,18 +297,24 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		getPlayerStats: function()
 		{
 			var playerStats = [];
+			var statString = "";
 
+			var i = 0;
 			this.players.forEach( function( clientId, player ) {
-				playerStats.push({
-					nickname: player.nickname,
-					score: player.score,
-					ping: player.stats.ping,
-					numberOfTimesDidHit: player.stats.numberOfTimesDidHit,
-					numberOfTimesWasHit: player.stats.numberOfTimesWasHit
-				});
-			}, this );
 
-			return playerStats;
+				// Send empty string if undefined
+				var nickname = player.model.nickname || '';
+
+				statString += (i == 0) ? "" : "|";
+				statString += "&nickname=" + nickname;
+				statString += "&score=" + player.score;
+				statString += "&ping=" + player.stats.ping;
+				statString += "&numberOfTimesDidHit=" + player.stats.numberOfTimesDidHit;
+				statString += "&numberOfTimesWasHit=" + player.stats.numberOfTimesWasHit;
+				i++;
+			}, this);
+
+			return statString;
 		},
 
 		/**

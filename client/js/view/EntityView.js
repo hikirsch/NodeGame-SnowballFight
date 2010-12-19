@@ -125,6 +125,12 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 					// Scale me up!
 					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time, 700, 2, 1);
+
+					// Tell the world!
+					var event = document.createEvent("Event");
+					event.initEvent(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, true, true);
+					event.data = {theme: this.controller.themeMask};
+					window.dispatchEvent(event);
 				}
 
 				// Set to dirty, and remember new mask

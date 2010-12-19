@@ -139,6 +139,7 @@ AbstractServerGame = (function()
 				}
 			};
 
+			console.log(SYS.inspect(endGameMessage.cmds.data.stats), 50);
 			this.netChannel.broadcastMessage(endGameMessage);
 			this.dealloc();
 		},

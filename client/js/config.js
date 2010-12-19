@@ -59,7 +59,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			height: 600,
 			MAX_PLAYERS: 8,
 //			gameDuration: 1 * 60 * 1000,
-			gameDuration: 15000,
+			gameDuration: 20000,
 			ROUND_INTERMISSION_DURATION: 5000
 		},
 
@@ -103,6 +103,10 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		ENTITY_MODEL: EntityModel,
 		PROJECTILE_MODEL: ProjectileModel,
 		CHARACTER_MODEL: CharacterModel,
+
+		EVENTS: {
+			ON_POWERUP_AQUIRED: 'onPowerupAquired'
+		},
 
 		// GET HOST
 		HOST: function() {
