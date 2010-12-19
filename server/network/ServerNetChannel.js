@@ -78,7 +78,6 @@ ServerNetChannel = (function()
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.removeClient;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.onPlayerMoveCommand;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
-			this.CMD_TO_FUNCTION[config.CMDS.END_GAME] = this.onEndGame;
 
 		    this.initAndStartWebSocket(config);
 		},
@@ -188,8 +187,6 @@ ServerNetChannel = (function()
 		 */
 		broadcastMessage: function(aDecodedMessage)
 		{
-			console.log('(ServerNetChannel)::broadcastMessage');
-
 			var encodedMessage = BISON.encode(aDecodedMessage);
 			this.clients.forEach( function(key, client)
 			{
@@ -334,10 +331,14 @@ ServerNetChannel = (function()
 
 		dealloc: function()
 		{
-			for(var aClient in this.clients)
-			{
-				try { this.clients[aClient].close(); } catch( e ) { }
-			}
+			this.clients.forEach(function(key, aClient) {
+				this.removeClient(aClient.conn);
+			}, this);
+
+//			for(var aClient in this.clients)
+//			{
+//				try { this.clients[aClient].close(); } catch( e ) { }
+//			}
 			this.$.stopListening();
 			console.log("(ServerNetChannel) Closing Port: " + this.port );
 		}

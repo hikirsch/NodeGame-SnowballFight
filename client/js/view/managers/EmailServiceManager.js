@@ -60,10 +60,11 @@ define(['view/managers/QueryStringManager'], function(QueryStringManager) {
 			$errorMessageEle.addClass('hide');
 			formData = $(form).find("form").serialize().replace("&", "|");
 			url = "php/utils.php";
-			postData = "enc=|action=sendEmail|game=" + QueryStringManager.getQueryString('game') + '|' + formData;
+			postData = "enc=" + encodeURI( "|action=sendEmail|game=" + QueryStringManager.getQueryString('game') + '|' + formData );
 
 			$.ajax({
 				url: url,
+				type: 'post',
 				data: postData,
 				success: function(response) {
 					callback( response.trim() );

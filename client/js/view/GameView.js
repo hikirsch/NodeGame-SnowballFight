@@ -328,7 +328,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 						$invite
 							.find("p.error")
 							.removeClass('hide')
-							.html("Sorry! An error occured while trying to send this email!");
+							.html("Sorry! An error occurred while trying to send this email!");
 					}
 				});
 
