@@ -28,8 +28,19 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 		{
 			this.isMuted = enable;
 
-			if(!this.isMuted)
-				this.playSound(GAMECONFIG.SOUNDS_MAP.tickOver);
+			// Stop all sounds
+			if(this.isMuted)
+			{
+				this.sounds.forEach(function(key, sound)
+				{
+					sound.currentTime = 0;
+				 	sound.pause();
+				}, this);
+			}
+			else // Play a sound to let them know audio is enabled
+			{
+				this.playSound(GAMECONFIG.SOUNDS_MAP.endGame);
+			}
 		},
 
 		/**

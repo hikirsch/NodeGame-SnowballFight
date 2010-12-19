@@ -44,6 +44,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				var that = this;
 
 				// This entity is the client character
+				// We have to do this here to call the create function next tick as the prop is set after we've are made
 				setTimeout(function(){
 							  that.createClientControlledCharacterHighlight()
 						  }, 0);
