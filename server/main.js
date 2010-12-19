@@ -25,6 +25,7 @@ require.paths.unshift('../client'); // We still want to know when we're going in
 
 
 require('network/Server.js');
+
 var config = require(configLocation).Config;
 var serverConfig = require('serverConfig.js').Config;
 var serverInstance = new Server(config, serverConfig);

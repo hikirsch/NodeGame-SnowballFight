@@ -105,7 +105,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		CHARACTER_MODEL: CharacterModel,
 
 		EVENTS: {
-			ON_POWERUP_AQUIRED: 'onPowerupAquired'
+			ON_POWERUP_AQUIRED				: 'onPowerupAquired',
+			ON_SOUND_WANTS_TO_BE_PLAYED		: "onSoundWantsToBePlayed"
 		},
 
 		// GET HOST

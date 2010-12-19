@@ -39,9 +39,6 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 
 		ignoreConsoleIfUndefined();
 
-		// Internal namespace
-		NGK = {};
-
 		// Tripple nested onReady function - awesome!
 		var base = './img/entities/';
 		var themes = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP;

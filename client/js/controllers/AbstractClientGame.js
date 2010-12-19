@@ -53,7 +53,6 @@ define(['lib/Vector',
 				CAAT.GlobalDisableEvents();
 
 				this.initializeGame();
-
 			},
 
 			initializeGame: function()
@@ -68,8 +67,9 @@ define(['lib/Vector',
 
 				this.fieldController.onCAATInitialized(this.director);
 
-				// Listen for when new powerups are aquired
-				window.addEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
+
+				this.unregisterEventListeners();
+				this.registerEventListeners();
 
 				// Start the game timer
 				this.startGameClock();
@@ -103,6 +103,11 @@ define(['lib/Vector',
 				$(this.director.canvas).prependTo(  this.fieldController.view.getElement() );
 			},
 
+			registerEventListeners: function()
+			{
+				window.addEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
+				window.addEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
+			},
 
 			getResults: function()
 			{
@@ -404,6 +409,11 @@ define(['lib/Vector',
 				var powerupAnnounce = new PowerupAnnounceView(arguments)
 			},
 
+			onSoundWantsToBePlayed: function (event)
+			{
+				console.log("YEAH")
+			},
+
 			gameOverTick: function()
 			{
 				// Store the previous clockTime, then set it to whatever it is no, and compare time
@@ -510,6 +520,20 @@ define(['lib/Vector',
 			isGameActive: function()
 			{
 				return (this.gameClock < this.model.gameDuration);
+			},
+
+			/**
+			 * Memory management
+			 */
+			unregisterEventListeners: function()
+			{
+				window.removeEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
+				window.removeEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
+			},
+
+			dealloc: function()
+			{
+				// Todo?
 			}
 		});
 	}

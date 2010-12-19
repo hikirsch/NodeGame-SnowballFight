@@ -1,10 +1,46 @@
+define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
+{
+	return new JS.Class(
+	{
+		initialize: function()
+		{
+			this.isMuted = false;
+			this.audioMap = new SortedLookupTable();
+			this.preloadSounds();
+
+			window.addEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantoBePlayed);
+		},
+
+		preloadSounds: function() {
+			var sounds
+			var snd = new Audio("file.mp3");
+			snd.play();*
+		},
+
+		onSoundWantsToBePlayed: function(event) {
+
+		},
+
+		/**
+		 * Deallocate
+		 */
+		dealloc: function(force)
+		{
+			this.audioMap.dealloc();
+			window.removeEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantoBePlayed);
+		}
+	});
+});
+
+
+
 /**
  * AudioManager.js
  *
  * @author michael.paige@ogilvy.com
  * @description Initializes and plays audio files
  *
- */
+
 
 
 define(function() {
@@ -105,3 +141,5 @@ AudioManager.stopAllSounds = function() {
         }
     })
 };
+
+ */
