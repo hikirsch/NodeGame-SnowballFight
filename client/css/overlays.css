@@ -123,6 +123,7 @@
 .inviteOverlay input { width: 100%; height: 28px; }
 .inviteOverlay textarea { width: 580px; height: 89px; }
 .inviteOverlay .buttonContainer { text-align: right; padding: 22px 0 0; }
+.inviteOverlay .buttonContainer input { border: none; }
 .inviteOverlay .invite-button { width: auto; height: auto; -webkit-box-reflect: below 0 -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.7,transparent),to(white)); }
 .inviteOverlay .closeBtn { position: absolute; top: -11px; right: 36px; cursor: pointer; }
 
