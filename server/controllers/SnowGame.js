@@ -65,8 +65,7 @@ SnowGame = (function()
 
 			var rand = 3;//Math.floor(Math.random() * 2) + 1;
 
-			var entities = this['getBattlefield'+rand]();
-
+			var entities = this.levels[ Math.floor( this.levels.length * Math.random() ) ];
 
  			for( var i = 0; i < entities.length; i++ ) {
 				var nextEntity = entities[ i ];
@@ -258,14 +257,6 @@ SnowGame = (function()
 		/**
 		 * Levels
 		 */
-		getDevelopersLevel: function()
-		{
-			return [
-				// { position: { x: 100, y: 100 }, entityType: FieldEntityModel.gingerBreadHouse },
-				{ position: { x: 450, y: 250 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
-				{ position: { x: 100, y: 100 }, entityType: FieldEntityModel.blockOfIce1 }
-			];
-		},
 
 		getAllFieldEntitiesAsLevel: function()
 		{
@@ -309,44 +300,55 @@ SnowGame = (function()
 
 		},
 
-		getBattlefield2: function()
-		{
-		  return [
-				  { position: { x: 450, y: 275 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
-				  { position: { x: 350, y: 225 }, entityType: FieldEntityModel.blockOfIce3 },
-				  { position: { x: 550, y: 225 }, entityType: FieldEntityModel.blockOfIce3 },
-				  { position: { x: 100, y: 100 }, entityType: FieldEntityModel.iglooGreenFlag },
-				  { position: { x: 450, y: 170 }, entityType: FieldEntityModel.blockOfIce6 },
-				  { position: { x: 50, y: 320 }, entityType: FieldEntityModel.blockOfIce1 },
-				  { position: { x: 805, y: 520 }, entityType: FieldEntityModel.blockOfIce4 },
-				  { position: { x: 226, y: 550 }, entityType: FieldEntityModel.blockOfIce2 },
-				  { position: { x: 450, y: 540 }, entityType: FieldEntityModel.smallPond2 },
-				  { position: { x: 750, y: 80 }, entityType: FieldEntityModel.blockOfIce1 },
-				  { position: { x: 810, y: 250 }, entityType: FieldEntityModel.iglooRedFlag }
-			  ];
-
-		},
-
-		getBattlefield3: function()
-		{
-		  return [
-				  { position: { x: 270, y: 184}, entityType: FieldEntityModel.gingerBreadHouse },
-				  { position: { x: 179, y: 228}, entityType: FieldEntityModel.candyCane },
-				  { position: { x: 726, y: 508}, entityType: FieldEntityModel.iglooRedFlag },
-				  { position: { x: 803, y: 539}, entityType: FieldEntityModel.candyCane },
-				  { position: { x: 814, y: 191}, entityType: FieldEntityModel.blockOfIce5 },
-				  { position: { x: 169, y: 473}, entityType: FieldEntityModel.largePond1 },
-				  { position: { x: 704, y: 321}, entityType: FieldEntityModel.smallPond2 },
-				  { position: { x: 76, y: 70}, entityType: FieldEntityModel.blockOfIce6 },
-				  { position: { x: 576, y: 139}, entityType: FieldEntityModel.iceMountainOgilvyFlag },
-				  { position: { x: 447, y: 337}, entityType: FieldEntityModel.blockOfIce4 }
-
-
-
-
-			  ];
-
-		},
+		levels: [
+			[
+				{ position: { x: 450, y: 275 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				{ position: { x: 350, y: 225 }, entityType: FieldEntityModel.blockOfIce3 },
+				{ position: { x: 550, y: 225 }, entityType: FieldEntityModel.blockOfIce3 },
+				{ position: { x: 100, y: 100 }, entityType: FieldEntityModel.iglooGreenFlag },
+				{ position: { x: 450, y: 170 }, entityType: FieldEntityModel.blockOfIce6 },
+				{ position: { x: 50, y: 320 }, entityType: FieldEntityModel.blockOfIce1 },
+				{ position: { x: 805, y: 520 }, entityType: FieldEntityModel.blockOfIce4 },
+				{ position: { x: 226, y: 550 }, entityType: FieldEntityModel.blockOfIce2 },
+				{ position: { x: 450, y: 540 }, entityType: FieldEntityModel.smallPond2 },
+				{ position: { x: 750, y: 80 }, entityType: FieldEntityModel.blockOfIce1 },
+				{ position: { x: 810, y: 250 }, entityType: FieldEntityModel.iglooRedFlag }
+			],
+			[
+				{ position: { x: 136, y: 136 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				{ position: { x: 263, y: 353 }, entityType: FieldEntityModel.gingerBreadHouse },
+				{ position: { x: 103, y: 508 }, entityType: FieldEntityModel.blockOfIce5 },
+				{ position: { x: 482, y: 300 }, entityType: FieldEntityModel.largePond1 },
+				{ position: { x: 585, y: 106 }, entityType: FieldEntityModel.iglooRedFlag },
+				{ position: { x: 455, y: 485 }, entityType: FieldEntityModel.blockOfIce4 },
+				{ position: { x: 507, y: 135 }, entityType: FieldEntityModel.candyCane },
+				{ position: { x: 507, y: 135 }, entityType: FieldEntityModel.candyCane },
+				{ position: { x: 813, y: 77 }, entityType: FieldEntityModel.smallPond2 },
+				{ position: { x: 766, y: 303 }, entityType: FieldEntityModel.blockOfIce5 },
+				{ position: { x: 794, y: 513 }, entityType: FieldEntityModel.blockOfIce6 }
+			],
+			[
+				{ position: { x: 295, y: 266 }, entityType: FieldEntityModel.largePond1 },
+				{ position: { x: 756, y: 487 }, entityType: FieldEntityModel.largePond1 },
+				{ position: { x: 529, y: 128 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				{ position: { x: 769, y: 176 }, entityType: FieldEntityModel.gingerBreadHouse },
+				{ position: { x: 160, y: 109 }, entityType: FieldEntityModel.blockOfIce6 },
+				{ position: { x: 611, y: 360 }, entityType: FieldEntityModel.blockOfIce4 },
+				{ position: { x: 116, y: 481 }, entityType: FieldEntityModel.iglooRedFlag },
+				{ position: { x: 203, y:471 }, entityType: FieldEntityModel.candyCane }
+			],
+			[
+				{ position: { x: 113, y: 181 }, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				{ position: { x: 231, y: 122 }, entityType: FieldEntityModel.candyCane },
+				{ position: { x: 396, y: 88 }, entityType: FieldEntityModel.iglooRedFlag },
+				{ position: { x: 369, y: 258 }, entityType: FieldEntityModel.smallPond2 },
+				{ position: { x: 494, y: 289 }, entityType: FieldEntityModel.gingerBreadHouse },
+				{ position: { x: 777, y: 149 }, entityType: FieldEntityModel.largePond1 },
+				{ position: { x: 147, y: 465 }, entityType: FieldEntityModel.largePond1 },
+				{ position: { x: 648, y: 460 }, entityType: FieldEntityModel.candyCane },
+				{ position: { x: 766, y: 496 }, entityType: FieldEntityModel.iglooRedFlag }
+			]
+		],
 
 		dealloc: function()
         {
