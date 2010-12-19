@@ -11,9 +11,9 @@
 .site-message input[type='button']:active { background-color: #f3fcff; border-color: #c13b3b; color: #6398aa; }
 
 /* welcome overlay */
-.mainOverlay { width: 900px; height: 600px; position: absolute; top: 0; left: 0; overflow: hidden; background: transparent; padding: 10px; color: #005072; font-family: "Lucida Grande", sans-serif; font-size: 13px; margin-top: -10px; }
+.mainOverlay { width: 900px; height: 600px; position: absolute; top: 0; left: 0; background: transparent; color: #005072; font-family: "Lucida Grande", sans-serif; font-size: 13px; }
 .mainOverlay .intro { background: url(../img/intro/bg-intro.jpg) no-repeat top center; -webkit-box-shadow: 0 0 10px #999; width: 810px; height: 600px; margin: auto; position: relative; overflow: visible; z-index: 8000; }
-.mainOverlay .inviteCharacters { position: absolute; bottom: 10px; left: 30px; display: block; z-index: 8100; }
+.mainOverlay .inviteCharacters { position: absolute; bottom: 0; left: 20px; display: block; z-index: 8100; }
 .mainOverlay .invite { position: relative; float: right; display: block; z-index: 8100; margin-right: 13px; }
 .mainOverlay .snobigdeal { position: relative; left: 65px; top: -9px; }
 .mainOverlay .btnJumpin { position: relative; left: 570px; top: 20px; overflow: visible; -webkit-box-reflect: below 0 -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.8,transparent),to(white)); display: block; display: block; }
