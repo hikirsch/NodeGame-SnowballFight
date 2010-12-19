@@ -31,7 +31,7 @@ define(['lib/jsclass/core'], function()
 				actor.setLocation(director.width/2-actor.width/2, director.height/2-actor.height/2);
 				actor.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 
-				var duration = 600,
+				var duration = 500,
 					startTime = i*(duration*1.5),
 					isLastAnimation = i === len-1;
 
@@ -48,7 +48,7 @@ define(['lib/jsclass/core'], function()
 
 				// Last one, "Go!" - scale up and fade out
 				var delayedTime = startTime+(duration*1.5) + 500;
-				var fadeOutDuration = 600;
+				var fadeOutDuration = 700;
 				this.addScaleBehavior(actor, delayedTime, fadeOutDuration, 1, 5);
 				var finalBehavior = this.addFadeBehavior(actor, delayedTime, fadeOutDuration-200, 1, 0);
 				var that = this;
@@ -114,15 +114,18 @@ define(['lib/jsclass/core'], function()
 		/**
 		 * Deallocate resources for GC
 		 */
-		dealloc: function()
+		dealloc: function(force)
 		{
 		   if(!this.CAATActorContainer || !this.CAATActorContainer.parent)
 		   {
+
 			   throw "Does not have parent!"
+			   return;
 		   }
 
 			console.log("(MatchStartView)::dealloc!");
 			this.CAATActorContainer.parent.removeChild(this.CAATActorContainer);
+			this.CAATActorContainer = null;
 		}
 	});
 });
