@@ -167,8 +167,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 
 		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
 		// So we have to put it here, because otherwise e don't actually have a true client ID yet so the code below will not work
-		if(serverMessage.cmds.cmd == config.CMDS.SERVER_CONNECT)
-		{
+		if(serverMessage.cmds.cmd == config.CMDS.SERVER_CONNECT) {
 			this.onServerDidAcceptConnection(serverMessage);
 		}
 
@@ -207,8 +206,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		}
 		else // Server wants to tell the gameclient something, not just a regular world update
 		{
-			// Usually the result of an error?
-			console.log("(NetChannel) - Passing error ")
 			this.controller.netChannelDidReceiveMessage(serverMessage);
 		}
 

@@ -21,7 +21,7 @@ Basic Usage:
 	if ($_GET['debug'] == '' ||$_GET['debug'] == 'false')
 		$info = decryptAndSplit($_POST['enc']);  //it  comes from post, or is not debug - deccrypt it - then spit
 	else
-		parse_str(str_replace("|", "&",$_GET['enc']), $info);//comes from get, or debug is true, just split it, its not encrypted
+		parse_str(str_replace("|", "&", $_GET['enc']), $info);//comes from get, or debug is true, just split it, its not encrypted
 
 	// Explicitely find the action and pass the info
 	Switch ($info['action'])

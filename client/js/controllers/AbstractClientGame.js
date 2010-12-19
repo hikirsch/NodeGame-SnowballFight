@@ -12,8 +12,16 @@ Basic Usage:
 	var gameController = new ClientGameController(HOST, PORT) 
 */
 
-define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'controllers/AbstractGame','factories/TraitFactory', 'controllers/FieldController', 'lib/jsclass/core' ],
-	function(Vector, NetChannel, GameView, Joystick, AbstractGame, TraitFactory, FieldController)
+define(['lib/Vector',
+	'network/NetChannel',
+	'view/GameView',
+	'view/caat/MatchStartView',
+	'lib/Joystick',
+	'controllers/AbstractGame',
+	'factories/TraitFactory',
+	'controllers/FieldController',
+	'lib/jsclass/core' ],
+	function(Vector, NetChannel, GameView, MatchStartView, Joystick, AbstractGame, TraitFactory, FieldController)
 	{
 		return new JS.Class(AbstractGame,
 		{
@@ -23,9 +31,7 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 
 				this.CMD_TO_FUNCTION = {};
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onClientJoined;
-				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.onRemoveClient;
-				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.genericCommand; // Not implemented yet
-				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
+				this.CMD_TO_FUNCTION[config.CMDS.SERVER_MATCH_START] = this.onServerMatchStart;
 				this.CMD_TO_FUNCTION[config.CMDS.SERVER_END_GAME] = this.onShouldEndGame;
 
 				this.clientCharacter = null; // Special pointer to our own client character
@@ -312,13 +318,10 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				}
 			},
 
-			onRemoveClient: function()
-			{
-				this.log( 'onRemoveClient: ', arguments );
-			},
-
 			onShouldEndGame: function( clientID, data )
 			{
+				console.log('nextTick callback', clientConnection);
+
 				this.isGameOver = true;
 
 				this.view.onEndGame();
@@ -338,6 +341,11 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				var that = this;
 				this.gameClock = 0; // Will be used to know when to join the next game
 				this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
+			},
+
+			onServerMatchStart: function( clientID, data )
+			{
+				var matchViewCountdown = new MatchStartView();
 			},
 
 			gameOverTick: function()
@@ -406,11 +414,13 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 				this.view.showIntro();
 			},
 
+			/**
+			 * Called by NetChannel when it receives a command if it decides not to intercept it.
+			 * (for example CMDS.FULL_UPDATE is always intercepted, so it never calls this function, but CMDS.SERVER_MATCH_START is not intercepted so this function triggered)
+			 * @param messageData
+			 */
 			netChannelDidReceiveMessage: function (messageData)
 			{
-				console.log( "received message: ", messageData );
-				// TODO: Handle array of 'cmds'
-				// TODO: prep for cmds: send only the client ID and the message data
 				this.CMD_TO_FUNCTION[messageData.cmds.cmd].apply(this,[messageData.id, messageData.cmds.data]);
 			},
 

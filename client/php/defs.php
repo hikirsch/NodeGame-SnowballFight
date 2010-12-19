@@ -28,6 +28,11 @@ Basic Usage:
 
 		return $decrypted;
 	}
+
+ 	function splitOnly($string)
+	{
+
+	}
 	function decryptAndSplit($string)	//decrypts a query string, splits it into an associate array and returns it.
 	{
 		$weekiwaawoo = "d0ntw0rryab0utit";

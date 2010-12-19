@@ -33,41 +33,12 @@ define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], funct
 		destroy: function() {
 			this.element.destroy();
 		},
-		
-		update: function()
-		{
-			// the position
-//			this.element.css({
-//				'left': this.controller.getPosition().x,
-//				'top': this.controller.getPosition().y
-//			});
 
-//			if( this.controller.theme != this.model.theme ) {
-//				if( this.controller.theme >= 1000 && this.controller.theme < 2000 )
-//				{
-//					this.hideInvisible();
-//					this.showStunned();
-//				}
-//				else if( this.controller.theme >= 2000 && this.controller.theme < 3000 )
-//				{
-//					this.hideStunned();
-//					this.showInvisible();
-//				}
-//
-//				this.changed = true;
-//			}
-//			else if( this.changed )
-//			{
-//				this.hideStunned();
-//				this.hideInvisible();
-//				this.changed = false;
-//				this.frameReadyForAnimation = 0;
-//			}
-
-
-			// the sprite
-//			this.adjustSprite();
-		},
+		/**
+		 * Perform necessary functions before drawing the view
+		 * Subclasses should override
+		 */
+		update: function() {},
 
 		showInvisible: function()
 		{

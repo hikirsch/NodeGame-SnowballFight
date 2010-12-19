@@ -13,7 +13,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		{
 			console.log("CREATED!~")
 			// create 3 layers, zero based
-			this.CAATLayers = [this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector)]
+			GAMECONFIG.CAAT.LAYERS = this.CAATLayers = [this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector)]
 		},
 
 		createCAATLayer: function(aCATDirector)

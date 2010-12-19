@@ -95,15 +95,32 @@ SnowGame = (function()
 			var aNewCharacter = this.callSuper();
 			if(aNewCharacter == null) return; // No charactnode node mainer created for whatever reason. Room full?
 
-			aNewCharacter.setInput( new Joystick() );
-
 			// Place randomly in the field
 			aNewCharacter.position = this.fieldController.positionEntityAtRandomNonOverlappingLocation(20);
 
 			// Freeze players for 3 seconds if the game just started
-			if(this.gameClock < 5000) {
+			if(this.gameClock < 995000)
+			{
 				var Trait = this.traitFactory.createTraitWithName("ProjectileTraitFreeze");
-				aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 1500 ) );
+				aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 3000 ) );
+
+				/**
+				 * Send that player a message to start its MatchStart animation
+				 */
+				var endGameMessage = {
+					seq: 999,
+					gameClock: this.gameClock,
+					cmds: {
+						cmd: this.server.gameConfig.CMDS.SERVER_MATCH_START,
+						data: {}
+					}
+				};
+
+				var clientConnection = this.netChannel.getClientWithID(aClientID);
+				if(clientConnection) { // Can be null if we have dummy players
+					clientConnection.conn.send( BISON.encode(endGameMessage) );
+				}
+
 			} else {
 				// always make new characters invulnerable
 				new CharacterTraitInvulnerable(1500)
@@ -186,7 +203,6 @@ SnowGame = (function()
 		 	this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
 
 //			Try to create if possible and luck says so
-
 			console.log("Presents", this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
 			if(Math.random() < chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
 				return;

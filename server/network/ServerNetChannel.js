@@ -122,6 +122,7 @@ ServerNetChannel = (function()
 				catch (e)
 				{ // If something went wrong, just remove this client and avoid crashign
 
+					console.log('!! Error: ' + e);
 					that.delegate.log(e.stack);
 					that.delegate.log('!! Error: ' + e);
 					connection.close();
@@ -295,6 +296,15 @@ ServerNetChannel = (function()
 			this.clients.setObjectForKey( aClient, connection.$clientID);
 
 			return connection.$clientID ;
+		},
+
+		/**
+		 * Returns a client for a given ID
+		 * @param clientID
+		 */
+		getClientWithID: function(clientID)
+		{
+			return this.clients.objectForKey(clientID);
 		},
 
 		/**
