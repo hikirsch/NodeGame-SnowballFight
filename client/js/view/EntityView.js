@@ -5,6 +5,8 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		initialize:  function(controller, model ) {
 			this.callSuper();
 			this.themeMask = this.controller.themeMask;
+
+			this.verboseRanking = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
 		},
 
 		createElement: function()
@@ -166,7 +168,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				this.createTextfield(this.controller.nickname);
 
 			if(this.CAATText) {
-				this.CAATText.setText("#"  + this.controller.rank + " " + this.controller.nickname);
+				this.CAATText.setText(this.verboseRanking[this.controller.rank] + " - " + this.controller.nickname);
 			}
 		},
 
