@@ -31,6 +31,7 @@ SnowGame = (function()
 	return new JS.Class(AbstractServerGame, {
 		initialize: function(aServer, portNumber)
 		{
+			console.log("NEW GAME!!");
 			this.callSuper();
 			var that = this;
 

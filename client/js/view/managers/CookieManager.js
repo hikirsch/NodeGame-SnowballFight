@@ -28,7 +28,9 @@ define(function() {
 			((domain) ? "; domain=" + domain : "") +
 			((secure) ? "; secure" : "");
 
-		document.cookie = _cookies[ name ] = newCookie;
+		document.cookie = newCookie;
+
+		_cookies[ name ] = value;
 
 		console.log( "(CookieManager).setCookie: " + name + " | " + value );
 	}

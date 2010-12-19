@@ -167,7 +167,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		showIntro: function()
 		{
 			if( location.href.toLocaleLowerCase().indexOf("playnow") > -1 ) {
-				this.joinGame('200');
+				this.joinCurrentGame('200');
 				return false;
 			}
 
@@ -208,7 +208,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 					var carouselType = that.carouselManager.getCharacterType();
 					var characterType = that.getThemeCodeFromName(carouselType ) ;
 
-					return that.joinGame(characterType);
+					return that.joinCurrentGame(characterType);
 				});
 
 			$characterSelect
@@ -240,7 +240,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			$("html").addClass('server-offline');
 		},
 
-		joinGame: function( characterType )
+		joinCurrentGame: function( characterType )
 		{
 			var nickName = $("#nickname").length > 0 ? $("#nickname").val() : "";
 
@@ -254,7 +254,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				characterType: characterType
 			};
 
-			this.gameController.joinGame(nickName, characterType);
+			this.gameController.joinFromCharacterSelectScreen(nickName, characterType);
 
 			this.overlayManager.popOverlay();
 

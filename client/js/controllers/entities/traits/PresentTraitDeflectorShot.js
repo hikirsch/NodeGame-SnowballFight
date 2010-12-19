@@ -21,7 +21,7 @@ var init = function(BaseTrait, EntityModel)
 		initialize: function(collisionNormal)
 		{
 			this.callSuper();
-			this.fireRate = 200;
+			this.fireRate = 300;
 		},
 
 		attach: function()

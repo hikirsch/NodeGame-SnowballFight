@@ -95,7 +95,6 @@ define(['lib/Vector',
 
 				this.director.switchToNextScene( 1000, true, true);
 				$(this.director.canvas).prependTo(  this.fieldController.view.getElement() );
-
 			},
 
 
@@ -112,6 +111,8 @@ define(['lib/Vector',
 			/**
 			 * ClientGameView delegate
 			 */
+
+
 			/**
 			 * Called when the user has entered a name, and wants to join the match
 			 * @param aNickname
@@ -320,9 +321,11 @@ define(['lib/Vector',
 
 			onShouldEndGame: function( clientID, data )
 			{
+
+				// We have a clientCharacter - thus we're in the game
+				var isInGame = this.clientCharacter != null;
 				this.isGameOver = true;
 
-				this.view.onEndGame();
 				this.stopGameClock();
 
 				this.netChannel.dealloc();
@@ -330,15 +333,19 @@ define(['lib/Vector',
 
 				this.fieldController.dealloc();
 				this.fieldController = null;
+
 				this.clientCharacter = null;
 
 				this.nextGamePort = data.nextGamePort;
-				console.log("(AbstractClientGame) End Game" );
 
-				// Start waiting for the next game
-				var that = this;
-				this.gameClock = 0; // Will be used to know when to join the next game
-				this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
+				if(isInGame)
+				{
+					this.view.onEndGame();
+					// Start waiting for the next game
+					var that = this;
+					this.gameClock = 0; // Will be used to know when to join the next game
+					this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
+				}
 			},
 
 			onServerMatchStart: function( clientID, data )
@@ -382,6 +389,25 @@ define(['lib/Vector',
 				}, 150);
 			},
 
+			/**
+			 * Join match has been called from the character select screen.
+			 * Because an entire game might have elapsed while they sat on this screen, make sure the game is still valid
+			 */
+			joinFromCharacterSelectScreen: function(aNickname, aCharacterTheme)
+			{
+				this.nickname = aNickname;
+				this.theme = aCharacterTheme;
+
+				// If there is no netchannel then we got dropped - lets create a new one and join the game
+				if(!this.netChannel) {
+//					debugger;
+					this.joinNextGame();
+				} else {
+//					debugger;
+					this.joinGame(aNickname, aCharacterTheme);
+				}
+			},
+
 			getNextGameStartTime: function()
 			{
 				var t = Math.round( ( this.config.GAME_MODEL.ROUND_INTERMISSION_DURATION - this.gameClock ) / 1000);
@@ -409,7 +435,9 @@ define(['lib/Vector',
 				// we get a copy of the game model from the server to be extra efficient :-), so set it
 				this.setModel( messageData.gameModel );
 
-				this.view.showIntro();
+				// First connect
+				if(!this.clientCharacter)
+					this.view.showIntro();
 			},
 
 			/**
