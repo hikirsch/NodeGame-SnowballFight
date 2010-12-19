@@ -1,35 +1,31 @@
 <script type="text/html">
-<div class="inviteOverlay" id="inviteFriends">
-	<div class="overlayContent">
-        <img src="img/invite/txt-invite-a-friend.png" alt="Invite a Friend" class="overlayTitle">
-		<p>You know there's someone out there you want to fight. Now you can invite them to a friendly little competition.</p>
+	<div class="inviteOverlay" id="inviteFriends">
+		<div class="overlayContent">
+			<img src="img/invite/txt-invite-a-friend.png" alt="Invite a Friend" class="overlayTitle">
+			<p>You know there's someone out there you want to fight. Now you can invite them to a friendly little competition.</p>
 
-		<p class="error hide">Please verify the broken fields.</p>
-        <form action="php/utils.php">
-            <fieldset>
-                <div class="formControl">
-                    <label for="emailList">
-                        Friend’s email address(es):
-                        <span>Use a comma to separate each email address.</span>
-                    </label>
-                    <textarea data-validation-type="required email-list" id="emailList" rows="10" cols="30" placeholder="example@domain.com, example@domain.com"></textarea>
-                </div>
-                <div class="formControls">
-                    <div class="formControl emailField">
-                        <label for="player_email">Your Email Address:</label>
-                        <input data-validation-type="required email" id="player_email" type="text" value="">
-                    </div>
-
-                    <div class="formControl">
-                        <label for="player_name">Your Name:</label>
-                        <input data-validation-type="required" id="player_name" type="text" value="">
-                    </div>
-                </div>
-            </fieldset>
-            <div class="buttonContainer">
-                <input class="invite-button" type="image" src="img/invite/btn-submit.png">
-            </div>
-        </form>
+			<p class="error hide">Please verify the broken fields.</p>
+			<form action="php/utils.php">
+				<fieldset>
+					<div class="formControls">
+						<div class="formControl">
+							<label for="player_name">Your Name:</label>
+							<input data-validation-type="required" name="fromName" id="player_name" type="text" value="">
+						</div>
+					</div>
+					<div class="formControl">
+						<label for="emailList">
+							Friend's email address(es):
+							<span>Use a comma to separate each email address.</span>
+						</label>
+						<textarea name="toEmail" data-validation-type="required email-list" id="emailList" rows="10" cols="30" placeholder="example@domain.com, example@domain.com"></textarea>
+					</div>
+				</fieldset>
+				<div class="buttonContainer">
+					<input class="invite-button" type="image" src="img/invite/btn-submit.png">
+				</div>
+			</form>
+		</div>
+        <img class="closeBtn" src="img/global/btn-close.png" alt="Close">
 	</div>
-</div>
 </script>

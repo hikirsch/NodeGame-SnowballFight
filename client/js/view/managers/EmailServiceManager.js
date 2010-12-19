@@ -1,4 +1,4 @@
-define( function() {
+define(['view/managers/QueryStringManager'], function(QueryStringManager) {
 	var validations = {
 		// http://docs.jquery.com/Plugins/Validation/Methods/email
 		'email': function( str ) { // contributed by Scott Gonzalez: http://projects.scottsplayground.com/email_address_validation/
@@ -23,7 +23,7 @@ define( function() {
 	};
 
 	function validateForm( form ) {
-		var invalidFields = [];
+		var invalidFields = [], nextEle, i, validateTypeLength;
 
 		$(form).find("*[data-validation-type]").each(function() {
 			nextEle = $(this)
@@ -31,7 +31,7 @@ define( function() {
 
 			validationTypes = nextEle.data('validation-type').split(' ');
 
-			for( var i = 0, validateTypeLength = validationTypes.length; i < validateTypeLength; i += 1 ) {
+			for( i = 0, validateTypeLength = validationTypes.length; i < validateTypeLength; i += 1 ) {
 				var validationType = validationTypes[i];
 
 				if( ! validationType in validations )
@@ -49,15 +49,27 @@ define( function() {
 		return invalidFields;
 	}
 
-	function validateFormAndSendEmail( form )
+	function validateFormAndSendEmail( form, callback )
 	{
 	 	var invalidFields = validateForm( form ),
-		    $errorMessageEle = $(form).find('p.error');
-			isValid = invalidFields.length == 0;
+			$errorMessageEle = $(form).find('p.error'),
+			isValid = invalidFields.length == 0,
+			formData, url, postData;
 
 		if( isValid ) {
 			$errorMessageEle.addClass('hide');
-			alert("hit service");
+			formData = $(form).find("form").serialize().replace("&", "|");
+			url = "php/utils.php";
+			postData = "enc=" + encodeURI( "|action=sendEmail|game=" + QueryStringManager.getQueryString('game') + '|' + formData );
+
+			$.ajax({
+				url: url,
+				type: 'post',
+				data: postData,
+				success: function(response) {
+					callback( response.trim() );
+				}
+			});
 		} else {
 			$errorMessageEle.removeClass('hide');
 		}
@@ -66,11 +78,8 @@ define( function() {
 	}
 
 	return {
-
 		validateForm: validateForm,
-
 		validateFormAndSendEmail: validateFormAndSendEmail
-
 	};
 
 });

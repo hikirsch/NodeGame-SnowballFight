@@ -1,4 +1,4 @@
-var init = function( $, browserReq, character, characterSelect, credits, entity, field, footer, gameStatus, instructions, intro, invite, navigation, overlay, results, serverUnavailable, statusUpdates ) {
+var init = function( $, browserReq, character, characterSelect, credits, entity, field, footer, gameStatus, instructions, intro, invite, inviteThankYou, navigation, overlay, results, serverUnavailable, statusUpdates ) {
 	return {
         browserRequirements: function() {
             return $(browserReq)
@@ -60,6 +60,11 @@ var init = function( $, browserReq, character, characterSelect, credits, entity,
             .tmpl();
         },
 
+		inviteThankYou: function( data ) {
+            return $(inviteThankYou)
+            .tmpl();
+        },
+
         navigation: function() {
             return $(navigation)
                 .tmpl();
@@ -101,6 +106,7 @@ define([
         'text!view/html/instructions.html',
 		'text!view/html/intro.html',
         'text!view/html/invite.html',
+		'text!view/html/invite-thank-you.html',
         'text!view/html/navigation.html',
         'text!view/html/overlay.html',
 		'text!view/html/results.html',

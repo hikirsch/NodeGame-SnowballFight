@@ -35,7 +35,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.attachInstructions();
 			this.inviteFriend();
 			this.attachCredits();
-			this.attachShare();
+			this.addThis();
 			this.carouselManager = CarouselManager;
 			this.myCharacterModel = null;
 			this.resultsOverlayShowing = false;
@@ -297,24 +297,55 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			return false;
 		},
-
-		/*
-		shareThis: function()
+		addThis: function()
 		{
 			var that = this;
 			$results = HTMLFactory.results();
-			$("li.share a").click( function() {
-				that.overlayManager.show( $results );
-			});
-		}, */
+
+			function open()
+			{
+				var url = "http://holiday2010.ogilvy.com",
+					title = "#OgilvySnowballFight";
+
+				addthis_open(this, '', url, title);
+			}
+
+			function close()
+			{
+				addthis_close();
+			}
+
+			$("li.share a")
+				.attr('href', 'javascript:Void()')
+				.hover( open, close );
+		},
 
 		inviteFriend: function()
 		{
-			var that = this,
-			    inviteOpen = 0,
-			    $invite = HTMLFactory.invite();
 
-			$invite.submit( function() { return EmailServiceManager.validateFormAndSendEmail( this ); } );
+			var that = this,
+				inviteOpen = 0,
+				$invite = HTMLFactory.invite(),
+				$thankYou = HTMLFactory.inviteThankYou();
+
+			$invite.submit( function() {
+				EmailServiceManager.validateFormAndSendEmail( this, function(response) {
+					if( response === "true" )
+					{
+						that.overlayManager.popOverlay();
+						that.overlayManager.pushOverlay( $thankYou );
+					}
+					else
+					{
+						$invite
+							.find("p.error")
+							.removeClass('hide')
+							.html("Sorry! An error occurred while trying to send this email!");
+					}
+				});
+
+				return false;
+			});
 
 			$("#btn-invite").live( 'click', function() {
  				if(inviteOpen === 0)
@@ -328,12 +359,11 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 					inviteOpen = 0;
 				}
 			});
-		},
 
-		attachShare: function() {
-			$("li.share a").click( function() {
-				return false;
-			})
+            $(".closeBtn").live( 'click', function() {
+                that.overlayManager.popOverlay();
+                inviteOpen = 0;
+            });
 		},
 
 		attachCredits: function()
