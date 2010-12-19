@@ -76,12 +76,12 @@
 .choose .introText img { display: block; margin-bottom: 10px; }
 .choose .nav { position: relative; width: 810px; height: 370px; margin: 60px auto 0 auto; z-index: 8200; }
 .choose .nav .name { position: absolute; left: 430px; top: 0; width: 255px; height: 65px; background: url(../img/character-select/bg-choose-name.png) top left no-repeat; padding: 0 9px; }
-.choose .nav .name label { display: block; font-weight: bold; line-height: 1.4; color: #005072; padding: 0 0 5px; }
+.choose .nav .name label { display: block; font-weight: bold; line-height: 1.4; color: #005072; padding: 6px 0px 2px; }
 .choose .nav .name input { display: block; width: 225px; font-size: 14px; font-family: "Lucida Grande", sans-serif; color: #005072; background: transparent; padding: 3px; border: 1px solid #bed6db; margin: 0; }
 .choose .nav .name input:-webkit-input-placeholder { color: #005072; }
 .choose .nav .name input:-moz-placeholder { }
 
-.choose .nav .name small { font-size: 10px; color: #337593; }
+.choose .nav .name small { display: block; padding-top: 10px; font-size: 10px; color: #337593; }
 .choose .nav .chooseArrows { position: absolute; top: 135px; left: 20px; cursor: pointer; -webkit-box-reflect: below 0 -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.7,transparent),to(white)); }
 .choose .nav .chooseArrows.arrowRight { left: 715px; }
 .choose .nav .btnSelect { position: absolute; cursor: pointer; top: 325px; left: 445px; }
