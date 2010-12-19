@@ -18,6 +18,7 @@ define(['lib/jsclass/core'], function()
 			actor.mouseEnabled = false;
 			actor.setLocation(director.width/2-actor.width/2, 30);
 			actor.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
+			actor.spriteIndex = 4;
 
 			var duration = 500,
 				startTime = 0;
