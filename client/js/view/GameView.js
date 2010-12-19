@@ -282,9 +282,18 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		serverOffline: function()
 		{
 			var $unavailableEle = HTMLFactory.serverUnavailableDialog(),
-				$fakeField = HTMLFactory.field();
+				$fakeField = HTMLFactory.field(),
+				$field = $(".game-container");
 
-			$fakeField.insertAfter("#game-status");
+			if( $field.length > 0 )
+			{
+				$fakeField = $field;
+			}
+			else
+			{
+				$fakeField.insertAfter("#game-status");
+			}
+
 
 			this.overlayManager.pushOverlay( $unavailableEle, $fakeField );
 
