@@ -40,8 +40,9 @@ define(['lib/jsclass/core'], function()
 					that.dealloc();
 			}});
 
+			GAMECONFIG.CAAT.DIRECTOR.scene.addChild(this.CAATSprite);
 			// Place at highest layer
-			layers[layers.length-1].addChild(this.CAATSprite)
+			//layers[layers.length-1].addChild(this.CAATSprite)
 		},
 
 		/**

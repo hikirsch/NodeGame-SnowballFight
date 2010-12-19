@@ -109,6 +109,15 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			ON_SOUND_WANTS_TO_BE_PLAYED		: "onSoundWantsToBePlayed"
 		},
 
+		SOUNDS_MAP: {
+			tickSec: "audio/game-tick-1sec.ogg",
+			tickOver: "audio/game-tick-over.ogg",
+			endGame: "audio/on-end-game.ogg",
+			snowballHit1: "audio/on-snowball-hit-1.ogg",
+			snowballHit2: "audio/on-snowball-hit-2.ogg"
+		},
+
+
 		// GET HOST
 		HOST: function() {
 			if( typeof window === 'undefined' ) {

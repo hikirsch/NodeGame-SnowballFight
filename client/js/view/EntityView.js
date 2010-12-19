@@ -95,6 +95,10 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				{
 					this.CAATSprite.setAnimationImageIndex( [8,9] );
                 	this.CAATSprite.changeFPS= 300;
+
+					// TODO: Move to randomizing function
+					var hitSound = ( Math.random() < 0.5 ) ? GAMECONFIG.SOUNDS_MAP.snowballHit1 : GAMECONFIG.SOUNDS_MAP.snowballHit2
+					GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(hitSound);
 				}
 				// Flashing
 				else if (this.controller.themeMask & this.themeMaskList.FLASHING)
@@ -115,6 +119,10 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 					// Scale me up!
 					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time, 700, 2, 1);
+
+					//
+//					GAMECONFIG.GENERIC_EVENT_DISPATCHER.dispatchEvent(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED,{theme: this.controller.themeMask});
+
 
 					// Tell the world!
 					var event = document.createEvent("Event");

@@ -2,23 +2,63 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 {
 	return new JS.Class(
 	{
-		initialize: function()
+		initialize: function(soundMap)
 		{
+			GAMECONFIG.CAAT.AUDIO_MANAGER = this;
+
 			this.isMuted = false;
-			this.audioMap = new SortedLookupTable();
-			this.preloadSounds();
 
-			window.addEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantoBePlayed);
+			this.sounds = new SortedLookupTable();
+			this.preloadSounds(soundMap);
+
+			window.addEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
 		},
 
-		preloadSounds: function() {
-			var sounds
-			var snd = new Audio("file.mp3");
-			snd.play();*
+		preloadSounds: function(soundMap)
+		{
+			// Preload all sounds
+			for(var soundInfo in soundMap)
+			{
+				var audio = new Audio(soundMap[soundInfo]);
+				this.sounds.setObjectForKey(audio, soundMap[soundInfo]);
+			}
 		},
 
-		onSoundWantsToBePlayed: function(event) {
+		toggleMute: function(enable)
+		{
+			this.isMuted = enable;
 
+			if(!this.isMuted)
+				this.playSound(GAMECONFIG.SOUNDS_MAP.tickOver);
+		},
+
+		/**
+		 * Used by event-dispatch, has bugs had to not use
+		 * @param event
+		 */
+		onSoundWantsToBePlayed: function(event)
+		{
+//			debugger;
+//			return;
+//
+//			var id = event.data.soundID;
+//
+//			if(!id) return;
+//
+//			playSound(id);
+		},
+
+		/**
+		 * Plays a sound. The sound is assumed to exist.
+		 * @param id ID of the sound
+		 */
+		playSound: function(id)
+		{
+			if(!id || this.isMuted) return;
+			var audio = this.sounds.objectForKey(id);
+			if(!audio) return;
+
+			audio.play();
 		},
 
 		/**
@@ -26,8 +66,8 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 		 */
 		dealloc: function(force)
 		{
-			this.audioMap.dealloc();
-			window.removeEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantoBePlayed);
+			this.sounds.dealloc();
+			window.removeEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
 		}
 	});
 });

@@ -19,10 +19,11 @@ define(['lib/Vector',
 	'view/caat/PowerupAnnounceView',
 	'lib/Joystick',
 	'controllers/AbstractGame',
+	'controllers/AudioManager',
 	'factories/TraitFactory',
 	'controllers/FieldController',
 	'lib/jsclass/core' ],
-	function(Vector, NetChannel, GameView, MatchStartView, PowerupAnnounceView, Joystick, AbstractGame, TraitFactory, FieldController)
+	function(Vector, NetChannel, GameView, MatchStartView, PowerupAnnounceView, Joystick, AbstractGame, AudioManager, TraitFactory, FieldController)
 	{
 		return new JS.Class(AbstractGame,
 		{
@@ -51,6 +52,8 @@ define(['lib/Vector',
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
 				CAAT.GlobalDisableEvents();
+
+				this.audioManager = new AudioManager(GAMECONFIG.SOUNDS_MAP);
 
 				this.initializeGame();
 			},
@@ -106,7 +109,6 @@ define(['lib/Vector',
 			registerEventListeners: function()
 			{
 				window.addEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
-				window.addEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
 			},
 
 			getResults: function()
@@ -405,13 +407,7 @@ define(['lib/Vector',
 
 			onPowerupAquired: function(data)
 			{
-				console.log("(AbstractClientGame)::onPowerupAquired", arguments);
 				var powerupAnnounce = new PowerupAnnounceView(arguments)
-			},
-
-			onSoundWantsToBePlayed: function (event)
-			{
-				console.log("YEAH")
 			},
 
 			gameOverTick: function()
@@ -528,7 +524,6 @@ define(['lib/Vector',
 			unregisterEventListeners: function()
 			{
 				window.removeEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
-				window.removeEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
 			},
 
 			dealloc: function()
