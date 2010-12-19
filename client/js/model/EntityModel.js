@@ -29,7 +29,11 @@ var init = function(ThemeModel)
 	CAAT_THEME_MAP['112'] = new ThemeModel('large-pond-1.png', 1, 1, 0, 0);
 	CAAT_THEME_MAP['113'] = new ThemeModel('small-pond-1.png', 1, 1, 0, 0);
 	CAAT_THEME_MAP['114'] = new ThemeModel('small-pond-2.png', 1, 1, 0, 0);
-	CAAT_THEME_MAP['115'] = new ThemeModel('small-pond-3.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['115'] = new ThemeModel('brown-reindeer.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['116'] = new ThemeModel('green-reindeer.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['117'] = new ThemeModel('candy-cane.png', 1, 1, 0, 0);
+	CAAT_THEME_MAP['118'] = new ThemeModel('sleigh-in-ground.png', 1, 1, 0, 0);
+
 	// Characters
 	CAAT_THEME_MAP['200'] = new ThemeModel('character-yeti.png', 1, 10, 0, 2);
 	CAAT_THEME_MAP['201'] = new ThemeModel('character-penguin.png', 1, 10, 0, 2);

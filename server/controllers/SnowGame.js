@@ -63,7 +63,7 @@ SnowGame = (function()
 			var aFieldEntity,
 				aFieldEntityModel;
 
-			var rand = 2;//Math.floor(Math.random() * 2) + 1;
+			var rand = 3;//Math.floor(Math.random() * 2) + 1;
 
 			var entities = this['getBattlefield'+rand]();
 
@@ -299,8 +299,13 @@ SnowGame = (function()
 				  { position: { x: 50, y: 220 }, entityType: FieldEntityModel.blockOfIce1 },
 				  { position: { x: 850, y: 300 }, entityType: FieldEntityModel.blockOfIce4 },
 				  { position: { x: 226, y: 550 }, entityType: FieldEntityModel.blockOfIce2 },
-				  { position: { x: 526, y: 350 }, entityType: FieldEntityModel.smallPond2 }
-				  ];
+				  { position: { x: 526, y: 350 }, entityType: FieldEntityModel.smallPond2 },
+
+				  { position: { x: 650, y: 50 }, entityType: FieldEntityModel.brownReindeer },
+				  { position: { x: 650, y: 200 }, entityType: FieldEntityModel.greenReindeer },
+				  { position: { x: 650, y: 350 }, entityType: FieldEntityModel.candyCane },
+				  { position: { x: 650, y: 550 }, entityType: FieldEntityModel.sleighInGround }
+			  ];
 
 		},
 
@@ -317,8 +322,29 @@ SnowGame = (function()
 				  { position: { x: 226, y: 550 }, entityType: FieldEntityModel.blockOfIce2 },
 				  { position: { x: 450, y: 540 }, entityType: FieldEntityModel.smallPond2 },
 				  { position: { x: 750, y: 80 }, entityType: FieldEntityModel.blockOfIce1 },
-				  { position: { x: 810, y: 250 }, entityType: FieldEntityModel.iglooRedFlag },
-				  ];
+				  { position: { x: 810, y: 250 }, entityType: FieldEntityModel.iglooRedFlag }
+			  ];
+
+		},
+
+		getBattlefield3: function()
+		{
+		  return [
+				  { position: { x: 270, y: 184}, entityType: FieldEntityModel.gingerBreadHouse },
+				  { position: { x: 179, y: 228}, entityType: FieldEntityModel.candyCane },
+				  { position: { x: 726, y: 508}, entityType: FieldEntityModel.iglooRedFlag },
+				  { position: { x: 803, y: 539}, entityType: FieldEntityModel.candyCane },
+				  { position: { x: 814, y: 191}, entityType: FieldEntityModel.blockOfIce5 },
+				  { position: { x: 169, y: 473}, entityType: FieldEntityModel.largePond1 },
+				  { position: { x: 704, y: 321}, entityType: FieldEntityModel.smallPond2 },
+				  { position: { x: 76, y: 70}, entityType: FieldEntityModel.blockOfIce6 },
+				  { position: { x: 576, y: 139}, entityType: FieldEntityModel.iceMountainOgilvyFlag },
+				  { position: { x: 447, y: 337}, entityType: FieldEntityModel.blockOfIce4 }
+
+
+
+
+			  ];
 
 		},
 
