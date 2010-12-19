@@ -174,8 +174,6 @@ SnowGame = (function()
 
 				// Apply the projectile's trait(s) to the character that was hit
 				var Trait = this.traitFactory.createTraitWithName(projectile.view.transferredTraits);
-				// TODO: HACK should never be undefined
-				if(Trait !== undefined)
 					character.view.addTraitAndExecute( new Trait(collisionNormal) );
 
 				this.fieldController.removeEntity(projectile.view.objectID);

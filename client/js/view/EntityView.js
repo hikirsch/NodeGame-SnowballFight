@@ -222,7 +222,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			this.CAATPowerupSprite.spriteIndex = powerupThemeModel.spriteIndex;
 			this.CAATPowerupSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
-			this.CAATPowerupSprite.setLocation(4, -10);
+			this.CAATPowerupSprite.setLocation(5, -10);
 
 			this.CAATPowerupSprite.setAnimationImageIndex( [0, 1, 2, 3, 2, 1] );
 			this.CAATPowerupSprite.changeFPS = 60;

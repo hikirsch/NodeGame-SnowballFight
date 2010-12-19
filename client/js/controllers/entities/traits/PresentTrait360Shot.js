@@ -51,6 +51,7 @@ var init = function(BaseTrait)
 				projectileModel.initialPosition = this.attachedEntity.position.cp();
 				projectileModel.initialPosition.y += 19;
 				projectileModel.angle = i/amount * (Math.PI*2) + angleOffset;
+				projectileModel.transferredTraits = ProjectileModel.defaultSnowball.transferredTraits;
 
 				var projectile = this.attachedEntity.fieldController.fireProjectileFromCharacterUsingProjectileModel( this.attachedEntity, projectileModel);
 				// Make the projectile bounce around

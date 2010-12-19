@@ -45,6 +45,7 @@ var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTrait
 		 */
 		getRandomPresentTrait: function()
 		{
+//			return presentTraits[ 1 ]; // dev
 			return presentTraits[ Math.floor(Math.random() * presentTraits.length) ];
 		}
 	};
