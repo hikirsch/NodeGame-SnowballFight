@@ -23,19 +23,20 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.cookieManager = CookieManager;
 			this.gameController = controller;
 			this.overlayManager = new OverlayManager( controller, gameModel );
-            this.currentStatus = {
+
+			this.currentStatus = {
                 TimeLeft: this.gameController.getTimeRemaining() || "00:00",
                 Score: "0",
                 TotalPlayers: this.gameController.getNumberOfPlayers() || "00",
                 Rank: "00/00"
             };
+
 			this.showNav();
             this.showGameStatus();
 			this.showFooter();
-			this.attachInstructions();
-			this.inviteFriend();
-			this.attachCredits();
-			this.addThis();
+
+			this.attachOverlayEvents();
+
 			this.carouselManager = CarouselManager;
 			this.myCharacterModel = null;
 			this.resultsOverlayShowing = false;
@@ -96,7 +97,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.resultsData.OverlayLeftStyle = this.resultsElement.css('left');
 			this.resultsData.OverlayTopStyle = this.resultsElement.css('top');
 			this.resultsData.NextMatchTime = ''; // this.gameController.getNextGameStartTime();
-			this.resultsData.HideClass = ! this.gameController.isGameOver ? 'hide' : '';
 			this.resultsData.PlayerStats = this.gameController.getResults();
 			this.resultsTmplItem.update();
 		},
@@ -199,68 +199,31 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		showCharacterSelect: function()
 		{
-			if( this.myCharacterModel != null )
-			{
-//				debugger
-			}
-			else
-			{
-
-				var that = this,
-					$characterSelect = HTMLFactory.characterSelect();
-
-				$characterSelect
-					.find("form")
-					.submit(function(e) {
-						var carouselType = that.carouselManager.getCharacterType();
-						var characterType = that.getThemeCodeFromName(carouselType ) ;
-
-						return that.joinGame(characterType);
-					});
-
-				$characterSelect
-					.find('img.arrowLeft')
-					.click( function() {
-						that.carouselManager.move(true);
-					});
-
-				$characterSelect
-					.find('img.arrowRight')
-					.click( function(e) {
-						that.carouselManager.move(false);
-					});
-
-				this.overlayManager.pushOverlay( $characterSelect );
-			}
-		},
-
-		attachInstructions: function()
-		{
-			var that = this;
-
-			$("li.instructions a").click(function() {
-				that.showInstructions();
-				return false;
-			});
-		},
-
-		showInstructions: function()
-		{
 			var that = this,
-				show = false,
-				$instructions;
+				$characterSelect = HTMLFactory.characterSelect();
 
-			if( ! show ) {
-				show = true;
-				$instructions = HTMLFactory.instructions();
+			$characterSelect
+				.find("form")
+				.submit(function(e) {
+					var carouselType = that.carouselManager.getCharacterType();
+					var characterType = that.getThemeCodeFromName(carouselType ) ;
 
-				this.overlayManager.pushOverlay($instructions);
-
-				$("#playBtn").live('click', function(e) {
-					that.overlayManager.popOverlay();
-					show = false;
+					return that.joinGame(characterType);
 				});
-			}
+
+			$characterSelect
+				.find('img.arrowLeft')
+				.click( function() {
+					that.carouselManager.move(-1);
+				});
+
+			$characterSelect
+				.find('img.arrowRight')
+				.click( function(e) {
+					that.carouselManager.move(1);
+				});
+
+			this.overlayManager.pushOverlay( $characterSelect );
 		},
 
         showBrowserReq: function()
@@ -297,11 +260,100 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			return false;
 		},
-		addThis: function()
+
+		attachOverlayEvents: function()
 		{
 			var that = this;
-			$results = HTMLFactory.results();
 
+			$(".closeBtn").live('click', function() {
+				that.overlayManager.popOverlay();
+			});
+
+			this.attachInvite();
+			this.attachCredits();
+			this.attachAddThis();
+			this.attachInstructions();
+		},
+
+		attachInvite: function()
+		{
+			var that = this;
+
+			this.inviteOverlayOpen = false;
+
+			$("#btn-invite").click( function() {
+				that.showInvite();
+				return false;
+			});
+		},
+
+		showInvite: function()
+		{
+			var that = this,
+				$invite = HTMLFactory.invite(),
+				$thankYou = HTMLFactory.inviteThankYou();
+
+			if( ! this.inviteOverlayOpen && that.gameController.isGameActive() )
+			{
+				that.overlayManager.pushOverlay( $invite );
+				that.inviteOverlayOpen = true;
+
+				$invite.submit( function() {
+					EmailServiceManager.validateFormAndSendEmail( this, function(response) {
+						if( response === "true" )
+						{
+							that.overlayManager.popOverlay();
+							that.overlayManager.pushOverlay( $thankYou );
+							that.inviteOverlayOpen = false;
+						}
+						else
+						{
+							$invite
+								.find("p.error")
+								.removeClass('hide')
+								.html("Sorry! An error occurred while trying to send this email!");
+						}
+					});
+
+					return false;
+				});
+
+				$invite.find('.closeBtn').click( function() {
+					that.inviteOverlayOpen = false;
+				});
+			}
+		},
+
+		attachCredits: function()
+		{
+			var that = this;
+
+			this.creditsOverlayOpen = false;
+
+			$("#credits-link").click( function() {
+				that.showCredits();
+				return false;
+			});
+		},
+
+		showCredits: function()
+		{
+			var that = this,
+				$credits = HTMLFactory.credits();
+
+			if( ! that.creditsOverlayOpen && this.gameController.isGameActive() )
+			{
+				that.overlayManager.pushOverlay( $credits );
+				that.creditsOverlayOpen = true;
+			}
+
+			$credits.find(".closeBtn").click( function() {
+				that.creditsOverlayOpen = false;
+			});
+		},
+
+		attachAddThis: function()
+		{
 			function open()
 			{
 				var url = "http://holiday2010.ogilvy.com",
@@ -320,84 +372,34 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				.hover( open, close );
 		},
 
-		inviteFriend: function()
-		{
-
-			var that = this,
-				inviteOpen = 0,
-				$invite = HTMLFactory.invite(),
-				$thankYou = HTMLFactory.inviteThankYou();
-
-			$invite.submit( function() {
-				EmailServiceManager.validateFormAndSendEmail( this, function(response) {
-					if( response === "true" )
-					{
-						that.overlayManager.popOverlay();
-						that.overlayManager.pushOverlay( $thankYou );
-					}
-					else
-					{
-						$invite
-							.find("p.error")
-							.removeClass('hide')
-							.html("Sorry! An error occurred while trying to send this email!");
-					}
-				});
-
-				return false;
-			});
-
-			$("#btn-invite").live( 'click', function() {
- 				if(inviteOpen === 0)
-				{
-					that.overlayManager.pushOverlay( $invite );
-					inviteOpen = 1;
-				}
-				else
-				{
-					that.overlayManager.popOverlay();
-					inviteOpen = 0;
-				}
-			});
-
-            $(".closeBtn").live( 'click', function() {
-                that.overlayManager.popOverlay();
-                inviteOpen = 0;
-            });
-		},
-
-		attachCredits: function()
+		attachInstructions: function()
 		{
 			var that = this;
 
-			$("#credits-link").click( function() {
-				that.showCredits();
+			this.instructionsOverlayOpen = false;
+
+			$("li.instructions a").click(function() {
+				that.showInstructions();
 				return false;
 			});
 		},
 
-		showCredits: function()
+		showInstructions: function()
 		{
 			var that = this,
-				creditOpen = false,
-				$credits = HTMLFactory.credits();
+				$instructions = HTMLFactory.instructions();
 
-			if( ! creditOpen )
-			{
-				that.overlayManager.pushOverlay( $credits );
-				creditOpen = true;
-			}
-			else
-			{
-				that.overlayManager.popOverlay();
-				creditOpen = false;
+			if( ! this.instructionsOverlayOpen && this.gameController.isGameActive() ) {
+				this.instructionsOverlayOpen = true;
+				this.overlayManager.pushOverlay($instructions);
 			}
 
-			$(".closeBtn").click( function() {
+			$instructions.find('.playButton').click( function(e) {
+				that.instructionsOverlayOpen = false;
 				that.overlayManager.popOverlay();
-				creditOpen = false;
+
+				return false;
 			});
-
 		},
 
 		destroy: function()

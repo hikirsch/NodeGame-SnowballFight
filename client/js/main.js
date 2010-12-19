@@ -64,7 +64,7 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		GAMECONFIG.CAAT.imagePreloader.loadImages(imagesToLoad,
 			function(counter, images) {
 				if(counter != images.length) return; // Wait until last load
-				var game = new AbstractClientGame( config );
+				var game = window.clientGame = new AbstractClientGame( config );
 			});
     });
 });

@@ -25,9 +25,7 @@ define(function() {
 
 			navOff( _currentCharacter );
 
-			direction ?
-				_currentCharacter-- :
-				_currentCharacter++;
+			_currentCharacter += direction;
 
 			if( _currentCharacter > characterLastIndex ) {
 				_currentCharacter = 0;

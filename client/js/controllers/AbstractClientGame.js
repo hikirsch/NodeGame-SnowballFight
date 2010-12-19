@@ -418,6 +418,11 @@ define(['lib/Vector', 'network/NetChannel', 'view/GameView', 'lib/Joystick', 'co
 			{
 				if(this.view && !this.isGameOver) // If the server was never online, then we never had a view to begin with
 					this.view.serverOffline();
+			},
+
+			isGameActive: function()
+			{
+				return (this.gameClock < this.model.gameDuration);
 			}
 		});
 	}
