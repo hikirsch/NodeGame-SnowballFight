@@ -312,14 +312,26 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		{
 
 			var that = this,
-			    inviteOpen = 0,
-			    $invite = HTMLFactory.invite(),
+				inviteOpen = 0,
+				$invite = HTMLFactory.invite(),
 				$thankYou = HTMLFactory.inviteThankYou();
 
 			$invite.submit( function() {
-				EmailServiceManager.validateFormAndSendEmail( this );
-				that.overlayManager.popOverlay();
-				that.overlayManager.pushOverlay( $thankYou );
+				EmailServiceManager.validateFormAndSendEmail( this, function(response) {
+					if( response === "true" )
+					{
+						that.overlayManager.popOverlay();
+						that.overlayManager.pushOverlay( $thankYou );
+					}
+					else
+					{
+						$invite
+							.find("p.error")
+							.removeClass('hide')
+							.html("Sorry! An error occured while trying to send this email!");
+					}
+				});
+
 				return false;
 			});
 
