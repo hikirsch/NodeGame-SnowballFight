@@ -18,7 +18,7 @@
 .mainOverlay .snobigdeal { position: relative; left: 65px; top: -9px; }
 .mainOverlay .btnJumpin { position: relative; left: 570px; top: 20px; overflow: visible; -webkit-box-reflect: below 0 -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.8,transparent),to(white)); display: block; display: block; }
 .mainOverlay .jumpinLink { display: block; width: 160px; height: 45px; position: absolute; top: 335px; left: 625px; z-index: 8200; }
-.introTxt { padding: 0; margin: 15px auto 15px 77px; line-height: 140%; width: 650px; opacity: 1; z-index: 8010; background: transparent; }
+.introTxt { padding: 0; margin: 15px auto 15px 77px; line-height: 140%; width: 630px; opacity: 1; z-index: 8010; background: transparent; }
 .introSteps { position: relative; left: 70px; top: 0; }
 
 /* how to overlay */
