@@ -86,13 +86,13 @@
 .choose .nav .chooseArrows.arrowRight { left: 715px; }
 .choose .nav .btnSelect { position: absolute; cursor: pointer; top: 325px; left: 445px; }
 .choose .characters { width: 810px; position: relative; height: 100px; margin-top: 20px; }
-.choose .characters div { float: left; height: 84px; width: 89px; margin-right: 65px; overflow: hidden; }
+.choose .characters div { float: left; height: 84px; width: 89px; margin-right: 65px; overflow: hidden; cursor: pointer; }
 .choose .characters .yeti { background: url(../img/character-select/yeti.png) no-repeat bottom left; margin-left: 65px; }
 .choose .characters .tree { background: url(../img/character-select/tree.png) no-repeat top left; }
 .choose .characters .penguin { background: url(../img/character-select/penguin.png) no-repeat top left; }
 .choose .characters .robot { background: url(../img/character-select/robot.png) no-repeat top left; }
 .choose .characters .snowman { background: url(../img/character-select/snowman.png) no-repeat top left; margin-right: 0 !important; }
-.choose .carousel { position: absolute; top: 86px; left: 0; height: 500px; width: 4100px; z-index: 8100; overflow: visible; -webkit-transition: all 0.7s ease; }
+.choose .carousel { position: absolute; top: 86px; left: 0; height: 500px; width: 4100px; overflow: visible; -webkit-transition: all 0.7s ease; }
 .choose .carousel div { width: 810px; float: left; position: relative; min-height: 480px; }
 .choose .carousel .treeDetails { color: #058742; }
 .choose .carousel .yetiDetails { color: #ae3737}

@@ -25,9 +25,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.overlayManager = new OverlayManager( controller, gameModel );
 
 			this.currentStatus = {
-                TimeLeft: this.gameController.getTimeRemaining() || "00:00",
+                TimeLeft: "00:00",
                 Score: "0",
-                TotalPlayers: this.gameController.getNumberOfPlayers() || "00",
+                TotalPlayers: "00",
                 Rank: "00/00"
             };
 
@@ -200,7 +200,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		showCharacterSelect: function()
 		{
 			var that = this,
-				$characterSelect = HTMLFactory.characterSelect();
+				$characterSelect = HTMLFactory.characterSelect(),
+                $characterThumbs = $characterSelect.find('#character-thumbs'),
+                $thumbs = $characterThumbs.find('div');
 
 			$characterSelect
 				.find("form")
@@ -222,6 +224,11 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				.click( function(e) {
 					that.carouselManager.move(1);
 				});
+
+            $thumbs
+                .click( function(e) {
+                    that.carouselManager.moveTo($thumbs.index(this));
+                });
 
 			this.overlayManager.pushOverlay( $characterSelect );
 		},

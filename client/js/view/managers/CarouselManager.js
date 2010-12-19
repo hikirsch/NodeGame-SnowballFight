@@ -38,6 +38,17 @@ define(function() {
 			var newPosition = _currentCharacter * _screenWidth;
 
 			document.getElementById("carouselContainer").style.webkitTransform = "translate3d(" + newPosition + "px, 0px, 0px)";
-		}
+		},
+        moveTo: function( index ) {
+            navOff( _currentCharacter );
+
+            _currentCharacter = index;
+
+            navOn( _currentCharacter );
+
+            var newPosition = _currentCharacter * _screenWidth;
+
+            document.getElementById("carouselContainer").style.webkitTransform = "translate3d(" + newPosition + "px, 0px, 0px)";
+        }
 	};
 });
