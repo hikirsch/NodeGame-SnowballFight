@@ -51,10 +51,11 @@
 
 /* results overlay */
 .results { background: url(../img/results/bg-results.jpg) no-repeat top center; -webkit-box-shadow: 0 0 10px #999; width: 810px; height: 600px; margin: auto; position: relative; overflow: hidden; z-index: 8000; }
-.resultsHeader { width: 760px; margin: 25px; position: relative; color: #005072; }
+.resultsHeader { width: 760px; height: 85px; margin: 25px 25px 0; position: relative; color: #005072; }
 .resultsHeader .nextMatch { position: absolute; left: 345px; top: 20px; background: url(../img/results/txt-next-match.png) top left no-repeat; font-size: 42px; color: #11adb7; padding-top: 15px; font-family: Arial; width: 124px; }
 .resultsHeader .changeCharacter { position: absolute; top: 30px; left: 525px; -webkit-box-reflect: below 0 -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.7,transparent),to(white)); }
-.results .resultsData { margin: 60px 5px 0 5px; background: transparent; }
+.resultsHeader p { width: 340px; font-size: 12px; line-height: 1.3; padding: 10px 0 0; }
+.results .resultsData { margin: 10px 5px 0 5px; background: transparent; }
 .results .resultsData .even { background: #e2ebf1; }
 .results .resultsData .spacer { background: transparent !important; }
 .results .resultsData td { padding-top: 5px; padding-bottom: 5px; color: #0b748d; font-size: 12px; }
