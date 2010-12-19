@@ -39,7 +39,6 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER;			// Type
 
-			console.log("ID:",this.model);
 			// Override movement properties
 			this.moveSpeed = 0.4;
 			this.damping = 0.90;
@@ -57,6 +56,12 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.scoreMultiplier = 1;
 
 			this.radius = 13;
+
+			// Statistics
+			this.stats = {};
+			this.stats.ping = 0;
+			this.stats.numberOfTimesDidHit = 0;
+			this.stats.numberOfTimesWasHit = 0;
 		},
 
 		/**
@@ -142,8 +147,9 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 
 		constructEntityDescription: function(gameTick, wantsFullUpdate)
 		{
-			wantsFullUpdate = (gameTick % 5) == 0;
-
+			//
+			if(!wantsFullUpdate)
+				wantsFullUpdate = (gameTick % 120) == 0;
 
 			var returnString = this.callSuper(wantsFullUpdate);
 

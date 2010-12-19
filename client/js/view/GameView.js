@@ -57,9 +57,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			}
 		},
 
-		onEndGame: function()
+		onEndGame: function(stats)
 		{
-			this.showResultsView();
+			this.showResultsView(stats);
 		},
 
 		createStatusView: function( obj )
@@ -77,11 +77,13 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.resultsElement = null;
 		},
 
-		showResultsView: function()
+		showResultsView: function(stats)
 		{
 			this.createResultsView();
+
+			//(cannot update until template has been added to the DOM), Add the results to the DOM, /then/ call update
 			this.overlayManager.pushOverlay( this.resultsElement );
-			this.updateResultsView();
+			this.updateResultsView(stats);
 			this.resultsOverlayShowing = true;
 		},
 
@@ -92,13 +94,17 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.resultsOverlayShowing = false;
 		},
 
-		updateResultsView: function()
+		updateResultsView: function(stats)
 		{
-			this.resultsData.OverlayLeftStyle = this.resultsElement.css('left');
-			this.resultsData.OverlayTopStyle = this.resultsElement.css('top');
 			this.resultsData.NextMatchTime = ''; // this.gameController.getNextGameStartTime();
-			this.resultsData.PlayerStats = this.gameController.getResults();
+			this.resultsData.PlayerStats = stats || this.gameController.getResults();
 			this.resultsTmplItem.update();
+
+			// Update the position
+			this.resultsElement.css({
+				left: this.resultsElement.css('left'),
+				top: this.resultsElement.css('top')
+			});
 		},
 
 		update: function()

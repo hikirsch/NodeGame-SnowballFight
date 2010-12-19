@@ -340,7 +340,7 @@ define(['lib/Vector',
 
 				if(isInGame)
 				{
-					this.view.onEndGame();
+					this.view.onEndGame(data.stats);
 					// Start waiting for the next game
 					var that = this;
 					this.gameClock = 0; // Will be used to know when to join the next game
@@ -400,10 +400,8 @@ define(['lib/Vector',
 
 				// If there is no netchannel then we got dropped - lets create a new one and join the game
 				if(!this.netChannel) {
-//					debugger;
 					this.joinNextGame();
 				} else {
-//					debugger;
 					this.joinGame(aNickname, aCharacterTheme);
 				}
 			},
@@ -436,7 +434,7 @@ define(['lib/Vector',
 				this.setModel( messageData.gameModel );
 
 				// First connect
-				if(!this.clientCharacter)
+				if(!this.nickname)
 					this.view.showIntro();
 			},
 

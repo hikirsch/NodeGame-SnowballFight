@@ -301,7 +301,10 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			this.players.forEach( function( clientId, player ) {
 				playerStats.push({
 					nickname: player.nickname,
-					score: player.score
+					score: player.score,
+					ping: player.stats.ping,
+					numberOfTimesDidHit: player.stats.numberOfTimesDidHit,
+					numberOfTimesWasHit: player.stats.numberOfTimesWasHit
 				});
 			}, this );
 

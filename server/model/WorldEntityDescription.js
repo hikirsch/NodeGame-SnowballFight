@@ -35,7 +35,7 @@ WorldEntityDescription = (function()
 			// Construct players
 			fieldController.allEntities.forEach( function(key, entity)
 			{
-				this.entities.push( entity.constructEntityDescription(this.gameClock) );
+				this.entities.push( entity.constructEntityDescription(this.gameTick) );
 			}, this );
 		}
 	});
