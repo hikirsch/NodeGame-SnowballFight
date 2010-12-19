@@ -20,16 +20,19 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 	{
 		initialize: function( controller, gameModel )
 		{
+			this.setModel( gameModel );
+
 			this.cookieManager = CookieManager;
 			this.gameController = controller;
+
 			this.overlayManager = new OverlayManager( controller, gameModel );
 
 			this.currentStatus = {
-                TimeLeft: "00:00",
-                Score: "0",
-                TotalPlayers: "00",
-                Rank: "00/00"
-            };
+				TimeLeft: "00:00",
+				Score: "0",
+				TotalPlayers: "00",
+				Rank: "00/00"
+			};
 
 			this.showNav();
             this.showGameStatus();
@@ -39,6 +42,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.carouselManager = CarouselManager;
 			this.myCharacterModel = null;
+			this.resultsElement = null;
 			this.resultsOverlayShowing = false;
 			this.resultsData = {};
 
@@ -79,12 +83,20 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		showResultsView: function(stats)
 		{
-			this.createResultsView();
+			if( this.resultsElement == null )
+			{
+				this.createResultsView();
 
-			//(cannot update until template has been added to the DOM), Add the results to the DOM, /then/ call update
-			this.overlayManager.pushOverlay( this.resultsElement );
+				// we can't run update on this until it has been added to the DOM otherwise it can't measure the width of the element
+				this.overlayManager.pushOverlay( this.resultsElement );
+				this.resultsOverlayShowing = true;
+				this.resultsElement.size = {
+					width: this.resultsElement.width(),
+					height: this.resultsElement.height()
+				}
+			}
+
 			this.updateResultsView(stats);
-			this.resultsOverlayShowing = true;
 		},
 
 		createResultsView: function()
@@ -96,15 +108,13 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		updateResultsView: function(stats)
 		{
-			this.resultsData.NextMatchTime = ''; // this.gameController.getNextGameStartTime();
-			this.resultsData.PlayerStats = stats || this.gameController.getResults();
+			this.resultsData.OverlayLeft = this.overlayManager.settings.left + ( ( this.model.width - this.resultsElement.size.width ) / 2 ),
+			this.resultsData.OverlayTop = 	this.overlayManager.settings.top + ( ( this.model.height - this.resultsElement.size.height ) / 2 )
+			this.resultsData.NextMatchTime = stats.NextMatchTime;
+			this.resultsData.ShowNextMatchTime = stats.ShowNextMatchTime ? "" : "hide";
+			console.log( "WIDTH-->", this.resultsElement.width() );
+			this.resultsData.PlayerStats = stats.PlayerStats;
 			this.resultsTmplItem.update();
-
-			// Update the position
-			this.resultsElement.css({
-				left: this.resultsElement.css('left'),
-				top: this.resultsElement.css('top')
-			});
 		},
 
 		update: function()
@@ -132,13 +142,14 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			if( this.gameController.clientCharacter.input.isTab() )
 			{
+				var stats = this.gameController.getResults();
 				if( ! this.resultsOverlayShowing )
 				{
-					this.showResultsView();
+					this.showResultsView(stats);
 				}
 				else
 				{
-					this.updateResultsView();
+					this.updateResultsView(stats);
 				}
 			}
 			else
@@ -420,10 +431,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.element.remove();
 		},
 
-		updateGameOver: function()
+		updateGameOver: function(stats)
 		{
-			this.resultsData.NextMatchTime = this.gameController.getNextGameStartTime();
-			this.resultsTmplItem.update();
+			this.updateResultsView(stats);
 		}
 	});
 });

@@ -100,18 +100,17 @@ define(['lib/Vector',
 
 			getResults: function()
 			{
-				return this.fieldController.getPlayerStats();
+				return {
+					PlayerStats: this.fieldController.getPlayerStats(),
+					IsGameActive: this.isGameActive(),
+					ShowNextMatchTime: false
+				};
 			},
 
 			createView: function()
 			{
 				this.view = new GameView(this);
 			},
-
-			/**
-			 * ClientGameView delegate
-			 */
-
 
 			/**
 			 * Called when the user has entered a name, and wants to join the match
@@ -340,7 +339,14 @@ define(['lib/Vector',
 
 				if(isInGame)
 				{
-					this.view.onEndGame(data.stats);
+					this.endGameStats = {
+						PlayerStats: data.stats,
+						ShowNextMatchTime: true,
+						NextMatchTime: this.getNextGameStartTime()
+					};
+
+					this.view.onEndGame(this.endGameStats);
+
 					// Start waiting for the next game
 					var that = this;
 					this.gameClock = 0; // Will be used to know when to join the next game
@@ -364,7 +370,9 @@ define(['lib/Vector',
 				this.gameClock += delta;
 				this.gameTick++;
 
-				this.view.updateGameOver();
+				this.endGameStats.NextMatchTime = this.getNextGameStartTime();
+
+				this.view.updateGameOver( this.endGameStats );
 
 				// Enough time has passed, join the next game
 				if( this.gameClock > this.config.GAME_MODEL.ROUND_INTERMISSION_DURATION ) {
