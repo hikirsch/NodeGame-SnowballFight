@@ -126,18 +126,19 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			// grab it on first run
 			if(!this.statHTML) {
 				this.statHTML = {};
-				var statelement = this.statHTML.root = document.querySelector("#status-updates");
-				this.statHTML.score = statelement.querySelector("dd.score");
-				this.statHTML.timeLeft = statelement.querySelector("dd.time-left");
-				this.statHTML.totalPlayers = statelement.querySelector("dd.total-players");
-				this.statHTML.rank = statelement.querySelector("dd.rank");
+				var statElement = this.statHTML.root = document.querySelector("#status-updates");
+				this.statHTML.score = statElement.querySelector("dd.score");
+				this.statHTML.timeLeft = statElement.querySelector("dd.time-left");
+				this.statHTML.totalPlayers = statElement.querySelector("dd.total-players");
+				this.statHTML.rank = statElement.querySelector("dd.rank");
 			}
 
 			// Update stats
+			var totalPlayersString = this.addDigitPadding( this.gameController.getNumberOfPlayers() );
 			this.statHTML.score.innerHTML = this.gameController.clientCharacter.score;
-			this.statHTML.totalPlayers.innerHTML = this.gameController.getNumberOfPlayers();
-			this.statHTML.timeLeft.innerHTML = this.gameController.getTimeRemaining();
-			this.statHTML.innerHTML = "0" + this.gameController.clientCharacter.rank + "/" + this.currentStatus.TotalPlayers;
+			this.statHTML.totalPlayers.innerHTML = totalPlayersString;
+			this.statHTML.timeLeft.innerHTML =  this.formatTime( this.gameController.getTimeRemaining() );
+			this.statHTML.rank.innerHTML = this.addDigitPadding( this.gameController.clientCharacter.rank ) + "/" + totalPlayersString;
 
 
 			if( this.gameController.clientCharacter.input.isTab() )
@@ -441,6 +442,24 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 				return false;
 			});
+		},
+
+		formatTime: function(originalTime)
+		{
+			if(originalTime < 0) originalTime *= -1;
+
+			var time = "",
+				sec = Math.floor( originalTime / 1000 ),
+				min = Math.floor( sec / 60 ),
+				seconds = this.addDigitPadding( sec % 60 ),
+				minutes = this.addDigitPadding( min % 60 );
+
+			return minutes + ":" + seconds;
+		},
+
+		addDigitPadding: function(aNumericValue)
+		{
+			return ( ( aNumericValue > 9 ) ? "" : "0") + aNumericValue;
 		},
 
 		destroy: function()

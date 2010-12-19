@@ -39,24 +39,14 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					setBounds(0, 0, this.CAATSprite.width, this.CAATSprite.height);
 				actor.addChild(this.CAATSprite);
 
-				/**
-				 * Create a sprite to show the powerup state
-				 */
-				var powerupThemeModel= this.getThemeModelByID('500');
-				imageRef = director.getImage('500');
-				caatImage = new CAAT.CompoundImage().
-						initialize(imageRef, powerupThemeModel.rowCount, powerupThemeModel.columnCount);
+				this.createPowerupSprite();
 
-				this.CAATPowerupSprite = new CAAT.SpriteActor().
-						create().
-						setSpriteImage(caatImage);
+				var that = this;
 
-				this.CAATPowerupSprite.spriteIndex = powerupThemeModel.spriteIndex;
-				this.CAATPowerupSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
-				this.CAATPowerupSprite.setLocation(4, -10);
-
-				this.CAATPowerupSprite.setAnimationImageIndex( [0, 1, 2, 3, 2, 1] );
-                this.CAATPowerupSprite.changeFPS = 60;
+				// This entity is the client character
+				setTimeout(function(){
+							  that.createClientControlledCharacterHighlight()
+						  }, 0);
 			}
 
 			this.actorWidth = actor.width*0.5;
@@ -170,11 +160,12 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			}
 
 			// We got the nickname but no textfield, create textfield
-			if(this.controller.nickname && !this.CAATText)
-				this.createTextfield(this.controller.nickname);
+			if(this.controller.model.nickname && !this.CAATText)
+				this.createTextfield(this.controller.model.nickname);
 
+			// We got text to display
 			if(this.CAATText) {
-				this.CAATText.setText(this.verboseRanking[this.controller.rank] + " - " + this.controller.nickname);
+				this.CAATText.setText(this.verboseRanking[this.controller.rank] + " - " + this.controller.model.nickname);
 			}
 		},
 
@@ -213,6 +204,58 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			actor.addBehavior(scaleBehavior);
 		},
 
+		createPowerupSprite: function()
+		{
+			var director = GAMECONFIG.CAAT.DIRECTOR;
+
+			/**
+			 * Create a sprite to show the powerup state
+			 */
+			var powerupThemeModel= this.getThemeModelByID('500'),
+				imageRef = director.getImage('500'),
+				caatImage = new CAAT.CompoundImage().
+						initialize(imageRef, powerupThemeModel.rowCount, powerupThemeModel.columnCount);
+
+			this.CAATPowerupSprite = new CAAT.SpriteActor().
+					create().
+					setSpriteImage(caatImage);
+
+			this.CAATPowerupSprite.spriteIndex = powerupThemeModel.spriteIndex;
+			this.CAATPowerupSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
+			this.CAATPowerupSprite.setLocation(4, -10);
+
+			this.CAATPowerupSprite.setAnimationImageIndex( [0, 1, 2, 3, 2, 1] );
+			this.CAATPowerupSprite.changeFPS = 60;
+		},
+
+		createClientControlledCharacterHighlight: function()
+		{
+			if(this.controller !== GAMECONFIG.CAAT.CLIENT_CHARACTER)
+				return;
+
+
+			var director = GAMECONFIG.CAAT.DIRECTOR;
+			/**
+			 * Create a sprite to show the powerup state
+			 */
+			var powerupThemeModel= this.getThemeModelByID('501'),
+				imageRef = GAMECONFIG.CAAT.DIRECTOR.getImage('501'),
+				caatImage = new CAAT.CompoundImage().
+						initialize(imageRef, powerupThemeModel.rowCount, powerupThemeModel.columnCount);
+
+			var actor = this.CAATCharacterHighlight = new CAAT.SpriteActor().
+					create().
+					setSpriteImage(caatImage);
+
+			this.CAATCharacterHighlight.spriteIndex = powerupThemeModel.spriteIndex;
+			this.CAATCharacterHighlight.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
+			this.CAATCharacterHighlight.setLocation(this.CAATSprite.width*-0.5 - 6, this.CAATSprite.height/2 - 10);
+
+			// TODO: Hack - setZOrder should work but it crashes out so this is the only way to place'behind'
+			this.CAATCharacterHighlight.parent = this.CAATActorContainer;
+			this.CAATActorContainer.childrenList.unshift(this.CAATCharacterHighlight);
+		},
+
 		/**
 		 * ACCESSORS
 		 */
@@ -225,7 +268,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			// Create a textfield
     		this.CAATText = new CAAT.TextActor().
             create().
-            setFont("bold 11px sans-serif").
+            setFont("bold 10px sans-serif").
 			setAlpha(0.6).
             setText(text).
             setBaseline("top").

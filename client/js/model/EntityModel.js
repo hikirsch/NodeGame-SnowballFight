@@ -51,6 +51,7 @@ var init = function(ThemeModel)
 	CAAT_THEME_MAP['403'] = new ThemeModel('presents.png', 4, 1, 3, 1);
 	// fanfare
 	CAAT_THEME_MAP['500'] = new ThemeModel('fanfareElements.png', 8, 2, 1, 2);
+	CAAT_THEME_MAP['501'] = new ThemeModel('character-hilight.png', 1, 1, 0, 1);
 	CAAT_THEME_MAP['600'] = new ThemeModel('powerup-announce.png', 5, 1, 1, 2);
 
 	var DEFAULT_MODEL = {

@@ -5,7 +5,8 @@ define(['lib/jsclass/core'], function()
 		initialize: function(themeMask)
 		{
 			var director = GAMECONFIG.CAAT.DIRECTOR,
-				scene = GAMECONFIG.CAAT.SCENE;
+				layers = GAMECONFIG.CAAT.LAYERS;
+
 
 			var themeMap = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP['600'];
 			var caatImage = new CAAT.CompoundImage().
@@ -29,17 +30,18 @@ define(['lib/jsclass/core'], function()
 			this.addFadeBehavior(actor, startTime, duration, 0.1, 1);
 
 			// Wait then go away
-			var delayedTime = startTime+(duration*1.5) + 500;
-			var fadeOutDuration = 700;
+			var delayedTime = startTime+(duration*1.5) + 1500;
+			var fadeOutDuration = 100;
 			this.addScaleBehavior(actor, delayedTime, fadeOutDuration, 1, 2);
-			var finalBehavior = this.addFadeBehavior(actor, delayedTime, fadeOutDuration-200, 1, 0);
+			var finalBehavior = this.addFadeBehavior(actor, delayedTime, fadeOutDuration*0.9, 1, 0);
 			var that = this;
 			finalBehavior.addListener( {
 				behaviorExpired : function(behavior, time, actor) {
 					that.dealloc();
 			}});
 
-			scene.addChild(this.CAATSprite)
+			// Place at highest layer
+			layers[layers.length-1].addChild(this.CAATSprite)
 		},
 
 		/**

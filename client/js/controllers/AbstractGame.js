@@ -58,25 +58,16 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			return this.view != null;
 		},
 
-		getTwoDigits: function(x) {
-			return ( ( x > 9 ) ? "" : "0") + x;
-		},
-
+		// Please never clog abstract game value formating, allow objects to do that with the data returned
 		getTimeRemaining: function()
 		{
-			var timeRemaining = Math.abs( GAMECONFIG.GAME_MODEL.gameDuration - this.gameClock ),
-				time = "",
-				sec = Math.floor( timeRemaining / 1000 ),
-				min = Math.floor( sec / 60 ),
-				seconds = this.getTwoDigits( sec % 60 ),
-				minutes = this.getTwoDigits( min % 60 );
-
-			return minutes + ":" + seconds;
+			return GAMECONFIG.GAME_MODEL.gameDuration - this.gameClock;
 		},
 
+		// NOTE: Please never format values here - allow objects to do that with the data returned
 		getNumberOfPlayers: function()
 		{
-			return this.getTwoDigits( this.fieldController.players.count() );
+			return this.fieldController.players.count();
 		},
 
 		setModel: function(aGameModel)

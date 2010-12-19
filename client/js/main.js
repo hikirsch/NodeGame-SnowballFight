@@ -42,7 +42,8 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 
 		ignoreConsoleIfUndefined();
 
-		var NGK = {};
+		// Internal namespace
+		NGK = {};
 
 		// Tripple nested onReady function - awesome!
 		var base = './img/entities/';
