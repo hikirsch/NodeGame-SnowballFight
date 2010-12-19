@@ -190,6 +190,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 				(entityDesc.theme && (entity.theme = entityDesc.theme));
 				(entityDesc.score && (entity.score = entityDesc.score));
 				(entityDesc.nickname && (entity.model.nickname = entityDesc.nickname));
+
 			} else {
 				console.log("(FieldController)::updateEntity - Error: Cannot find entity with objectID", objectID);
 			}

@@ -21,13 +21,13 @@
 					</tr>
 				   {{each PlayerStats}}
 					<tr>
-						<td width="70" class="position even">${this.Rank}</td>
+						<td width="70" class="position even">${this.rank}</td>
 						<td width="140" class="even">${this.nickname}</td>
 						<td width="5" class="spacer"></td>
 						<td width="190" class="even center">${this.score}</td>
-						<td width="140" class="even stun">${this.Stunned}</td>
-						<td width="130" class="even frozen">${this.Frozen}</td>
-						<td width="125" class="even ping">${this.Ping}</td>
+						<td width="140" class="even stun">${this.numberOfTimesWasHit}</td>
+						<td width="130" class="even frozen">${this.numberOfTimesDidHit}</td>
+						<td width="125" class="even ping">${this.ping}</td>
 					</tr>
 					{{/each}}
 				</table>
