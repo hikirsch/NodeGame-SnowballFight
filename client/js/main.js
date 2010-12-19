@@ -51,6 +51,14 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		for(var aTheme in themes) {
 			imagesToLoad.push( {id: aTheme, url: base + themes[aTheme].imageSource } );
 		}
+
+		// Countdown notifications
+		imagesToLoad.push({id: "notification_getready", url: base + "matchstart/notification_getready.png"});
+		imagesToLoad.push({id: "notification_3", url: base + "matchstart/notification_3.png"});
+		imagesToLoad.push({id: "notification_2", url: base + "matchstart/notification_2.png"});
+		imagesToLoad.push({id: "notification_1", url: base + "matchstart/notification_1.png"});
+		imagesToLoad.push({id: "notification_go", url: base + "matchstart/notification_go.png"});
+
 		// BG Image
 		imagesToLoad.push({id: "gameBackground", url: base + "bg-field.png"});
 

@@ -4,13 +4,12 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		// See: http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS:
 		{
-			SERVER_CONNECT	: 1 << 0, 			// Not yet playing
-			SERVER_END_GAME	: 1 << 1,
-			PLAYER_JOINED	: 1 << 2,            // This is when you're in the game
-			FULL_UPDATE		: 1 << 3,
-			PLAYER_MOVE		: 1 << 4,
-			PLAYER_FIRE		: 1 << 5
-
+			SERVER_CONNECT		: 1 << 0, 			// Not yet playing
+			SERVER_MATCH_START	: 1 << 1,
+			SERVER_END_GAME		: 1 << 2,
+			PLAYER_JOINED		: 1 << 3,            // This is when you're in the game
+			FULL_UPDATE			: 1 << 4,
+			PLAYER_MOVE			: 1 << 5
 		},
 
 		CLIENT_SETTING:
@@ -50,7 +49,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			GAME_PORT: 10000,
 			NEXT_PORT: 10000 + 1, // 1 more than GAME_PORT
 			MAX_PORTS: 5,
-			DEBUG_MODE: true,
+			DEBUG_MODE: true
 		},
 
 
@@ -59,8 +58,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			width: 900,
 			height: 600,
 			MAX_PLAYERS: 8,
-			gameDuration: 2 * 60 * 1000,
-//			gameDuration: 6000,
+//			gameDuration: 2 * 60 * 1000,
+			gameDuration: 15000,
 			ROUND_INTERMISSION_DURATION: 5000
 		},
 

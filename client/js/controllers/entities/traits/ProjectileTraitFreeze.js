@@ -18,10 +18,10 @@ var init = function(BaseTrait, Vector)
 {
 	return new JS.Class("ProjectileTraitFreeze", BaseTrait,
 	{
-		initialize: function(collisionNormal) {
+		initialize: function(collisionNormal, freezeTime) {
 			this.callSuper();
-
 			this.collisionNormal = collisionNormal;
+			this.freezeTime = freezeTime || 4500;
 		},
 
 		attach: function()
@@ -40,7 +40,7 @@ var init = function(BaseTrait, Vector)
 			// apply
 			this.attachedEntity.velocity.mul(0);
 			this.attachedEntity.velocity.add(this.collisionNormal);
-			this.detachAfterDelay(4500);
+			this.detachAfterDelay(this.freezeTime);
 		},
 
 		detach: function() {
@@ -51,7 +51,7 @@ var init = function(BaseTrait, Vector)
 			entity.themeMask &= ~this.themeMaskList.FROZEN;
 
 			// Add an invulnerability trait
-			entity.addTraitAndExecute( new CharacterTraitInvulnerable() );
+			entity.addTraitAndExecute( new CharacterTraitInvulnerable(this.freezeTime*0.5) );
 		},
 
 

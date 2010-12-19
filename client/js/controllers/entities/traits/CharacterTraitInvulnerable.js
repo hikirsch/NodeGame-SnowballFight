@@ -18,8 +18,9 @@ var init = function(BaseTrait, Vector)
 {
 	return new JS.Class("CharacterTraitInvulnerable", BaseTrait,
 	{
-		initialize: function(collisionNormal) {
+		initialize: function(invulnerabilityTime) {
 			this.callSuper();
+			this.invulnerabilityTime = invulnerabilityTime || 2500;
 			this.collisionMask = GAMECONFIG.ENTITY_MODEL.COLLISION_GROUPS.CHARACTER | GAMECONFIG.ENTITY_MODEL.COLLISION_GROUPS.FIELD_ENTITY;
 		},
 
@@ -49,7 +50,7 @@ var init = function(BaseTrait, Vector)
 
 		execute: function()
 		{
-			this.detachAfterDelay(2500);
+			this.detachAfterDelay(this.invulnerabilityTime);
 		}
 	});
 };
