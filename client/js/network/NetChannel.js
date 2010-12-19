@@ -197,7 +197,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 			while(++i < len) // Want to parse through them in correct order, so no fancy --len
 			{
 				var singleWorldUpdate = serverMessage.data[i];
-				var worldEntityDescription = this.createWorldEntityDescriptionFromString(singleWorldUpdate)
+				var worldEntityDescription = this.createWorldEntityDescriptionFromString(singleWorldUpdate);
 
 				// Add it to the incommingCmdBuffer and drop oldest element
 				this.incommingCmdBuffer.push(worldEntityDescription);
@@ -208,6 +208,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		else // Server wants to tell the gameclient something, not just a regular world update
 		{
 			// Usually the result of an error?
+			console.log("(NetChannel) - Passing error ")
 			this.controller.netChannelDidReceiveMessage(serverMessage);
 		}
 
@@ -402,7 +403,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 //		delete this.reliableBuffer;
 //		delete this.clientID;
 	};
-
 	return NetChannel;
 });
 
