@@ -359,6 +359,11 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 					inviteOpen = 0;
 				}
 			});
+
+            $(".closeBtn").live( 'click', function() {
+                that.overlayManager.popOverlay();
+                inviteOpen = 0;
+            });
 		},
 
 		attachCredits: function()
