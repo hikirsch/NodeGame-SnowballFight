@@ -59,7 +59,7 @@ SnowGame = (function()
 		 */
 		createLevel: function()
 		{
-			this.createDummyPlayers();
+			// this.createDummyPlayers();
 			var aFieldEntity,
 				aFieldEntityModel;
 
