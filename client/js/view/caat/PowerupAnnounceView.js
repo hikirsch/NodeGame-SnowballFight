@@ -40,9 +40,8 @@ define(['lib/jsclass/core'], function()
 					that.dealloc();
 			}});
 
-			GAMECONFIG.CAAT.SCENE.addChild(this.CAATSprite);
 			// Place at highest layer
-			//layers[layers.length-1].addChild(this.CAATSprite)
+			layers[3].addChild(this.CAATSprite)
 
 			GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.acquiredPowerup);
 		},

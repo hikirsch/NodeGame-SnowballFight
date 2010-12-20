@@ -59,7 +59,7 @@ SnowGame = (function()
 		 */
 		createLevel: function()
 		{
-			// this.createDummyPlayers();
+			this.createDummyPlayers();
 			var aFieldEntity,
 				aFieldEntityModel;
 
@@ -250,6 +250,8 @@ SnowGame = (function()
 				var character = this.shouldAddPlayer(this.getNextEntityID(), this.netChannel.getNextClientID(), charModel);
 				character.position.x = charModel.initialPosition.x;
 				character.position.y = charModel.initialPosition.y;
+
+				character.score = Math.floor(Math.random() * 9000)
 			}
 		},
 
