@@ -326,6 +326,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			this.attachCredits();
 			this.attachAddThis();
 			this.attachInstructions();
+            this.attachDevNotice();
 		},
 
 		attachInvite: function()
@@ -340,42 +341,66 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			});
 		},
 
-		showInvite: function()
-		{
-			var that = this,
-				$invite = HTMLFactory.invite(),
-				$thankYou = HTMLFactory.inviteThankYou();
+        showInvite: function()
+        {
+            var that = this,
+                $invite = HTMLFactory.invite(),
+                $thankYou = HTMLFactory.inviteThankYou();
 
-			if( ! this.inviteOverlayOpen && that.gameController.isGameActive() )
-			{
-				that.overlayManager.pushOverlay( $invite );
-				that.inviteOverlayOpen = true;
+            if( ! this.inviteOverlayOpen && that.gameController.isGameActive() )
+            {
+                that.overlayManager.pushOverlay( $invite );
+                that.inviteOverlayOpen = true;
 
-				$invite.submit( function() {
-					EmailServiceManager.validateFormAndSendEmail( this, function(response) {
-						if( response === "true" )
-						{
-							that.overlayManager.popOverlay();
-							that.overlayManager.pushOverlay( $thankYou );
-							that.inviteOverlayOpen = false;
-						}
-						else
-						{
-							$invite
-								.find("p.error")
-								.removeClass('hide')
-								.html("Sorry! An error occurred while trying to send this email!");
-						}
-					});
+                $invite.submit( function() {
+                    EmailServiceManager.validateFormAndSendEmail( this, function(response) {
+                        if( response === "true" )
+                        {
+                            that.overlayManager.popOverlay();
+                            that.overlayManager.pushOverlay( $thankYou );
+                            that.inviteOverlayOpen = false;
+                        }
+                        else
+                        {
+                            $invite
+                                .find("p.error")
+                                .removeClass('hide')
+                                .html("Sorry! An error occurred while trying to send this email!");
+                        }
+                    });
 
-					return false;
-				});
+                    return false;
+                });
 
-				$invite.find('.closeBtn').click( function() {
-					that.inviteOverlayOpen = false;
-				});
-			}
-		},
+                $invite.find('.closeBtn').click( function() {
+                    that.inviteOverlayOpen = false;
+                });
+            }
+        },
+
+        attachDevNotice: function()
+        {
+            var that = this;
+
+            this.devNoticeOverlayOpen = false;
+
+            $("#dev-notice").click( function() {
+                that.showDevNotice();
+                return false;
+            });
+        },
+
+        showDevNotice: function()
+        {
+            var that = this,
+                $devNotice = HTMLFactory.devNotice();
+
+            if( ! that.devNoticeOverlayOpen && this.gameController.isGameActive() )
+            {
+                this.overlayManager.pushOverlay( $devNotice );
+                this.devNoticeOverlayOpen = true;
+            }
+        },
 
 		attachCredits: function()
 		{
