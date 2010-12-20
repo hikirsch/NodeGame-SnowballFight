@@ -62,6 +62,7 @@ define(['lib/Vector',
 			{
 				this.clientCharacter = null; // Special pointer to our own client character
 				this.isGameOver = false;
+				this.hasPlayedFinalCountrdownAudio = false;
 
 				this.fieldController = new FieldController( this, this.model );
 				this.fieldController.createView( this.model );
@@ -162,6 +163,13 @@ define(['lib/Vector',
 					// Don't update html TOO often
 					if(this.gameTick % 10 == 0)
 						this.view.update();
+				}
+
+
+				if(!this.hasPlayedFinalCountrdownAudio && this.getTimeRemaining() < 60000 && this.gameClock > 10000) {
+
+					this.hasPlayedFinalCountrdownAudio = true;
+				 	GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.endGameCountdown);
 				}
 			},
 
@@ -357,9 +365,8 @@ define(['lib/Vector',
 						NextMatchTime: this.getNextGameStartTime()
 					};
 
-					console.log( this.endGameStats );
-
 					this.view.onEndGame(this.endGameStats);
+					GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.resultsScreen);
 
 					// Start waiting for the next game
 					var that = this;
