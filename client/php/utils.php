@@ -20,7 +20,7 @@ Basic Usage:
 	//Turn that string into aturn it into an array with all our info
 	//if ($_GET['debug'] == '' ||$_GET['debug'] == 'false')
 	//{
-	parse_str(str_replace("|", "&", $_GET['enc']), $info);  //it  comes from post, or is not debug - deccrypt it - then spit
+	parse_str(str_replace("|", "&", $_POST['enc']), $info);  //it  comes from post, or is not debug - deccrypt it - then spit
 	//}
 //	else
 //	{
@@ -39,30 +39,31 @@ Basic Usage:
 	}
 
 	function sendMail($inf)
-	{
-		$t_email	= $inf['toEmail'];
-		
+    {
+        $t_email    = $inf['toEmail'];
 
-		$recipients = explode(",", $t_email);
-		$len = count($recipients);
-		for($i = 0; $i < $len; $i++)
-		{		
-			$singleRecipient = $recipients[$i];
-			$gameID     = $inf['game'];
-			$f_name		= 'Ogilvy & Mather Holiday Card 2010';
-			$f_email	= 'holiday2010@ogilvy.com';
-			$playerName = $inf['fromName'];
-			$subject	= "$playerName has sent you a Holiday game from Ogilvy. Enjoy!";
-	
-			$body = implode( file("emails/omg_invite_external.html") );
-			$body = str_replace( "{{GAME_ID}}", $gameID, $body);
-	
-			$headers = "Content-Type: text/html; charset=iso-8859-1\n";
-			$headers .= "From: $f_name <$f_email>\r\n";
-	
-			mail($t_email, $subject, $body, $headers);
-		}
-		
-		echo "Sent total of " . $len . " emails";
-	}
+
+        $singleRecipient = $recipients[$i];
+        $gameID     = $inf['game'];
+        $f_name        = 'Ogilvy & Mather Holiday Card 2010';
+        $f_email    = 'holiday2010@ogilvy.com';
+        $playerName = $inf['fromName'];
+        $subject    = "$playerName has sent you a Holiday game from Ogilvy. Enjoy!";
+
+        $body = implode( file("emails/omg_invite_external.html") );
+        $body = str_replace( "{{GAME_ID}}", $gameID, $body);
+
+        $headers = "Content-Type: text/html; charset=iso-8859-1\n";
+        $headers .= "From: $f_name <$f_email>\r\n";
+
+        $recipients = explode(",", $t_email);
+        $len = count($recipients);
+
+        for($i = 0; $i < $len; $i++)
+        {
+            mail($recipients[$i], $subject, $body, $headers);
+        }
+
+        echo "true";
+    }
 ?>

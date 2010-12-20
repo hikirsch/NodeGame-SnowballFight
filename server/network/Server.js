@@ -85,7 +85,11 @@ Server = (function()
 
 		getGameWithDesiredPort: function( desiredPort )
 		{
-			if( desiredPort != this.gameConfig.SERVER_SETTING.GAME_PORT ) {
+
+			if( desiredPort != this.gameConfig.SERVER_SETTING.GAME_PORT &&
+                desiredPort > this.gameConfig.SERVER_SETTING.GAME_PORT &&
+                desiredPort < this.gameConfig.SERVER_SETTING.GAME_PORT + this.gameConfig.SERVER_SETTING.MAX_PORTS ) {
+
 				if( this.games[ desiredPort ] != null )
 				{
 					if( this.games[ desiredPort ].canAddPlayer() )
