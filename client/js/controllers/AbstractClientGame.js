@@ -353,7 +353,10 @@ define(['lib/Vector',
 
 				this.stopGameClock();
 
+				// super delete
 				this.netChannel.dealloc();
+				this.netChannel = null;
+				delete this.netChannel;
 				this.netChannel = null;
 
 				this.fieldController.dealloc();
@@ -363,6 +366,8 @@ define(['lib/Vector',
 
 				// Remember for next time
 				this.nextGamePort = data.nextGamePort;
+
+
 				console.log("putting!!! ",this.config.SERVER_SETTING.GAME_PORT)
 				history.pushState(null, "game-" + data.nextGamePort, "?game=" + data.nextGamePort );
 				console.log("putting!!! ",this.config.SERVER_SETTING.GAME_PORT)

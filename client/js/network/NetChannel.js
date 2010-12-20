@@ -386,24 +386,13 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	/**
 	 * disconnect the client and we're done
 	 */
-	NetChannel.prototype.dealloc = function() {
+	NetChannel.prototype.dealloc = function()
+	{
 		this.connection.close();
 		this.outgoingCmdBuffer.dealloc();
-
-//		delete this.connection;
-//		delete this.latency;
-//		delete this.gameClock;
-//		delete this.lastSentTime;
-//		delete this.lastRecievedTime;
-//		delete this.clearTime;
-//		delete this.messageBuffer;
-//		delete this.MESSAGE_BUFFER_MASK;
-//		delete this.incomingSequenceNumber;
-//		delete this.incommingCmdBuffer;
-//		delete this.outgoingSequenceNumber;
-//		delete this.outgoingCmdBuffer;
-//		delete this.reliableBuffer;
-//		delete this.clientID;
+		delete this.connection;
+		delete this.incommingCmdBuffer;
+		delete this.outgoingCmdBuffer;
 	};
 	return NetChannel;
 });
