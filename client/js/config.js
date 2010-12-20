@@ -26,7 +26,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 
 			// Lag compensation
 			interp_ratio		: 2,
-			interp				: 100,		// How far back (in milliseconds), to offset the clientTime to from the actual tick, in order to interpolate between the deltas
+			interp				: 75,		// How far back (in milliseconds), to offset the clientTime to from the actual tick, in order to interpolate between the deltas
 			extrapolate			: false,
 			extrapolate_amount	: 0.25,		// If the connection is suffering, and we don't get an update fast enough - extrapolate positions until after this point. Then drop.
 
@@ -59,7 +59,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			height: 600,
 			MAX_PLAYERS: 8,
 			gameDuration: 2 * 60 * 1000,
-//			gameDuration: 20000000,
+//			gameDuration: 20000,
 			ROUND_INTERMISSION_DURATION: 5000
 		},
 
@@ -112,7 +112,10 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		SOUNDS_MAP: {
 			tickSec: "audio/game-tick-1sec.ogg",
 			tickOver: "audio/game-tick-over.ogg",
-			endGame: "audio/on-end-game.ogg",
+			endGameCountdown: "audio/game-tick-with-over.ogg",
+			acquiredPowerup: "audio/aquired-powerup.mp3",
+			powerupAppears: "audio/powerup-appears.ogg",
+			resultsScreen: "audio/on-end-game.ogg",
 			snowballHit1: "audio/on-snowball-hit-1.ogg",
 			snowballHit2: "audio/on-snowball-hit-2.ogg"
 		},

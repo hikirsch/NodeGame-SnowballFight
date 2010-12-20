@@ -39,7 +39,7 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 			}
 			else // Play a sound to let them know audio is enabled
 			{
-				this.playSound(GAMECONFIG.SOUNDS_MAP.endGame);
+				this.playSound(GAMECONFIG.SOUNDS_MAP.acquiredPowerup);
 			}
 		},
 
