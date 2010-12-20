@@ -129,11 +129,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 			return aNewCharacter;
 		},
 
-		canAddPlayer: function()
-		{
-			return (this.gameClock < this.model.gameDuration) && (this.config.gameConfig.GAME_MODEL.MAX_PLAYERS > this.fieldController.players.count());
-		},
-
 		removeEntity: function( objectID )
 		{
 			this.fieldController.removeEntity( objectID );

@@ -79,37 +79,39 @@ Server = (function()
 				connection.doClose(); // this should work but causes recursive loop
 			};
 
-			console.log( 'listening on port: ' + port );
 			aWebSocket.listen( port );
 		},
 
 		getGameWithDesiredPort: function( desiredPort )
 		{
 
-			if( desiredPort != this.gameConfig.SERVER_SETTING.GAME_PORT &&
+			var isValidPort = desiredPort != this.gameConfig.SERVER_SETTING.GAME_PORT &&
                 desiredPort > this.gameConfig.SERVER_SETTING.GAME_PORT &&
-                desiredPort < this.gameConfig.SERVER_SETTING.GAME_PORT + this.gameConfig.SERVER_SETTING.MAX_PORTS ) {
+                desiredPort < this.gameConfig.SERVER_SETTING.GAME_PORT + this.gameConfig.SERVER_SETTING.MAX_PORTS;
 
-				if( this.games[ desiredPort ] != null )
-				{
-					if( this.games[ desiredPort ].canAddPlayer() )
-					{
-						return desiredPort;
-					}
-					else
-					{
-						return this.getNextAvailableGame();
-					}
-				}
-				else
-				{
-					return this.createGame( desiredPort );
-					//return this.getNextAvailableGame();
+			// Port is not within range - ignore requested and send to a new port defined by us
+			if(!isValidPort) {
+				return this.getNextAvailableGame();
+			}
+
+			var existingGameAtDesiredPort = this.games[ desiredPort ];
+
+			// Game exist
+			if(existingGameAtDesiredPort)
+			{
+				// If the game says its ok, allow them to connect
+				if(existingGameAtDesiredPort.canAddPlayer()) {
+					console.log("(Server) Allowing player to connect to'" + desiredPort + "'...");
+					return desiredPort;
+				} else { // Game is full or over, send them to another game
+					console.log("(Server) blocking player from joining '" + desiredPort + "', sending player to different game...");
+					return this.getNextAvailableGame();
 				}
 			}
-			else
+			else // No game at that port - make a new game at the next available port
 			{
-				return this.getNextAvailableGame();
+				console.log("(Server) No game found at '" + desiredPort + "', creating new game instance...");
+				return this.createGame( desiredPort );
 			}
 		},
 

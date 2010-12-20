@@ -49,10 +49,10 @@ ServerNetChannel = (function()
 			this.config = config;
 
 			// Connection options
-			this.maxChars = config.maxChars || 128;
-			this.maxClients = config.maxClients || 64;
+			this.maxClients = GAMECONFIG.GAME_MODEL.MAX_PLAYERS;
 			this.port = port;
 
+			console.log("MAX", this.maxClients)
 			this.showStatus = config.status !== false;
 
 			this.bytes = {
@@ -324,6 +324,10 @@ ServerNetChannel = (function()
 		getNextClientID: function()
 		{
 			return this.nextClientID++;
+		},
+
+		canAddConnection: function() {
+			return this.clients.count() < this.maxClients;
 		},
 
 		/**
