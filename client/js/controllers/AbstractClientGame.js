@@ -142,6 +142,10 @@ define(['lib/Vector',
 			tick: function()
 			{
 				this.callSuper();
+
+				if(this.netChannel.connection === undefined) return; // waiting for next match
+
+
 				this.netChannel.tick( this.gameClock );
 				this.renderAtTime(this.gameClock - ( this.config.CLIENT_SETTING.interp + this.config.CLIENT_SETTING.fakelag ) );
 
