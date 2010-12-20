@@ -21,6 +21,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 				   create().
 				   setBounds(0, 0, aCATDirector.width, aCATDirector.height);
 
+			layer.setFrameTime(0, Number.MAX_VALUE);
 			GAMECONFIG.CAAT.SCENE.addChild(layer);
 
 			return layer;
@@ -64,12 +65,16 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 			var layer = this.CAATLayers[anEntityView.theme.zIndex];
 			if(!layer) console.log("(FieldView) layer is null!");
 
-			layer.addChild(anEntityView.getCAATActor());
+			var actor = anEntityView.getCAATActor();
+			actor.setFrameTime(0, Number.MAX_VALUE);
+			layer.addChild(actor);
 		},
 
 		removeEntity: function( anEntityView )
 		{
-			anEntityView.getCAATActor().parent.removeChild(anEntityView.getCAATActor())
+			var actor = anEntityView.getCAATActor();
+			actor.setOutOfFrameTime();
+			actor.setDiscardable(true)
 		},
 
 		getElement: function() {

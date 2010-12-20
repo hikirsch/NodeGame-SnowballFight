@@ -48,8 +48,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.statHTML = null;
 
-			var showStats = false; // "getContext" in document.createElement("canvas");
-			if(showStats) {
+			var showStats = "getContext" in document.createElement("canvas");
+			if(showStats)
+			{
 				var stats = new Stats();
 				stats.domElement.style.position = 'absolute';
 				stats.domElement.style.left = '0px';
