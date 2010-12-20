@@ -153,3 +153,12 @@
 .browserReqOverlay #dlChrome { margin-right: 54px; }
 .browserReqOverlay #dlSafari { }
 
+/* invite overlay */
+#devNotice { position: absolute; left: -10px; top: 0; width: 623px; height: 461px; background: #fff url(../img/invite/bg-invite.jpg) no-repeat top left; -webkit-box-shadow: 0 0 10px #999; z-index: 8000; }
+#devNotice .overlayContent { padding: 16px 20px 20px; }
+#devNotice .headerContent { height: 78px; }
+#devNotice .overlayTitle { margin: 0 0 12px; }
+#devNotice .bodyContent { padding: 10px 0; }
+#devNotice p { font-size: 13px; font-family: "Lucida Grande", sans-serif; line-height: 1.4; color: #005072; margin: 0 0 10px; }
+#devNotice .closeBtn { position: absolute; top: -11px; right: 36px; cursor: pointer; }
+
