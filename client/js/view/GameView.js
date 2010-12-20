@@ -270,6 +270,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.overlayManager.pushOverlay($browserReq, $fakeField);
 			$("html").addClass('unsupported-browser');
+			$("#sound-toggle").hide();
 		},
 
 		serverOffline: function()
