@@ -73,7 +73,7 @@ SnowGame = (function()
 				aFieldEntityModel.initialPosition = nextEntity.position;
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 
-				 var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateIn');
+				 var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromSmall');
 				aFieldEntity.addTraitAndExecute( new animateInTrait() );
 
 				this.fieldController.addEntity(aFieldEntity);
@@ -224,7 +224,7 @@ SnowGame = (function()
 			this.fieldController.addEntity(present);
 
 			
-			var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateIn');
+			var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromLarge');
 			present.addTraitAndExecute( new animateInTrait() );
 
 			

@@ -29,13 +29,13 @@ var init = function(BaseTrait)
 
 			// Set our theme, and hijack the characters
 			this.attachedEntity.themeMask |= this.themeMaskList.HAS_POWERUP;
-			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN;
+			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN_SMALL;
 		},
 
 		detach: function()
 		{
 			this.attachedEntity.themeMask &= ~this.themeMaskList.HAS_POWERUP;
-			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN;
+			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN_SMALL;
 			this.callSuper();
 		},
 

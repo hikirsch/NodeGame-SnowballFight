@@ -11,7 +11,14 @@
 	 // TODO: FILL OUT
  */
 
-var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateIn)
+var init = function(ClientControlledTrait,
+					ProjectileTraitFreeze,
+					CharacterTraitInvulnerable,
+					PresentTraitHyperShot,
+					PresentTrait360Shot,
+					PresentTraitDeflectorShot,
+					EntityTraitAnimateInFromSmall,
+					EntityTraitAnimateInFromLarge)
 {
 	// Private reference
 	var traitTypes = new SortedLookupTable();
@@ -19,7 +26,8 @@ var init = function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTrait
 	traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
 	traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
 	traitTypes.setObjectForKey(CharacterTraitInvulnerable, 'CharacterTraitInvulnerable');
-	traitTypes.setObjectForKey(EntityTraitAnimateIn, 'EntityTraitAnimateIn');
+	traitTypes.setObjectForKey(EntityTraitAnimateInFromSmall, 'EntityTraitAnimateInFromSmall');
+	traitTypes.setObjectForKey(EntityTraitAnimateInFromLarge, 'EntityTraitAnimateInFromLarge');
 
 	// presents
 
@@ -60,8 +68,9 @@ if (typeof window === 'undefined')
 	require('js/controllers/entities/traits/PresentTraitHyperShot');
 	require('js/controllers/entities/traits/PresentTrait360Shot');
 	require('js/controllers/entities/traits/PresentTraitDeflectorShot');
-	require('js/controllers/entities/traits/EntityTraitAnimateIn');
-	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateIn);
+	require('js/controllers/entities/traits/EntityTraitAnimateInFromSmall');
+	require('js/controllers/entities/traits/EntityTraitAnimateInFromLarge');
+	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateInFromSmall, EntityTraitAnimateInFromLarge);
 }
 else
 {
@@ -73,6 +82,7 @@ else
 		'controllers/entities/traits/PresentTraitHyperShot',
 		'controllers/entities/traits/PresentTrait360Shot',
 		'controllers/entities/traits/PresentTraitDeflectorShot',
-		'controllers/entities/traits/EntityTraitAnimateIn',
+		'controllers/entities/traits/EntityTraitAnimateInFromSmall',
+		'controllers/entities/traits/EntityTraitAnimateInFromLarge',
 		'lib/jsclass/core'], init);
 }

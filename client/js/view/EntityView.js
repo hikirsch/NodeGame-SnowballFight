@@ -83,13 +83,22 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			// See if anything fancy has occured
 			if(this.controller.themeMask) // 1 means no
 			{
-
 				// TODO: Switch to function-object lookup instead of giant if/else
+
 				// Animate IN
-				if((this.controller.themeMask & this.themeMaskList.ANIMATE_IN) && !(this.themeMask & this.themeMaskList.ANIMATE_IN))
+				var animateInLargeOrSmall = (this.themeMaskList.ANIMATE_IN_SMALL || this.themeMaskList.ANIMATE_IN_LARGE);
+
+				// wants to animate in, and hasn't already
+				if((this.controller.themeMask & animateInLargeOrSmall) && !(this.themeMask & animateInLargeOrSmall) )
 				{
 					this.animatedIn = true;
-					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 4.5, 1 );
+
+					console.log('this.themeMaskList.ANIMATE_IN_SMALL', this.themeMaskList.ANIMATE_IN_SMALL);
+
+					if(this.controller.themeMask & this.themeMaskList.ANIMATE_IN_SMALL)
+						this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 0.1, 1);
+					else
+						this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 0, 1 );
 				}
 				// FROZEN
 				else if( this.controller.themeMask & this.themeMaskList.FROZEN && this.CAATSprite.animationImageIndex.length == 1)
@@ -100,7 +109,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					// TODO: Move to randomizing function
 
 
-					var hitSound = ( Math.random() < 0.5 ) ? GAMECONFIG.SOUNDS_MAP.snowballHit1 : GAMECONFIG.SOUNDS_MAP.snowballHit2
+					var hitSound = ( Math.random() < 0.5 ) ? GAMECONFIG.SOUNDS_MAP.snowballHit1 : GAMECONFIG.SOUNDS_MAP.snowballHit2;
 
 					// everyone starts off frozen, dont play sound
 					if(GAMECONFIG.CAAT.SCENE.time > 8000)
