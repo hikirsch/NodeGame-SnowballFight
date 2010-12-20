@@ -9,7 +9,7 @@ define(['view/managers/QueryStringManager'], function(QueryStringManager) {
 			for( i = 0, emailCount = emailList.length; i < emailCount; i += 1 )
 			{
 				var nextEmail = emailList[ i ];
-				if( ! validations['email']( nextEmail ) ) {
+				if( ! validations['email']( nextEmail.trim() ) ) {
 					return false;
 				}
 			}

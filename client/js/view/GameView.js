@@ -443,7 +443,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			function open()
 			{
 				var url = "http://holiday2010.ogilvy.com",
-					title = "#OgilvySnowballFight";
+					title = "Join my #OgilvySnowballFight";
 
 				addthis_open(this, '', url, title);
 			}
