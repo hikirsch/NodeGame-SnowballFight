@@ -73,7 +73,7 @@ SnowGame = (function()
 				aFieldEntityModel.initialPosition = nextEntity.position;
 				aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 
-				 var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromSmall');
+				 var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromAlpha');
 				aFieldEntity.addTraitAndExecute( new animateInTrait() );
 
 				this.fieldController.addEntity(aFieldEntity);
@@ -197,15 +197,15 @@ SnowGame = (function()
 			// restart the timer
 			var that = this;
 			var minTime = 1000;
-			var timeRange = 2000;
-			var chance = 1.25;
+			var timeRange = 5000;
+			var chance = 0.25;
 			clearTimeout(this.presentsTimer);
 		 	this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
 
 //			Try to create if possible and luck says so
 //			console.log("Presents", this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
-//			if(Math.random() < chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
-//				return;
+			if(Math.random() < chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
+				return;
 
 			// Presents are really just projectiles that don't move
 			// For now always fire the regular snowball

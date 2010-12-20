@@ -11,7 +11,7 @@ Basic Usage:
 */
 var init = function(BaseTrait, Vector)
 {
-	return new JS.Class("EntityTraitAnimateInFromSmall", BaseTrait,
+	return new JS.Class("EntityTraitAnimateInFromAlpha", BaseTrait,
 	{
 		initialize: function(collisionNormal)
 		{
@@ -22,12 +22,12 @@ var init = function(BaseTrait, Vector)
 		attach: function()
 		{
 			this.callSuper();
-			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN_SMALL;
+			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN_ALPHA;
 		},
 
 		detach: function()
 		{
-			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN_SMALL;
+			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN_ALPHA;
 			this.callSuper();
 		},
 
@@ -45,7 +45,7 @@ if (typeof window === 'undefined')
 	require('js/controllers/entities/traits/BaseTrait');
 	require('js/controllers/entities/traits/CharacterTraitInvulnerable');
 	require('js/lib/Vector');
-	EntityTraitAnimateInFromSmall = init(BaseTrait, Vector);
+	EntityTraitAnimateInFromAlpha = init(BaseTrait, Vector);
 }
 else
 {

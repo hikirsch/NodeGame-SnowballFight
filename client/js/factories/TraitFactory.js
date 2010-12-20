@@ -17,7 +17,7 @@ var init = function(ClientControlledTrait,
 					PresentTraitHyperShot,
 					PresentTrait360Shot,
 					PresentTraitDeflectorShot,
-					EntityTraitAnimateInFromSmall,
+					EntityTraitAnimateInFromAlpha,
 					EntityTraitAnimateInFromLarge)
 {
 	// Private reference
@@ -26,7 +26,7 @@ var init = function(ClientControlledTrait,
 	traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
 	traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
 	traitTypes.setObjectForKey(CharacterTraitInvulnerable, 'CharacterTraitInvulnerable');
-	traitTypes.setObjectForKey(EntityTraitAnimateInFromSmall, 'EntityTraitAnimateInFromSmall');
+	traitTypes.setObjectForKey(EntityTraitAnimateInFromAlpha, 'EntityTraitAnimateInFromAlpha');
 	traitTypes.setObjectForKey(EntityTraitAnimateInFromLarge, 'EntityTraitAnimateInFromLarge');
 
 	// presents
@@ -68,9 +68,9 @@ if (typeof window === 'undefined')
 	require('js/controllers/entities/traits/PresentTraitHyperShot');
 	require('js/controllers/entities/traits/PresentTrait360Shot');
 	require('js/controllers/entities/traits/PresentTraitDeflectorShot');
-	require('js/controllers/entities/traits/EntityTraitAnimateInFromSmall');
+	require('js/controllers/entities/traits/EntityTraitAnimateInFromAlpha');
 	require('js/controllers/entities/traits/EntityTraitAnimateInFromLarge');
-	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateInFromSmall, EntityTraitAnimateInFromLarge);
+	TraitFactory = init(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateInFromAlpha, EntityTraitAnimateInFromLarge);
 }
 else
 {
@@ -82,7 +82,7 @@ else
 		'controllers/entities/traits/PresentTraitHyperShot',
 		'controllers/entities/traits/PresentTrait360Shot',
 		'controllers/entities/traits/PresentTraitDeflectorShot',
-		'controllers/entities/traits/EntityTraitAnimateInFromSmall',
+		'controllers/entities/traits/EntityTraitAnimateInFromAlpha',
 		'controllers/entities/traits/EntityTraitAnimateInFromLarge',
 		'lib/jsclass/core'], init);
 }

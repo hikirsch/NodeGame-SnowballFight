@@ -86,15 +86,15 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				// TODO: Switch to function-object lookup instead of giant if/else
 
 				// Animate IN
-				var animateInLargeOrSmall = (this.themeMaskList.ANIMATE_IN_SMALL | this.themeMaskList.ANIMATE_IN_LARGE);
+				var animateInLargeOrSmall = (this.themeMaskList.ANIMATE_IN_ALPHA | this.themeMaskList.ANIMATE_IN_LARGE);
 
 				// wants to animate in, and hasn't already
 				if((this.controller.themeMask & animateInLargeOrSmall) && !(this.themeMask & animateInLargeOrSmall) )
 				{
 					this.animatedIn = true;
 
-					if(this.controller.themeMask & this.themeMaskList.ANIMATE_IN_SMALL)
-						this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 0.1, 1);
+					if(this.controller.themeMask & this.themeMaskList.ANIMATE_IN_ALPHA)
+						this.animateInUsingAlpha(this.CAATSprite, this.CAATSprite.time+30+Math.random()*300, Math.random() * 600 + 400, 0.1, 1)
 					else
 						this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 4.5, 1 );
 				}
@@ -223,6 +223,23 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			scaleBehavior.setCycle(false);
 			scaleBehavior.setInterpolator( new CAAT.Interpolator().createBounceOutInterpolator(false) );
 			actor.addBehavior(scaleBehavior);
+		},
+
+		/**
+		 * Adds a CAAT.ScaleBehavior to the entity, used on animate in
+		 */
+		animateInUsingAlpha: function(actor, starTime, endTime, startAlpha, endAlpha)
+		{
+		   var fadeBehavior = new CAAT.AlphaBehavior();
+			fadeBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
+			actor.alpha = fadeBehavior.startAlpha = startAlpha;  // Fall from the 'sky' !
+			fadeBehavior.endAlpha = endAlpha;
+			fadeBehavior.setFrameTime( GAMECONFIG.CAAT.SCENE.time + starTime, endTime );
+			fadeBehavior.setCycle(false);
+			fadeBehavior.setInterpolator( new CAAT.Interpolator().createExponentialOutInterpolator(2, false) );
+			actor.addBehavior(fadeBehavior);
+
+			return fadeBehavior;
 		},
 
 		createPowerupSprite: function()
