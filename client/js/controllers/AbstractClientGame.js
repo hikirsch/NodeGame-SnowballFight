@@ -366,7 +366,7 @@ define(['lib/Vector',
 					var that = this;
 					this.gameClock = 0; // Will be used to know when to join the next game
 					this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
-				}                                                                                         s
+				}
 			},
 
 			parsePlayerStats: function( data )

@@ -29,6 +29,11 @@ define(function() {
 		getQueryString: function( name )
 		{
 			return _queryString[ name ];
+		},
+
+		hasQueryString: function( name )
+		{
+			return name in _queryString;
 		}
 	};
 });
