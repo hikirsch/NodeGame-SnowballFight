@@ -166,7 +166,7 @@ define(['lib/Vector',
 				}
 
 
-				if(!this.hasPlayedFinalCountrdownAudio && this.getTimeRemaining() < 60000 && this.gameClock > 10000) {
+				if(!this.hasPlayedFinalCountrdownAudio && this.getTimeRemaining() < 10000 && this.gameClock > 10000) {
 
 					this.hasPlayedFinalCountrdownAudio = true;
 				 	GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.endGameCountdown);
