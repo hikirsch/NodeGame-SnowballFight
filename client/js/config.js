@@ -50,7 +50,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			NEXT_GAME_ID: 1,
 			GAME_PORT: 10000,
 			NEXT_PORT: 10000 + 1, // 1 more than GAME_PORT
-			MAX_PORTS: 5,
+			MAX_PORTS: 995,
 			DEBUG_MODE: true
 		},
 
