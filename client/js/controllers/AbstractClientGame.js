@@ -366,11 +366,12 @@ define(['lib/Vector',
 					var that = this;
 					this.gameClock = 0; // Will be used to know when to join the next game
 					this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
-				}
+				}                                                                                         s
 			},
 
 			parsePlayerStats: function( data )
 			{
+				console.log("PARSING PLAYER STATS");
 				var allPlayersStats = [],
 					allEntities = data.split('|').reverse(),
 					allEntitiesLen = allEntities.length;
@@ -395,7 +396,14 @@ define(['lib/Vector',
 					allPlayersStats.push( playerStats );
 				}
 
-				debugger;
+				// Sort on score
+				allPlayersStats.sort(function(a, b)
+				{
+					var comparisonResult = 0;
+					if((+a.score) > (+b.score)) return -1;
+					else if((+a.score) < (+b.score)) return 1;
+				});
+
 				return allPlayersStats;
 			},
 

@@ -6,7 +6,7 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 		{
 			GAMECONFIG.CAAT.AUDIO_MANAGER = this;
 
-			this.isMuted = true;
+			this.isMuted = false;
 
 			this.sounds = new SortedLookupTable();
 			this.preloadSounds(soundMap);
