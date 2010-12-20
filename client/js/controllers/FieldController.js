@@ -94,9 +94,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			// Apply impulse to character acceleration in opposite angle of the projectile
 			var currentAngle = aNewProjectile.angle;
 
-//			var impulseForce = -0.3;
-//			var impulseVector = new Vector(Math.cos(currentAngle) * impulseForce, Math.sin(currentAngle) * impulseForce);
-
 			aCharacter.velocity.mul(0);
 //			aCharacter.acceleration.add( impulseVector );
 			return aNewProjectile;

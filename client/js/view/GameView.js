@@ -185,6 +185,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 					if( ! $(this).is('.playing') ) {
 						CookieManager.setCookie("soundEnabled", "true");
+
 						GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(false);
 					} else {
 						CookieManager.setCookie("soundEnabled", "false");
@@ -193,12 +194,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 					$this.toggleClass('playing');
 				});
-
-			if( CookieManager.getCookie("soundEnabled") === "false" )
-			{
-				GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(true);
-				$soundToggle.removeClass('playing');
-			}
 		},
 
 		showFooter: function()

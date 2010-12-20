@@ -21,6 +21,12 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 				var audio = new Audio(soundMap[soundInfo]);
 				this.sounds.setObjectForKey(audio, soundMap[soundInfo]);
 			}
+
+			if( CookieManager.getCookie("soundEnabled") === "false" )
+			{
+				GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(true);
+				$('#sound-toggle').removeClass('playing');
+			}
 		},
 
 		toggleMute: function(enable)
@@ -32,6 +38,10 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 			{
 				this.sounds.forEach(function(key, sound)
 				{
+					// Make sure its loaded
+					if(isNaN(sound.duration))
+						return;
+
 					sound.currentTime = 0;
 				 	sound.pause();
 				}, this);
