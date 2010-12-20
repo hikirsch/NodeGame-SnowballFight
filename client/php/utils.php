@@ -39,31 +39,30 @@ Basic Usage:
 	}
 
 	function sendMail($inf)
-    {
-        $t_email    = $inf['toEmail'];
+	{
+		$t_email	= $inf['toEmail'];
 
 
-        $singleRecipient = $recipients[$i];
-        $gameID     = $inf['game'];
-        $f_name        = 'Ogilvy & Mather Holiday Card 2010';
-        $f_email    = 'holiday2010@ogilvy.com';
-        $playerName = $inf['fromName'];
-        $subject    = "$playerName has sent you a Holiday game from Ogilvy. Enjoy!";
+		$gameID     = $inf['game'];
+		$f_name		= 'Ogilvy & Mather Holiday Card 2010';
+		$f_email	= 'holiday2010@ogilvy.com';
+		$playerName = $inf['fromName'];
+		$subject	= "$playerName has sent you a Holiday game from Ogilvy. Enjoy!";
 
-        $body = implode( file("emails/omg_invite_external.html") );
-        $body = str_replace( "{{GAME_ID}}", $gameID, $body);
+		$body = implode( file("emails/omg_invite_external.html") );
+		$body = str_replace( "{{GAME_ID}}", $gameID, $body);
 
-        $headers = "Content-Type: text/html; charset=iso-8859-1\n";
-        $headers .= "From: $f_name <$f_email>\r\n";
+		$headers = "Content-Type: text/html; charset=iso-8859-1\n";
+		$headers .= "From: $f_name <$f_email>\r\n";
 
-        $recipients = explode(",", $t_email);
-        $len = count($recipients);
+		$recipients = explode(",", $t_email);
+		$len = count($recipients);
 
-        for($i = 0; $i < $len; $i++)
-        {
-            mail($recipients[$i], $subject, $body, $headers);
-        }
+		for($i = 0; $i < $len; $i++)
+		{
+			mail($recipients[$i], $subject, $body, $headers);
+		}
 
-        echo "true";
-    }
+		echo "true";
+	}
 ?>

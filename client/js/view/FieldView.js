@@ -74,7 +74,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		{
 			var actor = anEntityView.getCAATActor();
 			actor.setOutOfFrameTime();
-			actor.setDiscardable(true)
+			actor.setDiscardable(true);
 		},
 
 		getElement: function() {
