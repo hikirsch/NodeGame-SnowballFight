@@ -159,9 +159,6 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 
 		getFieldLeft: function()
 		{
-			if(!this.fieldController)
-				debugger;
-
 			return this.fieldController.getLeft();
 		},
 

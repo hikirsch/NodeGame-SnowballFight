@@ -167,32 +167,39 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			.appendTo("body");
 		},
 
-        showGameStatus: function()
-        {
-            HTMLFactory.gameStatus()
-                .appendTo("body");
+		showGameStatus: function()
+		{
+			HTMLFactory.gameStatus()
+				.appendTo("body");
 
-            this.createStatusView( this.currentStatus );
+			this.createStatusView( this.currentStatus );
 
-
-            var that = this,
-                $soundToggle = $('#sound-toggle');
+			var that = this,
+				$soundToggle = $('#sound-toggle');
 
 			$soundToggle.toggleClass('playing');
 
-            $soundToggle
-                .click(function(e) {
-                    $this = $(this);
+			$soundToggle
+				.click(function(e) {
+					var $this = $(this);
 
-                    if( ! $(this).is('.playing') ) {
-                        GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(false);
-                    } else {
-                        GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(true)
-                    }
+					if( ! $(this).is('.playing') ) {
+						CookieManager.setCookie("soundEnabled", "true");
+						GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(false);
+					} else {
+						CookieManager.setCookie("soundEnabled", "false");
+						GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(true)
+					}
 
-                    $this.toggleClass('playing');
-                });
-        },
+					$this.toggleClass('playing');
+				});
+
+			if( CookieManager.getCookie("soundEnabled") === "false" )
+			{
+				GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(true);
+				$soundToggle.removeClass('playing');
+			}
+		},
 
 		showFooter: function()
 		{

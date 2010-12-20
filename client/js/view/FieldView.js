@@ -62,10 +62,9 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		addEntity: function( anEntityView )
 		{
 			var layer = this.CAATLayers[anEntityView.theme.zIndex];
-			if(!layer) debugger;
+			if(!layer) console.log("(FieldView) layer is null!");
 
-
-        	layer.addChild(anEntityView.getCAATActor());
+			layer.addChild(anEntityView.getCAATActor());
 		},
 
 		removeEntity: function( anEntityView )

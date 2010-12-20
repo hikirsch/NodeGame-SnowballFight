@@ -312,7 +312,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	{
 		if(this.connection == undefined) {
 			console.log("connection is undefined!");
-			debugger;
 			return;
 
 		}
