@@ -197,7 +197,7 @@ SnowGame = (function()
 			// restart the timer
 			var that = this;
 			var minTime = 1000;
-			var timeRange = 5000;
+			var timeRange = 5500;
 			var chance = 0.25;
 			clearTimeout(this.presentsTimer);
 		 	this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
