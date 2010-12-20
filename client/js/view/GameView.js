@@ -109,10 +109,9 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 		updateResultsView: function(stats)
 		{
 			this.resultsData.OverlayLeft = this.overlayManager.settings.left + ( ( this.model.width - this.resultsElement.size.width ) / 2 ),
-			this.resultsData.OverlayTop = 	this.overlayManager.settings.top + ( ( this.model.height - this.resultsElement.size.height ) / 2 )
+			this.resultsData.OverlayTop = this.overlayManager.settings.top + ( ( this.model.height - this.resultsElement.size.height ) / 2 ),
 			this.resultsData.NextMatchTime = stats.NextMatchTime;
 			this.resultsData.ShowNextMatchTime = stats.ShowNextMatchTime ? "" : "hide";
-			console.log( "WIDTH-->", this.resultsElement.width() );
 			this.resultsData.PlayerStats = stats.PlayerStats;
 			this.resultsTmplItem.update();
 		},

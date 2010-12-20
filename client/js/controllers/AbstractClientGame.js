@@ -53,6 +53,7 @@ define(['lib/Vector',
 				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
 				CAAT.GlobalDisableEvents();
 
+				window.addEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
 				this.audioManager = new AudioManager(GAMECONFIG.SOUNDS_MAP);
 
 				this.initializeGame();
@@ -72,8 +73,6 @@ define(['lib/Vector',
 				this.fieldController.onCAATInitialized(this.director);
 
 
-				this.unregisterEventListeners();
-				this.registerEventListeners();
 
 				// Start the game timer
 				this.startGameClock();
@@ -105,11 +104,6 @@ define(['lib/Vector',
 
 				this.director.switchToNextScene( 1000, true, true);
 				$(this.director.canvas).prependTo(  this.fieldController.view.getElement() );
-			},
-
-			registerEventListeners: function()
-			{
-				window.addEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
 			},
 
 			getResults: function()
@@ -372,22 +366,23 @@ define(['lib/Vector',
 					var that = this;
 					this.gameClock = 0; // Will be used to know when to join the next game
 					this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
-				}
+				}                                                                                         s
 			},
 
-			parsePlayerStats: function( data ) {
+			parsePlayerStats: function( data )
+			{
+				console.log("PARSING PLAYER STATS");
 				var allPlayersStats = [],
 					allEntities = data.split('|').reverse(),
 					allEntitiesLen = allEntities.length;
 
 				// Loop through each entity
-				while(--allEntitiesLen > -1) // allEntities[0] is garbge, so by using prefix we avoid it
+				while(--allEntitiesLen > -1) // allEntities[0] is garbage, so by using prefix we avoid it
 				{
 					var allStats = allEntities[allEntitiesLen],
 						splitStats = allStats.split("&").reverse(),
 						playerStats = {},
 						splitStatsLength = splitStats.length, i;
-					console.log( "FULL STAT: ", allEntities[allEntitiesLen]);
 					while(--splitStatsLength > -1)
 					{
 						var splitPiece = splitStats[splitStatsLength].split("="),
@@ -399,10 +394,15 @@ define(['lib/Vector',
 
 					// Store the final result using the objectID
 					allPlayersStats.push( playerStats );
-
 				}
 
-				console.log("AFTER PARSE!", allPlayersStats );
+				// Sort on score
+				allPlayersStats.sort(function(a, b)
+				{
+					var comparisonResult = 0;
+					if((+a.score) > (+b.score)) return -1;
+					else if((+a.score) < (+b.score)) return 1;
+				});
 
 				return allPlayersStats;
 			},
@@ -523,14 +523,6 @@ define(['lib/Vector',
 			isGameActive: function()
 			{
 				return (this.gameClock < this.model.gameDuration);
-			},
-
-			/**
-			 * Memory management
-			 */
-			unregisterEventListeners: function()
-			{
-				window.removeEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
 			},
 
 			dealloc: function()

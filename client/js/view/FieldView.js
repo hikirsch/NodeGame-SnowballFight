@@ -12,7 +12,7 @@ define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass/core'], function(
 		onCAATInitialized:function(aCATDirector)
 		{
 			// create 3 layers, zero based
-			GAMECONFIG.CAAT.LAYERS = this.CAATLayers = [this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector)]
+			GAMECONFIG.CAAT.LAYERS = this.CAATLayers = [this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector)]
 		},
 
 		createCAATLayer: function(aCATDirector)

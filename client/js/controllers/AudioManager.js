@@ -17,8 +17,7 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 		preloadSounds: function(soundMap)
 		{
 			// Preload all sounds
-			for(var soundInfo in soundMap)
-			{
+			for(var soundInfo in soundMap) {
 				var audio = new Audio(soundMap[soundInfo]);
 				this.sounds.setObjectForKey(audio, soundMap[soundInfo]);
 			}
@@ -66,6 +65,7 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 		playSound: function(id)
 		{
 			if(!id || this.isMuted) return;
+
 			var audio = this.sounds.objectForKey(id);
 			if(!audio) return;
 
@@ -78,7 +78,7 @@ define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
 		dealloc: function(force)
 		{
 			this.sounds.dealloc();
-			window.removeEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
+//			window.removeEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
 		}
 	});
 });
