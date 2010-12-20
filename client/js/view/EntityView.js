@@ -98,8 +98,13 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
                 	this.CAATSprite.changeFPS= 300;
 
 					// TODO: Move to randomizing function
+
+
 					var hitSound = ( Math.random() < 0.5 ) ? GAMECONFIG.SOUNDS_MAP.snowballHit1 : GAMECONFIG.SOUNDS_MAP.snowballHit2
-					GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(hitSound);
+
+					// everyone starts off frozen, dont play sound
+					if(GAMECONFIG.CAAT.SCENE.time > 8000)
+						GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(hitSound);
 				}
 				// Flashing
 				else if (this.controller.themeMask & this.themeMaskList.FLASHING)
