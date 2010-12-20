@@ -73,11 +73,6 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		this.clientID = -1;
 
 
-		if( ! QueryStringManager.hasQueryString('game') )
-		{
-			history.pushState(null, "game-" + this.config.SERVER_SETTING.GAME_PORT, "?game=" + this.config.SERVER_SETTING.GAME_PORT );
-		}
-
 		// get a response from the Server and figure out which port we really need to connect to.
 		new ServerGameSelector(config, function( newPort, connected ) {
 			that.onSeverGameSelectorResponse( newPort, connected );

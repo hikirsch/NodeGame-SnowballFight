@@ -61,6 +61,13 @@ define(['lib/Vector',
 
 			initializeGame: function()
 			{
+				// If set use that
+				if( QueryStringManager.hasQueryString('game') ) {
+					console.log("SETTING!!! ",this.config.SERVER_SETTING.GAME_PORT)
+					this.config.SERVER_SETTING.GAME_PORT = QueryStringManager.getQueryString('game');
+					console.log("SETTING!!! ",this.config.SERVER_SETTING.GAME_PORT)
+				}
+
 				this.clientCharacter = null; // Special pointer to our own client character
 				this.isGameOver = false;
 				this.hasPlayedFinalCountrdownAudio = false;
@@ -339,6 +346,7 @@ define(['lib/Vector',
 
 			onShouldEndGame: function( clientID, data )
 			{
+
 				// We have a clientCharacter - thus we're in the game
 				var isInGame = this.clientCharacter != null;
 				this.isGameOver = true;
@@ -353,7 +361,12 @@ define(['lib/Vector',
 
 				this.clientCharacter = null;
 
+				// Remember for next time
 				this.nextGamePort = data.nextGamePort;
+				console.log("putting!!! ",this.config.SERVER_SETTING.GAME_PORT)
+				history.pushState(null, "game-" + data.nextGamePort, "?game=" + data.nextGamePort );
+				console.log("putting!!! ",this.config.SERVER_SETTING.GAME_PORT)
+
 
 				if(isInGame)
 				{
