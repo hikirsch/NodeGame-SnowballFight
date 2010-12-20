@@ -176,10 +176,10 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 
             var that = this,
-                $soundToggle = $('#sound-toggle'),
-                $audio = $('#audio');
-				$soundToggle.toggleClass('playing');
-			//
+                $soundToggle = $('#sound-toggle');
+
+			$soundToggle.toggleClass('playing');
+
             $soundToggle
                 .click(function(e) {
                     $this = $(this);
