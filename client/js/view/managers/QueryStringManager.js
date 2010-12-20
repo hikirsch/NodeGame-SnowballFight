@@ -13,8 +13,6 @@ define(function() {
 					name = splitPiece[0].trim(),
 					value = decodeURI( splitPiece.length > 1 ? splitPiece[1].trim() : "" );
 
-				console.log( "(QueryStringManager).parseQueryString: " + name + " | " + value );
-
 				_queryString[ name ] = value;
 			}
 		}

@@ -13,8 +13,6 @@ define(function() {
 					name = splitPiece[0].trim(),
 					value = splitPiece[1].trim();
 
-				console.log( "(CookieManager).parseCookies: " + name + " | " + value );
-
 				_cookies[ name ] = value;
 			}
 		}
@@ -31,8 +29,6 @@ define(function() {
 		document.cookie = newCookie;
 
 		_cookies[ name ] = value;
-
-		console.log( "(CookieManager).setCookie: " + name + " | " + value );
 	}
 
 	function init()

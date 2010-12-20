@@ -48,7 +48,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.statHTML = null;
 
-			var showStats = true; // "getContext" in document.createElement("canvas");
+			var showStats = "getContext" in document.createElement("canvas");
 			if(showStats) {
 				var stats = new Stats();
 				stats.domElement.style.position = 'absolute';
@@ -207,28 +207,19 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				return false;
 			}
 
-			if( this.cookieManager.getCookie('showIntro') != 'true' )
-			{
-				this.cookieManager.setCookie("showIntro", "true");
+			var that = this,
+				$intro = HTMLFactory.intro();
 
-				var that = this,
-					$intro = HTMLFactory.intro();
+			$intro
+				.find('a.jumpinLink, a.jumpinLink-2')
+				.click( function(){
+					that.overlayManager.popOverlay();
+					that.showCharacterSelect();
 
-				$intro
-					.find('a.jumpinLink')
-					.click( function(){
-						that.overlayManager.popOverlay();
-						that.showCharacterSelect();
+					return false;
+				});
 
-						return false;
-					});
-
-				this.overlayManager.pushOverlay( $intro );
-			}
-			else
-			{
-				this.showCharacterSelect();
-			}
+			this.overlayManager.pushOverlay( $intro );
 
 			return false;
 		},

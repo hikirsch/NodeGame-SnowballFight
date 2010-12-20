@@ -42,7 +42,6 @@ define(['lib/jsclass/core'], function()
 
 			// Place at highest layer
 			layers[3].addChild(this.CAATSprite)
-
 			GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.acquiredPowerup);
 		},
 
