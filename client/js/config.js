@@ -59,7 +59,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			height: 600,
 			MAX_PLAYERS: 8,
 			// gameDuration: 30 * 1000,
-			gameDuration: 2 * 60 * 1000,
+			gameDuration: 30 * 1000,
 			ROUND_INTERMISSION_DURATION: 15 * 1000
 		},
 

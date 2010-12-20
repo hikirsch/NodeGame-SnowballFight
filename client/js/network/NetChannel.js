@@ -75,7 +75,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 
 		if( ! QueryStringManager.hasQueryString('game') )
 		{
-			history.pushState(null, "game-" + this.config.PORT, "?game=" + this.config.PORT );
+			history.pushState(null, "game-" + this.config.SERVER_SETTING.GAME_PORT, "?game=" + this.config.SERVER_SETTING.GAME_PORT );
 		}
 
 		// get a response from the Server and figure out which port we really need to connect to.
