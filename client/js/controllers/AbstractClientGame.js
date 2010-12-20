@@ -79,8 +79,6 @@ define(['lib/Vector',
 
 				this.fieldController.onCAATInitialized(this.director);
 
-
-
 				// Start the game timer
 				this.startGameClock();
 			},
@@ -356,8 +354,8 @@ define(['lib/Vector',
 				this.netChannel.dealloc();
 				this.netChannel = null;
 
-				this.fieldController.dealloc();
-				this.fieldController = null;
+				// this.fieldController.dealloc();
+				// this.fieldController = null;
 
 				this.clientCharacter = null;
 
@@ -461,6 +459,7 @@ define(['lib/Vector',
 			 */
 			joinNextGame: function()
 			{
+				/*
 				this.view.hideResultsView();
 				this.config.SERVER_SETTING.GAME_PORT = this.nextGamePort;
 
@@ -470,6 +469,13 @@ define(['lib/Vector',
 				setTimeout(function(){
 					that.joinGame(that.nickname, that.theme);
 				}, 150);
+				*/
+
+				CookieManager.setCookie("autojoin", "true");
+				CookieManager.setCookie("theme", this.theme);
+				CookieManager.setCookie("nickname", this.nickname);
+
+				location.href = "?game=" + this.nextGamePort;
 			},
 
 			/**
@@ -516,9 +522,21 @@ define(['lib/Vector',
 				// we get a copy of the game model from the server to be extra efficient :-), so set it
 				this.setModel( messageData.gameModel );
 
-				// First connect
-				if(!this.nickname)
-					this.view.showIntro();
+				if( CookieManager.getCookie("autojoin") === "true" )
+				{
+					var nickname = CookieManager.getCookie("nickname"),
+						theme = CookieManager.getCookie("theme");
+
+					CookieManager.setCookie( "autojoin", "false" );
+
+					this.joinGame(nickname, theme);
+				}
+				else
+				{
+					// First connect
+					if(!this.nickname)
+						this.view.showIntro();
+				}
 			},
 
 			/**

@@ -39,11 +39,15 @@ define(function() {
 	require.ready( init );
 
 	return window.CookieManager = {
+		setCookie: setCookie,
+
 		getCookie: function( name )
 		{
 			return _cookies[ name ];
 		},
 
-		setCookie: setCookie
+		hasCookie: function( name ) {
+			return name in _cookies;
+		}
 	};
 });
