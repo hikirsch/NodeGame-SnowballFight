@@ -58,14 +58,14 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			width: 900,
 			height: 600,
 			MAX_PLAYERS: 8,
-			// gameDuration: 30 * 1000,
+//			gameDuration: 10000,
 			gameDuration: 2 * 60 * 1000,
-			ROUND_INTERMISSION_DURATION: 15 * 1000
+			ROUND_INTERMISSION_DURATION: 10 * 1000
 		},
 
 		PRESENTS_SETTING:
 		{
-			PRESENTS_MAX: 2
+			PRESENTS_MAX: 10
 		},
 
 		// The client sends this bitmask to the server
@@ -91,13 +91,14 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		// For example - 'im currently frozen, i should be flashing'
 		SPRITE_THEME_MASK:
 		{
-			ANIMATE_IN	: 1 << 0,
-			FROZEN		: 1 << 1,
-			FLASHING	: 1 << 2, // invulnerable
-			IS_LEADER	: 1 << 3,
-			HAS_POWERUP	: 1 << 4,
-			DESTROY_ON_FIELD_ENTITY_HIT	: 1 << 5,
-			BOUNCE_ON_FIELD_ENTITY_HIT : 1 << 6
+			ANIMATE_IN_SMALL	: 1 << 1,
+			ANIMATE_IN_LARGE	: 1 << 2,
+			FROZEN		: 1 << 3,
+			FLASHING	: 1 << 4, // invulnerable
+			IS_LEADER	: 1 << 5,
+			HAS_POWERUP	: 1 << 6,
+			DESTROY_ON_FIELD_ENTITY_HIT	: 1 << 7,
+			BOUNCE_ON_FIELD_ENTITY_HIT : 1 << 8
 		},
 
 		ENTITY_MODEL: EntityModel,

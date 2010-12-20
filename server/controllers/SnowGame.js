@@ -197,15 +197,15 @@ SnowGame = (function()
 			// restart the timer
 			var that = this;
 			var minTime = 1000;
-			var timeRange = 6000;
-			var chance = 0.25;
+			var timeRange = 2000;
+			var chance = 1.25;
 			clearTimeout(this.presentsTimer);
 		 	this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
 
 //			Try to create if possible and luck says so
-			console.log("Presents", this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
-			if(Math.random() < chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
-				return;
+//			console.log("Presents", this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
+//			if(Math.random() < chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
+//				return;
 
 			// Presents are really just projectiles that don't move
 			// For now always fire the regular snowball

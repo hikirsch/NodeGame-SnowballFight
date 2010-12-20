@@ -86,19 +86,17 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				// TODO: Switch to function-object lookup instead of giant if/else
 
 				// Animate IN
-				var animateInLargeOrSmall = (this.themeMaskList.ANIMATE_IN_SMALL || this.themeMaskList.ANIMATE_IN_LARGE);
+				var animateInLargeOrSmall = (this.themeMaskList.ANIMATE_IN_SMALL | this.themeMaskList.ANIMATE_IN_LARGE);
 
 				// wants to animate in, and hasn't already
 				if((this.controller.themeMask & animateInLargeOrSmall) && !(this.themeMask & animateInLargeOrSmall) )
 				{
 					this.animatedIn = true;
 
-					console.log('this.themeMaskList.ANIMATE_IN_SMALL', this.themeMaskList.ANIMATE_IN_SMALL);
-
 					if(this.controller.themeMask & this.themeMaskList.ANIMATE_IN_SMALL)
 						this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 0.1, 1);
 					else
-						this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 0, 1 );
+						this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 4.5, 1 );
 				}
 				// FROZEN
 				else if( this.controller.themeMask & this.themeMaskList.FROZEN && this.CAATSprite.animationImageIndex.length == 1)
@@ -188,7 +186,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 
 			// We got text to display
 			if(this.CAATText) {
-				this.CAATText.setText(this.verboseRanking[this.controller.rank] + " - " + this.controller.model.nickname);
+				this.CAATText.setText(this.verboseRanking[this.controller.rank-1] + " - " + this.controller.model.nickname);
 			}
 		},
 
@@ -219,7 +217,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		{
 		   var scaleBehavior = new CAAT.ScaleBehavior();
 			scaleBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
-			scaleBehavior.startScaleX = scaleBehavior.startScaleY = startScale;  // Fall from the 'sky' !
+			actor.scaleX = actor.scaleY = scaleBehavior.startScaleX = scaleBehavior.startScaleY = startScale;  // Fall from the 'sky' !
 			scaleBehavior.endScaleX = scaleBehavior.endScaleY = endScale;
 			scaleBehavior.setFrameTime( starTime, endTime );
 			scaleBehavior.setCycle(false);

@@ -532,8 +532,7 @@ define(['lib/Vector',
 					var nickname = CookieManager.getCookie("nickname"),
 						theme = CookieManager.getCookie("theme");
 
-					CookieManager.setCookie( "autojoin", "false" );
-
+//					CookieManager.setCookie( "autojoin", "false" );
 					this.joinGame(nickname, theme);
 				}
 				else
