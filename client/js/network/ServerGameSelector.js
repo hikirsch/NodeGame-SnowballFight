@@ -32,6 +32,8 @@ define( [ 'view/managers/QueryStringManager', 'lib/jsclass/core'], function( Que
 		{
 			var decodedMessage = BISON.decode( messageEvent.data );
 			this.actualPort = decodedMessage.actualPort;
+			history.pushState(null, "game-" + actualPort, "?game=" + actualPort);
+
 			console.log("(ServerGameSelector) got response ", decodedMessage );
 			this.connection.close();
 		},

@@ -12,7 +12,7 @@ Abstract:
  	   <--> server does some stuff
 	     --> the server talks to this object
 		  --> this object talks to the client --^
-	  			 	 
+
 Basic Usage:
 
  */
@@ -81,19 +81,21 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	}
 
 	NetChannel.prototype.onSeverGameSelectorResponse = function( newPort, connected ) {
-		var that = this;
-		this.newPort = newPort;
-		if( connected ) {
+		if( connected )
+		{
 			console.log("(NetChannel) Connecting to ws://" + this.config.HOST + ':' + this.config.SERVER_SETTING.GAME_PORT);
+
 			this.connection = new WebSocket( 'ws://' + this.config.HOST + ':' + newPort );
 			this.connection.onopen = function() { that.onConnectionOpened(); };
 			this.connection.onmessage = function(messageEvent) { that.onServerMessage(messageEvent); };
 			this.connection.onclose = function() { that.onConnectionClosed(); };
+
 			console.log("(NetChannel) Created with socket: ", this.connection);
-			history.pushState(null, "game-" + newPort, "?game=" + newPort);
 		} else {
 			this.onConnectionClosed();
 		}
+		var that = this;
+		this.newPort = newPort;
 	};
 
 	/**
@@ -309,6 +311,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 	{
 		if(this.connection == undefined) {
 			console.log("connection is undefined!");
+			debugger;
 			return;
 
 		}
