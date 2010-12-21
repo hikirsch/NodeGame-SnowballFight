@@ -213,15 +213,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			var that = this,
 				$intro = HTMLFactory.intro();
 
-			$intro
-				.find('a.jumpinLink, a.jumpinLink-2')
-				.click( function(){
-					that.overlayManager.popOverlay();
-					that.showCharacterSelect();
-
-					return false;
-				});
-
 			this.overlayManager.pushOverlay( $intro );
 
 			return false;
@@ -341,8 +332,27 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				that.overlayManager.popOverlay();
 			});
 
+
+			$('.intro a.jumpinLink, .intro a.jumpinLink-2').live('click', function(){
+				that.overlayManager.popOverlay();
+				that.showCharacterSelect();
+
+				return false;
+			});
+
+
+			this.creditsOverlayOpen = false;
+
+			$("#credits-link").live( 'click', function() {
+				that.showCredits();
+				return false;
+			});
+
+			$('.inviteOverlay .closeBtn').live( 'click', function() {
+				that.inviteOverlayOpen = false;
+			});
+
 			this.attachInvite();
-			this.attachCredits();
 			this.attachAddThis();
 			this.attachInstructions();
             this.attachDevNotice();
@@ -354,7 +364,7 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.inviteOverlayOpen = false;
 
-			$("#btn-invite").click( function() {
+			$("#btn-invite").live( 'click', function() {
 				that.showInvite();
 				return false;
 			});
@@ -390,10 +400,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
                     return false;
                 });
-
-                $invite.find('.closeBtn').click( function() {
-                    that.inviteOverlayOpen = false;
-                });
             }
         },
 
@@ -420,18 +426,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
                 this.devNoticeOverlayOpen = true;
             }
         },
-
-		attachCredits: function()
-		{
-			var that = this;
-
-			this.creditsOverlayOpen = false;
-
-			$("#credits-link").click( function() {
-				that.showCredits();
-				return false;
-			});
-		},
 
 		showCredits: function()
 		{
