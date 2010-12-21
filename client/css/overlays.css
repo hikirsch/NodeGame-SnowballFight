@@ -156,11 +156,12 @@
 .browserReqOverlay #dlSafari { }
 
 /* invite overlay */
-#devNotice { position: absolute; left: -10px; top: 0; width: 623px; height: 461px; background: #fff url(../img/invite/bg-invite.jpg) no-repeat top left; -webkit-box-shadow: 0 0 10px #999; z-index: 8000; }
+#devNotice { position: absolute; left: -10px; top: 0; width: 606px; height: 514px; background: url(../img/global/bg-dev-notice.png) no-repeat top left; z-index: 8000; }
 #devNotice .overlayContent { padding: 16px 20px 20px; }
-#devNotice .headerContent { height: 35px; }
+#devNotice .headerContent { padding-top: 15px; height: 35px; padding-bottom: 10px; }
 #devNotice .overlayTitle { margin: 0 0 12px; }
-#devNotice .bodyContent { padding: 10px 0; }
+#devNotice .bodyContent { padding: 10px; }
+#devNotice a { color: #005072; }
 #devNotice p { font-size: 13px; font-family: "Lucida Grande", sans-serif; line-height: 1.4; color: #005072; margin: 0 0 10px; }
 #devNotice ul { padding-left: 20px; margin-bottom: 10px; }
 #devNotice ul li { font-size: 13px; font-family: "Lucida Grande", sans-serif; line-height: 1.4; color: #005072; margin: 0 0 2px; }
