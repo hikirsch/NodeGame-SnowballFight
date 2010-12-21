@@ -5,7 +5,7 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		initialize: function(gameController, gameModel )
 		{
 			console.log('(FieldController)::initialize');
-
+			this.isDeallocated = false;
 			this.gameController = gameController;
 			this.packedCircleManager = null;
 
@@ -200,7 +200,13 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 * @param connectionID	ConnectionID of the player who jumped out of the game
 		 */
 		removePlayer: function( connectionID )
-		{
+		{       
+			if(this.players === undefined || !this.players)
+			{
+				console.log("FieldController), 'this.players' is null, ignoring. Fieldcontroller-deallocated:", this.isDeallocated);
+				return;
+			}
+
 			var player = this.players.objectForKey(connectionID);
 
 			if(!player) {
@@ -355,6 +361,8 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 
 		dealloc: function()
 		{
+			this.isDeallocated = true;
+
 			this.players.forEach( function(key, entity){
 				this.removePlayer(entity.clientID);
 			}, this );

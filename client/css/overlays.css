@@ -129,14 +129,14 @@
 .inviteOverlay .closeBtn { position: absolute; top: -11px; right: 36px; cursor: pointer; }
 
 /* credits overlay */
-.creditsOverlay { position: absolute; top: 0; width: 813px; height: 364px; background: url(../img/global/bg-credits.png) left top no-repeat; margin: auto; z-index: 8000; -webkit-box-shadow: 0 0 10px #999; }
+.creditsOverlay { position: absolute; top: 0; width: 813px; height: 364px; background: url(../img/global/bg-credits.jpg) left top no-repeat; margin: auto; z-index: 8000; -webkit-box-shadow: 0 0 10px #999; }
 .creditsOverlay .overlayTitle { display: block; margin: 25px 0 15px 25px; }
 .creditsOverlay .closeBtn { position: absolute; top: -11px; right: 36px; cursor: pointer; }
 .creditsOverlay .creditsBody { padding: 23px 0 0 25px; }
 .creditsOverlay .creditsBody .column { float: left; width: 190px; }
 .creditsOverlay .creditsBody .developers { width: 282px; }
 .creditsOverlay .creditsBody .creatives { width: 302px; }
-.creditsOverlay .creditsBody .column ul { list-style-type: none; padding: 10px 0 25px; }
+.creditsOverlay .creditsBody .column ul { list-style-type: none; padding: 10px 0 10px; }
 .creditsOverlay .creditsBody .column ul li { line-height: 20px; font-size: 12px; }
 
 .creditsOverlay .creditsBody ul.developers { color: #03a69a; }
