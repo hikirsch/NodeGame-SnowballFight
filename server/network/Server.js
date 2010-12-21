@@ -28,6 +28,7 @@ require('js/lib/jsclass/core.js');
 require('controllers/SnowGame.js');
 require('lib/Logger.js');
 
+SERVERSTATS = {};
 Server = (function()
 {
 	return new JS.Class(
@@ -35,21 +36,43 @@ Server = (function()
 		initialize: function( gameConfig, serverConfig )
 		{
 			this.gameID = 1;
-			this.logger = new Logger( serverConfig, this );
 			this.gameConfig = gameConfig;
 			this.serverConfig = serverConfig;
 
-			console.log("(Server) GAMECONFIG", SYS.inspect(this.gameConfig.SERVER_SETTING), serverConfig)
+			// Make our rolling log globally accessible
+			var that = this;
+			console.gameLog = function () {
+				var len = arguments.length;
+				while(len--)
+					that.log(arguments[len]);
+			};
+
 
 			this.gameConfig.SERVER_SETTING.NEXT_PORT = this.gameConfig.SERVER_SETTING.GAME_PORT + 1;
 
-//			console.log("(Server) GAMECONFIG", SYS.inspect(this.gameConfig.SERVER_SETTING), serverConfig)
-
-			var loggerOptions = {};
-			this.logger = new Logger( loggerOptions, this );
+		    this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
 			this.games = {};
 
 			this.initServerChooser( this.gameConfig.SERVER_SETTING.GAME_PORT );
+
+			console.gameLog("(Server)::initialized Using\n\nServer Configuration:\n", SYS.inspect(this.gameConfig.SERVER_SETTING), "\n")
+			console.gameLog("(Server) started and running...");
+
+			// Running active connections on a ServerNetChannel
+			SERVERSTATS.activeConnections = 0;
+			SERVERSTATS.totalConnections = 0;
+			// Total people who attempted to connect to ServerChooser
+			SERVERSTATS.gameJoinRequest = 0;
+			// Game info
+			SERVERSTATS.activeGames = 0;
+			SERVERSTATS.totalGamesPlayed = 0;
+
+//			// Listen for process termination
+			var that = this;
+			process.addListener('SIGINT', function(){
+				that.log("(Server) Shutting Down");
+				process.exit(0);
+			});
 		},
 
 		initServerChooser: function( port ) {
@@ -57,9 +80,10 @@ Server = (function()
 				aWebSocket = this.$ = new ws.Server(null),
 				clientID = 0;
 
-			// client will ask for a game in on message
+			// client will ask for a game in onMessage
 			aWebSocket.onConnect = function(connection) {
-				console.log("(Server) connected!");
+				SERVERSTATS.gameJoinRequest++;
+				console.log("(ServerChooser) client connected, [ clients: " + SERVERSTATS.gameJoinRequest + "]");
 				connection.__CONNECTED = true;
 			};
 
@@ -67,12 +91,13 @@ Server = (function()
 			{
 				clientID++;
 				connection.$clientID = clientID;
+
 				var decodedMessage = BISON.decode( encodedMessage ),
 					actualPort = that.getGameWithDesiredPort( decodedMessage.desiredPort ),
-					newGame = { 'actualPort': actualPort },
-					newEncodedMessage = BISON.encode(newGame);
-			  	console.log("(Server) player should join: " + actualPort );
-				connection.send( newEncodedMessage );
+					gameInfoMessage = {'actualPort': actualPort};
+
+			  	console.gameLog("(ServerChooser) Routing player to: " + actualPort );
+				connection.send( BISON.encode(gameInfoMessage) );
 			};
 
 			aWebSocket.onClose = function(connection) {
@@ -167,9 +192,11 @@ Server = (function()
 			return this.gameConfig.SERVER_SETTING.NEXT_PORT ;
 		},
 
-		log: function( o )
+		log: function(msg)
 		{
-			this.logger.log( o );
-		} // Close prototype object
+			this.logger.log(msg);
+		}
+
+		// Close prototype object
 	}); // Close .extend
 })(); // close init()

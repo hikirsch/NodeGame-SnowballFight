@@ -36,21 +36,12 @@ AbstractServerGame = (function()
 		initialize: function(aServer, portNumber)
 		{
 			this.callSuper();
-			console.log('(ServerGame)::init');
 
 			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
 			this.server = aServer;
 			this.nextEntityID = 1; 	// Each time we create an entity we increment this
 			this.gameID = this.server.gameConfig.SERVER_SETTING.NEXT_GAME_ID;
-
-			// Make our rolling log globally accessible
-			var that = this;
-			console.gameLog = function () {
-				var len = arguments.length;
-				while(len--)
-					that.log(arguments[len]);
-			};
 
 			this.portNumber = portNumber;
 			this.fieldController.createPackedCircleManager();

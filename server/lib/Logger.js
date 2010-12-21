@@ -55,8 +55,11 @@ Logger = (function()
 	
 		log: function( str )
 		{
+			if(!this.options.status) {
+			 	console.log(str);
+			};
+
 			this.logs.push([this.game.gameClock, str]);
-			
 			if(this.logs.length > 20)
 				this.logs.shift();
 		},

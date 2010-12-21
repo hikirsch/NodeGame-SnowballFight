@@ -286,9 +286,10 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		removeTraitWithName: function(aTraitName)
 		{
 			// TODO: Remove check - this should not be called if traits is null - clear timeouts
-
-			console.log("(GameEntity)::removingTraitWithName ", aTraitName);
-			if(!this.traits) return;
+			if(!this.traits) {
+				console.log("(GameEntity)::removingTraitWithName ERROR: could not remove", aTraitName);
+				return;
+			}
 
 			var aTrait = this.traits.objectForKey(aTraitName);
 			if(!aTrait) return;

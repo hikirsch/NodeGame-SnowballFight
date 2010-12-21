@@ -52,7 +52,7 @@ ServerNetChannel = (function()
 			this.maxClients = GAMECONFIG.GAME_MODEL.MAX_PLAYERS;
 			this.port = port;
 
-			console.log("MAX", this.maxClients)
+			console.log("MAX", this.maxClients);
 			this.showStatus = config.status !== false;
 
 			this.bytes = {
@@ -75,18 +75,16 @@ ServerNetChannel = (function()
 
 		    this.CMD_TO_FUNCTION[config.CMDS.SERVER_CONNECT] = this.onClientConnected;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onPlayerJoined;
-		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_DISCONNECT] = this.removeClient;
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.onPlayerMoveCommand;
-		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_FIRE] = this.genericCommand;
 
-		    this.initAndStartWebSocket(config);
+		    this.initAndStartWebSocket();
 		},
 
 		/**
 		 * Initialize and start the WebSocket server.
 		 * With this set up we should be abl to move to Socket.io easily if we need to
 		 */
-		initAndStartWebSocket: function(options)
+		initAndStartWebSocket: function()
 		{
 			// START THE WEB-SOCKET
 			var that = this;
@@ -94,7 +92,9 @@ ServerNetChannel = (function()
 
 			aWebSocket.onConnect = function(connection)
 			{
-				that.delegate.log("(ServerNetChannel)::onConnect");
+				SERVERSTATS.totalConnections++;
+				SERVERSTATS.activeConnections++;
+				that.delegate.log("(ServerNetChannel):: ClientConnected [totalConnectionsMade:" + SERVERSTATS.totalConnections + "| ActiveConnections ~" + SERVERSTATS.activeConnections + "]");
 			};
 
 			/**
@@ -102,7 +102,6 @@ ServerNetChannel = (function()
 			* Messages can come as a single message, or grouped into an array of commands.
 			*/
 			aWebSocket.onMessage = function(connection, encodedMessage )
-
 			{
 				var client;
 				try
@@ -117,7 +116,6 @@ ServerNetChannel = (function()
 
 					// Call the mapped function, always pass the connection. Also pass data if available
 					that.CMD_TO_FUNCTION[decodedMessage.cmds.cmd].apply(that, [connection, decodedMessage]);
-
 				}
 				catch (e)
 				{ // If something went wrong, just remove this client and avoid crashign
@@ -130,6 +128,7 @@ ServerNetChannel = (function()
 			};
 
 			aWebSocket.onClose = function(connection) {
+				SERVERSTATS.activeConnections--;
 				that.removeClient(connection);
 			};
 		},
@@ -172,7 +171,7 @@ ServerNetChannel = (function()
 			this.clients.forEach( function(key, client)
 			{
 				// Collapse delta - store the world state
-				var deltaCompressedWorldUpdate = client.compressDeltaAndQueueMessage( worldDescription, gameClock );
+				client.compressDeltaAndQueueMessage( worldDescription, gameClock );
 
 				// Ask if enough time passed, and send a new world update
 				if ( client.canSendMessage(gameClock) ) {
@@ -201,14 +200,12 @@ ServerNetChannel = (function()
 			// Tell all the clients then close
 			var that = this;
 			setTimeout(function() {
-				for(var aClient in that.clients)
-				{
+				for(var aClient in that.clients) {
 					try { that.clients[aClient].close(); } catch( e ) { }
 				}
 
 				// that.saveRecording();
-				that.delegate.log('>> Shutting down...');
-				process.exit(0);
+				that.delegate.log('(ServerNetChannel) Shutting down...');
 			}, 100);
 		},
 
@@ -220,12 +217,13 @@ ServerNetChannel = (function()
 			// This client is not in our client-list. Throw warning, something has probably gone wrong.
 			if(aClient == undefined)
 			{
-				this.delegate.log("(ServerNetChannel) Attempted to disconnect unknown client!:" + clientID );
+				debugger;
+				this.delegate.log("(ServerNetChannel)::removeClient - Attempted to disconnect unknown client!:" + clientID );
 				return;
 			}
 
 
-			this.delegate.log("(ServerNetChannel) Disconnecting client: " + clientID );
+			this.delegate.log("(ServerNetChannel)::removeClient Disconnecting client: " + clientID );
 
 			// if this client is mid-game, and playing then we need to tell the other players to remove it
 			if(aClient.isPlaying) {
@@ -236,7 +234,7 @@ ServerNetChannel = (function()
 
 			// Free the slot
 			this.clients.remove(clientID);
-			connection.close();
+			connection.doClose();
 		},
 
 		/**
@@ -349,10 +347,6 @@ ServerNetChannel = (function()
 				this.removeClient(aClient.conn);
 			}, this);
 
-//			for(var aClient in this.clients)
-//			{
-//				try { this.clients[aClient].close(); } catch( e ) { }
-//			}
 			this.$.stopListening();
 			console.log("(ServerNetChannel) Closing Port: " + this.port );
 		}

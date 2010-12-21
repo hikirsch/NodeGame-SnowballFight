@@ -263,7 +263,6 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 		 */
 		removeEntity: function( objectID )
 		{
-			console.log("(FieldController) removingEntity");
 			var entity = this.allEntities.objectForKey( objectID );
 
 			// Clients contain a view, server entities contain a collisionCircle.
@@ -298,6 +297,9 @@ var init = function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleMana
 			return position;
 		},
 
+		/**
+		 * Returns statistics for all active players in the game
+		 */
 		getPlayerStats: function()
 		{
 			var playerStats = [];

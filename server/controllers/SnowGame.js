@@ -31,7 +31,10 @@ SnowGame = (function()
 	return new JS.Class(AbstractServerGame, {
 		initialize: function(aServer, portNumber)
 		{
-			console.log("NEW GAME!!");
+			console.log("(SnowGame)::initialize");
+			SERVERSTATS.totalGamesPlayed++;
+			SERVERSTATS.activeGames++;
+
 			this.callSuper();
 			var that = this;
 
@@ -351,6 +354,12 @@ SnowGame = (function()
 				{ position: { x: 766, y: 496 }, entityType: FieldEntityModel.iglooRedFlag }
 			]
 		],
+
+		shouldEndGame: function()
+		{
+			SERVERSTATS.activeGames--;
+			this.callSuper();
+		},
 
 		dealloc: function()
         {
