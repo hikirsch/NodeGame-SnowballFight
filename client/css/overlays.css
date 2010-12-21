@@ -136,7 +136,7 @@
 .creditsOverlay .creditsBody .column { float: left; width: 190px; }
 .creditsOverlay .creditsBody .developers { width: 282px; }
 .creditsOverlay .creditsBody .creatives { width: 302px; }
-.creditsOverlay .creditsBody .column ul { list-style-type: none; padding: 10px 0 25px; }
+.creditsOverlay .creditsBody .column ul { list-style-type: none; padding: 10px 0 10px; }
 .creditsOverlay .creditsBody .column ul li { line-height: 20px; font-size: 12px; }
 
 .creditsOverlay .creditsBody ul.developers { color: #03a69a; }
