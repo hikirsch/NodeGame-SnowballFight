@@ -225,31 +225,14 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
                 $characterThumbs = $characterSelect.find('#character-thumbs'),
                 $thumbs = $characterThumbs.find('div');
 
-			$characterSelect
-				.find("form")
-				.submit(function(e) {
+			$characterSelect.executeOnPush = function(element){
+				element.submit( function(){
 					var carouselType = that.carouselManager.getCharacterType();
 					var characterType = that.getThemeCodeFromName(carouselType ) ;
 
 					return that.joinCurrentGame(characterType);
 				});
-
-			$characterSelect
-				.find('img.arrowLeft')
-				.click( function() {
-					that.carouselManager.move(-1);
-				});
-
-			$characterSelect
-				.find('img.arrowRight')
-				.click( function(e) {
-					that.carouselManager.move(1);
-				});
-
-            $thumbs
-                .click( function(e) {
-                    that.carouselManager.moveTo($thumbs.index(this));
-                });
+			};
 
 			this.overlayManager.pushOverlay( $characterSelect );
 		},
@@ -332,14 +315,12 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				that.overlayManager.popOverlay();
 			});
 
-
 			$('.intro a.jumpinLink, .intro a.jumpinLink-2').live('click', function(){
 				that.overlayManager.popOverlay();
 				that.showCharacterSelect();
 
 				return false;
 			});
-
 
 			this.creditsOverlayOpen = false;
 
@@ -348,19 +329,36 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				return false;
 			});
 
-			$('.inviteOverlay .closeBtn').live( 'click', function() {
-				that.inviteOverlayOpen = false;
+			$('.choose img.arrowLeft').live('click', function(e) {
+				that.carouselManager.move(-1);
 			});
 
-			this.attachInvite();
-			this.attachAddThis();
-			this.attachInstructions();
-            this.attachDevNotice();
-		},
+			$('.choose img.arrowRight').live('click', function(e) {
+				that.carouselManager.move(1);
+			});
 
-		attachInvite: function()
-		{
-			var that = this;
+            $('.choose .characters div').live('click', function() {
+				that.carouselManager.moveTo($thumbs.index(this));
+			});
+
+			this.devNoticeOverlayOpen = false;
+
+			$("#dev-notice").live( 'click', function() {
+				that.showDevNotice();
+				return false;
+			});
+
+			$("#devNotice .closeBtn").live('click',function(){
+				that.devNoticeOverlayOpen = false;
+			});
+
+
+			this.instructionsOverlayOpen = false;
+
+			$("li.instructions a").live( 'click', function() {
+				that.showInstructions();
+				return false;
+			});
 
 			this.inviteOverlayOpen = false;
 
@@ -368,59 +366,54 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				that.showInvite();
 				return false;
 			});
+
+			$('.inviteOverlay .closeBtn').live( 'click', function() {
+				that.inviteOverlayOpen = false;
+			});
+
+			this.attachAddThis();
 		},
 
-        showInvite: function()
-        {
-            var that = this,
-                $invite = HTMLFactory.invite(),
-                $thankYou = HTMLFactory.inviteThankYou();
+		showInvite: function()
+		{
+			var that = this,
+				$invite = HTMLFactory.invite(),
+				$thankYou = HTMLFactory.inviteThankYou();
 
-            if( ! this.inviteOverlayOpen && that.gameController.isGameActive() )
-            {
-                that.overlayManager.pushOverlay( $invite );
-                that.inviteOverlayOpen = true;
+			if( ! this.inviteOverlayOpen )
+			{
+				$invite.executeOnPush = function(ele){
+					ele.submit( function() {
+						EmailServiceManager.validateFormAndSendEmail( this, function(response) {
+							if( response === "true" )
+							{
+								that.overlayManager.popOverlay();
+								that.overlayManager.pushOverlay( $thankYou );
+								that.inviteOverlayOpen = false;
+							}
+							else
+							{
+								$invite
+									.find("p.error")
+									.removeClass('hide')
+									.html("Sorry! An error occurred while trying to send this email!");
+							}
+						});
 
-                $invite.submit( function() {
-                    EmailServiceManager.validateFormAndSendEmail( this, function(response) {
-                        if( response === "true" )
-                        {
-                            that.overlayManager.popOverlay();
-                            that.overlayManager.pushOverlay( $thankYou );
-                            that.inviteOverlayOpen = false;
-                        }
-                        else
-                        {
-                            $invite
-                                .find("p.error")
-                                .removeClass('hide')
-                                .html("Sorry! An error occurred while trying to send this email!");
-                        }
-                    });
+						return false;
+					});
+				};
 
-                    return false;
-                });
+				this.overlayManager.pushOverlay( $invite );
+				this.inviteOverlayOpen = true;
             }
-        },
-
-        attachDevNotice: function()
-        {
-            var that = this;
-
-            this.devNoticeOverlayOpen = false;
-
-            $("#dev-notice").click( function() {
-                that.showDevNotice();
-                return false;
-            });
         },
 
         showDevNotice: function()
         {
-            var that = this,
-                $devNotice = HTMLFactory.devNotice();
+            var $devNotice = HTMLFactory.devNotice();
 
-            if( ! that.devNoticeOverlayOpen && this.gameController.isGameActive() )
+            if( ! this.devNoticeOverlayOpen )
             {
                 this.overlayManager.pushOverlay( $devNotice );
                 this.devNoticeOverlayOpen = true;
@@ -461,18 +454,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			$("li.share a")
 				.attr('href', 'javascript:Void()')
 				.hover( open, close );
-		},
-
-		attachInstructions: function()
-		{
-			var that = this;
-
-			this.instructionsOverlayOpen = false;
-
-			$("li.instructions a").click(function() {
-				that.showInstructions();
-				return false;
-			});
 		},
 
 		showInstructions: function()

@@ -13,11 +13,11 @@
 /* welcome overlay */
 .mainOverlay { width: 900px; height: 600px; position: absolute; top: 0; left: 0; background: transparent; color: #005072; font-family: "Lucida Grande", sans-serif; font-size: 13px; }
 .mainOverlay .intro { background: url(../img/intro/bg-intro.jpg) no-repeat top center; -webkit-box-shadow: 0 0 10px #999; width: 810px; height: 600px; margin: auto; position: relative; overflow: visible; z-index: 8000; }
-.mainOverlay .inviteCharacters { position: absolute; bottom: 0; left: 20px; display: block; z-index: 8100; }
-.mainOverlay .invite { position: relative; float: right; display: block; z-index: 8100; margin-right: 13px; }
+.mainOverlay .inviteCharacters { position: absolute; bottom: 0; left: -25px; display: block; z-index: 7000; }
+
 .mainOverlay .snobigdeal { position: relative; left: 65px; top: -9px; }
-.mainOverlay .btnJumpin { position: relative; left: 570px; top: 20px; overflow: visible; -webkit-box-reflect: below 0 -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.8,transparent),to(white)); display: block; display: block; }
-.mainOverlay .jumpinLink { display: block; width: 160px; height: 45px; position: absolute; top: 335px; left: 625px; z-index: 8200; }
+.mainOverlay .btnJumpin { position: relative; z-index: 9000; left: 570px; top: 20px; overflow: visible; -webkit-box-reflect: below 0 -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.8,transparent),to(white)); display: block; }
+.mainOverlay .jumpinLink { display: block; width: 160px; height: 45px; top: 335px; left: 625px; z-index: 8100; }
 .introTxt { padding: 0; margin: 15px auto 15px 77px; line-height: 140%; width: 630px; opacity: 1; z-index: 8010; background: transparent; }
 .introSteps { position: relative; left: 70px; top: 0; }
 
@@ -37,6 +37,8 @@
 .howtoOverlay .powerUps { border-top: 1px solid #c9dadf; }
 .howtoOverlay .powerUps div { width: 480px; margin-left: 81px; }
 .howtoOverlay .playButton {  position: absolute; right: 36px; bottom: 21px; cursor: pointer; -webkit-box-reflect: below 0 -webkit-gradient(linear,left top,left bottom,from(transparent),color-stop(0.5,transparent),to(white)); }
+
+.mainOverlay .invite { position: relative; float: right; display: block; z-index: 8100; margin-right: 13px; }
 
 /* countdown overlay */
 .countOverlay { 
@@ -156,9 +158,11 @@
 /* invite overlay */
 #devNotice { position: absolute; left: -10px; top: 0; width: 623px; height: 461px; background: #fff url(../img/invite/bg-invite.jpg) no-repeat top left; -webkit-box-shadow: 0 0 10px #999; z-index: 8000; }
 #devNotice .overlayContent { padding: 16px 20px 20px; }
-#devNotice .headerContent { height: 78px; }
+#devNotice .headerContent { height: 35px; }
 #devNotice .overlayTitle { margin: 0 0 12px; }
 #devNotice .bodyContent { padding: 10px 0; }
 #devNotice p { font-size: 13px; font-family: "Lucida Grande", sans-serif; line-height: 1.4; color: #005072; margin: 0 0 10px; }
+#devNotice ul { padding-left: 20px; margin-bottom: 10px; }
+#devNotice ul li { font-size: 13px; font-family: "Lucida Grande", sans-serif; line-height: 1.4; color: #005072; margin: 0 0 2px; }
 #devNotice .closeBtn { position: absolute; top: -11px; right: 36px; cursor: pointer; }
 
