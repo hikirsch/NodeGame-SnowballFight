@@ -19,6 +19,7 @@ html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 	overflow: hidden; text-indent: -9999px; width: 160px; height: 58px;
 	float: left; background-repeat: no-repeat; background-position: 0 0;
 }
+.main-nav ul li a:hover { background-position: 0 100%; }
 .main-nav ul li.instructions a { background-image: url( ../img/global/nav-instructions.png ); }
 .main-nav ul li.share a { background-image: url( ../img/global/nav-share.png ); }
 .main-nav ul li.ogilvy-logo { float: right; width: auto; height: auto; padding-top: 10px; }

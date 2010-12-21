@@ -406,19 +406,19 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 				this.overlayManager.pushOverlay( $invite );
 				this.inviteOverlayOpen = true;
-            }
-        },
+			}
+		},
 
-        showDevNotice: function()
-        {
-            var $devNotice = HTMLFactory.devNotice();
+		showDevNotice: function()
+		{
+			var $devNotice = HTMLFactory.devNotice();
 
-            if( ! this.devNoticeOverlayOpen )
-            {
-                this.overlayManager.pushOverlay( $devNotice );
-                this.devNoticeOverlayOpen = true;
-            }
-        },
+			if( ! this.devNoticeOverlayOpen )
+			{
+				this.overlayManager.pushOverlay( $devNotice );
+				this.devNoticeOverlayOpen = true;
+			}
+		},
 
 		showCredits: function()
 		{
@@ -438,22 +438,19 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		attachAddThis: function()
 		{
-			function open()
+			function open(ele)
 			{
 				var url = "http://holiday2010.ogilvy.com",
 					title = "Join my #OgilvySnowballFight";
 
-				addthis_open(this, '', url, title);
-			}
-
-			function close()
-			{
-				addthis_close();
+				addthis_open(ele, '', url, title);
 			}
 
 			$("li.share a")
-				.attr('href', 'javascript:Void()')
-				.hover( open, close );
+				.attr('href', 'javascript:void(0)')
+				.click(function(){
+					open(this);
+				});
 		},
 
 		showInstructions: function()
