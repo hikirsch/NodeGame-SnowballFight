@@ -22,7 +22,7 @@ var init = function($)
 		attachEvents: function()
 		{
 			var that = this;
-			$('.game-container').live({
+			$('html').live({
 				keydown: function( e ) {
 					if( e.keyCode in that.keyCodes ) {
 						// if we're already pressing down on the same key, then we don't want to increment
@@ -31,7 +31,7 @@ var init = function($)
 							that.keyPressed++;
 						}
 						that.handler( e.keyCode, true );
-//						e.preventDefault();
+						e.preventDefault();
 					}
 				},
 	
@@ -39,7 +39,7 @@ var init = function($)
 					if( e.keyCode in that.keyCodes ) {
 						that.handler( e.keyCode, false );
 						that.keyPressed--;
-//						e.preventDefault();
+						e.preventDefault();
 					}
 				}
 			});
