@@ -40,6 +40,8 @@ AbstractServerGame = (function()
 			// the Server has access to all the games and our logger
 			// amongst other things that the entire server would need
 			this.server = aServer;
+
+			this.eventEmitter = new EVENTS.EventEmitter();
 			this.nextEntityID = 1; 	// Each time we create an entity we increment this
 			this.gameID = this.server.gameConfig.SERVER_SETTING.NEXT_GAME_ID;
 
@@ -100,10 +102,10 @@ AbstractServerGame = (function()
 		onPlayerMoveCommand: function(clientID, aDecodedMessage)
 		{
 			if(!this.isGameActive()) {
-				console.log("(AbstractServerGame)::onPlayerMoveCommand - Ignoring move CMD, game is over (", this.gameClock - this.model.gameDuration + ")ms old. Sent from clientID: " + clientID);
+				console.log("(AbstractServerGame)::onPlayerMoveCommand - Ignoring move CMD, game is over (" + this.gameClock - this.model.gameDuration + ")ms old. Sent from clientID: " + clientID);
 				return;
 			} else if(!this.fieldController.allEntities) { // Should not occur! debug
-				debugger;
+//				debugger;
 				return;
 			}
 
@@ -139,7 +141,6 @@ AbstractServerGame = (function()
 				}
 			};
 
-			console.log(SYS.inspect(endGameMessage.cmds.data.stats), 50);
 			this.netChannel.broadcastMessage(endGameMessage);
 			this.dealloc();
 		},
@@ -150,7 +151,9 @@ AbstractServerGame = (function()
 
 			this.netChannel.dealloc();
 			this.fieldController.dealloc();
-			this.server.killGame( this.portNumber );
+
+			// Tell the world!
+			this.eventEmitter.emit(GAMECONFIG.EVENTS.ON_GAME_ENDED, this);
 		},
 
 		/**
@@ -207,11 +210,12 @@ AbstractServerGame = (function()
 
 		canAddPlayer: function()
 		{
-			var gameClockLessThanDuration = (this.gameClock < this.model.gameDuration);
+			var gameClockLessThanDuration = ( (this.gameClock+GAMECONFIG.GAME_MODEL.ROUND_INTERMISSION_DURATION) < this.model.gameDuration);
 			var netChannelCanAcceptConnection = this.netChannel.canAddConnection();
-			console.log("(AbsractServerGame)::canAddPlayer - netchannel has " + this.netChannel.clients.count() + " connections.  GameClock < gameDuration: " + gameClockLessThanDuration);
 
 			var gameCanAddPlayer = netChannelCanAcceptConnection && gameClockLessThanDuration;
+
+			console.log("(AbsractServerGame)::canAddPlayer - GameID '"+ this.portNumber +" canAdd= " + gameCanAddPlayer + "  [netchannel has " + this.netChannel.clients.count() + " connections.  GameClock: " + (this.gameClock+GAMECONFIG.GAME_MODEL.ROUND_INTERMISSION_DURATION) + " GameDuration: " + this.model.gameDuration + "]");
 			return gameCanAddPlayer;
 		}
 	});

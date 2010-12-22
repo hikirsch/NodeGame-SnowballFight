@@ -102,20 +102,20 @@ Server.prototype = {
             }
         }
 
-		this.server.maxConnections = 3;
+//		this.server.maxConnections = 3;
         this.server.listen(this.port);
     },
 
 	close: function()
 	{
-		console.log("Closing!");
+		console.log("(WS).Server::Close");
 		if(this.isOpen === false) {
 			console.log("(WS).Server - Not open!");
 		}
 
 		var that = this;
 		this.connections.each(function(item) {
-            that.remove(item);
+			item.close();
         });
 
 		this.server.close();
@@ -189,6 +189,8 @@ WebSocket.prototype = {
 
     close: function() {
         if (this.connected) {
+
+			console.log("(WS).Client - Closing connection");
             this.connected = false;
             this.write(null);
             this.socket.end();
@@ -245,7 +247,9 @@ WebSocket.prototype = {
             this.socket.flush();
             bytes += 2;
 
-        } catch(e) {}
+        } catch(e) {
+			console.log("(WS).Client::write - error!", SYS.inspect(e));
+		}
 
         this.bytesSend += bytes;
         this.server.bytesSend += bytes;
@@ -258,6 +262,7 @@ WebSocket.prototype = {
                 msg = this.server.decoder(msg);
 
             } catch(e) {
+				console.log("(WS).Client::message - error!", SYS.inspect(e));
                 this.close();
                 return false;
             }
@@ -360,13 +365,13 @@ FluffSocket.prototype = {
             return this.write(encoded ? data : this.server.encoder(data));
 
         } else {
-            return 0;
-        }
-    },
+			return 0;
+		}
+	},
 
-    close: function() {
-        if (this.connected) {
-            this.connected = false;
+	close: function() {
+		if (this.connected) {
+                        this.connected = false;
             this.socket.end();
             this.socket.destroy();
             this.server.remove(this);
@@ -421,7 +426,9 @@ FluffSocket.prototype = {
             }
             this.socket.flush();
 
-        } catch(e) {}
+        } catch(e) {
+			console.log("(WS).fluffSocket - error!");
+		}
 
         this.bytesSend += bytes;
         this.server.bytesSend += bytes;

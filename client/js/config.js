@@ -14,6 +14,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			PLAYER_MOVE			: 1 << 5
 		},
 
+
 		CLIENT_SETTING:
 		{
 			updaterate	: 1000/25, 			// How often to request an update from the server perserver
@@ -33,7 +34,9 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			extrapolate_amount	: 0.25,		// If the connection is suffering, and we don't get an update fast enough - extrapolate positions until after this point. Then drop.
 
 			// Development
-			fakelag				: 0
+			fakelag				: 0,
+
+			VERBOSE_DEALLOC		: false
 		},
 
 		SERVER_SETTING:
@@ -51,7 +54,9 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			GAME_PORT: 10000,
 			NEXT_PORT: 10000 + 1, // 1 more than GAME_PORT
 			MAX_PORTS: 995,
-			DEBUG_MODE: true
+
+			DEBUG_MODE			: false,
+			VERBOSE_DEALLOC		: true
 		},
 
 
@@ -60,7 +65,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			width: 900,
 			height: 600,
 			MAX_PLAYERS: 8,
-			gameDuration: 8000,
+			gameDuration: 30000,
 //			gameDuration: 0.5 * 60 * 1000,
 			ROUND_INTERMISSION_DURATION: 4 * 1000
 		},
@@ -108,8 +113,9 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 		CHARACTER_MODEL: CharacterModel,
 
 		EVENTS: {
-			ON_POWERUP_AQUIRED				: 'onPowerupAquired',
-			ON_SOUND_WANTS_TO_BE_PLAYED		: "onSoundWantsToBePlayed"
+			ON_GAME_ENDED					: 'server_onGameEnded',
+			ON_POWERUP_AQUIRED				: 'client_onPowerupAquired',
+			ON_SOUND_WANTS_TO_BE_PLAYED		: "client_onSoundWantsToBePlayed"
 		},
 
 		SOUNDS_MAP: {

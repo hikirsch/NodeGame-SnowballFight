@@ -14,7 +14,6 @@ Basic Usage:
  	var netChannelOptions = {};
 	netChannelOptions.HOST = 'localhost';
 	netChannelOptions.PORT = 28785;
-	netChannelOptions.DEBUG_MODE = true;
 
  	// These are the 'CMDS' the player sends to the server, and the server sends.
 	netChannelOptions.CMDS = {};

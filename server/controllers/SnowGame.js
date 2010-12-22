@@ -31,22 +31,23 @@ SnowGame = (function()
 	return new JS.Class(AbstractServerGame, {
 		initialize: function(aServer, portNumber)
 		{
-			console.log("(SnowGame)::initialize");
+			this.callSuper();
+
 			SERVERSTATS.totalGamesPlayed++;
 			SERVERSTATS.activeGames++;
-
-			this.callSuper();
-			var that = this;
 
 			this.traitFactory = TraitFactory;
 
 			// Listen for collisions
-			var collisionManager = this.fieldController.getCollisionManager();
+			var collisionManager = this.fieldController.getCollisionManager(),
+				that = this;
 			collisionManager.eventEmitter.on('collision', function() { that.onCollision.apply(that, arguments) });
 
 			// Create the worlds best level of anything ever
 			this.createLevel();
 			this.initializePresents();
+
+			console.log("(SnowGame)::initialize");
 		},
 
 		initializePresents: function()

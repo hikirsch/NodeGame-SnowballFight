@@ -25,6 +25,7 @@ Version:
 
 var ws = require('network/ws.js');
 require('js/lib/jsclass/core.js');
+require('js/lib/SortedLookupTable.js');
 require('controllers/SnowGame.js');
 require('lib/Logger.js');
 
@@ -51,11 +52,11 @@ Server = (function()
 			this.gameConfig.SERVER_SETTING.NEXT_PORT = this.gameConfig.SERVER_SETTING.GAME_PORT + 1;
 
 		    this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
-			this.games = {};
+			this.games = new SortedLookupTable();
 
 			this.initServerChooser( this.gameConfig.SERVER_SETTING.GAME_PORT );
 
-			console.gameLog("(Server)::initialized Using\n\nServer Configuration:\n", SYS.inspect(this.gameConfig.SERVER_SETTING), "\n")
+			console.gameLog("(Server)::initialized Using\n\nServer Configuration:\n", SYS.inspect(this.gameConfig.SERVER_SETTING), "\n");
 			console.gameLog("(Server) started and running...");
 
 			// Running active connections on a ServerNetChannel
@@ -83,7 +84,7 @@ Server = (function()
 			// client will ask for a game in onMessage
 			aWebSocket.onConnect = function(connection) {
 				SERVERSTATS.gameJoinRequest++;
-				console.log("(ServerChooser) client connected, [ clients: " + SERVERSTATS.gameJoinRequest + "]");
+				console.log("(ServerChooser) client connected, [total gameJoinRequest: " + SERVERSTATS.gameJoinRequest + "]");
 				connection.__CONNECTED = true;
 			};
 
@@ -101,6 +102,7 @@ Server = (function()
 			};
 
 			aWebSocket.onClose = function(connection) {
+				connection.close();
 //				connection.doClose(); // this should work but causes recursive loop
 			};
 
@@ -119,7 +121,7 @@ Server = (function()
 				return this.getNextAvailableGame();
 			}
 
-			var existingGameAtDesiredPort = this.games[ desiredPort ];
+			var existingGameAtDesiredPort = this.games.objectForKey(desiredPort );
 
 			// Game exist
 			if(existingGameAtDesiredPort)
@@ -142,17 +144,19 @@ Server = (function()
 
 		getNextAvailableGame: function()
 		{
-			for( var gamePort in this.games )
+			var firstMatch = 0;
+			this.games.forEach(function(key, game)
 			{
-				if( this.games.hasOwnProperty( gamePort  ) ) {
-					if( gamePort in this.games && this.games[ gamePort ] != null
-						&& this.games[gamePort].canAddPlayer() ) {
-						return gamePort;
-					}
-				}
-			}
+				if( firstMatch !== 0) return; // Already matched
 
-			return this.createNewGame();
+				// Ask game if this player can join
+				if( game.canAddPlayer() )
+					firstMatch = game.portNumber;
+
+			}, this);
+
+
+			return firstMatch || this.createNewGame();
 		},
 
 		createNewGame: function()
@@ -164,23 +168,30 @@ Server = (function()
 		{
 			this.gameConfig.SERVER_SETTING.NEXT_GAME_ID++;
 			var aGameInstance = new SnowGame( this, newPort );
-			// start the game
-			aGameInstance.start();
-			this.games[ newPort ] = aGameInstance;
+			aGameInstance.start(); // start the game
+
+			var that = this;
+			// Listen for when the game is over
+			aGameInstance.eventEmitter.on(GAMECONFIG.EVENTS.ON_GAME_ENDED, function( anEndedGameInstance ) {
+				that.killGame(anEndedGameInstance.portNumber);
+			});
+
+			this.games.setObjectForKey(aGameInstance, newPort);
 
 			return newPort;
 		},
 
 		killGame: function( port )
 		{
-			this.games[ port ] = null;
+			console.log('(Server)::killGame KillingGame on port', port);
+			this.games.remove(port);
 		},
 
 		getNextAvailablePort: function()
 		{
 			var nextPort = this.gameConfig.SERVER_SETTING.NEXT_PORT;
 
-			while( this.games[ nextPort ] != null )
+			while( this.games.objectForKey(nextPort) != null )
 			{
 				nextPort += 1;
 				if( nextPort > this.gameConfig.SERVER_SETTING.GAME_PORT + this.gameConfig.SERVER_SETTING.MAX_PORTS ) {

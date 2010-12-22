@@ -32,6 +32,12 @@ var init = function(Joystick, BaseTrait)
 			this.attachedEntity.input.attachEvents();
 		},
 
+		detach: function(force)
+		{
+			debugger;
+			this.callSuper();
+		},
+
 		/**
 		 * Implement our own intercepted version of the methods/properties
 		 */

@@ -37,6 +37,7 @@ define(['lib/Vector',
 				this.CMD_TO_FUNCTION[config.CMDS.SERVER_END_GAME] = this.onShouldEndGame;
 
 				this.clientCharacter = null; // Special pointer to our own client character
+				this.isGameOver = false;
 
 				// Create the view first, we need a place to show the browser req.
 				this.view = new GameView(this, this.model );
@@ -68,6 +69,7 @@ define(['lib/Vector',
 				}
 
 				this.clientCharacter = null; // Special pointer to our own client character
+				this.isGameOver = false;
 
 				this.hasPlayedFinalCountrdownAudio = false;
 
@@ -346,6 +348,7 @@ define(['lib/Vector',
 
 				// We have a clientCharacter - thus we're in the game
 				var isInGame = this.clientCharacter != null;
+				this.isGameOver = true;
 
 				this.stopGameClock();
 
@@ -553,11 +556,8 @@ define(['lib/Vector',
 
 			netChannelDidDisconnect: function (messageData)
 			{
-				if(!this.isGameActive()) {
-					debugger;
+				if(this.view && !this.isGameOver) // If the server was never online, then we never had a view to begin with
 					this.view.serverOffline();
-
-				}
 			},
 
 			dealloc: function()
