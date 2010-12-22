@@ -51,6 +51,7 @@ AbstractServerGame = (function()
 
 			this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
 
+			this.isDeallocated = false;
 			this.startGameClock();
 		},
 
@@ -98,6 +99,14 @@ AbstractServerGame = (function()
 		 */
 		onPlayerMoveCommand: function(clientID, aDecodedMessage)
 		{
+			if(!this.isGameActive()) {
+				console.log("(AbstractServerGame)::onPlayerMoveCommand - Ignoring move CMD, game is over (", this.gameClock - this.model.gameDuration + ")ms old. Sent from clientID: " + clientID);
+				return;
+			} else if(!this.fieldController.allEntities) { // Should not occur! debug
+				debugger;
+				return;
+			}
+
 			var cmdData = aDecodedMessage.cmds.data;
 			var playerEntity = this.fieldController.allEntities.objectForKey(cmdData.objectID);
 
@@ -137,6 +146,8 @@ AbstractServerGame = (function()
 
 		dealloc: function()
 		{
+			this.isDeallocated = true;
+
 			this.netChannel.dealloc();
 			this.fieldController.dealloc();
 			this.server.killGame( this.portNumber );

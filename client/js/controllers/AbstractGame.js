@@ -23,6 +23,7 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 		{
 			this.config = config;
 			this.setModel(GAMECONFIG.GAME_MODEL);
+			this.isGameOver = false;
 
 			// our game takes place in a field
 			this.fieldController = new FieldController( this, this.model );
@@ -160,6 +161,11 @@ var init = function( Vector, Rectangle, SortedLookupTable, FieldController, Game
 		getFieldTop: function()
 		{
 			return this.fieldController.getTop();
+		},
+
+		isGameActive: function()
+		{
+			return (this.gameClock < this.model.gameDuration);
 		}
 	});
 };

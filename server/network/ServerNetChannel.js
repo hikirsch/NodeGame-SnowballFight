@@ -44,6 +44,7 @@ ServerNetChannel = (function()
 		initialize: function(aDelegate, config, port)
 		{
 			console.log('(ServerNetChannel)::init', config, port);
+
 			// Delegation pattern, avoid subclassing ServerNetChannel
 			this.delegate = aDelegate;
 			this.config = config;
@@ -78,6 +79,7 @@ ServerNetChannel = (function()
 		    this.CMD_TO_FUNCTION[config.CMDS.PLAYER_MOVE] = this.onPlayerMoveCommand;
 
 		    this.initAndStartWebSocket();
+			this.isDeallocated = false;
 		},
 
 		/**
@@ -88,7 +90,7 @@ ServerNetChannel = (function()
 		{
 			// START THE WEB-SOCKET
 			var that = this;
-			var aWebSocket = this.$ = new ws.Server(null);
+			var aWebSocket = this.websocketServer = new ws.Server(null);
 
 			aWebSocket.onConnect = function(connection)
 			{
@@ -151,7 +153,7 @@ ServerNetChannel = (function()
 
 			// Start the websocket
 			this.delegate.log("(ServerNetChannel) Starting listen on port '" + this.port + "'");
-			this.$.listen(this.port);
+			this.websocketServer.listen(this.port);
 
 			// Listen for process termination
 			process.addListener('SIGINT', function(){that.shutdown()});
@@ -217,9 +219,13 @@ ServerNetChannel = (function()
 			// This client is not in our client-list. Throw warning, something has probably gone wrong.
 			if(aClient == undefined)
 			{
-				debugger;
-				this.delegate.log("(ServerNetChannel)::removeClient - Attempted to disconnect unknown client!:" + clientID );
-				return;
+				if(!this.isDeallocated) { // No excuse to not have this client!
+					this.delegate.log("(ServerNetChannel)::removeClient - Attempted to disconnect unknown client!:" + clientID );
+					debugger;
+					return;
+				} else {
+					return; // Probably recursive removal. TODO: Remove recursive removal, and remove recursive removal.
+				}
 			}
 
 
@@ -234,7 +240,6 @@ ServerNetChannel = (function()
 
 			// Free the slot
 			this.clients.remove(clientID);
-			connection.doClose();
 		},
 
 		/**
@@ -343,11 +348,13 @@ ServerNetChannel = (function()
 
 		dealloc: function()
 		{
+			this.isDeallocated = true;
+
 			this.clients.forEach(function(key, aClient) {
 				this.removeClient(aClient.conn);
 			}, this);
 
-			this.$.stopListening();
+			this.websocketServer.close();
 			console.log("(ServerNetChannel) Closing Port: " + this.port );
 		}
 		// Close prototype object

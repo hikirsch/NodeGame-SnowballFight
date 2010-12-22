@@ -48,7 +48,8 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.statHTML = null;
 
-			var showStats = false; //"getContext" in document.createElement("canvas");
+			console.log("Location.host:", location.host);
+			var showStats = (location.host.indexOf("localhost") >= 0) ? ("getContext" in document.createElement("canvas")) : false;
 			if(showStats)
 			{
 				var stats = new Stats();
@@ -451,22 +452,19 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 		attachAddThis: function()
 		{
-			function open()
+			function open(ele)
 			{
 				var url = "http://holiday2010.ogilvy.com",
 					title = "Join my #OgilvySnowballFight";
 
-				addthis_open(this, '', url, title);
-			}
-
-			function close()
-			{
-				addthis_close();
+				addthis_open(ele, '', url, title);
 			}
 
 			$("li.share a")
-				.attr('href', 'javascript:Void()')
-				.hover( open, close );
+				.attr('href', 'javascript:void(0)')
+				.click(function(){
+					open(this);
+				});
 		},
 
 		attachInstructions: function()
