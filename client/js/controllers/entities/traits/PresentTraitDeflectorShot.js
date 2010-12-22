@@ -32,7 +32,7 @@ var init = function(BaseTrait, EntityModel)
 			this.attachedEntity.themeMask |= this.themeMaskList.HAS_POWERUP;
 		},
 
-		detach: function()
+		detach: function(force)
 		{
 			this.attachedEntity.themeMask &= ~this.themeMaskList.HAS_POWERUP;
 			this.callSuper();

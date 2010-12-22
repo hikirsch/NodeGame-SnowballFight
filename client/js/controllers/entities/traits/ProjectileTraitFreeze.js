@@ -43,7 +43,7 @@ var init = function(BaseTrait, Vector)
 			this.detachAfterDelay(this.freezeTime);
 		},
 
-		detach: function() {
+		detach: function(force) {
 			var entity = this.attachedEntity; // Store in var because the super call below will clear the memory
 			this.callSuper();
 
@@ -51,7 +51,8 @@ var init = function(BaseTrait, Vector)
 			entity.themeMask &= ~this.themeMaskList.FROZEN;
 
 			// Add an invulnerability trait
-			entity.addTraitAndExecute( new CharacterTraitInvulnerable(this.freezeTime*0.5) );
+			if(!force)
+				entity.addTraitAndExecute( new CharacterTraitInvulnerable(this.freezeTime*0.5) );
 		},
 
 

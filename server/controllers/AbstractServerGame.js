@@ -207,7 +207,6 @@ AbstractServerGame = (function()
 
 		canAddPlayer: function()
 		{
-			console.log("ABC")
 			var gameClockLessThanDuration = (this.gameClock < this.model.gameDuration);
 			var netChannelCanAcceptConnection = this.netChannel.canAddConnection();
 			console.log("(AbsractServerGame)::canAddPlayer - netchannel has " + this.netChannel.clients.count() + " connections.  GameClock < gameDuration: " + gameClockLessThanDuration);

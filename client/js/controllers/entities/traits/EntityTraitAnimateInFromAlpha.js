@@ -25,7 +25,7 @@ var init = function(BaseTrait, Vector)
 			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN_ALPHA;
 		},
 
-		detach: function()
+		detach: function(force)
 		{
 			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN_ALPHA;
 			this.callSuper();

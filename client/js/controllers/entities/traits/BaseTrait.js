@@ -72,15 +72,17 @@ var init = function()
 		/**
 		 * Detaches a trait from an 'attachedEntity' and restores the properties
 		 */
-		detach: function()
+		detach: function(force)
 		{
 			clearTimeout(this.detachTimeout);
 
 			this.restore();
-
 			delete this.interceptedProperties;
 			this.interceptProperties = null;
 			this.attachedEntity = null;
+
+			if(force)
+				console.log("("+this.displayName+")::Trait forcefully detached");
 		},
 
 		detachAfterDelay: function(aDelay)

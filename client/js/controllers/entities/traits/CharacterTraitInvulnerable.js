@@ -36,15 +36,13 @@ var init = function(BaseTrait, Vector)
 			this.attachedEntity.collisionCircle.collisionMask = this.collisionMask;
 		},
 
-		detach: function()
+		detach: function(force)
 		{
 			var entity = this.attachedEntity;
 			this.callSuper();
 
-			console.log("1DEATACH!!!", entity.themeMask)
 			// restore the collisionmask to the circle
 			entity.themeMask &= ~this.themeMaskList.FLASHING;
-			console.log("2DEATACH!!!", entity.themeMask)
 			entity.collisionCircle.collisionMask = entity.collisionMask;
 		},
 

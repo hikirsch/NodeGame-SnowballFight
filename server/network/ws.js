@@ -92,6 +92,7 @@ Server.prototype = {
 
 		this.isOpen = true;
         this.port = port;
+		this.flashSocket = false;
         if (this.flashSocket) {
             try {
                 this.initFlash();
@@ -100,11 +101,14 @@ Server.prototype = {
                 this.flashSocket = false;
             }
         }
+
+		this.server.maxConnections = 3;
         this.server.listen(this.port);
     },
 
 	close: function()
 	{
+		console.log("Closing!");
 		if(this.isOpen === false) {
 			console.log("(WS).Server - Not open!");
 		}

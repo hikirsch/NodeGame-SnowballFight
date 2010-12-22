@@ -288,6 +288,7 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 			// TODO: Remove check - this should not be called if traits is null - clear timeouts
 			if(!this.traits) {
 				console.log("(GameEntity)::removingTraitWithName ERROR: could not remove", aTraitName);
+				debugger;
 				return;
 			}
 
@@ -349,11 +350,14 @@ var init = function(Vector, Rectangle, FieldController, SortedLookupTable, Entit
 		 */
 		dealloc: function()
 		{
+			this.traits.forEach( function(key, trait){
+				trait.detach(true);
+			}, this );
+
 			delete this.position;
 			delete this.velocity;
 			delete this.acceleration;
 
-//			this.traits.forEach(this)
 			this.traits.dealloc();
 			delete this.traits;
 

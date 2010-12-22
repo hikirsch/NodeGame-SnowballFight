@@ -32,7 +32,7 @@ var init = function(BaseTrait)
 			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN_ALPHA;
 		},
 
-		detach: function()
+		detach: function(force)
 		{
 			this.attachedEntity.themeMask &= ~this.themeMaskList.HAS_POWERUP;
 			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN_ALPHA;

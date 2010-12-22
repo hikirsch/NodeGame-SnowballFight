@@ -24,7 +24,7 @@ var init = function(BaseTrait, Vector)
 			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN_LARGE;
 		},
 
-		detach: function()
+		detach: function(force)
 		{
 			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN_LARGE;
 			this.callSuper();
