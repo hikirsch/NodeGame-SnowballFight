@@ -19,37 +19,30 @@ var init = function(Joystick, BaseTrait)
 {
 	return new JS.Class("ClientControlledTrait", BaseTrait,
 	{
-		initialize: function() {
+		initialize: function(aFieldController, aCircleManager)
+		{
+			this.fieldController = aFieldController;
+			this.circleManager = aCircleManager;
+
 			this.callSuper();
 		},
 
 		attach: function(anEntity)
 		{
 			this.callSuper();
-			this.intercept(['constructEntityDescription', 'handleInput']);
+			this.intercept(['tick', 'handleInput']);
 
 			this.attachedEntity.setInput( new Joystick() );
 			this.attachedEntity.input.attachEvents();
 		},
 
-		detach: function(force)
-		{
-			this.callSuper();
-		},
-
 		/**
 		 * Implement our own intercepted version of the methods/properties
 		 */
-		constructEntityDescription: function(gameTick, wantsFullUpdate)
+		tick: function(speedFactor, gameClock)
 		{
-			return {
-				objectID: this.objectID,
-				clientID: this.clientID,
-				input: this.input.constructInputBitmask()
-			}
+			// TODO: Write AI
 		},
-		// Do nothing
-		handleInput: function(gameClock){}
 	});
 };
 

@@ -63,9 +63,7 @@ define(['lib/Vector',
 			{
 				// If set use that
 				if( QueryStringManager.hasQueryString('game') ) {
-					console.log("SETTING!!! ",this.config.SERVER_SETTING.GAME_PORT)
 					this.config.SERVER_SETTING.GAME_PORT = QueryStringManager.getQueryString('game');
-					console.log("SETTING!!! ",this.config.SERVER_SETTING.GAME_PORT)
 				}
 
 				this.clientCharacter = null; // Special pointer to our own client character
@@ -367,9 +365,8 @@ define(['lib/Vector',
 				this.nextGamePort = data.nextGamePort;
 
 
-				console.log("putting!!! ",this.config.SERVER_SETTING.GAME_PORT)
+				// Add to history
 				history.pushState(null, "game-" + data.nextGamePort, "?game=" + data.nextGamePort );
-				console.log("putting!!! ",this.config.SERVER_SETTING.GAME_PORT)
 
 
 				if(isInGame)
@@ -392,7 +389,6 @@ define(['lib/Vector',
 
 			parsePlayerStats: function( data )
 			{
-				console.log("PARSING PLAYER STATS");
 				var allPlayersStats = [],
 					allEntities = data.split('|').reverse(),
 					allEntitiesLen = allEntities.length;
@@ -533,7 +529,7 @@ define(['lib/Vector',
 					var nickname = CookieManager.getCookie("nickname"),
 						theme = CookieManager.getCookie("theme");
 
-					CookieManager.setCookie( "autojoin", "false" );
+//					CookieManager.setCookie( "autojoin", "false" );
 					this.joinGame(nickname, theme);
 				}
 				else

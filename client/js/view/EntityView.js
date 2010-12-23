@@ -3,17 +3,26 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 	return new JS.Class( BaseView,
 	{
 		initialize:  function(controller, model ) {
-			this.callSuper();
-			this.themeMask = this.controller.themeMask;
+			GAMECONFIG.UUID = (GAMECONFIG.UUID !== undefined) ? GAMECONFIG.UUID++ : 0;
 
+			this.ID = GAMECONFIG.UUID;
+			this.themeMask = controller.themeMask;
+
+			// When 'isDirtyTheme' is true, and we currently don't have a 'themeMask' - that's how we know to clear
+			this.isDirtyTheme = false;
+			this.CAATActorContainer = null; // Characters use ActorContainers because they can contain other actors
+			this.CAATText = null;
+
+			this.themeMaskList = GAMECONFIG.SPRITE_THEME_MASK;
 			this.verboseRanking = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
+
+			this.callSuper();
 		},
 
 		createElement: function()
 		{
 			var director = GAMECONFIG.CAAT.DIRECTOR;
 			this.themeMaskList = GAMECONFIG.SPRITE_THEME_MASK;
-			this.animatedIn = false;
 
 			// Grab our model info and create a sprite
 			var themeModel = this.themeModel = this.getThemeModelByID(this.model.theme);
@@ -27,9 +36,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 					setSpriteImage(caatImage);
 
 			this.CAATSprite.spriteIndex = themeModel.spriteIndex;
-
 		  	this.CAATSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
-			this.CAATText = null;
 
 			// Don't create an actorcontainer if its not a character
 			if(this.controller.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER)
@@ -44,7 +51,7 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 				var that = this;
 
 				// This entity is the client character
-				// We have to do this here to call the create function next tick as the prop is set after we've are made
+				// We have to do this here to call the create function next event loop, as the prop is set after we've are made
 				setTimeout(function(){
 							  that.createClientControlledCharacterHighlight()
 						  }, 0);
@@ -56,9 +63,6 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			this.CAATSprite.zIndex = actor.zIndex = themeModel.zIndex;
 			this.CAATSprite.mouseEnabled = actor.mouseEnabled = false;
 
-			// We previously had a theme applied - but now we don't want one anymore - clear
-			this.isDirtyTheme = false;
-
 			this.update();
 		},
 
@@ -69,116 +73,19 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 		update: function()
 		{
 			var actor = this.CAATActorContainer || this.CAATSprite;
-
-			// dev test
-			var fixOffset = true;
-			if(fixOffset)
-			{
-				actor.setLocation(this.controller.getPosition().x - this.actorWidth, this.controller.getPosition().y - this.actorWidth );
-			} else {
-				actor.setLocation(this.controller.getPosition().x, this.controller.getPosition().y);
-
-			}
+			actor.setLocation(this.controller.getPosition().x - this.actorWidth, this.controller.getPosition().y - this.actorWidth );
 
 			// See if anything fancy has occured
-			if(this.controller.themeMask) // 1 means no
-			{
-				// TODO: Switch to function-object lookup instead of giant if/else
+			if(this.controller.themeMask)
+				this.handleThemeMask(actor);
 
-				// Animate IN
-				var animateInLargeOrSmall = (this.themeMaskList.ANIMATE_IN_ALPHA | this.themeMaskList.ANIMATE_IN_LARGE);
-
-				// wants to animate in, and hasn't already
-				if((this.controller.themeMask & animateInLargeOrSmall) && !(this.themeMask & animateInLargeOrSmall) )
-				{
-					this.animatedIn = true;
-
-					if(this.controller.themeMask & this.themeMaskList.ANIMATE_IN_ALPHA)
-						this.animateInUsingAlpha(this.CAATSprite, this.CAATSprite.time+30+Math.random()*300, Math.random() * 600 + 400, 0.1, 1)
-					else
-						this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 4.5, 1 );
-				}
-				// FROZEN
-				else if( this.controller.themeMask & this.themeMaskList.FROZEN && this.CAATSprite.animationImageIndex.length == 1)
-				{
-					this.CAATSprite.setAnimationImageIndex( [8,9] );
-                	this.CAATSprite.changeFPS= 300;
-
-					// TODO: Move to randomizing function
-
-
-					var hitSound = ( Math.random() < 0.5 ) ? GAMECONFIG.SOUNDS_MAP.snowballHit1 : GAMECONFIG.SOUNDS_MAP.snowballHit2;
-
-					// everyone starts off frozen, dont play sound
-					if(GAMECONFIG.CAAT.SCENE.time > 8000)
-						GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(hitSound);
-				}
-				// Flashing
-				else if (this.controller.themeMask & this.themeMaskList.FLASHING)
-				{
-					// TODO: HACK - we shouldn't have to reset animation index here
-					this.CAATSprite.spriteIndex = 1;
-					this.CAATSprite.setAnimationImageIndex([1]);
-					this.CAATSprite.setAlpha(Math.random());
-				}
-
-				// Powerup
-				if( (this.controller.themeMask & this.themeMaskList.HAS_POWERUP) && !(this.themeMask & this.themeMaskList.HAS_POWERUP) ) // and we don't have it yet
-				{
-					this.CAATActorContainer.addChild(this.CAATPowerupSprite);
-
-					// Turn the animation back on
-					this.CAATPowerupSprite.setFrameTime(this.CAATActorContainer.time, this.CAATActorContainer.time+10000);
-
-					// Scale me up!
-					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time, 700, 2, 1);
-
-					//
-//					GAMECONFIG.GENERIC_EVENT_DISPATCHER.dispatchEvent(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED,{theme: this.controller.themeMask});
-
-
-					// Tell the world!
-					var event = document.createEvent("Event");
-					event.initEvent(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, true, true);
-					event.data = {theme: this.controller.themeMask};
-					window.dispatchEvent(event);
-				}
-
-				// Set to dirty, and remember new mask
-				this.isDirtyTheme = true;
-			}
 
 			this.themeMask = this.controller.themeMask;
 			// This is true if we had a theme applied, and its done, but we didn't remove some of its stuff yet
 			if( this.controller.themeMask === 0 && this.isDirtyTheme)
-			{
 				this.restoreFromThemeMask();
-			}
 
-			// Do regular stuff
-			var actualRotation = this.controller.getRotation();
-			var untouchedRotation = actualRotation;
-
-			if( this.controller.useTransform ) {
-				this.CAATSprite.setRotation( actualRotation * 0.0174532);
-
-			}
-			else if(actualRotation != 0 )
-			{
-				actualRotation += 90;
-				if(actualRotation < 0)  actualRotation += 359; // Wrap
-
-				// Round to the number of sprites we have
-				var roundTo = 45,
-					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
-
-				// spriteIndex = 90 / 45 = 2
-
-				this.CAATSprite.spriteIndex = ( roundedRotation / roundTo);
-
-				if(this.CAATSprite.spriteIndex === 8) // When we are at 360 degrees, interpret as zero
-					this.CAATSprite.spriteIndex = 0;
-			}
+			this.handleRotation();
 
 			// We got the nickname but no textfield, create textfield
 			if(this.controller.model.nickname && !this.CAATText)
@@ -188,6 +95,95 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			if(this.CAATText) {
 				this.CAATText.setText(this.verboseRanking[this.controller.rank-1] + " - " + this.controller.model.nickname);
 			}
+		},
+
+		handleRotation: function ()
+		{
+			// Do regular stuff
+			var actualRotation = this.controller.getRotation();
+
+			// No spritesheet - just rotate actual actor
+			if( this.controller.useTransform ) {
+				this.CAATSprite.setRotation( actualRotation * 0.0174532);
+				return;
+			}
+
+			//  only update if changed
+			if(actualRotation != 0 )
+			{
+				actualRotation += 90;
+				if(actualRotation < 0)  actualRotation += 359; // Wrap
+
+				// Round to the number of sprites we have
+				var roundTo = 45,
+					roundedRotation = Math.round(actualRotation / roundTo) * roundTo;
+
+				// spriteIndex = 90 / 45 = 2
+				this.CAATSprite.spriteIndex = ( roundedRotation / roundTo);
+
+				if(this.CAATSprite.spriteIndex === 8) // When we are at 360 degrees, interpret as zero
+					this.CAATSprite.spriteIndex = 0;
+			}
+		},
+
+		handleThemeMask: function(actor)
+		{
+			// TODO: Switch to function-object lookup instead of giant if/else
+			// Animate IN
+			var animateInLargeOrSmall = (this.themeMaskList.ANIMATE_IN_ALPHA | this.themeMaskList.ANIMATE_IN_LARGE);
+
+			// wants to animate in, and hasn't already
+			if((this.controller.themeMask & animateInLargeOrSmall) && !(this.themeMask & animateInLargeOrSmall) )
+			{
+				if(this.controller.themeMask & this.themeMaskList.ANIMATE_IN_ALPHA)
+					this.animateInUsingAlpha(this.CAATSprite, this.CAATSprite.time+100+ Math.random() * 1000, Math.random() * 600 + 400, 0, 1);
+				else
+					this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time+30, Math.random() * 600 + 400, 4.5, 1 );
+			}
+			// FROZEN
+			else if( this.controller.themeMask & this.themeMaskList.FROZEN && this.CAATSprite.animationImageIndex.length == 1)
+			{
+				this.CAATSprite.setAnimationImageIndex( [8,9] );
+				this.CAATSprite.changeFPS= 300;
+
+				// TODO: Move to randomizing function
+
+
+				var hitSound = ( Math.random() < 0.5 ) ? GAMECONFIG.SOUNDS_MAP.snowballHit1 : GAMECONFIG.SOUNDS_MAP.snowballHit2;
+
+				// everyone starts off frozen, dont play sound
+				if(GAMECONFIG.CAAT.SCENE.time > 8000)
+					GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(hitSound);
+			}
+			// Flashing
+			else if (this.controller.themeMask & this.themeMaskList.FLASHING)
+			{
+				// TODO: HACK - we shouldn't have to reset animation index here
+				this.CAATSprite.spriteIndex = 1;
+				this.CAATSprite.setAnimationImageIndex([1]);
+				this.CAATSprite.setAlpha(Math.random());
+			}
+
+			// Powerup
+			if( (this.controller.themeMask & this.themeMaskList.HAS_POWERUP) && !(this.themeMask & this.themeMaskList.HAS_POWERUP) ) // and we don't have it yet
+			{
+				this.CAATActorContainer.addChild(this.CAATPowerupSprite);
+
+				// Turn the animation back on
+				this.CAATPowerupSprite.setFrameTime(this.CAATActorContainer.time, this.CAATActorContainer.time+10000);
+
+				// Scale me up!
+				this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time, 700, 2, 1);
+
+				// Tell the world!
+				var event = document.createEvent("Event");
+				event.initEvent(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, true, true);
+				event.data = {theme: this.controller.themeMask};
+				window.dispatchEvent(event);
+			}
+
+			// Set to dirty, so we
+			this.isDirtyTheme = true
 		},
 
 		/**
@@ -271,21 +267,20 @@ define(['view/BaseView', 'lib/jsclass/core'], function(BaseView)
 			if(this.controller !== GAMECONFIG.CAAT.CLIENT_CHARACTER)
 				return;
 
-
 			var director = GAMECONFIG.CAAT.DIRECTOR;
 			/**
 			 * Create a sprite to show the powerup state
 			 */
-			var powerupThemeModel= this.getThemeModelByID('501'),
+			var themeModel = this.getThemeModelByID('501'),
 				imageRef = GAMECONFIG.CAAT.DIRECTOR.getImage('501'),
 				caatImage = new CAAT.CompoundImage().
-						initialize(imageRef, powerupThemeModel.rowCount, powerupThemeModel.columnCount);
+						initialize(imageRef, themeModel.rowCount, themeModel.columnCount);
 
 			var actor = this.CAATCharacterHighlight = new CAAT.SpriteActor().
 					create().
 					setSpriteImage(caatImage);
 
-			this.CAATCharacterHighlight.spriteIndex = powerupThemeModel.spriteIndex;
+			this.CAATCharacterHighlight.spriteIndex = themeModel.spriteIndex;
 			this.CAATCharacterHighlight.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 			this.CAATCharacterHighlight.setLocation(this.CAATSprite.width*-0.5 - 6, this.CAATSprite.height/2 - 10);
 
