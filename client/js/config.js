@@ -56,7 +56,7 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			MAX_PORTS: 995,
 
 			DEBUG_MODE			: false,
-			VERBOSE_DEALLOC		: true
+			VERBOSE_DEALLOC		: false
 		},
 
 
@@ -66,8 +66,8 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			height: 600,
 			MAX_PLAYERS: 8,
 //			gameDuration: 10000,
-			gameDuration: 2.5 * 60 * 1000,
-			ROUND_INTERMISSION_DURATION: 4 * 1000
+			gameDuration: 2.25 * 60 * 1000,
+			ROUND_INTERMISSION_DURATION: 10 * 1000
 		},
 
 		PRESENTS_SETTING:

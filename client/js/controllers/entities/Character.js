@@ -40,7 +40,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER;			// Type
 
 			// Override movement properties
-			this.moveSpeed = 0.4;
+			this.moveSpeed = 0.38;
 			this.damping = 0.90;
 			this.maxVelocity = 3.0;
 
@@ -55,7 +55,7 @@ var init = function(Vector, Rectangle, FieldController, GameEntity, ProjectileMo
 			this.lastScoreSent = 0;
 			this.scoreMultiplier = 1;
 
-			this.radius = 13;
+			this.radius = 12.5;
 
 			// Statistics
 			this.stats = {};
