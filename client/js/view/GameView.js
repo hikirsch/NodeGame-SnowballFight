@@ -48,7 +48,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 
 			this.statHTML = null;
 
-			console.log("Location.host:", location.host);
 			var showStats = (location.host.indexOf("localhost") >= 0) ? ("getContext" in document.createElement("canvas")) : false;
 			if(showStats)
 			{
@@ -214,15 +213,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 			var that = this,
 				$intro = HTMLFactory.intro();
 
-			$intro
-				.find('a.jumpinLink, a.jumpinLink-2')
-				.click( function(){
-					that.overlayManager.popOverlay();
-					that.showCharacterSelect();
-
-					return false;
-				});
-
 			this.overlayManager.pushOverlay( $intro );
 
 			return false;
@@ -235,31 +225,14 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
                 $characterThumbs = $characterSelect.find('#character-thumbs'),
                 $thumbs = $characterThumbs.find('div');
 
-			$characterSelect
-				.find("form")
-				.submit(function(e) {
+			$characterSelect.executeOnPush = function(element){
+				element.submit( function(){
 					var carouselType = that.carouselManager.getCharacterType();
 					var characterType = that.getThemeCodeFromName(carouselType ) ;
 
 					return that.joinCurrentGame(characterType);
 				});
-
-			$characterSelect
-				.find('img.arrowLeft')
-				.click( function() {
-					that.carouselManager.move(-1);
-				});
-
-			$characterSelect
-				.find('img.arrowRight')
-				.click( function(e) {
-					that.carouselManager.move(1);
-				});
-
-            $thumbs
-                .click( function(e) {
-                    that.carouselManager.moveTo($thumbs.index(this));
-                });
+			};
 
 			this.overlayManager.pushOverlay( $characterSelect );
 		},
@@ -342,96 +315,109 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				that.overlayManager.popOverlay();
 			});
 
-			this.attachInvite();
-			this.attachCredits();
-			this.attachAddThis();
-			this.attachInstructions();
-            this.attachDevNotice();
-		},
+			$('.intro a.jumpinLink, .intro a.jumpinLink-2').live('click', function(){
+				that.overlayManager.popOverlay();
+				that.showCharacterSelect();
 
-		attachInvite: function()
-		{
-			var that = this;
-
-			this.inviteOverlayOpen = false;
-
-			$("#btn-invite").click( function() {
-				that.showInvite();
 				return false;
 			});
-		},
-
-        showInvite: function()
-        {
-            var that = this,
-                $invite = HTMLFactory.invite(),
-                $thankYou = HTMLFactory.inviteThankYou();
-
-            if( ! this.inviteOverlayOpen && that.gameController.isGameActive() )
-            {
-                that.overlayManager.pushOverlay( $invite );
-                that.inviteOverlayOpen = true;
-
-                $invite.submit( function() {
-                    EmailServiceManager.validateFormAndSendEmail( this, function(response) {
-                        if( response === "true" )
-                        {
-                            that.overlayManager.popOverlay();
-                            that.overlayManager.pushOverlay( $thankYou );
-                            that.inviteOverlayOpen = false;
-                        }
-                        else
-                        {
-                            $invite
-                                .find("p.error")
-                                .removeClass('hide')
-                                .html("Sorry! An error occurred while trying to send this email!");
-                        }
-                    });
-
-                    return false;
-                });
-
-                $invite.find('.closeBtn').click( function() {
-                    that.inviteOverlayOpen = false;
-                });
-            }
-        },
-
-        attachDevNotice: function()
-        {
-            var that = this;
-
-            this.devNoticeOverlayOpen = false;
-
-            $("#dev-notice").click( function() {
-                that.showDevNotice();
-                return false;
-            });
-        },
-
-        showDevNotice: function()
-        {
-            var that = this,
-                $devNotice = HTMLFactory.devNotice();
-
-            if( ! that.devNoticeOverlayOpen && this.gameController.isGameActive() )
-            {
-                this.overlayManager.pushOverlay( $devNotice );
-                this.devNoticeOverlayOpen = true;
-            }
-        },
-
-		attachCredits: function()
-		{
-			var that = this;
 
 			this.creditsOverlayOpen = false;
 
-			$("#credits-link").click( function() {
+			$("#credits-link").live( 'click', function() {
 				that.showCredits();
 				return false;
 			});
+
+			$('.choose img.arrowLeft').live('click', function(e) {
+				that.carouselManager.move(-1);
+			});
+
+			$('.choose img.arrowRight').live('click', function(e) {
+				that.carouselManager.move(1);
+			});
+
+            $('.choose .characters div').live('click', function() {
+				that.carouselManager.moveTo($thumbs.index(this));
+			});
+
+			this.devNoticeOverlayOpen = false;
+
+			$("#dev-notice").live( 'click', function() {
+				that.showDevNotice();
+				return false;
+			});
+
+			$("#devNotice .closeBtn").live('click',function(){
+				that.devNoticeOverlayOpen = false;
+			});
+
+
+			this.instructionsOverlayOpen = false;
+
+			$("li.instructions a").live( 'click', function() {
+				that.showInstructions();
+				return false;
+			});
+
+			this.inviteOverlayOpen = false;
+
+			$("#btn-invite").live( 'click', function() {
+				that.showInvite();
+				return false;
+			});
+
+			$('.inviteOverlay .closeBtn').live( 'click', function() {
+				that.inviteOverlayOpen = false;
+			});
+
+			this.attachAddThis();
+		},
+
+		showInvite: function()
+		{
+			var that = this,
+				$invite = HTMLFactory.invite(),
+				$thankYou = HTMLFactory.inviteThankYou();
+
+			if( ! this.inviteOverlayOpen )
+			{
+				$invite.executeOnPush = function(ele){
+					ele.submit( function() {
+						EmailServiceManager.validateFormAndSendEmail( this, function(response) {
+							if( response === "true" )
+							{
+								that.overlayManager.popOverlay();
+								that.overlayManager.pushOverlay( $thankYou );
+								that.inviteOverlayOpen = false;
+							}
+							else
+							{
+								$invite
+									.find("p.error")
+									.removeClass('hide')
+									.html("Sorry! An error occurred while trying to send this email!");
+							}
+						});
+
+						return false;
+					});
+				};
+
+				this.overlayManager.pushOverlay( $invite );
+				this.inviteOverlayOpen = true;
+			}
+		},
+
+		showDevNotice: function()
+		{
+			var $devNotice = HTMLFactory.devNotice();
+
+			if( ! this.devNoticeOverlayOpen )
+			{
+				this.overlayManager.pushOverlay( $devNotice );
+				this.devNoticeOverlayOpen = true;
+			}
 		},
 
 		showCredits: function()
@@ -465,18 +451,6 @@ define( ['lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieM
 				.click(function(){
 					open(this);
 				});
-		},
-
-		attachInstructions: function()
-		{
-			var that = this;
-
-			this.instructionsOverlayOpen = false;
-
-			$("li.instructions a").click(function() {
-				that.showInstructions();
-				return false;
-			});
 		},
 
 		showInstructions: function()
