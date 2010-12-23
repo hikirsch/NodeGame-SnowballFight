@@ -72,6 +72,11 @@ define(['factories/HTMLFactory'], function( HTMLFactory ) {
 
 				this.activeElement.appendTo("body");
 
+				if( "executeOnPush" in this.activeElement && typeof this.activeElement.executeOnPush === "function" ) {
+					console.log("Attaching event for overlay!");
+					this.activeElement.executeOnPush( this.activeElement );
+				}
+
 				this.resize();
 				console.log( '(OverlayManager) Push', $ele, this.active );
 			},
