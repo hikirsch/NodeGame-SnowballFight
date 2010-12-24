@@ -1,4 +1,4 @@
-require([ 'lib/ArgHelper', 'network/Server', 'serverConfig', 'js/config' ], function( ArgHelper, Server, serverConfig, config ) {
+require([ 'lib/ArgHelper', 'network/Server', 'serverConfig', 'config' ], function( ArgHelper, Server, serverConfig, config ) {
 	// Use ArgHelper to get optional command line arguments
 	//	var ArgHelper = require('./lib/ArgHelper.js');
 	//	SYS = require('sys');  // This is a really good example of when a global, is actually the best option!
