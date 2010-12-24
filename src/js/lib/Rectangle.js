@@ -9,7 +9,7 @@ Abstract:
 	Simple value object
 Basic Usage: 
 */
-define(['lib/js-class'], function( JS ) {
+define(['lib/jsclass-core'], function( JS ) {
 	return new JS.Class(
 	{
 		initialize: function(x, y, width, height)

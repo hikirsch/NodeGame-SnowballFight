@@ -15,7 +15,7 @@ Basic Usage:
 		this.clientCharacter = aCharacter;
 	}
 */
-var init = function(Joystick, BaseTrait)
+define(['lib/jsclass-core', 'lib/Joystick', 'controllers/entities/traits/BaseTrait'], function(JS, Joystick, BaseTrait)
 {
 	return new JS.Class("ClientControlledTrait", BaseTrait,
 	{
@@ -42,22 +42,6 @@ var init = function(Joystick, BaseTrait)
 		tick: function(speedFactor, gameClock)
 		{
 			// TODO: Write AI
-		},
+		}
 	});
-};
-
-
-if (typeof window === 'undefined')
-{
-	// We're in node!
-	require('js/controllers/entities/traits/BaseTrait');
-	require('js/lib/SortedLookupTable');
-	require('js/lib/Joystick');
-	ClientControlledTrait = init(Joystick, BaseTrait);
-}
-else
-{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/Joystick', 'controllers/entities/traits/BaseTrait', 'lib/jsclass-core'], init);
-}
+});

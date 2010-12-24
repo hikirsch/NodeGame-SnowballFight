@@ -14,8 +14,7 @@ Basic Usage:
 		this.clientCharacter = aCharacter;
 	}
 */
-var init = function(BaseTrait, Vector)
-{
+define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(JS, BaseTrait) {
 	return new JS.Class("ProjectileTraitFreeze", BaseTrait,
 	{
 		initialize: function(collisionNormal, freezeTime) {
@@ -64,20 +63,4 @@ var init = function(BaseTrait, Vector)
 			// Do nothing! You're frozen!
 		}
 	});
-};
-
-
-if (typeof window === 'undefined')
-{
-	// We're in node!
-	require('js/controllers/entities/traits/BaseTrait');
-	require('js/controllers/entities/traits/CharacterTraitInvulnerable');
-	require('js/lib/Vector');
-	ProjectileTraitFreeze = init(BaseTrait, Vector);
-}
-else
-{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/Vector', 'controllers/entities/traits/BaseTrait', 'lib/jsclass-core'], init);
-}
+});

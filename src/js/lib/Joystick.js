@@ -2,7 +2,8 @@
  * A helper class to detect the current state of the controls of the game. 
  */
 
-define(['jquery'], function($) {
+// TODO: ADD JQUERY TO JOYSTICK!
+define(['lib/jsclass-core'], function(JS, $) {
 	return new JS.Class(
 	{
 		initialize: function()

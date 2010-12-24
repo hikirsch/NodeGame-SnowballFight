@@ -11,8 +11,8 @@
 	 // TODO: FILL OUT
  */
 
-define(['lib/Vector', 'lib/Rectangle', 'controllers/entities/GameEntity', 'controllers/entities/Character', 'controllers/entities/Projectile', 'controllers/entities/FieldEntity', 'model/CharacterModel', 'lib/jsclass-core'],
-	function(Vector, Rectangle, GameEntity, Character, Projectile, FieldEntity, CharacterModel)
+define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/entities/GameEntity', 'controllers/entities/Character', 'controllers/entities/Projectile', 'controllers/entities/FieldEntity', 'model/CharacterModel'],
+	function(JS, Vector, Rectangle, GameEntity, Character, Projectile, FieldEntity, CharacterModel)
 	{
 		return new JS.Class(
 		{

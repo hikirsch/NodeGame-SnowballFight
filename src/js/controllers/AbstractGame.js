@@ -13,8 +13,8 @@ Basic Usage:
 	 See subclasses
 */
 
-define(['lib/Vector', 'lib/Rectangle', 'lib/SortedLookupTable', 'controllers/FieldController', 'factories/GameEntityFactory', 'lib/jsclass-core'],
-	function( Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory ) {
+define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'lib/SortedLookupTable', 'controllers/FieldController', 'factories/GameEntityFactory'],
+	function( JS, Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory ) {
 		return new JS.Class(
 		{
 			include: JS.StackTrace,

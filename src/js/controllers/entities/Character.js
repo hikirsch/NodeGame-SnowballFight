@@ -26,7 +26,7 @@ Basic Usage:
 		this.view.addCharacter(newCharacter.initView());
 */
 
-define( ['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'model/ProjectileModel', 'lib/jsclass-core'],
+define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'model/ProjectileModel', 'lib/jsclass-core'],
 	function(Vector, Rectangle, FieldController, GameEntity, ProjectileModel, JS)
 	{
 		return new JS.Class(GameEntity,

@@ -38,8 +38,7 @@ Basic Usage:
 		this.clientCharacter = aCharacter;
 	}
 */
-var init = function()
-{
+define(['lib/jsclass-core', 'lib/SortedLookupTable'], function( JS, SortedLookupTable ) {
 	return new JS.Class("BaseTrait",
 	{
 		initialize: function()
@@ -66,7 +65,6 @@ var init = function()
 
 		execute: function() {
 		   // Override
-
 		},
 
 		/**
@@ -118,19 +116,4 @@ var init = function()
 			}, this );
 		}
 	});
-};
-
-
-if (typeof window === 'undefined')
-{
-	// We're in node!
-	require('js/lib/jsclass-core');
-	require('js/lib/SortedLookupTable');
-	BaseTrait = init();
-}
-else
-{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/jsclass-core', 'lib/SortedLookupTable'], init);
-}
+});

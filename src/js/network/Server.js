@@ -21,26 +21,25 @@ Basic Usage:
 Version:
 	1.0
 */
-
-define([ 'network/ws', 'lib/core.js', 'lib/SortedLookupTable', 'controllers/SnowGame', 'lib/Logger'], function( ws, JS, SortedLookupTable, SnowGame, Logger ) {
+define([ 'sys', 'network/ws', 'lib/jsclass-core', 'lib/SortedLookupTable', 'controllers/SnowGame', 'lib/Logger'], function( SYS, ws, JS, SortedLookupTable, SnowGame, Logger ) {
 	var SERVERSTATS = {};
 
 	return new JS.Class(
 	{
 		initialize: function( gameConfig, serverConfig )
 		{
+			var that = this;
+
 			this.gameID = 1;
 			this.gameConfig = gameConfig;
 			this.serverConfig = serverConfig;
 
 			// Make our rolling log globally accessible
-			var that = this;
 			console.gameLog = function () {
 				var len = arguments.length;
 				while(len--)
 					that.log(arguments[len]);
 			};
-
 
 			this.gameConfig.SERVER_SETTING.NEXT_PORT = this.gameConfig.SERVER_SETTING.GAME_PORT + 1;
 
@@ -61,8 +60,6 @@ define([ 'network/ws', 'lib/core.js', 'lib/SortedLookupTable', 'controllers/Snow
 			SERVERSTATS.activeGames = 0;
 			SERVERSTATS.totalGamesPlayed = 0;
 
-			// Listen for process termination
-			var that = this;
 			process.addListener('SIGINT', function(){
 				that.log("(Server) Shutting Down");
 				process.exit(0);

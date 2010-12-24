@@ -9,8 +9,7 @@ Abstract:
 	When detected on the client side will cause entity to be animated in via scale
 Basic Usage:
 */
-var init = function(BaseTrait, Vector)
-{
+define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function( JS, BaseTrait ) {
 	return new JS.Class("EntityTraitAnimateInFromLarge", BaseTrait,
 	{
 		initialize: function(collisionNormal)
@@ -35,20 +34,4 @@ var init = function(BaseTrait, Vector)
 			this.detachAfterDelay(5000);
 		}
 	});
-};
-
-
-if (typeof window === 'undefined')
-{
-	// We're in node!
-	require('js/controllers/entities/traits/BaseTrait');
-	require('js/controllers/entities/traits/CharacterTraitInvulnerable');
-	require('js/lib/Vector');
-	EntityTraitAnimateInFromLarge = init(BaseTrait, Vector);
-}
-else
-{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/Vector', 'controllers/entities/traits/BaseTrait', 'lib/jsclass-core'], init);
-}
+});

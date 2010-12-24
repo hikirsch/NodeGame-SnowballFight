@@ -1,4 +1,4 @@
-define(['factories/HTMLFactory', 'view/BaseView', 'lib/jsclass-core'], function(HTMLFactory, BaseView)
+define(['lib/jsclass-core', 'factories/HTMLFactory', 'view/BaseView'], function(JS, HTMLFactory, BaseView)
 {
 	return new JS.Class( BaseView,
 	{

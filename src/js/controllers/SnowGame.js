@@ -22,8 +22,8 @@ Version:
 */
 
 
-define( [ 'controllers/AbstractServerGame', 'factories/TraitFactory', 'model/ProjectileModel', 'lib/SortedLookupTable', 'lib/Vector' ],
-	function( AbstractServerGame, TraitFactory, ProjectileModel, SortedLookupTable, Vector )
+define( [ 'lib/jsclass-core', 'controllers/AbstractServerGame', 'factories/TraitFactory', 'model/ProjectileModel', 'lib/SortedLookupTable', 'model/FieldEntityModel', 'lib/Vector' ],
+	function( JS, AbstractServerGame, TraitFactory, ProjectileModel, SortedLookupTable, FieldEntityModel, Vector )
 	{
 		return new JS.Class(AbstractServerGame, {
 			initialize: function(aServer, portNumber)

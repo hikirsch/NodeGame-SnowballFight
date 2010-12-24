@@ -1,5 +1,5 @@
-define(['lib/Vector', 'lib/Rectangle', 'view/FieldView', "lib/circlepack/PackedCircle", "lib/circlepack/PackedCircleManager", 'lib/jsclass-core'],
-	function(Vector, Rectangle, FieldView, PackedCircle, PackedCircleManager)
+define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'view/FieldView', "lib/circlepack/PackedCircle", "lib/circlepack/PackedCircleManager"],
+	function(JS, Vector, Rectangle, FieldView, PackedCircle, PackedCircleManager)
 	{
 		return new JS.Class(
 		{

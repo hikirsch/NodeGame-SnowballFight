@@ -27,8 +27,8 @@ Basic Usage:
 		this.view.addCharacter(newCharacter.initView());
 */
 
-define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'lib/SortedLookupTable', 'view/EntityView', 'lib/jsclass-core'],
-	function(Vector, Rectangle, FieldController, SortedLookupTable, EntityView)
+define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'lib/SortedLookupTable', 'view/EntityView'],
+	function(JS, Vector, Rectangle, FieldController, SortedLookupTable, EntityView)
 	{
 		return new JS.Class(
 		{

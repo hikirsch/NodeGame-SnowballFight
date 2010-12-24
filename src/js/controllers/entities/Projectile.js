@@ -10,8 +10,8 @@ Abstract:
 Basic Usage:
 */
 
-define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'model/ProjectileModel', 'lib/jsclass-core'],
-	function(Vector, Rectangle, FieldController, GameEntity)
+define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'model/ProjectileModel'],
+	function(JS, Vector, Rectangle, FieldController, GameEntity)
 	{
 		return new JS.Class(GameEntity,
 		{

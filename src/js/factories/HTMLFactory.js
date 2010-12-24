@@ -1,5 +1,5 @@
 define([
-		'jquery',
+//		'jquery',
 		'text!view/html/browser-req.html',
 		'text!view/html/character.html',
 		'text!view/html/character-select.html',
@@ -18,7 +18,7 @@ define([
 		'text!view/html/results.html',
 		'text!view/html/server-unavailable.html',
 		'text!view/html/status-updates.html',
-		'plugins/jquery.tmpl.min' /** this should be last **/
+//		'plugins/jquery.tmpl.min' /** this should be last **/
 	],
 	function( $, browserReq, character, characterSelect, credits, devNotice, entity, field, footer, gameStatus, instructions, intro, invite, inviteThankYou, navigation, overlay, results, serverUnavailable, statusUpdates )
 	{

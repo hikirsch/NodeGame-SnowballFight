@@ -29,13 +29,6 @@ Basic Usage:
     // Alright everything went well, start the net channel which will create the websocket and start listening
 	netChannel.start();
 */
-
-var ws = require('network/ws.js');
-require('js/lib/bison.js');
-require('js/lib/jsclass-core.js');
-require('js/lib/SortedLookupTable.js');
-require('model/Client.js');
-
 define(['network/ws', 'lib/bison', 'lib/jsclass-core', 'model/Client' ], function( ws, BISON, JS, SortedLookupTable, Client)
 {
 	return new JS.Class(
@@ -358,6 +351,4 @@ define(['network/ws', 'lib/bison', 'lib/jsclass-core', 'model/Client' ], functio
 		}
 		// Close prototype object
 	});// Close .extend
-})(); // close init()
-
-
+}); // close init()

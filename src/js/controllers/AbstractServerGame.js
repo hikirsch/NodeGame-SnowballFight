@@ -23,8 +23,8 @@ Version:
 
 
 
-define( [ 'events', 'controllers/AbstractGame', 'lib/Joystick', 'factories/GameEntityFactory', 'model/FieldEntityModel', 'network/ServerNetChannel', 'model/WorldEntityDescription', 'lib/Logger' ],
-	function( EVENTS, AbstractGame, Joystick, GameEntityFactory, FieldEntityModel, ServerNetChannel, WorldEntityDescription, Logger )
+define( [ 'lib/jsclass-core', 'events', 'controllers/AbstractGame', 'lib/Joystick', 'factories/GameEntityFactory', 'model/FieldEntityModel', 'network/ServerNetChannel', 'model/WorldEntityDescription', 'lib/Logger' ],
+	function( JS, EVENTS, AbstractGame, Joystick, GameEntityFactory, FieldEntityModel, ServerNetChannel, WorldEntityDescription, Logger )
 	{
 		return new JS.Class(AbstractGame, {
 			initialize: function(aServer, portNumber)

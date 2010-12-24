@@ -11,7 +11,7 @@ require([ 'lib/ArgHelper', 'network/Server', 'serverConfig', 'config' ], functio
 	* Optionally creates an HTTP server if dictated in args
 	**/
 	var createHTTPServer = ArgHelper.getArgumentByNameOrSetDefault( 'createHTTPServer', false );
-	var configLocation = ArgHelper.getArgumentByNameOrSetDefault( 'configLocation', 'js/config.js' );
+	// var configLocation = ArgHelper.getArgumentByNameOrSetDefault( 'configLocation', 'config.js' );
 
 	if( createHTTPServer ) {
 		var port = ArgHelper.getArgumentByNameOrSetDefault( 'port', 12345 );

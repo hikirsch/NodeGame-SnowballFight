@@ -6,7 +6,7 @@
        Mario Gonzalez
 */
 
-define(function(){
+define(['lib/jsclass-core'], function(JS){
 	return new JS.Class(
 	{
 		initialize: function(x, y)

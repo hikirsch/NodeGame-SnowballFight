@@ -13,7 +13,7 @@ Basic Usage:
 Version:
 	1.0
 */
-define(['lib/js-class'], function( JS ) {
+define(['lib/jsclass-core'], function( JS ) {
 	return new JS.Class(
 	{
 		initialize: function( options, game)

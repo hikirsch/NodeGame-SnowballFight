@@ -14,7 +14,7 @@ Basic Usage:
 		this.clientCharacter = aCharacter;
 	}
 */
-var init = function(BaseTrait, EntityModel)
+define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(JS, BaseTrait)
 {
 	return new JS.Class("PresentTraitDeflectorShot", BaseTrait,
 	{
@@ -61,16 +61,4 @@ var init = function(BaseTrait, EntityModel)
 		  	projectile.themeMask |= GAMECONFIG.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT;
 		}
 	});
-};
-
-
-if (typeof window === 'undefined') {
-	// We're in node!
-	require('js/controllers/entities/traits/BaseTrait');
-	require('js/model/EntityModel');
-	PresentTraitDeflectorShot = init(BaseTrait, EntityModel);
-} else {
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['controllers/entities/traits/BaseTrait', 'model/EntityModel', 'lib/jsclass-core'], init);
-}
+});
