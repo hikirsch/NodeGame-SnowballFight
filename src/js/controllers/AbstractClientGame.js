@@ -21,7 +21,7 @@ define([
 		'lib/Joystick',
 		'controllers/AbstractGame',
 		'controllers/AudioManager',
-		'test-blank', // 'factories/TraitFactory'
+		'factories/TraitFactory',
 		'controllers/FieldController',
 		'lib/caat'
 	],

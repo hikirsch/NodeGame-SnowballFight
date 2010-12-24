@@ -73,7 +73,6 @@ define(['lib/jsclass-core', 'factories/HTMLFactory'], function( JS, HTMLFactory 
 				this.activeElement.appendTo("body");
 
 				if( "executeOnPush" in this.activeElement && typeof this.activeElement.executeOnPush === "function" ) {
-					console.log("Attaching event for overlay!");
 					this.activeElement.executeOnPush( this.activeElement );
 				}
 

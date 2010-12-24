@@ -24,6 +24,7 @@ Version:
 
 define([
 		'lib/jsclass-core',
+		'lib/bison',
 		'lib/SortedLookupTable',
 		'lib/Vector',
 		'controllers/AbstractServerGame',
@@ -32,7 +33,7 @@ define([
 		'model/FieldEntityModel'
 	],
 
-	function( JS, SortedLookupTable, Vector, AbstractServerGame, TraitFactory, ProjectileModel, FieldEntityModel )
+	function( JS, BISON, SortedLookupTable, Vector, AbstractServerGame, TraitFactory, ProjectileModel, FieldEntityModel )
 	{
 		return new JS.Class( AbstractServerGame,
 		{
@@ -110,8 +111,9 @@ define([
 				// Freeze players for 3 seconds if the game just started
 				if(this.gameClock < 5000)
 				{
-					var Trait = this.traitFactory.createTraitWithName("ProjectileTraitFreeze");
-					aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 4000 ) );
+					// TODO: fix TraitFactory
+					// var Trait = this.traitFactory.createTraitWithName("ProjectileTraitFreeze");
+					// aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 4000 ) );
 
 					/**
 					 * Send that player a message to start its MatchStart animation
@@ -132,7 +134,8 @@ define([
 
 				} else {
 					// always make new characters invulnerable
-					aNewCharacter.addTraitAndExecute( new CharacterTraitInvulnerable(2500) );
+					// TODO: fix TraitFactory
+					// aNewCharacter.addTraitAndExecute( new CharacterTraitInvulnerable(2500) );
 				}
 				return aNewCharacter;
 			},
@@ -143,10 +146,10 @@ define([
 			onCollision: function(circleA, circleB, collisionNormal)
 			{
 				// Debug, friendly name for when debugging
-				var tAFriendly = EntityModel.ENTITY_NAME_FRIENDLY[String(circleA.view.entityType)];
-				var tBFriendly = EntityModel.ENTITY_NAME_FRIENDLY[String(circleB.view.entityType)];
+				var tAFriendly = this.config.ENTITY_MODEL.ENTITY_NAME_FRIENDLY[String(circleA.view.entityType)];
+				var tBFriendly = this.config.ENTITY_MODEL.ENTITY_NAME_FRIENDLY[String(circleB.view.entityType)];
 
-				var tList = EntityModel.ENTITY_MAP;
+				var tList = this.config.ENTITY_MODEL.ENTITY_MAP;
 				var tA = circleA.view.entityType;	// circleA entityType
 				var tB = circleB.view.entityType;	// circleB entityType
 				var tC = tA | tB;					// entityType of combined

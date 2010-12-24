@@ -12,7 +12,7 @@
  */
 define([
 		'lib/SortedLookupTable',
-//		'controllers/entities/traits/ClientControlledTrait',
+		'controllers/entities/traits/ClientControlledTrait'
 //		'controllers/entities/traits/ClientControlledTrait',
 //		'controllers/entities/traits/CharacterTraitInvulnerable',
 //		'controllers/entities/traits/PresentTraitHyperShot',
@@ -26,7 +26,7 @@ define([
 		// Private reference
 		var traitTypes = new SortedLookupTable();
 
-//		traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
+		traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
 //		traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
 //		traitTypes.setObjectForKey(CharacterTraitInvulnerable, 'CharacterTraitInvulnerable');
 //		traitTypes.setObjectForKey(EntityTraitAnimateInFromAlpha, 'EntityTraitAnimateInFromAlpha');

@@ -182,7 +182,8 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 
 		killGame: function( port )
 		{
-			SERVERSTATS.activeGames--;
+			// TODO: fix SERVERSTATS reference
+			// SERVERSTATS.activeGames--;
 			console.log('(Server)::killGame KillingGame on port', port);
 			this.games.remove(port);
 		},

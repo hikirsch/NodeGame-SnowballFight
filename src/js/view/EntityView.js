@@ -28,7 +28,7 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 			var themeModel = this.themeModel = this.getThemeModelByID(this.model.theme);
 			var imageRef = director.getImage(this.model.theme);
 			var caatImage = new CAAT.CompoundImage().
-					initialize(imageRef, themeModel.rowCount, themeModel.columnCount);
+				initialize(imageRef, themeModel.rowCount, themeModel.columnCount);
 
 			var actor = null; // will be either SpriteActor or ActorContainer
 			actor = this.CAATSprite = new CAAT.SpriteActor().

@@ -31,7 +31,6 @@ define(['controllers/AbstractClientGame', 'config', 'lib/caat'], function (Abstr
 	// Everything ready - start the game client
     require.ready(function()
 	{
-		console.log("LOADED!");
 		CFInstall.check({
 			mode: "overlay",
 			destination: location.href.toString()
@@ -41,7 +40,7 @@ define(['controllers/AbstractClientGame', 'config', 'lib/caat'], function (Abstr
 
 		// Tripple nested onReady function - awesome!
 		var base = './img/entities/';
-		var themes = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP;
+		var themes = config.ENTITY_MODEL.CAAT_THEME_MAP;
 		var imagesToLoad = [];
 		for(var aTheme in themes) {
 			imagesToLoad.push( {id: aTheme, url: base + themes[aTheme].imageSource } );
@@ -61,14 +60,12 @@ define(['controllers/AbstractClientGame', 'config', 'lib/caat'], function (Abstr
 		// Disable CAAT from capturing events
 
 		// Create CAAT accessor
-		GAMECONFIG.CAAT = {};
-		GAMECONFIG.CAAT.imagePreloader = new CAAT.ImagePreloader();
+		config.CAAT = {};
+		config.CAAT.imagePreloader = new CAAT.ImagePreloader();
 		// Fired when images have been preloaded
-		GAMECONFIG.CAAT.imagePreloader.loadImages(imagesToLoad,
-			function(counter, images) {
-				console.log('caat preloader loading');
-				if(counter != images.length) return; // Wait until last load
-				new AbstractClientGame( config, config.SERVER_SETTING.GAME_PORT );
-			});
+		config.CAAT.imagePreloader.loadImages(imagesToLoad, function(counter, images) {
+			if(counter != images.length) return; // Wait until last load
+			new AbstractClientGame( config, config.SERVER_SETTING.GAME_PORT );
+		});
     });
 });

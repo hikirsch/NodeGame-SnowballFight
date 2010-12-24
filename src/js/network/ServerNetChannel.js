@@ -215,7 +215,6 @@ define(['lib/jsclass-core', 'network/ws', 'lib/bison', 'lib/SortedLookupTable', 
 			{
 				if(!this.isDeallocated) { // No excuse to not have this client!
 					this.delegate.log("(ServerNetChannel)::removeClient - Attempted to disconnect unknown client!:" + clientID );
-					debugger;
 					return;
 				} else {
 					return; // Probably recursive removal. TODO: Remove recursive removal, and remove recursive removal.

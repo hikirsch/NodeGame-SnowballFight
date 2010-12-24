@@ -15,21 +15,21 @@ define(['lib/jsclass-core'], function(JS) {
 		},
 
 		keydown: function ( e ) {
-			if( e.keyCode in that.keyCodes ) {
+			if( e.keyCode in this.keyCodes ) {
 				// if we're already pressing down on the same key, then we don't want to increment
 				// our key pressed count
-				if( ! that.keys[ that.keyCodes[ e.keyCode ] ] ) {
-					that.keyPressed++;
+				if( ! this.keys[ this.keyCodes[ e.keyCode ] ] ) {
+					this.keyPressed++;
 				}
-				that.handler( e.keyCode, true );
+				this.handler( e.keyCode, true );
 				e.preventDefault();
 			}
 		},
 
 		keyup: function( e ) {
-			if( e.keyCode in that.keyCodes ) {
-				that.handler( e.keyCode, false );
-				that.keyPressed--;
+			if( e.keyCode in this.keyCodes ) {
+				this.handler( e.keyCode, false );
+				this.keyPressed--;
 				e.preventDefault();
 			}
 		},
@@ -42,8 +42,8 @@ define(['lib/jsclass-core'], function(JS) {
 		attachEvents: function()
 		{
 			var that = this;
-			document.attachEvent('onkeydown', function(e) { that.keydown(e); });
-			document.attachEvent('onkeyup', function(e) { that.keyup(e); });
+			document.addEventListener('keydown', function(e) { that.keydown(e); });
+			document.addEventListener('keyup', function(e) { that.keyup(e); });
 		},
 
 		isKeyPressed: function() {
