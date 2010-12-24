@@ -68,7 +68,7 @@ define(['controllers/AbstractClientGame', 'config', 'lib/caat'], function (Abstr
 			function(counter, images) {
 				console.log('caat preloader loading');
 				if(counter != images.length) return; // Wait until last load
-				new AbstractClientGame( config );
+				new AbstractClientGame( config, config.SERVER_SETTING.GAME_PORT );
 			});
     });
 });

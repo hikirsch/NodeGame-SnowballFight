@@ -395,6 +395,7 @@ define([
 
 			setModel: function(aGameModel)
 			{
+				console.log("(FieldController) Game Model: ", aGameModel);
 				this.rectangle = new Rectangle(0, 0, aGameModel.width, aGameModel.height);
 
 				if( this.view )

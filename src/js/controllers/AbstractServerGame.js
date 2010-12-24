@@ -34,27 +34,24 @@ define([
 		'model/WorldEntityDescription',
 		'lib/Logger'
 	],
-	function( JS, EVENTS, AbstractGame )
-	/* function( JS, EVENTS, AbstractGame, Joystick, GameEntityFactory, FieldEntityModel, ServerNetChannel, WorldEntityDescription, Logger ) */
+
+	function( JS, EVENTS, AbstractGame, Joystick, GameEntityFactory, FieldEntityModel, ServerNetChannel, WorldEntityDescription, Logger )
 	{
 		return new JS.Class(AbstractGame, {
-			initialize: function(aServer, portNumber)
+			initialize: function(gameConfig, portNumber)
 			{
 				this.callSuper();
 
-				// the Server has access to all the games and our logger
-				// amongst other things that the entire server would need
-				this.server = aServer;
-
 				this.eventEmitter = new EVENTS.EventEmitter();
+
 				this.nextEntityID = 1; 	// Each time we create an entity we increment this
-				this.gameID = this.server.gameConfig.SERVER_SETTING.NEXT_GAME_ID;
+				this.gameID = this.config.SERVER_SETTING.NEXT_GAME_ID;
 
 				this.portNumber = portNumber;
 				this.fieldController.createPackedCircleManager();
 
 				// Each ServerNetChannel is owned by a single ServerGameInstance
-				this.netChannel = new ServerNetChannel(this, this.server.gameConfig, portNumber);
+				this.netChannel = new ServerNetChannel(this, this.config, portNumber);
 
 				this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
 
@@ -62,6 +59,13 @@ define([
 				this.startGameClock();
 			},
 
+			// the Server has access to all the games and our logger
+			// amongst other things that the entire server would need, it also requests
+			// the server for the next available game port when the game ends.
+			setServer: function( aServer )
+			{
+				this.server = aServer;
+			},
 			/**
 			 * Main loop
 			 * Calls super.tick()
@@ -138,7 +142,7 @@ define([
 					seq: 1,
 					gameClock: this.gameClock,
 					cmds: {
-						cmd: this.server.gameConfig.CMDS.SERVER_END_GAME,
+						cmd: this.config.CMDS.SERVER_END_GAME,
 						data: {
 							nextGamePort: nextGamePort,
 							stats: this.fieldController.getPlayerStats()
@@ -158,7 +162,7 @@ define([
 				this.fieldController.dealloc();
 
 				// Tell the world!
-				this.eventEmitter.emit(GAMECONFIG.EVENTS.ON_GAME_ENDED, this);
+				this.eventEmitter.emit(this.config.EVENTS.ON_GAME_ENDED, this);
 			},
 
 			/**
@@ -215,12 +219,12 @@ define([
 
 			canAddPlayer: function()
 			{
-				var gameClockLessThanDuration = ( (this.gameClock+GAMECONFIG.GAME_MODEL.ROUND_INTERMISSION_DURATION) < this.model.gameDuration);
+				var gameClockLessThanDuration = ( (this.gameClock + this.config.GAME_MODEL.ROUND_INTERMISSION_DURATION) < this.model.gameDuration);
 				var netChannelCanAcceptConnection = this.netChannel.canAddConnection();
 
 				var gameCanAddPlayer = netChannelCanAcceptConnection && gameClockLessThanDuration;
 
-				console.log("(AbsractServerGame)::canAddPlayer - GameID '"+ this.portNumber +" canAdd= " + gameCanAddPlayer + "  [netchannel has " + this.netChannel.clients.count() + " connections.  GameClock: " + (this.gameClock+GAMECONFIG.GAME_MODEL.ROUND_INTERMISSION_DURATION) + " GameDuration: " + this.model.gameDuration + "]");
+				console.log("(AbsractServerGame)::canAddPlayer - GameID '"+ this.portNumber +" canAdd= " + gameCanAddPlayer + "  [netchannel has " + this.netChannel.clients.count() + " connections.  GameClock: " + (this.gameClock+this.config.GAME_MODEL.ROUND_INTERMISSION_DURATION) + " GameDuration: " + this.model.gameDuration + "]");
 				return gameCanAddPlayer;
 			}
 		});

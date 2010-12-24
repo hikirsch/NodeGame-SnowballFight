@@ -24,24 +24,21 @@ Version:
 
 define([
 		'lib/jsclass-core',
-//		'lib/SortedLookupTable',
-//		'lib/Vector',
+		'lib/SortedLookupTable',
+		'lib/Vector',
 		'controllers/AbstractServerGame',
-//		'factories/TraitFactory',
-//		'model/ProjectileModel',
+		'factories/TraitFactory',
+		'model/ProjectileModel',
 		'model/FieldEntityModel'
 	],
-	function( JS, AbstractServerGame, FieldEntityModel )
-	//function( JS, SortedLookupTable, Vector, AbstractServerGame, TraitFactory, ProjectileModel, FieldEntityModel )
+
+	function( JS, SortedLookupTable, Vector, AbstractServerGame, TraitFactory, ProjectileModel, FieldEntityModel )
 	{
 		return new JS.Class( AbstractServerGame,
 		{
-			initialize: function(aServer, portNumber)
+			initialize: function(gameConfig, portNumber)
 			{
-				// this.callSuper();
-				/*
-				SERVERSTATS.totalGamesPlayed++;
-				SERVERSTATS.activeGames++;
+				this.callSuper();
 
 				this.traitFactory = TraitFactory;
 
@@ -55,7 +52,6 @@ define([
 				this.initializePresents();
 
 				console.log("(SnowGame)::initialize");
-				*/
 			},
 
 			initializePresents: function()
@@ -85,8 +81,9 @@ define([
 					aFieldEntityModel.initialPosition = nextEntity.position;
 					aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 
-					 var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromAlpha');
-					aFieldEntity.addTraitAndExecute( new animateInTrait() );
+					// TODO: Fix TraitFactory
+//					var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromAlpha');
+//					aFieldEntity.addTraitAndExecute( new animateInTrait() );
 
 					this.fieldController.addEntity(aFieldEntity);
 				}
@@ -236,8 +233,9 @@ define([
 				this.fieldController.addEntity(present);
 
 
-				var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromLarge');
-				present.addTraitAndExecute( new animateInTrait() );
+				// TODO: Enable TraitFactory
+				// var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromLarge');
+				// present.addTraitAndExecute( new animateInTrait() );
 
 
 				// Add to our list
@@ -366,7 +364,6 @@ define([
 
 			shouldEndGame: function()
 			{
-				SERVERSTATS.activeGames--;
 				this.callSuper();
 			},
 

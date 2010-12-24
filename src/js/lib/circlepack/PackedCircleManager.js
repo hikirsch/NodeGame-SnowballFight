@@ -14,7 +14,7 @@
  Basic Usage:
 	http://onedayitwillmake.com/CirclePackJS/
 */
-define( [ 'lib/Vector', 'lib/circlepack/PackedCircle' ], function(Vector, PackedCircle ) {
+define( [ 'events', 'lib/Vector', 'lib/circlepack/PackedCircle' ], function( EVENTS, Vector, PackedCircle ) {
 	/*
 	 *	PackedCircleManager
 	 */

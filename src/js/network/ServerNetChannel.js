@@ -29,7 +29,7 @@ Basic Usage:
     // Alright everything went well, start the net channel which will create the websocket and start listening
 	netChannel.start();
 */
-define(['network/ws', 'lib/bison', 'lib/jsclass-core', 'model/Client' ], function( ws, BISON, JS, SortedLookupTable, Client)
+define(['lib/jsclass-core', 'network/ws', 'lib/bison', 'lib/SortedLookupTable', 'model/Client' ], function( JS, ws, BISON, SortedLookupTable, Client)
 {
 	return new JS.Class(
 	{
@@ -45,7 +45,7 @@ define(['network/ws', 'lib/bison', 'lib/jsclass-core', 'model/Client' ], functio
 			this.maxClients = GAMECONFIG.GAME_MODEL.MAX_PLAYERS;
 			this.port = port;
 
-			console.log("MAX", this.maxClients);
+			console.log("(ServerNetChannel) Max Clients: ", this.maxClients);
 			this.showStatus = config.status !== false;
 
 			this.bytes = {
@@ -285,7 +285,8 @@ define(['network/ws', 'lib/bison', 'lib/jsclass-core', 'model/Client' ], functio
 		addClient: function(connection)
 		{
 			connection.$clientID = this.getNextClientID();
-			var aClient = new Client(this, connection, this.config, this.bytes);
+			console.log( "CREATING CLIENT, PASSING CONFIG: ", this.config );
+			var aClient = new Client(this, connection, this.config);
 
 			// Add to our list of connected users
 			this.clients.setObjectForKey( aClient, connection.$clientID);

@@ -22,19 +22,19 @@ define([
 
 		return new JS.Class(
 		{
-			initialize: function(GameConfig)
+			initialize: function(gameConfig, portNumber)
 			{
 				console.log("(AbstractGame) Loaded");
 
-				this.config = GameConfig;
-				this.setModel(GameConfig.GAME_MODEL);
+				this.config = gameConfig;
+				this.setModel(this.config.GAME_MODEL);
 				this.isGameOver = false;
-
+				                     console.log( "(AbstractGame) Game Model: " ,this.config.GAME_MODEL);
 				// our game takes place in a field
 				this.fieldController = new FieldController( this, this.model );
 
 				// This is the Factory that will create all the entities for us
-				this.entityFactory = new GameEntityFactory(this.fieldController, GameConfig.ENTITY_MODEL);
+				this.entityFactory = new GameEntityFactory(this.fieldController, this.config.ENTITY_MODEL);
 
 				// intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
 				// this.targetDelta, Milliseconds between frames 16ms means 60FPS - it's the framerate the game is designed against

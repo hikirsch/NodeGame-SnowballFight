@@ -30,16 +30,15 @@ define([
 		console.log("arguments!", AbstractGame);
 		return new JS.Class( AbstractGame,
 		{
-			initialize: function(config)
+			initialize: function(gameConfig, portNumber)
 			{
 				console.log("(AbstractClientGame) Loaded");
 				this.callSuper();
 
-
 				this.CMD_TO_FUNCTION = {};
-				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onClientJoined;
-				this.CMD_TO_FUNCTION[config.CMDS.SERVER_MATCH_START] = this.onServerMatchStart;
-				this.CMD_TO_FUNCTION[config.CMDS.SERVER_END_GAME] = this.onShouldEndGame;
+				this.CMD_TO_FUNCTION[this.config.CMDS.PLAYER_JOINED] = this.onClientJoined;
+				this.CMD_TO_FUNCTION[this.config.CMDS.SERVER_MATCH_START] = this.onServerMatchStart;
+				this.CMD_TO_FUNCTION[this.config.CMDS.SERVER_END_GAME] = this.onShouldEndGame;
 
 				this.clientCharacter = null; // Special pointer to our own client character
 				this.isGameOver = false;

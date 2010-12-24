@@ -21,18 +21,18 @@ Basic Usage:
 Version:
 	1.0
 */
+define('jquery', function() { var Void=function(){}; return { }; } );
 define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/Logger', 'lib/bison', 'controllers/SnowGame' ], function( JS, SYS, ws, SortedLookupTable, Logger, BISON, SnowGame ) {
 
 	return new JS.Class(
 	{
-		initialize: function( gameConfig, serverConfig )
+		initialize: function( config, serverConfig )
 		{
 			var that = this;
 
 			this.gameID = 1;
-			this.gameConfig = gameConfig;
+			this.config = config;
 			this.serverConfig = serverConfig;
-			this.SERVERSTATS = {};
 
 			// Make our rolling log globally accessible
 			console.gameLog = function () {
@@ -41,24 +41,28 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 					that.log(arguments[len]);
 			};
 
-			this.gameConfig.SERVER_SETTING.NEXT_PORT = this.gameConfig.SERVER_SETTING.GAME_PORT + 1;
+			this.config.SERVER_SETTING.NEXT_PORT = this.config.SERVER_SETTING.GAME_PORT + 1;
 
 		    this.logger = new Logger({time: this.gameClock, showStatus: false }, this);
 			this.games = new SortedLookupTable();
 
-			this.initServerChooser( this.gameConfig.SERVER_SETTING.GAME_PORT );
+			this.initServerChooser( this.config.SERVER_SETTING.GAME_PORT );
 
-			console.gameLog("(Server)::initialized Using\n\nServer Configuration:\n", SYS.inspect(this.gameConfig.SERVER_SETTING), "\n");
+			console.gameLog("(Server)::initialized Using\n\nServer Configuration:\n", SYS.inspect(this.config.SERVER_SETTING), "\n");
 			console.gameLog("(Server) started and running...");
 
-			// Running active connections on a ServerNetChannel
-			this.SERVERSTATS.activeConnections = 0;
-			this.SERVERSTATS.totalConnections = 0;
-			// Total people who attempted to connect to ServerChooser
-			this.SERVERSTATS.gameJoinRequest = 0;
-			// Game info
-			this.SERVERSTATS.activeGames = 0;
-			this.SERVERSTATS.totalGamesPlayed = 0;
+			this.SERVERSTATS = {
+			    // Running active connections on a ServerNetChannel
+				activeConnections: 0,
+				totalConnections: 0,
+
+				// Total people who attempted to connect to ServerChooser
+				gameJoinRequest: 0,
+
+				// Game info
+				activeGames: 0,
+				totalGamesPlayed: 0
+			};
 
 			process.addListener('SIGINT', function(){
 				that.log("(Server) Shutting Down");
@@ -102,9 +106,9 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 		getGameWithDesiredPort: function( desiredPort )
 		{
 
-			var isValidPort = desiredPort != this.gameConfig.SERVER_SETTING.GAME_PORT &&
-                desiredPort > this.gameConfig.SERVER_SETTING.GAME_PORT &&
-                desiredPort < this.gameConfig.SERVER_SETTING.GAME_PORT + this.gameConfig.SERVER_SETTING.MAX_PORTS;
+			var isValidPort = desiredPort != this.config.SERVER_SETTING.GAME_PORT &&
+                desiredPort > this.config.SERVER_SETTING.GAME_PORT &&
+                desiredPort < this.config.SERVER_SETTING.GAME_PORT + this.config.SERVER_SETTING.MAX_PORTS;
 
 			// Port is not within range - ignore requested and send to a new port defined by us
 			if(!isValidPort) {
@@ -156,42 +160,46 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 
 		createGame: function( newPort )
 		{
-			this.gameConfig.SERVER_SETTING.NEXT_GAME_ID++;
-			var aGameInstance = new SnowGame( this, newPort );
+			this.config.SERVER_SETTING.NEXT_GAME_ID++;
+			var aGameInstance = new SnowGame( this.config, newPort );
 			// aGameInstance.start(); // start the game
 
 			var that = this;
 
 			// Listen for when the game is over
-			aGameInstance.eventEmitter.on(this.gameConfig.EVENTS.ON_GAME_ENDED, function( anEndedGameInstance ) {
+			aGameInstance.eventEmitter.on(this.config.EVENTS.ON_GAME_ENDED, function( anEndedGameInstance ) {
 				that.killGame(anEndedGameInstance.portNumber);
 			});
 
 			this.games.setObjectForKey(aGameInstance, newPort);
+
+			this.SERVERSTATS.totalGamesPlayed++;
+			this.SERVERSTATS.activeGames++;
 
 			return newPort;
 		},
 
 		killGame: function( port )
 		{
+			SERVERSTATS.activeGames--;
 			console.log('(Server)::killGame KillingGame on port', port);
 			this.games.remove(port);
 		},
 
 		getNextAvailablePort: function()
 		{
-			var nextPort = this.gameConfig.SERVER_SETTING.NEXT_PORT;
+			var nextPort = this.config.SERVER_SETTING.NEXT_PORT;
 
 			while( this.games.objectForKey(nextPort) != null )
 			{
 				nextPort += 1;
-				if( nextPort > this.gameConfig.SERVER_SETTING.GAME_PORT + this.gameConfig.SERVER_SETTING.MAX_PORTS ) {
-					nextPort = this.gameConfig.SERVER_SETTING.GAME_PORT + 1;
+				if( nextPort > this.config.SERVER_SETTING.GAME_PORT + this.config.SERVER_SETTING.MAX_PORTS ) {
+					nextPort = this.config.SERVER_SETTING.GAME_PORT + 1;
 				}
 			}
 
-			this.gameConfig.SERVER_SETTING.NEXT_PORT = nextPort;
-			return this.gameConfig.SERVER_SETTING.NEXT_PORT ;
+			this.config.SERVER_SETTING.NEXT_PORT = nextPort;
+			return this.config.SERVER_SETTING.NEXT_PORT ;
 		},
 
 		log: function(msg)

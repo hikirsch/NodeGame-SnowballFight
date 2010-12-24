@@ -12,36 +12,36 @@
  */
 define([
 		'lib/SortedLookupTable',
-		'controllers/entities/traits/ClientControlledTrait',
-		'controllers/entities/traits/ClientControlledTrait',
-		'controllers/entities/traits/CharacterTraitInvulnerable',
-		'controllers/entities/traits/PresentTraitHyperShot',
-		'controllers/entities/traits/PresentTrait360Shot',
-		'controllers/entities/traits/PresentTraitDeflectorShot',
-		'controllers/entities/traits/EntityTraitAnimateInFromAlpha',
-		'controllers/entities/traits/EntityTraitAnimateInFromLarge'
+//		'controllers/entities/traits/ClientControlledTrait',
+//		'controllers/entities/traits/ClientControlledTrait',
+//		'controllers/entities/traits/CharacterTraitInvulnerable',
+//		'controllers/entities/traits/PresentTraitHyperShot',
+//		'controllers/entities/traits/PresentTrait360Shot',
+//		'controllers/entities/traits/PresentTraitDeflectorShot',
+//		'controllers/entities/traits/EntityTraitAnimateInFromAlpha',
+//		'controllers/entities/traits/EntityTraitAnimateInFromLarge'
 	],
 	function(SortedLookupTable, ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateInFromAlpha, EntityTraitAnimateInFromLarge )
 	{
 		// Private reference
 		var traitTypes = new SortedLookupTable();
 
-		traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
-		traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
-		traitTypes.setObjectForKey(CharacterTraitInvulnerable, 'CharacterTraitInvulnerable');
-		traitTypes.setObjectForKey(EntityTraitAnimateInFromAlpha, 'EntityTraitAnimateInFromAlpha');
-		traitTypes.setObjectForKey(EntityTraitAnimateInFromLarge, 'EntityTraitAnimateInFromLarge');
+//		traitTypes.setObjectForKey(ClientControlledTrait, 'ClientControlledTrait');
+//		traitTypes.setObjectForKey(ProjectileTraitFreeze, 'ProjectileTraitFreeze');
+//		traitTypes.setObjectForKey(CharacterTraitInvulnerable, 'CharacterTraitInvulnerable');
+//		traitTypes.setObjectForKey(EntityTraitAnimateInFromAlpha, 'EntityTraitAnimateInFromAlpha');
+//		traitTypes.setObjectForKey(EntityTraitAnimateInFromLarge, 'EntityTraitAnimateInFromLarge');
 
-		// presents
-		traitTypes.setObjectForKey(PresentTrait360Shot, 'PresentTrait360Shot');
-		traitTypes.setObjectForKey(PresentTraitHyperShot, 'PresentTraitHyperShot');
-		traitTypes.setObjectForKey(PresentTraitDeflectorShot, 'PresentTraitDeflectorShot');
+//		// presents
+//		traitTypes.setObjectForKey(PresentTrait360Shot, 'PresentTrait360Shot');
+//		traitTypes.setObjectForKey(PresentTraitHyperShot, 'PresentTraitHyperShot');
+//		traitTypes.setObjectForKey(PresentTraitDeflectorShot, 'PresentTraitDeflectorShot');
 
 		// Present traits
 		var presentTraits = [];
-		presentTraits.push('PresentTraitHyperShot');
-		presentTraits.push('PresentTrait360Shot');
-		presentTraits.push('PresentTraitDeflectorShot');
+//		presentTraits.push('PresentTraitHyperShot');
+//		presentTraits.push('PresentTrait360Shot');
+//		presentTraits.push('PresentTraitDeflectorShot');
 
 		// Return only accessor
 		return {

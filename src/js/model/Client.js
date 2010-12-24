@@ -29,6 +29,7 @@ define([ 'lib/jsclass-core', 'lib/bison', 'lib/SortedLookupTable' ], function( J
 			this.isPlaying = false; // Before the match, or if only observing this is false
 
 			this.netChannel = aServer;
+
 			this.commandTypes = config.CMDS;
 
 			this.updaterate = config.CLIENT_SETTING.updaterate; 	// Send user info this ofte

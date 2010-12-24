@@ -24,6 +24,7 @@ define(['lib/jsclass-core'], function(JS){
 
 		cp: function()
 		{
+			var Vector = require('lib/Vector')
 			return new Vector(this.x, this.y);
 		},
 
