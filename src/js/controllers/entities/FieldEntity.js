@@ -10,46 +10,29 @@ Abstract:
 Basic Usage:
 */
 
-var init = function(Vector, Rectangle, FieldController, GameEntity)
-{
-	return new JS.Class(GameEntity,
+define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'model/FieldEntityModel', 'lib/jsclass-core'],
+	function(Vector, Rectangle, FieldController, GameEntity)
 	{
-		initialize: function(anObjectID, aClientID, aFieldEntityModel, aFieldController)
+		return new JS.Class(GameEntity,
 		{
-			this.callSuper();
-			this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.FIELD_ENTITY;
-			// Get information from the projectile model
-			this.radius = aFieldEntityModel.radius;
-		},
+			initialize: function(anObjectID, aClientID, aFieldEntityModel, aFieldController)
+			{
+				this.callSuper();
+				this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.FIELD_ENTITY;
+				// Get information from the projectile model
+				this.radius = aFieldEntityModel.radius;
+			},
 
-		/**
-		 * Creates the event-listener function for handling collisions
-		 * Note: This only is called on the server side
-		 * @param aPackedCircle A PackedCircle which is tied to (and represents in the collision system) this entity
-		 */
-		setCollisionCircleProperties: function(aPackedCircle)
-		{
-			this.callSuper();
-			this.collisionCircle.isFixed = true;
-		}
-	});
-};
-
-if (typeof window === 'undefined')
-{
-	// We're in node!
-	require('../../lib/jsclass/core.js');
-	require('../../lib/Vector');
-	require('../../lib/Rectangle');
-	require('../FieldController');
-	require('./GameEntity');
-
-	var sys = require('sys');
-	FieldEntity = init(Vector, Rectangle, FieldController, GameEntity);
-}
-else
-{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/Vector', 'lib/Rectangle', 'controllers/FieldController', 'controllers/entities/GameEntity', 'model/FieldEntityModel', 'lib/jsclass/core'], init);
-}
+			/**
+			 * Creates the event-listener function for handling collisions
+			 * Note: This only is called on the server side
+			 * @param aPackedCircle A PackedCircle which is tied to (and represents in the collision system) this entity
+			 */
+			setCollisionCircleProperties: function(aPackedCircle)
+			{
+				this.callSuper();
+				this.collisionCircle.isFixed = true;
+			}
+		});
+	}
+);

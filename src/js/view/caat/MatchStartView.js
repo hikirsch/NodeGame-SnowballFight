@@ -1,4 +1,4 @@
-define(['lib/jsclass/core'], function()
+define(['lib/jsclass-core', 'lib/caat'], function( JS, CAAT )
 {
 	return new JS.Class(
 	{

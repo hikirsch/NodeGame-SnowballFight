@@ -1,4 +1,4 @@
-define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass/core'], function(HTMLFactory, EntityModel )
+define(['factories/HTMLFactory', 'model/EntityModel', 'lib/jsclass-core'], function(HTMLFactory, EntityModel )
 {
 	return new JS.Class(
 	{

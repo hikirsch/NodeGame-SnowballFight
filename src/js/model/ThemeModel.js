@@ -11,8 +11,7 @@
  // TODO: FILL OUT
  */
 
-var init = function()
-{
+define([ 'lib/jsclass-core'], function( JS ) {
 	return new JS.Class(
 	{
 		initialize: function(imageSource, rowCount, columnCount, spriteIndex, zIndex, animationTiming)
@@ -35,17 +34,4 @@ var init = function()
 			this.animationTiming = animationTiming || 0;
 		}
 	});
-};
-
-if (typeof window === 'undefined')
-{
-	// We're in node!
-	require('js/lib/jsclass/core.js');
-	ThemeModel = init();
-}
-else
-{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/jsclass/core'], init);
-}
+});

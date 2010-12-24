@@ -66,5 +66,5 @@ else
 {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/Joystick', 'controllers/entities/traits/BaseTrait', 'lib/jsclass/core'], init);
+	define(['lib/Joystick', 'controllers/entities/traits/BaseTrait', 'lib/jsclass-core'], init);
 }

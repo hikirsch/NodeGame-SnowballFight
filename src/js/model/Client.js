@@ -19,8 +19,7 @@ Basic Usage:
 	}
 	
 */
-var init = function()
-{
+define([ 'lib/jsclass-core', 'lib/bison', 'lib/SortedLookupTable' ], function( JS, BISON, SortedLookupTable ) {
 	return new JS.Class(
 	{
 		initialize: function( aServer, aConnection, config )
@@ -36,12 +35,8 @@ var init = function()
 			this.cmdrate =  config.CLIENT_SETTING.cmdrate;			// Receive user info this often
 			this.rate =  config.CLIENT_SETTING.rate;				// Cap bandwidth/sec 
 
-			//
-
-
-
 			// 	Array of the last 31 messages sent/received
-			 // This is used in the messageBuffer bitmask - It's the sequence number - store
+			// This is used in the messageBuffer bitmask - It's the sequence number - store
 			this.MESSAGE_BUFFER_MASK = 31;
 
 			// outgoing sent
@@ -158,14 +153,4 @@ var init = function()
 		}
 
 	}); // close extend
-}; // close anon function
-
-// Handle Node.JS and browser
-if (typeof window === 'undefined') {
-	require('js/lib/jsclass/core.js');
-	require('js/lib/bison.js');
-	require('js/lib/SortedLookupTable.js');
-	Client = init();
-}
-
-	
+});

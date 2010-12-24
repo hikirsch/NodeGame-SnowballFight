@@ -22,8 +22,8 @@ Version:
 	1.0
 */
 
-define({ paths: { 'client': '../client' } }, [ 'network/ws', 'js/lib/core.js', 'js/lib/SortedLookupTable', 'controllers/SnowGame', 'lib/Logger'], function( ws, JS, SortedLookupTable, SnowGame, Logger ) {
-	SERVERSTATS = {};
+define([ 'network/ws', 'lib/core.js', 'lib/SortedLookupTable', 'controllers/SnowGame', 'lib/Logger'], function( ws, JS, SortedLookupTable, SnowGame, Logger ) {
+	var SERVERSTATS = {};
 
 	return new JS.Class(
 	{

@@ -9,8 +9,7 @@ Abstract:
 	Simple value object
 Basic Usage: 
 */
-var init = function()
-{
+define(['lib/js-class'], function( JS ) {
 	return new JS.Class(
 	{
 		initialize: function(x, y, width, height)
@@ -36,11 +35,4 @@ var init = function()
 			return this.height;
 		}
 	});
-};
-
-if (typeof window === 'undefined') {
-	require('../lib/jsclass/core.js');
-	Rectangle = init();
-} else {
-	define(['lib/jsclass/core'], init);
-}
+});

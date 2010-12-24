@@ -13,12 +13,7 @@ Basic Usage:
 Version:
 	1.0
 */
-
-var sys = require('sys');
-var BISON = require('js/lib/bison');
-
-Logger = (function()
-{
+define(['lib/js-class'], function( JS ) {
 	return new JS.Class(
 	{
 		initialize: function( options, game)
@@ -118,4 +113,4 @@ Logger = (function()
 			console.log('\x1b[H\x1b[J# NodeGame Server at port ' + this.netChannel.port + '\n' + stats + '\n\x1b[s\x1b[H');
 		}
 	});
-})();
+});

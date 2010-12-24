@@ -17,12 +17,7 @@
 	var worldEntityDescription = new WorldEntityDescription( this );
 	this.netChannel.tick( this.gameClock, worldEntityDescription );
  */
-require('js/lib/jsclass/core.js');
-require('js/lib/SortedLookupTable.js');
-require('js/controllers/entities/GameEntity');
-
-WorldEntityDescription = (function()
-{
+define(['lib/jsclass-core'], function( JS ) {
 	return new JS.Class(
 	{
 		initialize: function( aGameInstance )
@@ -39,5 +34,5 @@ WorldEntityDescription = (function()
 			}, this );
 		}
 	});
-})();
+});
 

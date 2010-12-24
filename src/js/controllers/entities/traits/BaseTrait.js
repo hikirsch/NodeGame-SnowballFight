@@ -124,7 +124,7 @@ var init = function()
 if (typeof window === 'undefined')
 {
 	// We're in node!
-	require('js/lib/jsclass/core');
+	require('js/lib/jsclass-core');
 	require('js/lib/SortedLookupTable');
 	BaseTrait = init();
 }
@@ -132,5 +132,5 @@ else
 {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['lib/jsclass/core', 'lib/SortedLookupTable'], init);
+	define(['lib/jsclass-core', 'lib/SortedLookupTable'], init);
 }

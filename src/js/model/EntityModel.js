@@ -11,8 +11,7 @@
  Basic Usage:
  */
 
-var init = function(ThemeModel)
-{
+define(['model/ThemeModel'], function(ThemeModel) {
 	var CAAT_THEME_MAP = {};
 	CAAT_THEME_MAP['100'] = new ThemeModel('ginger-bread-house.png', 1, 1, 0, 0);
 	CAAT_THEME_MAP['101'] = new ThemeModel('block-of-ice-1.png', 1, 1, 0, 0);
@@ -94,13 +93,4 @@ var init = function(ThemeModel)
 		'ENTITY_NAME_FRIENDLY': ENTITY_NAME_FRIENDLY,
 		'COLLISION_GROUPS' : COLLISION_GROUPS
 	}
-};
-
-if (typeof window === 'undefined') {
-	require('js/model/ThemeModel');
-	EntityModel = init(ThemeModel);
-} else{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['model/ThemeModel'], init);
-}
+});

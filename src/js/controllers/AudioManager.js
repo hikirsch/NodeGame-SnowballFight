@@ -1,4 +1,4 @@
-define(['lib/jsclass/core', 'lib/SortedLookupTable'], function()
+define(['lib/jsclass-core', 'lib/SortedLookupTable'], function()
 {
 	return new JS.Class(
 	{

@@ -2,8 +2,7 @@
  * A helper class to detect the current state of the controls of the game. 
  */
 
-var init = function($)
-{
+define(['jquery'], function($) {
 	return new JS.Class(
 	{
 		initialize: function()
@@ -34,7 +33,7 @@ var init = function($)
 						e.preventDefault();
 					}
 				},
-	
+
 				keyup: function( e ) {
 					if( e.keyCode in that.keyCodes ) {
 						that.handler( e.keyCode, false );
@@ -62,7 +61,7 @@ var init = function($)
 		 */
 		constructInputBitmask: function()
 		{
-		  	var input = 0;
+			var input = 0;
 
 			// Check each key
 			if(this.keys['up']) input |= GAMECONFIG.INPUT_BITMASK.UP;
@@ -102,10 +101,4 @@ var init = function($)
 		isShift: function() { return this.keys['shift']; },
 		isTab: function() { return this.keys['tab']; }
 	});
-};
-
-if (typeof window === 'undefined') {	// We're in node!
-	Joystick = init(null);
-} else {
-	define(['jquery'], init);
-}
+});

@@ -14,14 +14,13 @@
  Basic Usage:
 	http://onedayitwillmake.com/CirclePackJS/
 */
-var init = function(Vector, PackedCircle)
-{
+define( [ 'lib/Vector', 'lib/circlepack/PackedCircle' ], function(Vector, PackedCircle ) {
 	/*
 	 *	PackedCircleManager
 	 */
 	var PackedCircleManager = function( options )
 	{
-		
+
 		//allCircles
 		this.allCircles = [];
 		this.desiredTarget = new Vector(0,0);
@@ -180,7 +179,7 @@ var init = function(Vector, PackedCircle)
 		var v = new Vector(0, 0);
 
 		var dragCircle = this.draggedCircle; // ignore for now
-	  	var circleList = this.allCircles;
+		var circleList = this.allCircles;
 
 		// remove null elements
 		for (var k = circleList.length; k >= 0; k--) {
@@ -433,17 +432,4 @@ var init = function(Vector, PackedCircle)
 	};
 
 	return PackedCircleManager;
-};
-
-if (typeof window === 'undefined') {
-
-	require('js/lib/Vector.js');
-	require('js/lib/circlepack/PackedCircle.js');
-	require('js/lib/jsclass/core.js');
-	require('js/lib/SortedLookupTable.js');
-	EVENTS = require('events');
-
-	PackedCircleManager = init(Vector, PackedCircle);
-} else {
-	define(['lib/Vector', 'lib/circlepack/PackedCircle', 'lib/jsclass/core'], init);
-}
+});

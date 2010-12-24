@@ -1,4 +1,4 @@
-define(['lib/jsclass/core'], function()
+define(['lib/jsclass-core'], function()
 {
 	return new JS.Class(
 	{

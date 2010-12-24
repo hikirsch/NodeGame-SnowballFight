@@ -9,8 +9,7 @@
  	Contains the properties for the various types of projectiles
  Basic Usage:
  */
-
-var init = function(EntityModel)
+define(['model/EntityModel'], function(EntityModel)
 {
     var charactersAndProjectiles = EntityModel.COLLISION_GROUPS.CHARACTER | EntityModel.COLLISION_GROUPS.PROJECTILE;
 	var charactersOnly = EntityModel.COLLISION_GROUPS.CHARACTER;
@@ -37,13 +36,4 @@ var init = function(EntityModel)
 		candyCane				: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 24,	theme: '117' },
 		sleighInGround			: { initialPosition:{x:5, y:5}, collisionMask: charactersOnly, collisionOffset: {x:0, y:0},	radius: 25,	theme: '118' }
 	}
-};
-
-if (typeof window === 'undefined') {
-	require('js/model/EntityModel');
-	FieldEntityModel = init(EntityModel);
-} else{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['model/EntityModel'], init);
-}
+});

@@ -71,5 +71,5 @@ if (typeof window === 'undefined') {
 } else {
 	// We're on the browser.
 	// Require.js will use this file's name (CharacterController.js), to create a new
-	define(['controllers/entities/traits/BaseTrait', 'model/EntityModel', 'lib/jsclass/core'], init);
+	define(['controllers/entities/traits/BaseTrait', 'model/EntityModel', 'lib/jsclass-core'], init);
 }

@@ -25,8 +25,7 @@ Basic Usage:
 	this.connection.send(message.encodedSelf());
 */
 
-var init = function()
-{
+define(['lib/jsclass-core', 'lib/bison'], function( JS, BISON ) {
 	return new JS.Class(
 	{
 		/**
@@ -65,12 +64,4 @@ var init = function()
 			return BISON.encode({id:this.clientID, seq:this.sequenceNumber, cmds:this.unencodedMessage, t:this.messageTime});
 		}
 	});
-};
-
-if (typeof window === 'undefined') {
-	require('./lib/bison.js');
-	Message = init();
-} else {
-
-	define(['lib/jsclass/core', 'lib/bison'], init);
-}
+});

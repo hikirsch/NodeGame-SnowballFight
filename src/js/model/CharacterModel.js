@@ -10,7 +10,7 @@
  Basic Usage:
  */
 
-var init = function()
+define(function()
 {
 	return {
 		yeti: { initialPosition:null, collisionMask: 0, collisionOffset: {x:0, y:05}, radius: 16, theme: '200', nickname:'Notyetti' },
@@ -20,12 +20,4 @@ var init = function()
 		tree: { initialPosition:null, collisionMask: 0, collisionOffset: {x:0, y:05}, radius: 16, theme: '204', nickname:'Pine3' },
 		smashTV : { initialPosition:null, collisionMask: 0, collisionOffset: {x:0, y:05}, radius: 16, theme: '999', nickname: 'SmashTV' }
 	}
-};
-
-if (typeof window === 'undefined') {
-	CharacterModel = init();
-} else{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define([], init);
-}
+});

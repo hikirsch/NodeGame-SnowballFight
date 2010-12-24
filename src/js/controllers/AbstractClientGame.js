@@ -22,7 +22,7 @@ define(['lib/Vector',
 	'controllers/AudioManager',
 	'factories/TraitFactory',
 	'controllers/FieldController',
-	'lib/jsclass/core' ],
+	'lib/jsclass-core' ],
 	function(Vector, NetChannel, GameView, MatchStartView, PowerupAnnounceView, Joystick, AbstractGame, AudioManager, TraitFactory, FieldController)
 	{
 		return new JS.Class(AbstractGame,

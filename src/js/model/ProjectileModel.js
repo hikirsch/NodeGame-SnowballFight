@@ -10,7 +10,7 @@
  Basic Usage:
  */
 
-var init = function()
+define(function()
 {
 
 	return {
@@ -29,15 +29,4 @@ var init = function()
 		// Presents are basically projectiles with no velocity
 		present				: { transferredTraits: '', initialPosition: null, angle: 0, themeMask: 0, radius: 14, maxVelocity: 1, force: 1, theme: '400', spriteIndex: 0, useTransform: false }
 	}
-};
-
-if (typeof window === 'undefined')
-{
-	ProjectileModel = init();
-}
-else
-{
-	// We're on the browser.
-	// Require.js will use this file's name (CharacterController.js), to create a new
-	define([], init);
-}
+});

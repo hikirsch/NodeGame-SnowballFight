@@ -16,7 +16,7 @@ Basic Usage:
 
 	http://blog.jcoglan.com/2010/10/18/i-am-a-fast-loop/
 */
-var init = (function() {
+define(function() {
 	/**
 	 *	LookupTable
 	 */
@@ -115,14 +115,3 @@ var init = (function() {
 
 	return SortedLookupTable;
 });
-
-if (typeof window === 'undefined')
-{
-	// Node.js
-	SortedLookupTable = init();
-}
-else
-{
-	// Browser
-	define(init);
-}

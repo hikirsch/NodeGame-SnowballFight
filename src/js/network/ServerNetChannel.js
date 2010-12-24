@@ -32,11 +32,11 @@ Basic Usage:
 
 var ws = require('network/ws.js');
 require('js/lib/bison.js');
-require('js/lib/jsclass/core.js');
+require('js/lib/jsclass-core.js');
 require('js/lib/SortedLookupTable.js');
 require('model/Client.js');
 
-ServerNetChannel = (function()
+define(['network/ws', 'lib/bison', 'lib/jsclass-core', 'model/Client' ], function( ws, BISON, JS, SortedLookupTable, Client)
 {
 	return new JS.Class(
 	{
