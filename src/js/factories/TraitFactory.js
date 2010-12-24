@@ -10,16 +10,18 @@
  Basic Usage:
 	 // TODO: FILL OUT
  */
-define(['controllers/entities/traits/ClientControlledTrait',
+define([
+		'lib/SortedLookupTable',
+		'controllers/entities/traits/ClientControlledTrait',
 		'controllers/entities/traits/ClientControlledTrait',
 		'controllers/entities/traits/CharacterTraitInvulnerable',
 		'controllers/entities/traits/PresentTraitHyperShot',
 		'controllers/entities/traits/PresentTrait360Shot',
 		'controllers/entities/traits/PresentTraitDeflectorShot',
 		'controllers/entities/traits/EntityTraitAnimateInFromAlpha',
-		'controllers/entities/traits/EntityTraitAnimateInFromLarge',
-		'lib/jsclass-core'],
-	function(ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateInFromAlpha, EntityTraitAnimateInFromLarge )
+		'controllers/entities/traits/EntityTraitAnimateInFromLarge'
+	],
+	function(SortedLookupTable, ClientControlledTrait, ProjectileTraitFreeze, CharacterTraitInvulnerable, PresentTraitHyperShot, PresentTrait360Shot, PresentTraitDeflectorShot, EntityTraitAnimateInFromAlpha, EntityTraitAnimateInFromLarge )
 	{
 		// Private reference
 		var traitTypes = new SortedLookupTable();

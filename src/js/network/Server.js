@@ -21,7 +21,7 @@ Basic Usage:
 Version:
 	1.0
 */
-define([ 'sys', 'network/ws', 'lib/jsclass-core', 'lib/SortedLookupTable', 'controllers/SnowGame', 'lib/Logger'], function( SYS, ws, JS, SortedLookupTable, SnowGame, Logger ) {
+define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/Logger'], function( JS, SYS, ws, SortedLookupTable, Logger ) {
 	var SERVERSTATS = {};
 
 	return new JS.Class(

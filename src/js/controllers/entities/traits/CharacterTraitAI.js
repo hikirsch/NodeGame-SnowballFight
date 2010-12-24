@@ -15,33 +15,39 @@ Basic Usage:
 		this.clientCharacter = aCharacter;
 	}
 */
-define(['lib/jsclass-core', 'lib/Joystick', 'controllers/entities/traits/BaseTrait'], function(JS, Joystick, BaseTrait)
-{
-	return new JS.Class("ClientControlledTrait", BaseTrait,
+define(
+	[
+		'lib/jsclass-core',
+		'lib/Joystick',
+		'controllers/entities/traits/BaseTrait'
+	], function(JS, Joystick, BaseTrait)
 	{
-		initialize: function(aFieldController, aCircleManager)
+		return new JS.Class("ClientControlledTrait", BaseTrait,
 		{
-			this.fieldController = aFieldController;
-			this.circleManager = aCircleManager;
+			initialize: function(aFieldController, aCircleManager)
+			{
+				this.fieldController = aFieldController;
+				this.circleManager = aCircleManager;
 
-			this.callSuper();
-		},
+				this.callSuper();
+			},
 
-		attach: function(anEntity)
-		{
-			this.callSuper();
-			this.intercept(['tick', 'handleInput']);
+			attach: function(anEntity)
+			{
+				this.callSuper();
+				this.intercept(['tick', 'handleInput']);
 
-			this.attachedEntity.setInput( new Joystick() );
-			this.attachedEntity.input.attachEvents();
-		},
+				this.attachedEntity.setInput( new Joystick() );
+				this.attachedEntity.input.attachEvents();
+			},
 
-		/**
-		 * Implement our own intercepted version of the methods/properties
-		 */
-		tick: function(speedFactor, gameClock)
-		{
-			// TODO: Write AI
-		}
-	});
-});
+			/**
+			 * Implement our own intercepted version of the methods/properties
+			 */
+			tick: function(speedFactor, gameClock)
+			{
+				// TODO: Write AI
+			}
+		});
+	}
+);

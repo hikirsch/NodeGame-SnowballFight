@@ -7,10 +7,9 @@ Abstract:
 	This is the point of entry on the client side.
 Basic Usage:
 */
-require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(AbstractClientGame, config) {
-	/**
-	 * we do a lot of logging, some browsers don't have a console, so i create this fake one so it swallows any calls
-	 */
+
+define(['controllers/AbstractClientGame', 'config', 'lib/caat'], function (AbstractClientGame, config, CAAT) {
+	// we do a lot of logging, some browsers don't have a console, so i create this fake one so it swallows any calls
 	function ignoreConsoleIfUndefined()
 	{
 		var Void = function(){};
@@ -32,6 +31,7 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 	// Everything ready - start the game client
     require.ready(function()
 	{
+		console.log("LOADED!");
 		CFInstall.check({
 			mode: "overlay",
 			destination: location.href.toString()
@@ -66,10 +66,9 @@ require(['controllers/AbstractClientGame', 'config', 'lib/caat'], function(Abstr
 		// Fired when images have been preloaded
 		GAMECONFIG.CAAT.imagePreloader.loadImages(imagesToLoad,
 			function(counter, images) {
+				console.log('caat preloader loading');
 				if(counter != images.length) return; // Wait until last load
-				var game = window.clientGame = new AbstractClientGame( config );
+				new AbstractClientGame( config );
 			});
     });
 });
-
-

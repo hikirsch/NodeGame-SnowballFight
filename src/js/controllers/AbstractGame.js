@@ -13,23 +13,28 @@ Basic Usage:
 	 See subclasses
 */
 
-define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'lib/SortedLookupTable', 'controllers/FieldController', 'factories/GameEntityFactory'],
-	function( JS, Vector, Rectangle, SortedLookupTable, FieldController, GameEntityFactory ) {
+define([
+		'lib/jsclass-core',
+		'controllers/FieldController',
+		'factories/GameEntityFactory'
+	],
+	function( JS, FieldController, GameEntityFactory ) {
+
 		return new JS.Class(
 		{
-			include: JS.StackTrace,
-
-			initialize: function(config)
+			initialize: function(GameConfig)
 			{
-				this.config = config;
-				this.setModel(GAMECONFIG.GAME_MODEL);
+				console.log("(AbstractGame) Loaded");
+
+				this.config = GameConfig;
+				this.setModel(GameConfig.GAME_MODEL);
 				this.isGameOver = false;
 
 				// our game takes place in a field
 				this.fieldController = new FieldController( this, this.model );
 
 				// This is the Factory that will create all the entities for us
-				this.entityFactory = new GameEntityFactory(this.fieldController, config.ENTITY_MODEL);
+				this.entityFactory = new GameEntityFactory(this.fieldController, GameConfig.ENTITY_MODEL);
 
 				// intervalFramerate, is used to determin how often to call settimeout - we can set to lower numbers for slower computers
 				// this.targetDelta, Milliseconds between frames 16ms means 60FPS - it's the framerate the game is designed against
@@ -61,7 +66,7 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'lib/SortedLookupTabl
 			// Please never clog abstract game value formating, allow objects to do that with the data returned
 			getTimeRemaining: function()
 			{
-				return GAMECONFIG.GAME_MODEL.gameDuration - this.gameClock;
+				return GameConfig.GAME_MODEL.gameDuration - this.gameClock;
 			},
 
 			// NOTE: Please never format values here - allow objects to do that with the data returned

@@ -42,7 +42,7 @@
  * public API, they are all 'plumbing' and may be removed or changed at any time.
  **/
 define( function () { 
-	var JS = (typeof JS === 'undefined') ? {} : JS;
+	var JS = {};
 
 	  /**
 	   * JS.extend(target, extensions) -> Object

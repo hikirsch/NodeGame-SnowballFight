@@ -1,4 +1,4 @@
-define( [ 'view/managers/QueryStringManager', 'lib/jsclass-core'], function( QueryStringManager ) {
+define( ['lib/jsclass-core', 'view/managers/QueryStringManager'], function( JS, QueryStringManager ) {
 	return new JS.Class({
 		initialize: function( config, callback )
 		{

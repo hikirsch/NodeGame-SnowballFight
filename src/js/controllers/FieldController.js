@@ -1,4 +1,11 @@
-define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'view/FieldView', "lib/circlepack/PackedCircle", "lib/circlepack/PackedCircleManager"],
+define([
+		'lib/jsclass-core',
+		'lib/Vector',
+		'lib/Rectangle',
+		'view/FieldView',
+		'lib/circlepack/PackedCircle',
+		'lib/circlepack/PackedCircleManager'
+	],
 	function(JS, Vector, Rectangle, FieldView, PackedCircle, PackedCircleManager)
 	{
 		return new JS.Class(
@@ -12,7 +19,7 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'view/FieldView', "li
 
 				// Might do away with different types of entities tables
 				this.allEntities = new SortedLookupTable();
-				this.players = new SortedLookupTable();    		// A special SortedLookupTable in which the key is the clientID (WebSocket connection) not the objectID
+				this.players = new SortedLookupTable(); // A special SortedLookupTable in which the key is the clientID (WebSocket connection) not the objectID
 				this.playersArray = []; // Used for ranking, TODO: figure out better way to implement character ranking
 
 				this.setModel( gameModel );
@@ -20,7 +27,8 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'view/FieldView', "li
 
 			createView: function( gameModel )
 			{
-				if( FieldView != null ) {
+				if( FieldView != null )
+				{
 					this.view = new FieldView( this, gameModel );
 				}
 			},

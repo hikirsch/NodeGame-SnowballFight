@@ -11,25 +11,30 @@ Abstract:
 Basic Usage: 
 	var gameController = new ClientGameController(HOST, PORT) 
 */
-
-define(['lib/Vector',
-	'network/NetChannel',
-	'view/GameView',
-	'view/caat/MatchStartView',
-	'view/caat/PowerupAnnounceView',
-	'lib/Joystick',
-	'controllers/AbstractGame',
-	'controllers/AudioManager',
-	'factories/TraitFactory',
-	'controllers/FieldController',
-	'lib/jsclass-core' ],
-	function(Vector, NetChannel, GameView, MatchStartView, PowerupAnnounceView, Joystick, AbstractGame, AudioManager, TraitFactory, FieldController)
+define([
+		'lib/jsclass-core',
+		'lib/Vector',
+		'network/NetChannel',
+		'view/GameView',
+		'view/caat/MatchStartView',
+		'view/caat/PowerupAnnounceView',
+		'lib/Joystick',
+		'controllers/AbstractGame',
+		'controllers/AudioManager',
+		'test-blank', // 'factories/TraitFactory'
+		'controllers/FieldController',
+		'lib/caat'
+	],
+	function( JS, Vector, NetChannel, GameView, MatchStartView, PowerupAnnounceView, Joystick, AbstractGame, AudioManager, TraitFactory, FieldController, CAAT )
 	{
-		return new JS.Class(AbstractGame,
+		console.log("arguments!", AbstractGame);
+		return new JS.Class( AbstractGame,
 		{
 			initialize: function(config)
 			{
+				console.log("(AbstractClientGame) Loaded");
 				this.callSuper();
+
 
 				this.CMD_TO_FUNCTION = {};
 				this.CMD_TO_FUNCTION[config.CMDS.PLAYER_JOINED] = this.onClientJoined;

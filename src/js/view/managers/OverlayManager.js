@@ -1,4 +1,4 @@
-define(['factories/HTMLFactory'], function( HTMLFactory ) {
+define(['lib/jsclass-core', 'factories/HTMLFactory'], function( JS, HTMLFactory ) {
 	return new JS.Class(
 		{
 			initialize: function( controller, aGameModel )
