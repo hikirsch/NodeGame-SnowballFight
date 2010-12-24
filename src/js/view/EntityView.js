@@ -1,4 +1,4 @@
-define(['lib/jsclass-core', 'view/BaseView'], function(JS, BaseView)
+define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView, CAAT)
 {
 	return new JS.Class( BaseView,
 	{

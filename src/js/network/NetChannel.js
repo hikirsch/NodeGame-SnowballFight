@@ -16,7 +16,7 @@ Abstract:
 Basic Usage:
 
  */
-define(['network/Message', 'network/ServerGameSelector', 'config'], function(Message, ServerGameSelector, config) {
+define(['network/Message', 'network/ServerGameSelector', 'lib/bison'], function(Message, ServerGameSelector, BISON) {
 	/**
 	 * NetChannel facilitates communication between the client-game, and the server-game
 	 * @param config  		A game configuration
@@ -151,7 +151,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 		if( this.verboseMode ) console.log("(NetChannel) onConnectionOpened");
 
 		// Create a new message with the SERVER_CONNECT command
-		this.addMessageToQueue(true, this.composeCommand(config.CMDS.SERVER_CONNECT, null) );
+		this.addMessageToQueue(true, this.composeCommand(this.config.CMDS.SERVER_CONNECT, null) );
 	};
 
 	/**
@@ -171,13 +171,13 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 
 		// This is a special command after connecting and the server OK-ing us - it's the first real message we receive
 		// So we have to put it here, because otherwise e don't actually have a true client ID yet so the code below will not work
-		if(serverMessage.cmds.cmd == config.CMDS.SERVER_CONNECT) {
+		if(serverMessage.cmds.cmd == this.config.CMDS.SERVER_CONNECT) {
 			this.onServerDidAcceptConnection(serverMessage);
 		}
 
 
 		// We sent this, clear our reliable buffer que
-		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != config.CMDS.FULL_UPDATE)
+		if(serverMessage.id == this.clientID && serverMessage.cmds.cmd != this.config.CMDS.FULL_UPDATE)
 		{
 			var messageIndex =  serverMessage.seq & this.MESSAGE_BUFFER_MASK;
 			var message = this.messageBuffer[messageIndex];
@@ -191,7 +191,7 @@ define(['network/Message', 'network/ServerGameSelector', 'config'], function(Mes
 			delete this.messageBuffer[messageIndex];
 			delete message;
 		}
-		else if (serverMessage.cmds.cmd == config.CMDS.FULL_UPDATE) // World update!
+		else if (serverMessage.cmds.cmd == this.config.CMDS.FULL_UPDATE) // World update!
 		{
 			var len = serverMessage.data.length;
 			var i = -1;

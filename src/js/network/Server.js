@@ -162,7 +162,8 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 		{
 			this.config.SERVER_SETTING.NEXT_GAME_ID++;
 			var aGameInstance = new SnowGame( this.config, newPort );
-			// aGameInstance.start(); // start the game
+			aGameInstance.setServer(this);
+			aGameInstance.start(); // start the game
 
 			var that = this;
 

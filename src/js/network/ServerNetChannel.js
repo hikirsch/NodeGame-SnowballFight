@@ -86,9 +86,10 @@ define(['lib/jsclass-core', 'network/ws', 'lib/bison', 'lib/SortedLookupTable', 
 
 			aWebSocket.onConnect = function(connection)
 			{
-				SERVERSTATS.totalConnections++;
-				SERVERSTATS.activeConnections++;
-				that.delegate.log("(ServerNetChannel):: ClientConnected [totalConnectionsMade:" + SERVERSTATS.totalConnections + "| ActiveConnections ~" + SERVERSTATS.activeConnections + "]");
+				// TODO: fix serverstats on ServerNetChannel
+				// SERVERSTATS.totalConnections++;
+				// SERVERSTATS.activeConnections++;
+				that.delegate.log("(ServerNetChannel):: ClientConnected [totalConnectionsMade:]" ) ;//+ SERVERSTATS.totalConnections + "| ActiveConnections ~" + SERVERSTATS.activeConnections + "]");
 			};
 
 			/**
@@ -122,7 +123,8 @@ define(['lib/jsclass-core', 'network/ws', 'lib/bison', 'lib/SortedLookupTable', 
 			};
 
 			aWebSocket.onClose = function(connection) {
-				SERVERSTATS.activeConnections--;
+				// TODO: fix SERVERSTATS in ServerNetChannel
+				// SERVERSTATS.activeConnections--;
 				that.removeClient(connection);
 			};
 		},

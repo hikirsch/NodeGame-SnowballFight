@@ -120,7 +120,7 @@ define([
 						seq: 999,
 						gameClock: this.gameClock,
 						cmds: {
-							cmd: this.server.gameConfig.CMDS.SERVER_MATCH_START,
+							cmd: this.config.CMDS.SERVER_MATCH_START,
 							data: {}
 						}
 					};
@@ -163,8 +163,8 @@ define([
 					var projectileOwner = this.fieldController.getPlayerWithClientID(projectile.view.clientID);
 					if(projectileOwner)
 					{
-						projectileOwner.score += (this.server.gameConfig.SCORING.HIT * projectileOwner.scoreMultiplier);
-						projectileOwner.scoreMultiplier = Math.min(++projectileOwner.scoreMultiplier, this.server.gameConfig.SCORING.MAX_MULTIPLIER);
+						projectileOwner.score += (this.config.SCORING.HIT * projectileOwner.scoreMultiplier);
+						projectileOwner.scoreMultiplier = Math.min(++projectileOwner.scoreMultiplier, this.config.SCORING.MAX_MULTIPLIER);
 
 						// Reset the multiplier of the person who was hit
 						character.view.scoreMultiplier = 1;
@@ -245,8 +245,8 @@ define([
 			createDummyPlayers: function()
 			{
 				var allCharacterModels = [];
-				for(var obj in GAMECONFIG.CHARACTER_MODEL) {
-					var model = GAMECONFIG.CHARACTER_MODEL['snowman'];
+				for(var obj in this.config.CHARACTER_MODEL) {
+					var model = this.config.CHARACTER_MODEL['snowman'];
 					allCharacterModels.push(model);
 				}
 
