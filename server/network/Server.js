@@ -22,16 +22,9 @@ Version:
 	1.0
 */
 
+define({ paths: { 'client': '../client' } }, [ 'network/ws', 'js/lib/core.js', 'js/lib/SortedLookupTable', 'controllers/SnowGame', 'lib/Logger'], function( ws, JS, SortedLookupTable, SnowGame, Logger ) {
+	SERVERSTATS = {};
 
-var ws = require('network/ws.js');
-require('js/lib/jsclass/core.js');
-require('js/lib/SortedLookupTable.js');
-require('controllers/SnowGame.js');
-require('lib/Logger.js');
-
-SERVERSTATS = {};
-Server = (function()
-{
 	return new JS.Class(
 	{
 		initialize: function( gameConfig, serverConfig )
@@ -68,7 +61,7 @@ Server = (function()
 			SERVERSTATS.activeGames = 0;
 			SERVERSTATS.totalGamesPlayed = 0;
 
-//			// Listen for process termination
+			// Listen for process termination
 			var that = this;
 			process.addListener('SIGINT', function(){
 				that.log("(Server) Shutting Down");
@@ -210,4 +203,4 @@ Server = (function()
 
 		// Close prototype object
 	}); // Close .extend
-})(); // close init()
+});

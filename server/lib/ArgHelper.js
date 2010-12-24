@@ -13,79 +13,71 @@ Basic Usage:
 	
 	// ...inside some other file
 	var movespeed = ArgHelper.getArgumentByNameOrSetDefault(movespeed, 1000); // returns 3.0
-	
 Version:
 	1.0
 */
 // Make argument name value pairs, and defaults globally accessible
-if(global.__ARGHELPER == undefined)
-{
-	global.__ARGHELPER = this;
-	this.nameValuePairs = {};
-}
-	
-var that = global.__ARGHELPER;
-that.outputAllArgumentsToConsole = function()
-{
-	console.log('(ArgHelper) Node created with process arguments:');
-	process.argv.forEach(function(val, index, array)
-	{
-		console.log("\t" + index + " : '" + val + "'");
-	});
-};
-
-that.getArgumentByNameOrSetDefault = function(anArgumentName, defaultValue)
-{
-	// No needle supplied
-	if (anArgumentName == undefined)
-	{
-		console.log("(ArgHelper) Cannot 'getArgumentByName' with undefined argument!' ");
-		return;
-	}
-	;
-
-	// Already previously set return default
-	if (that.nameValuePairs[anArgumentName] != undefined)
-	{
-		return that.nameValuePairs[anArgumentName];
-	}
-	var returnValue = undefined;
+define( function() {
+	var nameValuePairs = {};
 
 	process.argv.forEach(function(val, index, array)
 	{
 		// not a name-value pair?
-		if (val.indexOf("=") == -1)
-			return;
+		if (val.indexOf("=") > -1)
+		{
+			// Convert to name-value pair
+			var pair = val.split('='),
+				key = pair[0],
+				value = pair.length > 1 ? pair[1] : "";
 
-		// Convert to name-value pair
-		var nameValuePair = val.split('=');
+			// Convert string based Booleans - This is not the fastest, but it doesn't matter
+			// On subsequent calls we never get this far as the value is already set
+			if (value == 'true' || value == '1') value = true;
+			else if (value == 'false' || value == '0') value = false;
 
-		// See if name = anArgumentNAme
-		if (nameValuePair[0] != anArgumentName)
-			return;
-
-		// set that as returnValue, if dupes last one overrides previous
-		returnValue = nameValuePair[1];
+			nameValuePairs[ key ] = value;
+		}
 	});
 
-	// Check if match found, otherwise set to default
-	if (returnValue == undefined)
+	function getArgumentByNameOrSetDefault(anArgumentName, defaultValue)
 	{
-		console.log("(ArgHelper) No match found for '" + anArgumentName + "'" + " in process arguments. Setting value to " + defaultValue + "");
+		var returnValue = null;
 
-		returnValue = defaultValue;
+		// No needle supplied
+		if (anArgumentName == undefined)
+		{
+			console.log("(ArgHelper) Cannot 'getArgumentByName' with undefined argument!' ");
+			return;
+		}
+
+		// Already previously set return default
+		if ( anArgumentName in nameValuePairs )
+		{
+			returnValue = nameValuePairs[anArgumentName];
+		}
+		else
+		{
+			console.log("(ArgHelper) No match found for '" + anArgumentName + "'" + " in process arguments. Setting value to " + defaultValue + "");
+
+			returnValue = defaultValue;
+		}
+
+		return returnValue;
 	}
 
-	// Convert string based Booleans - This is not the fastest, but it doesn't matter
-	// On subsequent calls we never get this far as the value is already set
-	if (returnValue == 'true' || returnValue == '1') returnValue = true;
-	else if (returnValue == 'false' || returnValue == '0') returnValue = false;
+	function outputAllArgumentsToConsole()
+	{
+		console.log('(ArgHelper) Node created with process arguments:');
+		process.argv.forEach(function(val, index, array)
+		{
+			console.log("\t" + index + " : '" + val + "'");
+		});
+	}
 
-	// Store
-	that.nameValuePairs[anArgumentName] = returnValue;
-	return returnValue;
-};
+	outputAllArgumentsToConsole();
 
-// Trace out on first one
-if(this == that)
-	this.outputAllArgumentsToConsole();
+	return {
+		outputAllArgumentsToConsole: outputAllArgumentsToConsole,
+		getArgumentByNameOrSetDefault: getArgumentByNameOrSetDefault
+	};
+});

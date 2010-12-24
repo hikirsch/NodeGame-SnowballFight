@@ -1,7 +1,5 @@
-var init = function(EntityModel, ProjectileModel, CharacterModel)
-{ 
+define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], function(EntityModel, ProjectileModel, CharacterModel) {
 	return GAMECONFIG = {
-
 
 		// See: http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS:
@@ -13,7 +11,6 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			FULL_UPDATE			: 1 << 4,
 			PLAYER_MOVE			: 1 << 5
 		},
-
 
 		CLIENT_SETTING:
 		{
@@ -142,13 +139,4 @@ var init = function(EntityModel, ProjectileModel, CharacterModel)
 			}
 		}()
 	}
-};
-
-if (typeof window === 'undefined') {
-	require('./model/EntityModel.js');
-	require('./model/ProjectileModel.js');
-	require('./model/CharacterModel.js');
-	exports.Config = init(EntityModel, ProjectileModel, CharacterModel);
-} else if( typeof define === 'function' ) {
-	define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], init);
-}
+});

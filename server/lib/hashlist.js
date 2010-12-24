@@ -20,173 +20,175 @@
 
 */
 
-
 // Hash List Utility Class -----------------------------------------------------
 // -----------------------------------------------------------------------------
-function HashList(max) {
-    this.maximum = max || null;
-    this.clear();
-}
-exports.lib = HashList;
+define(function() {
+	function HashList(max) {
+		this.maximum = max || null;
+		this.clear();
+	}
 
-HashList.prototype = {
-    clear: function() {
-        this.hash = {};
-        this.items = [];
-        this.length = 0;
-    },
+	HashList.prototype = {
+		clear: function() {
+			this.hash = {};
+			this.items = [];
+			this.length = 0;
+		},
 
-    has: function(obj) {
-        if (typeof obj !== 'object') {
-            return obj in this.hash;
+		has: function(obj) {
+			if (typeof obj !== 'object') {
+				return obj in this.hash;
 
-        } else {
-            return obj.id in this.hash;
-        }
-    },
+			} else {
+				return obj.id in this.hash;
+			}
+		},
 
-    full: function() {
-        return this.maximum === null ? false : this.length === this.maximum;
-    },
+		full: function() {
+			return this.maximum === null ? false : this.length === this.maximum;
+		},
 
-    contains: function(item) {
-        return this.items.indexOf(item) !== -1;
-    },
+		contains: function(item) {
+			return this.items.indexOf(item) !== -1;
+		},
 
-    indexOf: function(item) {
-        return this.items.indexOf(item);
-    },
+		indexOf: function(item) {
+			return this.items.indexOf(item);
+		},
 
-    at: function(index) {
-        return this.items[index];
-    },
+		at: function(index) {
+			return this.items[index];
+		},
 
-    get: function(obj) {
-        if (typeof obj !== 'object') {
-            return this.hash[obj];
+		get: function(obj) {
+			if (typeof obj !== 'object') {
+				return this.hash[obj];
 
-        } else {
-            return this.hash[obj.id];
-        }
-    },
+			} else {
+				return this.hash[obj.id];
+			}
+		},
 
-    add: function(obj) {
-        if (!this.has(obj) && !this.full()) {
-            this.hash[obj.id] = obj;
-            this.items.push(obj);
-            this.length++;
-            return true;
+		add: function(obj) {
+			if (!this.has(obj) && !this.full()) {
+				this.hash[obj.id] = obj;
+				this.items.push(obj);
+				this.length++;
+				return true;
 
-        } else {
-            return false;
-        }
-    },
+			} else {
+				return false;
+			}
+		},
 
-    put: function(id, obj) {
-        if (!this.has(id) && !this.full()) {
-            this.hash[id] = obj;
-            this.items.push(obj);
-            this.length++;
-            return true;
+		put: function(id, obj) {
+			if (!this.has(id) && !this.full()) {
+				this.hash[id] = obj;
+				this.items.push(obj);
+				this.length++;
+				return true;
 
-        } else {
-            return false;
-        }
-    },
+			} else {
+				return false;
+			}
+		},
 
-    remove: function(obj) {
-        if (this.has(obj)) {
-            this.items.splice(this.items.indexOf(this.hash[obj.id]), 1);
-            delete this.hash[obj.id];
-            this.length--;
-            return true;
+		remove: function(obj) {
+			if (this.has(obj)) {
+				this.items.splice(this.items.indexOf(this.hash[obj.id]), 1);
+				delete this.hash[obj.id];
+				this.length--;
+				return true;
 
-        } else {
-            return false;
-        }
-    },
+			} else {
+				return false;
+			}
+		},
 
-    sort: function(func) {
-        this.items.sort(func);
-        return this;
-    },
+		sort: function(func) {
+			this.items.sort(func);
+			return this;
+		},
 
-    each: function(cb, scope) {
-        for(var i = 0; i < this.length; i++) {
-            var oldLength = this.length;
-            var item = this.items[i];
-            if (cb.call(scope || item, item)) {
-                return true;
-            }
-            if (this.length < oldLength) {
-                i--;
-            }
-        }
-    },
+		each: function(cb, scope) {
+			for(var i = 0; i < this.length; i++) {
+				var oldLength = this.length;
+				var item = this.items[i];
+				if (cb.call(scope || item, item)) {
+					return true;
+				}
+				if (this.length < oldLength) {
+					i--;
+				}
+			}
+		},
 
-    eachIn: function(items, cb, scope) {
-        for(var i = 0; i < this.length; i++) {
-            var oldLength = this.length;
-            var item = this.items[i];
-            if (items.indexOf(item) !== -1) {
-                if (cb.call(scope || item, item)) {
-                    return true;
-                }
-                if (this.length < oldLength) {
-                    i--;
-                }
-            }
-        }
-    },
+		eachIn: function(items, cb, scope) {
+			for(var i = 0; i < this.length; i++) {
+				var oldLength = this.length;
+				var item = this.items[i];
+				if (items.indexOf(item) !== -1) {
+					if (cb.call(scope || item, item)) {
+						return true;
+					}
+					if (this.length < oldLength) {
+						i--;
+					}
+				}
+			}
+		},
 
-    eachNot: function(items, cb, scope) {
-        for(var i = 0; i < this.length; i++) {
-            var oldLength = this.length;
-            var item = this.items[i];
-            if (items.indexOf(item) === -1) {
-                if (cb.call(scope || item, item)) {
-                    return true;
-                }
-                if (this.length < oldLength) {
-                    i--;
-                }
-            }
-        }
-    },
+		eachNot: function(items, cb, scope) {
+			for(var i = 0; i < this.length; i++) {
+				var oldLength = this.length;
+				var item = this.items[i];
+				if (items.indexOf(item) === -1) {
+					if (cb.call(scope || item, item)) {
+						return true;
+					}
+					if (this.length < oldLength) {
+						i--;
+					}
+				}
+			}
+		},
 
-    eachCall: function(method) {
-        for(var i = 0; i < this.length; i++) {
-            this.items[i][method]();
-        }
-    },
+		eachCall: function(method) {
+			for(var i = 0; i < this.length; i++) {
+				this.items[i][method]();
+			}
+		},
 
-    eachEach: function(check, func, after, scope) {
-        for(var i = 0; i < this.length; i++) {
-            var oldLength = this.length;
-            var item = this.items[i];
-            if (check.call(scope || item, item)) {
-                for(var e = i + 1;; e++) {
-                    var oldLengthInner = this.length;
-                    if (e === this.length) {
-                        e = 0;
-                    }
-                    if (e === i) {
-                        break;
-                    }
+		eachEach: function(check, func, after, scope) {
+			for(var i = 0; i < this.length; i++) {
+				var oldLength = this.length;
+				var item = this.items[i];
+				if (check.call(scope || item, item)) {
+					for(var e = i + 1;; e++) {
+						var oldLengthInner = this.length;
+						if (e === this.length) {
+							e = 0;
+						}
+						if (e === i) {
+							break;
+						}
 
-                    var itemInner = this.items[e];
-                    if (func.call(scope || itemInner, item, itemInner)) {
-                        break;
-                    }
-                    if (this.length < oldLengthInner) {
-                        e--;
-                    }
-                }
-                after.call(scope || item, item);
-            }
-            if (this.length < oldLength) {
-                i--;
-            }
-        }
-    }
-};
+						var itemInner = this.items[e];
+						if (func.call(scope || itemInner, item, itemInner)) {
+							break;
+						}
+						if (this.length < oldLengthInner) {
+							e--;
+						}
+					}
+					after.call(scope || item, item);
+				}
+				if (this.length < oldLength) {
+					i--;
+				}
+			}
+		}
+	};
+
+	return HashList;
+});
