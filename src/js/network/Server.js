@@ -21,8 +21,7 @@ Basic Usage:
 Version:
 	1.0
 */
-define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/Logger'], function( JS, SYS, ws, SortedLookupTable, Logger ) {
-	var SERVERSTATS = {};
+define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/Logger', 'lib/bison', 'controllers/SnowGame' ], function( JS, SYS, ws, SortedLookupTable, Logger, BISON, SnowGame ) {
 
 	return new JS.Class(
 	{
@@ -33,6 +32,7 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 			this.gameID = 1;
 			this.gameConfig = gameConfig;
 			this.serverConfig = serverConfig;
+			this.SERVERSTATS = {};
 
 			// Make our rolling log globally accessible
 			console.gameLog = function () {
@@ -52,13 +52,13 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 			console.gameLog("(Server) started and running...");
 
 			// Running active connections on a ServerNetChannel
-			SERVERSTATS.activeConnections = 0;
-			SERVERSTATS.totalConnections = 0;
+			this.SERVERSTATS.activeConnections = 0;
+			this.SERVERSTATS.totalConnections = 0;
 			// Total people who attempted to connect to ServerChooser
-			SERVERSTATS.gameJoinRequest = 0;
+			this.SERVERSTATS.gameJoinRequest = 0;
 			// Game info
-			SERVERSTATS.activeGames = 0;
-			SERVERSTATS.totalGamesPlayed = 0;
+			this.SERVERSTATS.activeGames = 0;
+			this.SERVERSTATS.totalGamesPlayed = 0;
 
 			process.addListener('SIGINT', function(){
 				that.log("(Server) Shutting Down");
@@ -73,8 +73,8 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 
 			// client will ask for a game in onMessage
 			aWebSocket.onConnect = function(connection) {
-				SERVERSTATS.gameJoinRequest++;
-				console.log("(ServerChooser) client connected, [total gameJoinRequest: " + SERVERSTATS.gameJoinRequest + "]");
+				that.SERVERSTATS.gameJoinRequest++;
+				console.log("(ServerChooser) client connected, [total gameJoinRequest: " + that.SERVERSTATS.gameJoinRequest + "]");
 				connection.__CONNECTED = true;
 			};
 
@@ -158,11 +158,12 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 		{
 			this.gameConfig.SERVER_SETTING.NEXT_GAME_ID++;
 			var aGameInstance = new SnowGame( this, newPort );
-			aGameInstance.start(); // start the game
+			// aGameInstance.start(); // start the game
 
 			var that = this;
+
 			// Listen for when the game is over
-			aGameInstance.eventEmitter.on(GAMECONFIG.EVENTS.ON_GAME_ENDED, function( anEndedGameInstance ) {
+			aGameInstance.eventEmitter.on(this.gameConfig.EVENTS.ON_GAME_ENDED, function( anEndedGameInstance ) {
 				that.killGame(anEndedGameInstance.portNumber);
 			});
 

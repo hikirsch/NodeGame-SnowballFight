@@ -66,7 +66,7 @@ define([
 			// Please never clog abstract game value formating, allow objects to do that with the data returned
 			getTimeRemaining: function()
 			{
-				return GameConfig.GAME_MODEL.gameDuration - this.gameClock;
+				return this.config.GAME_MODEL.gameDuration - this.gameClock;
 			},
 
 			// NOTE: Please never format values here - allow objects to do that with the data returned

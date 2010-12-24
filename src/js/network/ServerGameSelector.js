@@ -1,4 +1,4 @@
-define( ['lib/jsclass-core', 'view/managers/QueryStringManager'], function( JS, QueryStringManager ) {
+define( ['lib/jsclass-core', 'view/managers/QueryStringManager', 'lib/bison' ], function( JS, QueryStringManager, BISON ) {
 	return new JS.Class({
 		initialize: function( config, callback )
 		{

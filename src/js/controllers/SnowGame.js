@@ -22,14 +22,24 @@ Version:
 */
 
 
-define( [ 'lib/jsclass-core', 'controllers/AbstractServerGame', 'factories/TraitFactory', 'model/ProjectileModel', 'lib/SortedLookupTable', 'model/FieldEntityModel', 'lib/Vector' ],
-	function( JS, AbstractServerGame, TraitFactory, ProjectileModel, SortedLookupTable, FieldEntityModel, Vector )
+define([
+		'lib/jsclass-core',
+//		'lib/SortedLookupTable',
+//		'lib/Vector',
+		'controllers/AbstractServerGame',
+//		'factories/TraitFactory',
+//		'model/ProjectileModel',
+		'model/FieldEntityModel'
+	],
+	function( JS, AbstractServerGame, FieldEntityModel )
+	//function( JS, SortedLookupTable, Vector, AbstractServerGame, TraitFactory, ProjectileModel, FieldEntityModel )
 	{
-		return new JS.Class(AbstractServerGame, {
+		return new JS.Class( AbstractServerGame,
+		{
 			initialize: function(aServer, portNumber)
 			{
-				this.callSuper();
-
+				// this.callSuper();
+				/*
 				SERVERSTATS.totalGamesPlayed++;
 				SERVERSTATS.activeGames++;
 
@@ -45,6 +55,7 @@ define( [ 'lib/jsclass-core', 'controllers/AbstractServerGame', 'factories/Trait
 				this.initializePresents();
 
 				console.log("(SnowGame)::initialize");
+				*/
 			},
 
 			initializePresents: function()
