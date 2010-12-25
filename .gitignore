@@ -5,6 +5,9 @@
 .idea/
 .idea
 
+#src folder from requirejs optimization tool
+src-built/
+
 # OS X
 .DS_Store?
 Icon?

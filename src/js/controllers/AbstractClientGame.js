@@ -537,7 +537,9 @@ define([
 				{
 					// First connect
 					if(!this.nickname)
+					{
 						this.view.showIntro();
+					}
 				}
 			},
 
