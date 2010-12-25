@@ -30,9 +30,8 @@ define([
 		console.log("arguments!", AbstractGame);
 		return new JS.Class( AbstractGame,
 		{
-			initialize: function(gameConfig, portNumber)
+			initialize: function(config, portNumber)
 			{
-				console.log("(AbstractClientGame) Loaded");
 				this.callSuper();
 
 				this.CMD_TO_FUNCTION = {};
@@ -54,11 +53,11 @@ define([
 
 				// Create the director - there's only one ever. Each game is a new 'scene'
 				this.director = new CAAT.Director().initialize(this.model.width, this.model.height);
-				this.director.imagesCache = GAMECONFIG.CAAT.imagePreloader.images;
+				this.director.imagesCache = this.config.CAAT.imagePreloader.images;
 				CAAT.GlobalDisableEvents();
 
-				window.addEventListener(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
-				this.audioManager = new AudioManager(GAMECONFIG.SOUNDS_MAP);
+				window.addEventListener(this.config.EVENTS.ON_POWERUP_AQUIRED, this.onPowerupAquired);
+				this.audioManager = new AudioManager(this.config);
 
 				this.initializeGame();
 			},
@@ -75,7 +74,7 @@ define([
 
 				this.hasPlayedFinalCountrdownAudio = false;
 
-				this.fieldController = new FieldController( this, this.model );
+				this.fieldController = new FieldController( this, this.model, this.config );
 				this.fieldController.createView( this.model );
 				this.netChannel = new NetChannel(this.config, this);
 				this.initializeCaat();
@@ -97,8 +96,8 @@ define([
 				this.director.addScene(this.scene);
 
 				// Store
-				GAMECONFIG.CAAT.DIRECTOR = this.director;
-				GAMECONFIG.CAAT.SCENE = this.scene;
+				this.config.CAAT.DIRECTOR = this.director;
+				this.config.CAAT.SCENE = this.scene;
 
 				var caatImage = new CAAT.CompoundImage().
 						initialize(this.director.getImage('gameBackground'), 1, 1);
@@ -175,7 +174,7 @@ define([
 				if(!this.hasPlayedFinalCountrdownAudio && this.getTimeRemaining() < 10000 && this.gameClock > 10000) {
 
 					this.hasPlayedFinalCountrdownAudio = true;
-				 	GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.endGameCountdown);
+				 	this.config.CAAT.AUDIO_MANAGER.playSound(this.config.SOUNDS_MAP.endGameCountdown);
 				}
 			},
 
@@ -263,7 +262,7 @@ define([
 					if( !entity )
 					{
 						var connectionID = entityDesc.clientID,
-							isCharacter  = entityDesc.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER,
+							isCharacter  = entityDesc.entityType == this.config.ENTITY_MODEL.ENTITY_MAP.CHARACTER,
 							isOwnedByMe = connectionID == this.netChannel.clientID;
 
 						// Take care of the special things we have to do when adding a character
@@ -277,7 +276,7 @@ define([
 							{
 								var clientControlledTrait = TraitFactory.createTraitWithName('ClientControlledTrait');
 								aCharacter.addTraitAndExecute( new clientControlledTrait() );
-								GAMECONFIG.CAAT.CLIENT_CHARACTER = this.clientCharacter = aCharacter;
+								this.config.CAAT.CLIENT_CHARACTER = this.clientCharacter = aCharacter;
 							}
 						}
 						else // Every other kind of entity - is just a glorified view as far as the client game is concerned
@@ -382,7 +381,7 @@ define([
 					};
 
 					this.view.onEndGame(this.endGameStats);
-					GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.resultsScreen);
+					this.config.CAAT.AUDIO_MANAGER.playSound(this.config.SOUNDS_MAP.resultsScreen);
 
 					// Start waiting for the next game
 					var that = this;
@@ -556,6 +555,7 @@ define([
 
 			netChannelDidDisconnect: function (messageData)
 			{
+				this.stopGameClock();
 				if(this.view && !this.isGameOver) // If the server was never online, then we never had a view to begin with
 					this.view.serverOffline();
 			},

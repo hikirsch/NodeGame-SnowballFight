@@ -2,9 +2,10 @@ define(['lib/jsclass-core', 'factories/HTMLFactory', 'model/EntityModel'], funct
 {
 	return new JS.Class(
 	{
-		initialize:  function(controller, model) {
+		initialize:  function(controller, model, config) {
 			this.frameSkip = 3;
 			this.setModel( model );
+			this.config = config;
 			this.controller = controller;
 			this.theme = this.getThemeModelByID( this.model.theme );
 

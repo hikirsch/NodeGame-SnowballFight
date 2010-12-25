@@ -2,16 +2,18 @@ define(['lib/jsclass-core', 'lib/SortedLookupTable'], function( JS, SortedLookup
 {
 	return new JS.Class(
 	{
-		initialize: function(soundMap)
+		initialize: function(config)
 		{
-			GAMECONFIG.CAAT.AUDIO_MANAGER = this;
+			this.config = config;
+
+			this.config.CAAT.AUDIO_MANAGER = this;
 
 			this.isMuted = false;
 
 			this.sounds = new SortedLookupTable();
-			this.preloadSounds(soundMap);
+			this.preloadSounds(this.config.SOUNDS_MAP);
 
-			window.addEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
+			window.addEventListener(this.config.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
 		},
 
 		preloadSounds: function(soundMap)
@@ -24,7 +26,7 @@ define(['lib/jsclass-core', 'lib/SortedLookupTable'], function( JS, SortedLookup
 
 			if( CookieManager.getCookie("soundEnabled") === "false" )
 			{
-				GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(true);
+				this.config.CAAT.AUDIO_MANAGER.toggleMute(true);
 				$('#sound-toggle').removeClass('playing');
 			}
 		},
@@ -48,7 +50,7 @@ define(['lib/jsclass-core', 'lib/SortedLookupTable'], function( JS, SortedLookup
 			}
 			else // Play a sound to let them know audio is enabled
 			{
-				this.playSound(GAMECONFIG.SOUNDS_MAP.acquiredPowerup);
+				this.playSound(this.config.SOUNDS_MAP.acquiredPowerup);
 			}
 		},
 

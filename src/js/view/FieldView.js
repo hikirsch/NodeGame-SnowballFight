@@ -8,9 +8,11 @@ define([
 	{
 		return new JS.Class( BaseView,
 		{
-			initialize:  function(controller, model) {
+			initialize:  function(controller, model, config) {
+				// TODO: are we really not calling super here for a reason?
 				this.controller = controller;
-				this.model = model;
+				this.setModel( model );
+				this.config = config;
 
 				this.createElement();
 			},
@@ -18,7 +20,7 @@ define([
 			onCAATInitialized:function(aCATDirector)
 			{
 				// create 3 layers, zero based
-				GAMECONFIG.CAAT.LAYERS = this.CAATLayers = [this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector)]
+				this.config.CAAT.LAYERS = this.CAATLayers = [this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector), this.createCAATLayer(aCATDirector)]
 			},
 
 			createCAATLayer: function(aCATDirector)
@@ -28,7 +30,7 @@ define([
 					   setBounds(0, 0, aCATDirector.width, aCATDirector.height);
 
 				layer.setFrameTime(0, Number.MAX_VALUE);
-				GAMECONFIG.CAAT.SCENE.addChild(layer);
+				this.config.CAAT.SCENE.addChild(layer);
 
 				return layer;
 			},

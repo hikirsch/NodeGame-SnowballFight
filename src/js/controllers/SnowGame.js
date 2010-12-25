@@ -30,14 +30,15 @@ define([
 		'controllers/AbstractServerGame',
 		'factories/TraitFactory',
 		'model/ProjectileModel',
-		'model/FieldEntityModel'
+		'model/FieldEntityModel',
+		'controllers/entities/traits/CharacterTraitInvulnerable'
 	],
 
-	function( JS, BISON, SortedLookupTable, Vector, AbstractServerGame, TraitFactory, ProjectileModel, FieldEntityModel )
+	function( JS, BISON, SortedLookupTable, Vector, AbstractServerGame, TraitFactory, ProjectileModel, FieldEntityModel, CharacterTraitInvulnerable )
 	{
 		return new JS.Class( AbstractServerGame,
 		{
-			initialize: function(gameConfig, portNumber)
+			initialize: function(config, portNumber)
 			{
 				this.callSuper();
 
@@ -82,9 +83,8 @@ define([
 					aFieldEntityModel.initialPosition = nextEntity.position;
 					aFieldEntity = this.entityFactory.createFieldEntity(this.getNextEntityID(), 0, aFieldEntityModel, this.fieldController);
 
-					// TODO: Fix TraitFactory
-//					var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromAlpha');
-//					aFieldEntity.addTraitAndExecute( new animateInTrait() );
+					var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromAlpha');
+					aFieldEntity.addTraitAndExecute( new animateInTrait() );
 
 					this.fieldController.addEntity(aFieldEntity);
 				}
@@ -111,9 +111,8 @@ define([
 				// Freeze players for 3 seconds if the game just started
 				if(this.gameClock < 5000)
 				{
-					// TODO: fix TraitFactory
-					// var Trait = this.traitFactory.createTraitWithName("ProjectileTraitFreeze");
-					// aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 4000 ) );
+					var Trait = this.traitFactory.createTraitWithName("ProjectileTraitFreeze");
+					aNewCharacter.addTraitAndExecute( new Trait( new Vector(0,0), 4000 ) );
 
 					/**
 					 * Send that player a message to start its MatchStart animation
@@ -134,8 +133,8 @@ define([
 
 				} else {
 					// always make new characters invulnerable
-					// TODO: fix TraitFactory
-					// aNewCharacter.addTraitAndExecute( new CharacterTraitInvulnerable(2500) );
+					var characterTraitInvulnerable = TraitFactory.createTraitWithName('CharacterTraitInvulnerable');
+					aNewCharacter.addTraitAndExecute( new characterTraitInvulnerable(2500) );
 				}
 				return aNewCharacter;
 			},
@@ -195,9 +194,9 @@ define([
 					fieldEntity = (tA & tList.FIELD_ENTITY) ? circleA : circleB;
 					projectile = (fieldEntity === circleA)  ? circleB : circleA;
 
-					if(projectile.view.themeMask & GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT)
+					if(projectile.view.themeMask & this.config.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT)
 						this.fieldController.removeEntity(projectile.view.objectID);
-					else if(projectile.view.themeMask & GAMECONFIG.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT) {
+					else if(projectile.view.themeMask & this.config.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT) {
 						projectile.view.velocity.mul(-1);
 						projectile.view.velocity.rotate(Math.random() * 0.2 + 0.2)
 					}
@@ -208,38 +207,41 @@ define([
 			{
 				// restart the timer
 				var that = this;
-				var minTime = 1000;
-				var timeRange = 5500;
-				var chance = 0.25;
+				var minTime = 5; // 1000;
+				var timeRange = 1000; //5500;
+				// TODO: Fix "chance" of present
+				var chance = 1000; // 0.25;
 				clearTimeout(this.presentsTimer);
 				this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
 
+				console.log("try spawn?");
 	//			Try to create if possible and luck says so
-	//			console.log("Presents", this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
-				if(Math.random() < chance || this.presentsActive.count() >= GAMECONFIG.PRESENTS_SETTING.PRESENTS_MAX )
-					return;
+	//			console.log("Presents", this.presentsActive.count() >= this.config.PRESENTS_SETTING.PRESENTS_MAX )
+				//if(Math.random() < chance || this.presentsActive.count() >= this.config.PRESENTS_SETTING.PRESENTS_MAX )
+				//	return;
+
+				console.log("SPAWNING!");
 
 				// Presents are really just projectiles that don't move
 				// For now always fire the regular snowball
-				var projectileModel = ProjectileModel.present;
+				var projectileModel = this.config.PROJECTILE_MODEL.present;
 				projectileModel.force = 0 ; // TODO: Use force gauge
 				projectileModel.initialPosition = this.fieldController.positionEntityAtRandomNonOverlappingLocation( 65 );
 				projectileModel.angle = 0;
 				projectileModel.transferredTraits = this.traitFactory.getRandomPresentTrait();
 
 				// Seit to so that it goes to 1 of x random sprites in the sheet
-				var numRows = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP[projectileModel.theme].rowCount-1;
+				var numRows = this.config.ENTITY_MODEL.CAAT_THEME_MAP[projectileModel.theme].rowCount-1;
 				projectileModel.theme = 400 + Math.floor( Math.random() * numRows+1 );
 
 				// Create the present
 				var present = this.entityFactory.createProjectile(this.getNextEntityID(), 0, projectileModel, this);
 				this.fieldController.addEntity(present);
 
+				var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromLarge');
+				console.log( "animateInTrait: ", animateInTrait );
 
-				// TODO: Enable TraitFactory
-				// var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromLarge');
-				// present.addTraitAndExecute( new animateInTrait() );
-
+				present.addTraitAndExecute( new animateInTrait() );
 
 				// Add to our list
 				this.presentsActive.setObjectForKey(present, present.objectID);

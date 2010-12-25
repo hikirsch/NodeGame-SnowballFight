@@ -20,10 +20,12 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/entities
 			 * Creates an instance of the GameEntityFactory
 			 * @param aFieldController
 			 */
-			initialize: function(aFieldController, anEntityModel)
+			initialize: function(aFieldController, config)
 			{
 				this.fieldController = aFieldController;
-				this.entityModel = anEntityModel;
+				this.config = config;
+				this.entityModel = this.config.ENTITY_MODEL;
+
 
 				this.entityTypes = new SortedLookupTable();
 				this.entityTypes.setObjectForKey(GameEntity, 'GameEntity');
@@ -31,7 +33,7 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/entities
 				this.entityTypes.setObjectForKey(Projectile, 'Projectile');
 				this.entityTypes.setObjectForKey(FieldEntity, 'FieldEntity');
 
-				this.collisionGroups = GAMECONFIG.ENTITY_MODEL.COLLISION_GROUPS;
+				this.collisionGroups = this.config.ENTITY_MODEL.COLLISION_GROUPS;
 			},
 			createProjectile: function(anObjectID, aClientID, aProjectileModel, aFieldController)
 			{

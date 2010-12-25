@@ -10,9 +10,10 @@ define([
 	{
 		return new JS.Class(
 		{
-			initialize: function(gameController, gameModel )
+			initialize: function(gameController, gameModel, config )
 			{
 				console.log('(FieldController)::initialize');
+				this.config = config;
 				this.isDeallocated = false;
 				this.gameController = gameController;
 				this.packedCircleManager = null;
@@ -29,7 +30,7 @@ define([
 			{
 				if( FieldView != null )
 				{
-					this.view = new FieldView( this, gameModel );
+					this.view = new FieldView( this, gameModel, this.config );
 				}
 			},
 
@@ -254,7 +255,7 @@ define([
 	//					continue;
 	//				}
 
-					if( GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER == entity.entityType ) {
+					if( this.config.ENTITY_MODEL.ENTITY_MAP.CHARACTER == entity.entityType ) {
 						this.removePlayer( entity.clientID );
 					} else {
 						// Is not active, and does not belong to the server

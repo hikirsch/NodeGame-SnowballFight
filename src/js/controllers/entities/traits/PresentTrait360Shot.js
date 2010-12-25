@@ -45,12 +45,12 @@ define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(J
 			for(var i = 0; i <amount; i++)
 			{
 				// For now always fire the regular snowball
-				var projectileModel = ProjectileModel['powerupModeTheme'+this.attachedEntity.theme];
+				var projectileModel = this.config.PROJECTILE_MODEL['powerupModeTheme'+this.attachedEntity.theme];
 				projectileModel.force = 1.5; // slower is actually more deadly!
 				projectileModel.initialPosition = this.attachedEntity.position.cp();
 				projectileModel.initialPosition.y += 19;
 				projectileModel.angle = i/amount * (Math.PI*2) + angleOffset;
-				projectileModel.transferredTraits = ProjectileModel.defaultSnowball.transferredTraits;
+				projectileModel.transferredTraits = this.config.PROJECTILE_MODEL.defaultSnowball.transferredTraits;
 
 				var projectile = this.attachedEntity.fieldController.fireProjectileFromCharacterUsingProjectileModel( this.attachedEntity, projectileModel);
 				// Make the projectile bounce around

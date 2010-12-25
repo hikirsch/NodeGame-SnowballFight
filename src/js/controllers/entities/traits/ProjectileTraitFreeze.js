@@ -14,10 +14,11 @@ Basic Usage:
 		this.clientCharacter = aCharacter;
 	}
 */
-define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(JS, BaseTrait) {
+define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(JS, BaseTrait, TraitFactory) {
 	return new JS.Class("ProjectileTraitFreeze", BaseTrait,
 	{
 		initialize: function(collisionNormal, freezeTime) {
+			this.traitFactory = require('factories/TraitFactory');
 			this.callSuper();
 			this.collisionNormal = collisionNormal;
 			this.freezeTime = freezeTime || 4500;
@@ -51,7 +52,12 @@ define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(J
 
 			// Add an invulnerability trait
 			if(!force)
-				entity.addTraitAndExecute( new CharacterTraitInvulnerable(this.freezeTime*0.5) );
+			{
+			 	console.log("(ProjectileTraitFreeze) TraitFactory!", this.traitFactory);
+
+				var characterTraitInvulnerable = this.traitFactory.createTraitWithName('CharacterTraitInvulnerable');
+				entity.addTraitAndExecute( new characterTraitInvulnerable(this.freezeTime*0.5) );
+			}
 		},
 
 

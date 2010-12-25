@@ -339,7 +339,8 @@ define(['lib/jsclass-core', 'lib/Rectangle', 'view/managers/OverlayManager', 'vi
 				});
 
 				$('.choose .characters div').live('click', function() {
-					that.carouselManager.moveTo($(this).parent().index(this));
+					var newIndex = $(this).parent().children().index(this);
+					that.carouselManager.moveTo( newIndex );
 				});
 
 				this.devNoticeOverlayOpen = false;

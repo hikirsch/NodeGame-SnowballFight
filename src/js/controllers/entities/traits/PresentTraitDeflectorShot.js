@@ -49,14 +49,13 @@ define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(J
 		getProjectileModel: function()
 		{
 			// Use a fancy looking projectile
-			var model = ProjectileModel['powerupModeTheme'+this.theme];
-			model.transferredTraits = ProjectileModel.defaultSnowball.transferredTraits;
+			var model = GAMECONFIG.PROJECTILE_MODEL['powerupModeTheme' + this.theme];
+			model.transferredTraits = GAMECONFIG.PROJECTILE_MODEL.defaultSnowball.transferredTraits;
 			return model;
 		},
 
 		onProjectileFired: function(projectile)
 		{
-			console.log('a',projectile.themeMask);
 		  	projectile.themeMask &= ~GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
 		  	projectile.themeMask |= GAMECONFIG.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT;
 		}

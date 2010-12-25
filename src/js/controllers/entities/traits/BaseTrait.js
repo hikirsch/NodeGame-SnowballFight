@@ -38,11 +38,12 @@ Basic Usage:
 		this.clientCharacter = aCharacter;
 	}
 */
-define(['lib/jsclass-core', 'lib/SortedLookupTable'], function( JS, SortedLookupTable ) {
+define(['config', 'lib/jsclass-core', 'lib/SortedLookupTable'], function( config, JS, SortedLookupTable ) {
 	return new JS.Class("BaseTrait",
 	{
 		initialize: function()
 		{
+			this.config = config;
 			this.attachedEntity = null;
 			this.interceptedProperties = new SortedLookupTable();
 			this.detachTimeout = 0;

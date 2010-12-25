@@ -69,7 +69,7 @@ define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], f
 
 		PRESENTS_SETTING:
 		{
-			PRESENTS_MAX: 2
+			PRESENTS_MAX: 1000
 		},
 
 		// The client sends this bitmask to the server
@@ -101,7 +101,7 @@ define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], f
 			FLASHING	: 1 << 4, // invulnerable
 			IS_LEADER	: 1 << 5,
 			HAS_POWERUP	: 1 << 6,
-			DESTROY_ON_FIELD_ENTITY_HIT	: 1 << 7,
+			DESTROY_ON_FIELD_ENTITY_HIT : 1 << 7,
 			BOUNCE_ON_FIELD_ENTITY_HIT : 1 << 8
 		},
 
