@@ -62,7 +62,7 @@ define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], f
 			width: 900,
 			height: 600,
 			MAX_PLAYERS: 8,
-			//gameDuration: 10000,
+			// gameDuration: 10000,
 			gameDuration: 2.25 * 60 * 1000,
 			ROUND_INTERMISSION_DURATION: 15 * 1000
 		},

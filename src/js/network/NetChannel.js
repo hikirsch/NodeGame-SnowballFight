@@ -387,7 +387,6 @@ define(['network/Message', 'network/ServerGameSelector', 'lib/bison'], function(
 	 */
 	NetChannel.prototype.dealloc = function()
 	{
-		if(GAMECONFIG)
 		this.connection.close();
 		this.outgoingCmdBuffer.dealloc();
 		delete this.connection;

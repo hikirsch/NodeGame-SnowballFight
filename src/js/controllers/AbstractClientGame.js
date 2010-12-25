@@ -381,7 +381,6 @@ define([
 					// Start waiting for the next game
 
 					this.gameClock = 0; // Will be used to know when to join the next game
-					console.log("SETTING GAME OVER TICK!!!");
 
 					this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
 				}
@@ -436,7 +435,6 @@ define([
 
 			gameOverTick: function()
 			{
-				console.log("GAME OVER TICK!!");
 				// Store the previous clockTime, then set it to whatever it is no, and compare time
 				var oldTime = this.clockActualTime;
 				var now = this.clockActualTime = new Date().getTime();

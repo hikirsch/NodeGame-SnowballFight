@@ -54,7 +54,7 @@ textarea.error, input.error { border: 1px solid red; }
 #game-status dl .rank { width: 114px; color: #546fd3; background: url("../img/global/txt-your-rank.png"); padding-left: 46px; }
 
 #game-status .invite-friend { float: left; width:157px; height: 35px; background: url(../img/global/bg-invite-friend.png) 0 0 no-repeat; text-indent:-9999px; overflow:hidden; cursor:pointer; }
-#sound-toggle { float: right; width: 90px; height: 19px; background: url("../img/global/btn-sound.png") 0 0 no-repeat; margin-top: 16px; overflow:hidden; cursor:pointer; }
+#sound-toggle { float: right; width: 90px; height: 19px; background: url("../img/global/btn-sound.png") 0 0 no-repeat; margin-top: 8px; overflow:hidden; cursor:pointer; }
 #game-status .playing { background-position: left bottom; }
 
 #logger { display: none; font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }
