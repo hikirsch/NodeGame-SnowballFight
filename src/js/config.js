@@ -69,7 +69,7 @@ define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], f
 
 		PRESENTS_SETTING:
 		{
-			PRESENTS_MAX: 1000
+			PRESENTS_MAX: 2
 		},
 
 		// The client sends this bitmask to the server

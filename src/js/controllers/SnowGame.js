@@ -207,18 +207,18 @@ define([
 			{
 				// restart the timer
 				var that = this;
-				var minTime = 5; // 1000;
-				var timeRange = 1000; //5500;
+				var minTime = 1000;
+				var timeRange = 5500;
 				// TODO: Fix "chance" of present
-				var chance = 1000; // 0.25;
+				var chance = 0.25;
 				clearTimeout(this.presentsTimer);
 				this.presentsTimer = setTimeout( function() { that.spawnPresents()}, Math.random() * timeRange + minTime);
 
-				console.log("try spawn?");
+
 	//			Try to create if possible and luck says so
 	//			console.log("Presents", this.presentsActive.count() >= this.config.PRESENTS_SETTING.PRESENTS_MAX )
-				//if(Math.random() < chance || this.presentsActive.count() >= this.config.PRESENTS_SETTING.PRESENTS_MAX )
-				//	return;
+				if(Math.random() < chance || this.presentsActive.count() >= this.config.PRESENTS_SETTING.PRESENTS_MAX )
+					return;
 
 				console.log("SPAWNING!");
 

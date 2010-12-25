@@ -43,7 +43,7 @@ define(function() {
 
 		getCookie: function( name )
 		{
-			return _cookies[ name ];
+			return  decodeURI( _cookies[ name ] );
 		},
 
 		hasCookie: function( name ) {
