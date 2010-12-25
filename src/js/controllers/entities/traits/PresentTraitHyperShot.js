@@ -56,7 +56,7 @@ define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(J
 
 		onProjectileFired: function(projectile)
 		{
-		  	projectile.themeMask &= ~GAMECONFIG.PROJECTILE_MODEL.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
+		  	projectile.themeMask &= ~GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
 		}
 	});
 });
