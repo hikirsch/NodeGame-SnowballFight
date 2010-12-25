@@ -2,13 +2,8 @@
 .overlay-container { z-index: 7000; position: absolute; background-image: url(../img/global/bg-overlay.png); }
 
 /* legacy messaging */
-.site-message { width: 250px; padding: 11px; color: #7eabba; position: absolute; z-index: 8000; border-radius: 20px; border: 3px solid #ff8e8e; background-color: #f3fcff; }
-.site-message p { padding-bottom: 10px; font-size: 16px; line-height: 20px; font-weight: bold; }
-.site-message label { display: block; padding: 0 5px; }
-.site-message input[type='text'] { font-size: 16px; padding: 5px; border-radius: 5px; width: 225px; margin-bottom: 10px; }
-.site-message input[type='submit'] { padding: 0 30px; background-color: #f3fcff; border-style: solid; border-color: #ff8e8e; border-radius: 5px; color: #7eabba; border-width: 2px; font-size: 16px; line-height: 20px; }
-.site-message input[type='button']:hover { background-color: #f3fcff; border-color: #c13b3b; color: #7eabba; }
-.site-message input[type='button']:active { background-color: #f3fcff; border-color: #c13b3b; color: #6398aa; }
+.site-message { width: 250px; padding: 11px; color: #7eabba; position: absolute; z-index: 8000; background-color: #f3fcff; }
+.site-message p { text-align: center; font-size: 16px; line-height: 20px; font-weight: bold; padding: 10px 0; }
 
 /* welcome overlay */
 .mainOverlay { width: 900px; height: 600px; position: absolute; top: 0; left: 0; background: transparent; color: #005072; font-family: "Lucida Grande", sans-serif; font-size: 13px; }

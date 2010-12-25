@@ -8,7 +8,7 @@
 .konami-code-disabled { display: none; }
 .konami-code-enabled .konami-code-disabled { display: block; }
 
-html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
+html, body { font-family: Helvetica, Arial, sans-serif; font-size: 12px;
 	background-color: #f2f7fb; background-image: url(../img/global/bg-main.png); background-position: 50% 0;
 	background-repeat: no-repeat;
 }
@@ -16,8 +16,8 @@ html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 .main-nav ul { overflow: hidden; list-style-type: none; }
 .main-nav ul li { float: left; }
 .main-nav ul li a {
-	overflow: hidden; text-indent: -9999px; width: 160px; height: 58px;
-	float: left; background-repeat: no-repeat; background-position: 0 0;
+	overflow: hidden; float: left; width: 160px; height: 58px; text-indent: -9999px;
+	background-repeat: no-repeat; background-position: 0 0;
 }
 .main-nav ul li a:hover { background-position: 0 100%; }
 .main-nav ul li.instructions a { background-image: url(../img/global/nav-instructions.png); }
@@ -43,12 +43,7 @@ textarea.error, input.error { border: 1px solid red; }
 	background-repeat: no-repeat; background-position: 50% 50%; font-size: 10px; font-weight: bold;
 }
 
-#game-status {
-	position: relative;
-	width: 900px;
-	height: 34px;
-	margin: 2px auto;
-}
+#game-status { position: relative; width: 900px; height: 34px; margin: 2px auto; }
 #game-status dl { float: left; padding-top: 1px; overflow: hidden; }
 #game-status dl dt { position: absolute; margin-left: -9999px; }
 #game-status dl dd { float: left; height: 28px; font-family: arial, sans-serif; font-size: 26px; line-height: 26px; background-position: 0 0; background-repeat: no-repeat; padding-top: 6px; overflow: hidden; }
