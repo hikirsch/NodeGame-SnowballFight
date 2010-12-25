@@ -9,4 +9,6 @@ cd src-built/css
 rm -rf `find . | grep -v 'screen.css' | grep -v -x '.'`
 cd ../js
 rm -rf `find . | grep -v 'main-client.js' | grep -v -x '.'`
-cd ../..
+cd ..
+rm -f index.html
+mv index-built.html index.html
