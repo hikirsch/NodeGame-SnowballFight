@@ -72,7 +72,7 @@ define([
 				this.clientCharacter = null; // Special pointer to our own client character
 				this.isGameOver = false;
 
-				this.hasPlayedFinalCountrdownAudio = false;
+				this.hasPlayedFinalCountdownAudio = false;
 
 				this.fieldController = new FieldController( this, this.model, this.config );
 				this.fieldController.createView( this.model );
@@ -171,9 +171,9 @@ define([
 				}
 
 
-				if(!this.hasPlayedFinalCountrdownAudio && this.getTimeRemaining() < 10000 && this.gameClock > 10000) {
+				if(!this.hasPlayedFinalCountdownAudio && this.getTimeRemaining() < 5000 && this.gameClock > 5000 ) {
 
-					this.hasPlayedFinalCountrdownAudio = true;
+					this.hasPlayedFinalCountdownAudio = true;
 				 	this.config.CAAT.AUDIO_MANAGER.playSound(this.config.SOUNDS_MAP.endGameCountdown);
 				}
 			},
