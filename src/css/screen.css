@@ -1,5 +1,5 @@
-@import url( reset.css );
-@import url( overlays.css );
+@import url(reset.css);
+@import url(overlays.css);
 
 .hide { display: none; }
 
@@ -9,7 +9,7 @@
 .konami-code-enabled .konami-code-disabled { display: block; }
 
 html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
-	background-color: #f2f7fb; background-image: url( ../img/global/bg-main.png ); background-position: 50% 0;
+	background-color: #f2f7fb; background-image: url(../img/global/bg-main.png); background-position: 50% 0;
 	background-repeat: no-repeat;
 }
 .main-nav { width: 900px; margin: 0 auto 9px; }
@@ -20,10 +20,10 @@ html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 	float: left; background-repeat: no-repeat; background-position: 0 0;
 }
 .main-nav ul li a:hover { background-position: 0 100%; }
-.main-nav ul li.instructions a { background-image: url( ../img/global/nav-instructions.png ); }
-.main-nav ul li.share a { background-image: url( ../img/global/nav-share.png ); }
+.main-nav ul li.instructions a { background-image: url(../img/global/nav-instructions.png); }
+.main-nav ul li.share a { background-image: url(../img/global/nav-share.png); }
 .main-nav ul li.ogilvy-logo { float: right; width: auto; height: auto; padding-top: 10px; }
-.main-nav ul li.ogilvy-logo a { width: 72px; height: 53px; float: right; background-image: url( ../img/global/logo-ogilvy.png ); }
+.main-nav ul li.ogilvy-logo a { width: 72px; height: 53px; float: right; background-image: url(../img/global/logo-ogilvy.png); }
 
 .footer { margin: 10px auto; width: 900px; text-align: center; font-size: 11px; color: #6a7073; }
 .footer a { font-size: 11px; color: #005072; }
@@ -33,8 +33,7 @@ html, body { font-family: Helvetica, Arial,sans-serif; font-size: 12px;
 textarea.error, input.error { border: 1px solid red; }
 
 .server-offline .game-container,
-.unsupported-browser .game-container { background-image: url( '../img/entities/bg-field.png'); background-repeat: no-repeat; }
-
+.unsupported-browser .game-container { background-image: url("../img/entities/bg-field.png"); background-repeat: no-repeat; }
 
 .game-container .character p {
 	position: absolute; bottom: -10px; left: 0;
@@ -49,20 +48,18 @@ textarea.error, input.error { border: 1px solid red; }
 	width: 900px;
 	height: 34px;
 	margin: 2px auto;
-	/*overflow: hidden; */
-	/*z-index: 2000;*/
 }
 #game-status dl { float: left; padding-top: 1px; overflow: hidden; }
 #game-status dl dt { position: absolute; margin-left: -9999px; }
 #game-status dl dd { float: left; height: 28px; font-family: arial, sans-serif; font-size: 26px; line-height: 26px; background-position: 0 0; background-repeat: no-repeat; padding-top: 6px; overflow: hidden; }
 
-#game-status dl .score { width: 114px; color: #20629a; background-image: url( '../img/global/txt-your-score.png' ); padding-left: 46px; }
-#game-status dl .time-left { width: 118px; color: #167392; background-image: url( '../img/global/txt-time-left.png' ); padding-left: 42px; }
-#game-status dl .total-players { width: 100px; color: #03959e; background-image: url( '../img/global/txt-players-on-map.png' ); padding-left: 60px; }
-#game-status dl .rank { width: 114px; color: #546fd3; background: url( '../img/global/txt-your-rank.png' ); padding-left: 46px; }
+#game-status dl .score { width: 114px; color: #20629a; background-image: url("../img/global/txt-your-score.png"); padding-left: 46px; }
+#game-status dl .time-left { width: 118px; color: #167392; background-image: url("../img/global/txt-time-left.png"); padding-left: 42px; }
+#game-status dl .total-players { width: 100px; color: #03959e; background-image: url("../img/global/txt-players-on-map.png"); padding-left: 60px; }
+#game-status dl .rank { width: 114px; color: #546fd3; background: url("../img/global/txt-your-rank.png"); padding-left: 46px; }
 
 #game-status .invite-friend { float: left; width:157px; height: 35px; background: url(../img/global/bg-invite-friend.png) 0 0 no-repeat; text-indent:-9999px; overflow:hidden; cursor:pointer; }
-#sound-toggle { float: right; width: 90px; height: 19px; background: url( '../img/global/btn-sound.png' ) 0 0 no-repeat; margin-top: 16px; overflow:hidden; cursor:pointer; }
+#sound-toggle { float: right; width: 90px; height: 19px; background: url("../img/global/btn-sound.png") 0 0 no-repeat; margin-top: 16px; overflow:hidden; cursor:pointer; }
 #game-status .playing { background-position: left bottom; }
 
 #logger { display: none; font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }

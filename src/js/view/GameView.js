@@ -14,7 +14,17 @@ Basic Usage:
 	this.view = new ClientGameView(this);
 	this.view.showJoinGame();
 */
-define(['lib/jsclass-core', 'lib/Rectangle', 'view/managers/OverlayManager', 'view/managers/CookieManager', 'view/managers/CarouselManager', 'view/managers/EmailServiceManager', 'view/BaseView', 'factories/HTMLFactory', 'lib/Stats'],
+define([
+		'lib/jsclass-core',
+		'lib/Rectangle',
+		'view/managers/OverlayManager',
+		'view/managers/CookieManager',
+		'view/managers/CarouselManager',
+		'view/managers/EmailServiceManager',
+		'view/BaseView',
+		'factories/HTMLFactory',
+		'lib/Stats'
+	],
 	function(JS, Rectangle, OverlayManager, CookieManager, CarouselManager, EmailServiceManager, BaseView, HTMLFactory, Stats )
 	{
 		return new JS.Class( BaseView,

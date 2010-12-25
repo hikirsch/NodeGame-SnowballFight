@@ -1,13 +1,3 @@
-/*
- * This is an example build file that demonstrates how to use the build system for
- * require.js.
- *
- * THIS BUILD FILE WILL NOT WORK. It is referencing paths that probably
- * do not exist on your machine. Just use it as a guide.
- *
- *
- */
-
 ({
 	//The top level directory that contains your app. If this option is used
 	//then it assumed your scripts are in a subdirectory under this path.
@@ -16,7 +6,7 @@
 	//then all the files from the app directory will be copied to the dir:
 	//output area, and baseUrl will assume to be a relative path under
 	//this directory.
-	appDir: "../../src",
+	appDir: "src",
 
 	//By default, all modules are located relative to this path. If baseUrl
 	//is not explicitly set, then all modules are loaded relative to
@@ -26,7 +16,7 @@
 	//The directory path to save the output. If not specified, then
 	//the path will default to be a directory called "build" as a sibling
 	//to the build file. All relative paths are relative to the build file.
-	dir: "../../src-built/",
+	dir: "src-built",
 
 	//How to optimize all the JS files in the build output directory.
 	//Right now only the following values
@@ -44,7 +34,7 @@
 	//of CSS.
 	//- "standard.keepLines": like "standard" but keeps line returns.
 	//- "none": skip CSS optimizations.
-	optimizeCss: "standard.keepLines",
+	optimizeCss: "standard",
 
 	//If optimizeCss is in use, a list of of files to ignore for the @import
 	//inlining. The value of this option should be a comma separated list
