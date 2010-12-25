@@ -90,7 +90,7 @@
 .choose .characters .penguin { background: url(../img/character-select/penguin.png) no-repeat top left; }
 .choose .characters .robot { background: url(../img/character-select/robot.png) no-repeat top left; }
 .choose .characters .snowman { background: url(../img/character-select/snowman.png) no-repeat top left; margin-right: 0 !important; }
-.choose .carousel { position: absolute; top: 86px; left: 0; height: 500px; width: 4100px; overflow: visible; -webkit-transition: all 0.7s ease; }
+.choose .carousel { position: absolute; top: 86px; left: 0; height: 500px; width: 4920px; overflow: visible; -webkit-transition: all 0.7s ease; }
 .choose .carousel div { width: 810px; float: left; position: relative; min-height: 480px; }
 .choose .carousel .treeDetails { color: #058742; }
 .choose .carousel .yetiDetails { color: #ae3737}
@@ -102,6 +102,7 @@
 .choose .carousel .bigPenguin { position: absolute; top: 70px; left: 150px; }
 .choose .carousel .bigRobot { position: absolute; top: 63px; left: 140px; }
 .choose .carousel .bigSnowman { position: absolute; top: 50px; left: 100px; }
+.choose .carousel .bigSmashTV { position: absolute; top: 50px; left: 150px; }
 .choose .carousel div img { position: absolute; top: 0; left: 0; }
 .choose .carousel div p { position: absolute; left: 440px; top: 138px; margin: 0; padding: 0; width: 200px; line-height: 130%; }
 

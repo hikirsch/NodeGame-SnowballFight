@@ -1,5 +1,4 @@
 define(function() {
-
 	var _current,
 		_currentCharacter = 0,
 		_screenWidth = -810,
@@ -17,9 +16,11 @@ define(function() {
 		getCurrentIndex: function() {
 			return _currentCharacter;
 		},
+
 		getCharacterType: function() {
 			return 'character-' + $("#character-thumbs :nth-child(" + ( _currentCharacter + 1 ) + ")").data('character-type');
 		},
+
 		move: function( direction ) {
 			var characterLastIndex =  $("#character-thumbs").children().length - 1;
 
@@ -39,6 +40,7 @@ define(function() {
 
 			document.getElementById("carouselContainer").style.webkitTransform = "translate3d(" + newPosition + "px, 0px, 0px)";
 		},
+
         moveTo: function( index ) {
             navOff( _currentCharacter );
 

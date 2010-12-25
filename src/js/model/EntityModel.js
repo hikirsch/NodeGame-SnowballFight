@@ -39,7 +39,7 @@ define(['model/ThemeModel'], function(ThemeModel) {
 	CAAT_THEME_MAP['202'] = new ThemeModel('character-robot.png', 1, 10, 0, 2);
 	CAAT_THEME_MAP['203'] = new ThemeModel('character-snowman.png', 1, 10, 0, 2);
 	CAAT_THEME_MAP['204'] = new ThemeModel('character-tree.png', 1, 10, 0, 2);
-	CAAT_THEME_MAP['999'] = new ThemeModel('character-smash-tv.png', 3, 16, 2);
+	CAAT_THEME_MAP['999'] = new ThemeModel('character-smash-tv.png', 1, 10, 0, 2);
 	// Projectiles
 	CAAT_THEME_MAP['300'] = new ThemeModel('projectiles.png', 6, 1, 0, 1);
 	CAAT_THEME_MAP['301'] = new ThemeModel('projectiles.png', 6, 1, 1, 1);

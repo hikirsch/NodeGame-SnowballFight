@@ -23,7 +23,8 @@ define([
 		'view/managers/EmailServiceManager',
 		'view/BaseView',
 		'factories/HTMLFactory',
-		'lib/Stats'
+		'lib/Stats',
+		'plugins/jquery.konami' /** this should be last **/
 	],
 	function(JS, Rectangle, OverlayManager, CookieManager, CarouselManager, EmailServiceManager, BaseView, HTMLFactory, Stats )
 	{
@@ -49,6 +50,8 @@ define([
 				this.showGameStatus();
 				this.showFooter();
 
+				$(window).konami( this.enableKonami );
+
 				this.attachOverlayEvents();
 
 				this.carouselManager = CarouselManager;
@@ -71,6 +74,14 @@ define([
 						stats.update();
 					}, 1000 / 30 );
 				}
+			},
+
+			enableKonami: function() {
+				$("body").addClass('konami-code-enabled');
+				$("<p class='konami'>Konami Enabled</p>").appendTo("body");
+				this.konamiCodeEnabled = true;
+				GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.konamiEnabled);
+				console.log("(GameView) Enabled Konami");
 			},
 
 			onEndGame: function(stats)

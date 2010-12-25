@@ -123,7 +123,8 @@ define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], f
 			powerupAppears: "audio/powerup-appears.ogg",
 			resultsScreen: "audio/on-end-game.ogg",
 			snowballHit1: "audio/on-snowball-hit-1.ogg",
-			snowballHit2: "audio/on-snowball-hit-2.ogg"
+			snowballHit2: "audio/on-snowball-hit-2.ogg",
+			konamiEnabled: 'audio/konami-enabled'
 		},
 
 
