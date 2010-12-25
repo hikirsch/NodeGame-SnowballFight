@@ -30,7 +30,8 @@ html, body { font-family: Helvetica, Arial, sans-serif; font-size: 12px;
 
 .game-container  { width: 900px; height: 600px; margin: auto; position: relative; overflow: hidden;}
 
-textarea.error, input.error { border: 1px solid red; }
+p.error { position: absolute; color: red; font-weight: bold; }
+textarea.error, input.error { border: 1px solid red; background-color: #ffe0e1; }
 
 .server-offline .game-container,
 .unsupported-browser .game-container { background-image: url("../img/entities/bg-field.png"); background-repeat: no-repeat; }
