@@ -137,6 +137,7 @@ define([
 				this.gameOver = true;
 				this.stopGameClock();
 
+				console.log("(AbstractServerGame) ENDING THE GAME!");
 				// Create a message to send to all clients
 				var endGameMessage = {
 					seq: 1,

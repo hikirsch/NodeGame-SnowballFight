@@ -346,9 +346,9 @@ define([
 
 			onShouldEndGame: function( clientID, data )
 			{
-
 				// We have a clientCharacter - thus we're in the game
-				var isInGame = this.clientCharacter != null;
+				var isInGame = this.clientCharacter != null,
+					that = this;
 				this.isGameOver = true;
 
 				this.stopGameClock();
@@ -367,11 +367,6 @@ define([
 				// Remember for next time
 				this.nextGamePort = data.nextGamePort;
 
-
-				// Add to history
-				history.pushState(null, "game-" + data.nextGamePort, "?game=" + data.nextGamePort );
-
-
 				if(isInGame)
 				{
 					this.endGameStats = {
@@ -384,8 +379,10 @@ define([
 					this.config.CAAT.AUDIO_MANAGER.playSound(this.config.SOUNDS_MAP.resultsScreen);
 
 					// Start waiting for the next game
-					var that = this;
+
 					this.gameClock = 0; // Will be used to know when to join the next game
+					console.log("SETTING GAME OVER TICK!!!");
+
 					this.gameTickInterval = setInterval( function() { that.gameOverTick(); }, this.targetDelta );
 				}
 			},
@@ -439,6 +436,7 @@ define([
 
 			gameOverTick: function()
 			{
+				console.log("GAME OVER TICK!!");
 				// Store the previous clockTime, then set it to whatever it is no, and compare time
 				var oldTime = this.clockActualTime;
 				var now = this.clockActualTime = new Date().getTime();
@@ -555,9 +553,12 @@ define([
 
 			netChannelDidDisconnect: function (messageData)
 			{
-				this.stopGameClock();
-				if(this.view && !this.isGameOver) // If the server was never online, then we never had a view to begin with
+				// If the server was never online, then we never had a view to begin with
+				if(!this.isGameOver)
+				{
 					this.view.serverOffline();
+					this.stopGameClock();
+				}
 			},
 
 			dealloc: function()
