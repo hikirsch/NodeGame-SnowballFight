@@ -38,7 +38,7 @@ define([
 	function( JS, EVENTS, AbstractGame, Joystick, GameEntityFactory, FieldEntityModel, ServerNetChannel, WorldEntityDescription, Logger )
 	{
 		return new JS.Class(AbstractGame, {
-			initialize: function(gameConfig, portNumber)
+			initialize: function(config, portNumber)
 			{
 				this.callSuper();
 
@@ -177,7 +177,7 @@ define([
 				var aNewCharacter = this.callSuper();
 				if(aNewCharacter == null) return; // No charactnode node mainer created for whatever reason. Room full?
 
-				aNewCharacter.setInput( new Joystick() );
+				aNewCharacter.setInput( new Joystick( this.config ) );
 
 				return aNewCharacter;
 			},

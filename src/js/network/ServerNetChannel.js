@@ -42,7 +42,7 @@ define(['lib/jsclass-core', 'network/ws', 'lib/bison', 'lib/SortedLookupTable', 
 			this.config = config;
 
 			// Connection options
-			this.maxClients = GAMECONFIG.GAME_MODEL.MAX_PLAYERS;
+			this.maxClients = this.config.GAME_MODEL.MAX_PLAYERS;
 			this.port = port;
 
 			console.log("(ServerNetChannel) Max Clients: ", this.maxClients);
@@ -286,7 +286,6 @@ define(['lib/jsclass-core', 'network/ws', 'lib/bison', 'lib/SortedLookupTable', 
 		addClient: function(connection)
 		{
 			connection.$clientID = this.getNextClientID();
-			console.log( "CREATING CLIENT, PASSING CONFIG: ", this.config );
 			var aClient = new Client(this, connection, this.config);
 
 			// Add to our list of connected users

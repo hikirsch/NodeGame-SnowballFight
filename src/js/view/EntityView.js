@@ -2,10 +2,8 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 {
 	return new JS.Class( BaseView,
 	{
-		initialize:  function(controller, model ) {
-			GAMECONFIG.UUID = (GAMECONFIG.UUID !== undefined) ? GAMECONFIG.UUID++ : 0;
-
-			this.ID = GAMECONFIG.UUID;
+		initialize:  function(controller, model, config) {
+			this.ID = config.UUID = (config.UUID !== undefined) ? config.UUID++ : 0;
 			this.themeMask = controller.themeMask;
 
 			// When 'isDirtyTheme' is true, and we currently don't have a 'themeMask' - that's how we know to clear
@@ -13,16 +11,17 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 			this.CAATActorContainer = null; // Characters use ActorContainers because they can contain other actors
 			this.CAATText = null;
 
-			this.themeMaskList = GAMECONFIG.SPRITE_THEME_MASK;
+			this.themeMaskList = config.SPRITE_THEME_MASK;
 			this.verboseRanking = ['1st', '2nd', '3rd', '4th', '5th', '6th', '7th', '8th', '9th', '10th'];
 
+			// super has to go last since it makes a call to createElement() and we set this.CAATActorContainer
 			this.callSuper();
 		},
 
 		createElement: function()
 		{
-			var director = GAMECONFIG.CAAT.DIRECTOR;
-			this.themeMaskList = GAMECONFIG.SPRITE_THEME_MASK;
+			var director = this.config.CAAT.DIRECTOR;
+			this.themeMaskList = this.config.SPRITE_THEME_MASK;
 
 			// Grab our model info and create a sprite
 			var themeModel = this.themeModel = this.getThemeModelByID(this.model.theme);
@@ -39,7 +38,7 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 		  	this.CAATSprite.anchor= CAAT.Actor.prototype.ANCHOR_CENTER;
 
 			// Don't create an actorcontainer if its not a character
-			if(this.controller.entityType == GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER)
+			if(this.controller.entityType == this.config.ENTITY_MODEL.ENTITY_MAP.CHARACTER)
 			{
 				actor = this.CAATActorContainer = new CAAT.ActorContainer().
 					create().
@@ -149,11 +148,11 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 				// TODO: Move to randomizing function
 
 
-				var hitSound = ( Math.random() < 0.5 ) ? GAMECONFIG.SOUNDS_MAP.snowballHit1 : GAMECONFIG.SOUNDS_MAP.snowballHit2;
+				var hitSound = ( Math.random() < 0.5 ) ? this.config.SOUNDS_MAP.snowballHit1 : this.config.SOUNDS_MAP.snowballHit2;
 
 				// everyone starts off frozen, dont play sound
-				if(GAMECONFIG.CAAT.SCENE.time > 8000)
-					GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(hitSound);
+				if(this.config.CAAT.SCENE.time > 8000)
+					this.config.CAAT.AUDIO_MANAGER.playSound(hitSound);
 			}
 			// Flashing
 			else if (this.controller.themeMask & this.themeMaskList.FLASHING)
@@ -170,15 +169,16 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 				this.CAATActorContainer.addChild(this.CAATPowerupSprite);
 
 				// Turn the animation back on
-				this.CAATPowerupSprite.setFrameTime(this.CAATActorContainer.time, this.CAATActorContainer.time+10000);
+				this.CAATPowerupSprite.setFrameTime(this.CAATActorContainer.time, this.CAATActorContainer.time + 10000);
 
 				// Scale me up!
 				this.animateInUsingScale(this.CAATSprite, this.CAATSprite.time, 700, 2, 1);
 
 				// Tell the world!
 				var event = document.createEvent("Event");
-				event.initEvent(GAMECONFIG.EVENTS.ON_POWERUP_AQUIRED, true, true);
-				event.data = {theme: this.controller.themeMask};
+				event.initEvent(this.config.EVENTS.ON_POWERUP_AQUIRED, true, true);
+				event.gameController = this.controller;
+				// event.data = {theme: this.controller.themeMask};
 				window.dispatchEvent(event);
 			}
 
@@ -230,7 +230,7 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 			fadeBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 			actor.alpha = fadeBehavior.startAlpha = startAlpha;  // Fall from the 'sky' !
 			fadeBehavior.endAlpha = endAlpha;
-			fadeBehavior.setFrameTime( GAMECONFIG.CAAT.SCENE.time + starTime, endTime );
+			fadeBehavior.setFrameTime( this.config.CAAT.SCENE.time + starTime, endTime );
 			fadeBehavior.setCycle(false);
 			fadeBehavior.setInterpolator( new CAAT.Interpolator().createExponentialOutInterpolator(2, false) );
 			actor.addBehavior(fadeBehavior);
@@ -240,7 +240,7 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 
 		createPowerupSprite: function()
 		{
-			var director = GAMECONFIG.CAAT.DIRECTOR;
+			var director = this.config.CAAT.DIRECTOR;
 
 			/**
 			 * Create a sprite to show the powerup state
@@ -264,15 +264,15 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 
 		createClientControlledCharacterHighlight: function()
 		{
-			if(this.controller !== GAMECONFIG.CAAT.CLIENT_CHARACTER)
+			if(this.controller !== this.config.CAAT.CLIENT_CHARACTER)
 				return;
 
-			var director = GAMECONFIG.CAAT.DIRECTOR;
+			var director = this.config.CAAT.DIRECTOR;
 			/**
 			 * Create a sprite to show the powerup state
 			 */
 			var themeModel = this.getThemeModelByID('501'),
-				imageRef = GAMECONFIG.CAAT.DIRECTOR.getImage('501'),
+				imageRef = this.config.CAAT.DIRECTOR.getImage('501'),
 				caatImage = new CAAT.CompoundImage().
 						initialize(imageRef, themeModel.rowCount, themeModel.columnCount);
 
@@ -296,7 +296,7 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 		{
 			if(this.CAATText) return this.CAATText;
 
-			var isClient = this.controller === GAMECONFIG.CAAT.CLIENT_CHARACTER;
+			var isClient = this.controller === this.config.CAAT.CLIENT_CHARACTER;
 
 			// Create a textfield
     		this.CAATText = new CAAT.TextActor().
@@ -309,7 +309,7 @@ define(['lib/jsclass-core', 'view/BaseView', 'lib/caat'], function(JS, BaseView,
 			setFillStyle(isClient ? "#9E0000" : "#274b87");
 
 			this.CAATText.textAlign = "center";
-			this.CAATText.calcTextSize(GAMECONFIG.CAAT.DIRECTOR);
+			this.CAATText.calcTextSize(this.config.CAAT.DIRECTOR);
 			this.CAATText.setLocation((this.CAATSprite.width-this.CAATText.width/2 - 8), this.CAATSprite.height-1);
 			this.CAATActorContainer.addChild(this.CAATText);
 			return this.CAATText;

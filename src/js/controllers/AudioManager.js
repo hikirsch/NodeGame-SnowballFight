@@ -90,7 +90,7 @@ define(['lib/jsclass-core', 'lib/SortedLookupTable'], function( JS, SortedLookup
 		dealloc: function(force)
 		{
 			this.sounds.dealloc();
-//			window.removeEventListener(GAMECONFIG.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
+//			window.removeEventListener(this.config.EVENTS.ON_SOUND_WANTS_TO_BE_PLAYED, this.onSoundWantsToBePlayed);
 		}
 	});
 });

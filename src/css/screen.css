@@ -26,7 +26,13 @@ html, body { font-family: Helvetica, Arial, sans-serif; font-size: 12px;
 .main-nav ul li.share a { background-image: url(../img/global/nav-share.png); }
 .main-nav ul li.ogilvy-logo { float: right; width: auto; height: auto; padding-top: 10px; }
 .main-nav ul li.ogilvy-logo a { width: 72px; height: 53px; float: right; background-image: url(../img/global/logo-ogilvy.png); }
-
+.main-nav ul li.your-character { background-repeat: no-repeat; background-position: 0 0; height: 58px; }
+.main-nav ul li.your-character img { padding: 8px 0 0 110px; }
+.main-nav ul li.your-character.character-yeti { background-image: url( ../img/global/nav-character-yeti.png ); }
+.main-nav ul li.your-character.character-penguin { background-image: url( ../img/global/nav-character-penguin.png ); }
+.main-nav ul li.your-character.character-tree { background-image: url( ../img/global/nav-character-tree.png ); }
+.main-nav ul li.your-character.character-robot { background-image: url( ../img/global/nav-character-robot.png ); }
+.main-nav ul li.your-character.character-snowman { background-image: url( ../img/global/nav-character-snowman.png ); }
 .footer { margin: 10px auto; width: 900px; text-align: center; font-size: 11px; color: #6a7073; }
 .footer a { font-size: 11px; color: #005072; }
 
@@ -56,7 +62,8 @@ textarea.error, input.error { border: 1px solid red; background-color: #ffe0e1; 
 #game-status dl .total-players { width: 100px; color: #03959e; background-image: url("../img/global/txt-players-on-map.png"); padding-left: 60px; }
 #game-status dl .rank { width: 114px; color: #546fd3; background: url("../img/global/txt-your-rank.png"); padding-left: 46px; }
 
-#game-status .invite-friend { float: left; width:157px; height: 35px; background: url(../img/global/bg-invite-friend.png) 0 0 no-repeat; text-indent:-9999px; overflow:hidden; cursor:pointer; }
+#game-status .invite-friend { float: left; margin-top: 1px; width:157px; height: 35px; background: url(../img/global/nav-invite-friend.png) 0 0 no-repeat; text-indent:-9999px; overflow:hidden; cursor:pointer; }
+#game-status .invite-friend:hover { background-position: 0 -35px; }
 #sound-toggle { float: right; width: 90px; height: 19px; background: url("../img/global/btn-sound.png") 0 0 no-repeat; margin-top: 8px; overflow:hidden; cursor:pointer; }
 #game-status .playing { background-position: left bottom; }
 

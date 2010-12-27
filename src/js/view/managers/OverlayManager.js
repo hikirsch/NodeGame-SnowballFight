@@ -1,7 +1,7 @@
 define(['lib/jsclass-core', 'factories/HTMLFactory'], function( JS, HTMLFactory ) {
 	return new JS.Class(
 		{
-			initialize: function( controller, aGameModel )
+			initialize: function( controller )
 			{
 				this.controller = controller;
 				this.visible = false;

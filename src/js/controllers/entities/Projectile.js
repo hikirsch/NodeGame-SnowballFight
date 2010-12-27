@@ -15,13 +15,13 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/FieldCon
 	{
 		return new JS.Class(GameEntity,
 		{
-			initialize: function(anObjectID, aClientID, projectileModel, aFieldController)
+			initialize: function(anObjectID, aClientID, projectileModel, aFieldController, config)
 			{
 				this.callSuper();
-				this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.PROJECTILE; //
+				this.entityType = this.config.ENTITY_MODEL.ENTITY_MAP.PROJECTILE; //
 
 				// By default all projectiles are destroyed when they hit a field-entity
-				this.themeMask |= GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
+				this.themeMask |= this.config.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
 
 				this.force = projectileModel.force;
 				// Get information from the projectile model

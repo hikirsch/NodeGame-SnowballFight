@@ -22,11 +22,11 @@ define([
 
 		return new JS.Class(
 		{
-			initialize: function(gameConfig, portNumber)
+			initialize: function(config, portNumber)
 			{
 				console.log("(AbstractGame) Loaded");
 
-				this.config = gameConfig;
+				this.config = config;
 				this.setModel(this.config.GAME_MODEL);
 				this.isGameOver = false;
 

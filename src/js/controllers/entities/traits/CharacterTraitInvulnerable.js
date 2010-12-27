@@ -21,7 +21,7 @@ define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(J
 		initialize: function(invulnerabilityTime) {
 			this.callSuper();
 			this.invulnerabilityTime = invulnerabilityTime || 2500;
-			this.collisionMask = GAMECONFIG.ENTITY_MODEL.COLLISION_GROUPS.CHARACTER | GAMECONFIG.ENTITY_MODEL.COLLISION_GROUPS.FIELD_ENTITY;
+			this.collisionMask = this.config.ENTITY_MODEL.COLLISION_GROUPS.CHARACTER | this.config.ENTITY_MODEL.COLLISION_GROUPS.FIELD_ENTITY;
 		},
 
 		attach: function(anEntity)

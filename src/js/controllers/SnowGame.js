@@ -220,8 +220,6 @@ define([
 				if(Math.random() < chance || this.presentsActive.count() >= this.config.PRESENTS_SETTING.PRESENTS_MAX )
 					return;
 
-				console.log("SPAWNING!");
-
 				// Presents are really just projectiles that don't move
 				// For now always fire the regular snowball
 				var projectileModel = this.config.PROJECTILE_MODEL.present;
@@ -239,7 +237,6 @@ define([
 				this.fieldController.addEntity(present);
 
 				var animateInTrait = TraitFactory.createTraitWithName('EntityTraitAnimateInFromLarge');
-				console.log( "animateInTrait: ", animateInTrait );
 
 				present.addTraitAndExecute( new animateInTrait() );
 

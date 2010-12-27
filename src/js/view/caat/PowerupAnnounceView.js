@@ -2,13 +2,14 @@ define(['lib/jsclass-core', 'lib/caat'], function( JS, CAAT )
 {
 	return new JS.Class(
 	{
-		initialize: function(themeMask)
+		initialize: function( config )
 		{
-			var director = GAMECONFIG.CAAT.DIRECTOR,
-				layers = GAMECONFIG.CAAT.LAYERS;
+			this.config = config;
 
+			var director = this.config.CAAT.DIRECTOR,
+				layers = this.config.CAAT.LAYERS;
 
-			var themeMap = GAMECONFIG.ENTITY_MODEL.CAAT_THEME_MAP['600'];
+			var themeMap = this.config.ENTITY_MODEL.CAAT_THEME_MAP['600'];
 			var caatImage = new CAAT.CompoundImage().
 					initialize(director.getImage('600'), themeMap.rowCount, themeMap.columnCount);
 
@@ -42,7 +43,7 @@ define(['lib/jsclass-core', 'lib/caat'], function( JS, CAAT )
 
 			// Place at highest layer
 			layers[3].addChild(this.CAATSprite)
-			GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.acquiredPowerup);
+			this.config.CAAT.AUDIO_MANAGER.playSound(this.config.SOUNDS_MAP.acquiredPowerup);
 		},
 
 		/**
@@ -54,7 +55,7 @@ define(['lib/jsclass-core', 'lib/caat'], function( JS, CAAT )
 			scaleBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 			scaleBehavior.startScaleX = scaleBehavior.startScaleY = startScale;  // Fall from the 'sky' !
 			scaleBehavior.endScaleX = scaleBehavior.endScaleY = endScale;
-			scaleBehavior.setFrameTime(GAMECONFIG.CAAT.SCENE.time + starTime, endTime );
+			scaleBehavior.setFrameTime(this.config.CAAT.SCENE.time + starTime, endTime );
 			scaleBehavior.setCycle(false);
 			scaleBehavior.setInterpolator( new CAAT.Interpolator().createBounceOutInterpolator(false) );
 			actor.addBehavior(scaleBehavior);
@@ -71,7 +72,7 @@ define(['lib/jsclass-core', 'lib/caat'], function( JS, CAAT )
 			fadeBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 			fadeBehavior.startAlpha = startAlpha;  // Fall from the 'sky' !
 			fadeBehavior.endAlpha = endAlpha;
-			fadeBehavior.setFrameTime( GAMECONFIG.CAAT.SCENE.time + starTime, endTime );
+			fadeBehavior.setFrameTime( this.config.CAAT.SCENE.time + starTime, endTime );
 			fadeBehavior.setCycle(false);
 			fadeBehavior.setInterpolator( new CAAT.Interpolator().createExponentialOutInterpolator(2, false) );
 			actor.addBehavior(fadeBehavior);

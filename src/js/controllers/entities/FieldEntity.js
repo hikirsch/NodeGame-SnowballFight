@@ -15,10 +15,10 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/FieldCon
 	{
 		return new JS.Class(GameEntity,
 		{
-			initialize: function(anObjectID, aClientID, aFieldEntityModel, aFieldController)
+			initialize: function(anObjectID, aClientID, aFieldEntityModel, aFieldController, config)
 			{
 				this.callSuper();
-				this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.FIELD_ENTITY;
+				this.entityType = this.config.ENTITY_MODEL.ENTITY_MAP.FIELD_ENTITY;
 				// Get information from the projectile model
 				this.radius = aFieldEntityModel.radius;
 			},

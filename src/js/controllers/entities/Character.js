@@ -34,11 +34,11 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/FieldCon
 			/**
 			 * @inheritDoc
 			 */
-			initialize: function(anObjectID, aClientID, aCharacterModel, aFieldController)
+			initialize: function(anObjectID, aClientID, aCharacterModel, aFieldController, config)
 			{
 				this.callSuper();
 
-				this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.CHARACTER;			// Type
+				this.entityType = this.config.ENTITY_MODEL.ENTITY_MAP.CHARACTER;			// Type
 
 				// Override movement properties
 				this.moveSpeed = 0.38;

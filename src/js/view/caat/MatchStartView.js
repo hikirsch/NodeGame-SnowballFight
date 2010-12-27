@@ -2,10 +2,12 @@ define(['lib/jsclass-core', 'lib/caat'], function( JS, CAAT )
 {
 	return new JS.Class(
 	{
-		initialize:  function(controller, model)
+		initialize:  function(config)
 		{
-			var director = GAMECONFIG.CAAT.DIRECTOR,
-				scene = GAMECONFIG.CAAT.SCENE;
+			this.config = config;
+
+			var director = this.config.CAAT.DIRECTOR,
+				scene = this.config.CAAT.SCENE;
 
 			this.CAATActorContainer = new CAAT.ActorContainer().
 					create().
@@ -71,7 +73,7 @@ define(['lib/jsclass-core', 'lib/caat'], function( JS, CAAT )
 			scaleBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 			scaleBehavior.startScaleX = scaleBehavior.startScaleY = startScale;  // Fall from the 'sky' !
 			scaleBehavior.endScaleX = scaleBehavior.endScaleY = endScale;
-			scaleBehavior.setFrameTime(GAMECONFIG.CAAT.SCENE.time + starTime, endTime );
+			scaleBehavior.setFrameTime(this.config.CAAT.SCENE.time + starTime, endTime );
 			scaleBehavior.setCycle(false);
 			scaleBehavior.setInterpolator( new CAAT.Interpolator().createBounceOutInterpolator(false) );
 			actor.addBehavior(scaleBehavior);
@@ -88,7 +90,7 @@ define(['lib/jsclass-core', 'lib/caat'], function( JS, CAAT )
 			fadeBehavior.anchor = CAAT.Actor.prototype.ANCHOR_CENTER;
 			fadeBehavior.startAlpha = startAlpha;  // Fall from the 'sky' !
 			fadeBehavior.endAlpha = endAlpha;
-			fadeBehavior.setFrameTime( GAMECONFIG.CAAT.SCENE.time + starTime, endTime );
+			fadeBehavior.setFrameTime( this.config.CAAT.SCENE.time + starTime, endTime );
 			fadeBehavior.setCycle(false);
 			fadeBehavior.setInterpolator( new CAAT.Interpolator().createExponentialOutInterpolator(2, false) );
 			actor.addBehavior(fadeBehavior);

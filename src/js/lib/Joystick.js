@@ -4,8 +4,9 @@
 define(['lib/jsclass-core'], function(JS) {
 	return new JS.Class(
 	{
-		initialize: function()
+		initialize: function( config )
 		{
+			this.config = config;
 			this.keyCodes = { '16': 'shift', '32': 'space', '37': 'left', '38': 'up', '39': 'right', '40': 'down', '9': 'tab'},
 			this.keys = {'tab': false, 'shift': false, 'space': false, 'up': false, 'down': false, 'left': false, "right": false },
 			this.keyPressed = 0;
@@ -64,13 +65,13 @@ define(['lib/jsclass-core'], function(JS) {
 			var input = 0;
 
 			// Check each key
-			if(this.keys['up']) input |= GAMECONFIG.INPUT_BITMASK.UP;
-			if(this.keys['down']) input |= GAMECONFIG.INPUT_BITMASK.DOWN;
-			if(this.keys['left']) input |= GAMECONFIG.INPUT_BITMASK.LEFT;
-			if(this.keys['right']) input |= GAMECONFIG.INPUT_BITMASK.RIGHT;
-			if(this.keys['space']) input |= GAMECONFIG.INPUT_BITMASK.SPACE;
-			if(this.keys['shift']) input |= GAMECONFIG.INPUT_BITMASK.SHIFT;
-			if(this.keys['tab']) input |= GAMECONFIG.INPUT_BITMASK.TAB;
+			if(this.keys['up']) input |= this.config.INPUT_BITMASK.UP;
+			if(this.keys['down']) input |= this.config.INPUT_BITMASK.DOWN;
+			if(this.keys['left']) input |= this.config.INPUT_BITMASK.LEFT;
+			if(this.keys['right']) input |= this.config.INPUT_BITMASK.RIGHT;
+			if(this.keys['space']) input |= this.config.INPUT_BITMASK.SPACE;
+			if(this.keys['shift']) input |= this.config.INPUT_BITMASK.SHIFT;
+			if(this.keys['tab']) input |= this.config.INPUT_BITMASK.TAB;
 			return input;
 		},
 
@@ -81,12 +82,12 @@ define(['lib/jsclass-core'], function(JS) {
 		 */
 		deconstructInputBitmask: function(inputBitmask)
 		{
-			this.keys['up'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.UP);
-			this.keys['down'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.DOWN);
-			this.keys['left'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.LEFT);
-			this.keys['right'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.RIGHT);
-			this.keys['space'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.SPACE);
-			this.keys['shift'] = (inputBitmask & GAMECONFIG.INPUT_BITMASK.SHIFT);
+			this.keys['up'] = (inputBitmask & this.config.INPUT_BITMASK.UP);
+			this.keys['down'] = (inputBitmask & this.config.INPUT_BITMASK.DOWN);
+			this.keys['left'] = (inputBitmask & this.config.INPUT_BITMASK.LEFT);
+			this.keys['right'] = (inputBitmask & this.config.INPUT_BITMASK.RIGHT);
+			this.keys['space'] = (inputBitmask & this.config.INPUT_BITMASK.SPACE);
+			this.keys['shift'] = (inputBitmask & this.config.INPUT_BITMASK.SHIFT);
 		},
 
 		/**

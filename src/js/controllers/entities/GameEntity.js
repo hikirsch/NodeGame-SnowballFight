@@ -38,11 +38,14 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/FieldCon
 			 * @param {String|Number} aClientID	The connection which spawned this object. "0" means it belongs to the game
 			 * @param {FieldController} aFieldController	A FieldController instance this object belongs to.
 			 */
-			initialize: function(anObjectID, aClientID, anEntityModel, aFieldController)
+			initialize: function(anObjectID, aClientID, anEntityModel, aFieldController, config)
 			{
+				if( ! config ) { debugger; }
+
+				this.config = config;
 				// Meta information
 				this.fieldController = aFieldController;
-				this.entityType = GAMECONFIG.ENTITY_MODEL.ENTITY_MAP.UNKNOWN;			// Type
+				this.entityType = this.config.ENTITY_MODEL.ENTITY_MAP.UNKNOWN;			// Type
 				this.theme = 0;
 				this.themeMask = 0; // Used to send stuff like whether we have a trait - and which trait for example
 				this.setModel( anEntityModel );
@@ -90,7 +93,7 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/FieldCon
 			{
 				// if our game has a view, then create one
 				if( this.fieldController.hasView() ) {
-					this.view = new EntityView(this, this.model );
+					this.view = new EntityView(this, this.model, this.config );
 				}
 			},
 

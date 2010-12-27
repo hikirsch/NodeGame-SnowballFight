@@ -27,7 +27,6 @@ define([
 	],
 	function( JS, Vector, NetChannel, GameView, MatchStartView, PowerupAnnounceView, Joystick, AbstractGame, AudioManager, TraitFactory, FieldController, CAAT )
 	{
-		console.log("arguments!", AbstractGame);
 		return new JS.Class( AbstractGame,
 		{
 			initialize: function(config, portNumber)
@@ -43,7 +42,7 @@ define([
 				this.isGameOver = false;
 
 				// Create the view first, we need a place to show the browser req.
-				this.view = new GameView(this, this.model );
+				this.view = new GameView( this, this.config );
 
 				// You cannot play!
 				if( typeof WebSocket === "undefined" ) {
@@ -122,11 +121,6 @@ define([
 				};
 			},
 
-			createView: function()
-			{
-				this.view = new GameView(this);
-			},
-
 			/**
 			 * Called when the user has entered a name, and wants to join the match
 			 * @param aNickname
@@ -138,6 +132,8 @@ define([
 
 				// Create the message to send to the server
 				var message = this.netChannel.composeCommand( this.config.CMDS.PLAYER_JOINED, { theme: this.theme, nickname: this.nickname } );
+
+				this.view.showYourCharacter( this.theme );
 
 				// Tell the server!
 				this.netChannel.addMessageToQueue( true, message );
@@ -425,12 +421,13 @@ define([
 
 			onServerMatchStart: function( clientID, data )
 			{
-				var matchViewCountdown = new MatchStartView();
+				var matchViewCountdown = new MatchStartView( this.config );
 			},
 
-			onPowerupAquired: function(data)
+			onPowerupAquired: function(e)
 			{
-				var powerupAnnounce = new PowerupAnnounceView(arguments)
+				var controller = e.gameController;
+				new PowerupAnnounceView( controller.config );
 			},
 
 			gameOverTick: function()

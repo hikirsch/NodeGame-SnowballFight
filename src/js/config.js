@@ -1,5 +1,5 @@
 define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], function(EntityModel, ProjectileModel, CharacterModel) {
-	return GAMECONFIG = {
+	return {
 
 		// See: http://developer.valvesoftware.com/wiki/Latency_Compensating_Methods_in_Client/Server_In-game_Protocol_Design_and_Optimization#Contents_of_the_User_Input_messages
 		CMDS:

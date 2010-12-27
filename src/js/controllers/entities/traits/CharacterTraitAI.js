@@ -37,7 +37,7 @@ define(
 				this.callSuper();
 				this.intercept(['tick', 'handleInput']);
 
-				this.attachedEntity.setInput( new Joystick() );
+				this.attachedEntity.setInput( new Joystick( this.config ) );
 				this.attachedEntity.input.attachEvents();
 			},
 

@@ -30,14 +30,20 @@ define([
 	{
 		return new JS.Class( BaseView,
 		{
-			initialize: function( controller, gameModel )
+			initialize: function( controller, config )
 			{
-				this.setModel( gameModel );
+				var that = this,
+					showStats = (location.host.indexOf("localhost") >= 0) ? ("getContext" in document.createElement("canvas")) : false,
+					stats;
 
-				this.cookieManager = CookieManager;
+				this.config = config;
+
+				this.setModel( this.config.GAME_MODEL );
+
+				 this.cookieManager = CookieManager;
 				this.gameController = controller;
 
-				this.overlayManager = new OverlayManager( controller, gameModel );
+				this.overlayManager = new OverlayManager(controller);
 
 				this.currentStatus = {
 					TimeLeft: "00:00",
@@ -50,8 +56,6 @@ define([
 				this.showGameStatus();
 				this.showFooter();
 
-				$(window).konami( this.enableKonami );
-
 				this.attachOverlayEvents();
 
 				this.carouselManager = CarouselManager;
@@ -62,10 +66,9 @@ define([
 
 				this.statHTML = null;
 
-				var showStats = (location.host.indexOf("localhost") >= 0) ? ("getContext" in document.createElement("canvas")) : false;
 				if(showStats)
 				{
-					var stats = new Stats();
+					stats = new Stats();
 					stats.domElement.style.position = 'absolute';
 					stats.domElement.style.left = '0px';
 					stats.domElement.style.top = '0px';
@@ -74,13 +77,15 @@ define([
 						stats.update();
 					}, 1000 / 30 );
 				}
+
+				$(window).konami( function(e){ that.enableKonami(e); });
 			},
 
 			enableKonami: function() {
 				$("body").addClass('konami-code-enabled');
 				$("<p class='konami'>Konami Enabled</p>").appendTo("body");
 				this.konamiCodeEnabled = true;
-				GAMECONFIG.CAAT.AUDIO_MANAGER.playSound(GAMECONFIG.SOUNDS_MAP.konamiEnabled);
+				this.config.CAAT.AUDIO_MANAGER.playSound(this.config.SOUNDS_MAP.konamiEnabled);
 				console.log("(GameView) Enabled Konami");
 			},
 
@@ -209,10 +214,10 @@ define([
 						if( ! $(this).is('.playing') ) {
 							CookieManager.setCookie("soundEnabled", "true");
 
-							GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(false);
+							that.config.CAAT.AUDIO_MANAGER.toggleMute(false);
 						} else {
 							CookieManager.setCookie("soundEnabled", "false");
-							GAMECONFIG.CAAT.AUDIO_MANAGER.toggleMute(true)
+							that.config.CAAT.AUDIO_MANAGER.toggleMute(true);
 						}
 
 						$this.toggleClass('playing');
@@ -240,6 +245,14 @@ define([
 				return false;
 			},
 
+			showYourCharacter: function( theme )
+			{
+				var newTheme = this.getThemeNameFromCode(theme);
+				$('.your-character')
+					.addClass( newTheme )
+					.removeClass('hide');
+			},
+
 			showCharacterSelect: function()
 			{
 				var that = this,
@@ -250,7 +263,7 @@ define([
 				$characterSelect.executeOnPush = function(element){
 					element.submit( function(){
 						var carouselType = that.carouselManager.getCharacterType();
-						var characterType = that.getThemeCodeFromName(carouselType ) ;
+						var characterType = that.getThemeCodeFromName(carouselType );
 
 						return that.joinCurrentGame(characterType);
 					});

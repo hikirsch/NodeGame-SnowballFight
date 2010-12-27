@@ -54,8 +54,8 @@ define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(J
 
 				var projectile = this.attachedEntity.fieldController.fireProjectileFromCharacterUsingProjectileModel( this.attachedEntity, projectileModel);
 				// Make the projectile bounce around
-				projectile.themeMask &= ~GAMECONFIG.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
-				projectile.themeMask |= GAMECONFIG.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT;
+				projectile.themeMask &= ~this.config.SPRITE_THEME_MASK.DESTROY_ON_FIELD_ENTITY_HIT;
+				projectile.themeMask |= this.config.SPRITE_THEME_MASK.BOUNCE_ON_FIELD_ENTITY_HIT;
 			}
 
 			this.detachAfterDelay(500);

@@ -59,7 +59,7 @@ define([
 				console.warn("(FieldView) This function is depricated!");
 				return;
 
-				var childrenList = GAMECONFIG.CAAT.SCENE.childrenList;
+				var childrenList = this.config.CAAT.SCENE.childrenList;
 				childrenList.sort(function(a, b) {
 					var comparisonResult = 0;
 					if(a.zIndex > b.zIndex) comparisonResult = 1;
@@ -94,7 +94,7 @@ define([
 				// Remove all the CAAT layers
 				for(var i = 0; i < this.CAATLayers.length; i++) {
 					this.CAATLayers[i].emptyChildren();
-					GAMECONFIG.CAAT.SCENE.removeChild(this.CAATLayers[i]);
+					this.config.CAAT.SCENE.removeChild(this.CAATLayers[i]);
 				}
 				this.element.remove();
 			},

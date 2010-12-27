@@ -38,7 +38,7 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/entities
 			createProjectile: function(anObjectID, aClientID, aProjectileModel, aFieldController)
 			{
 				//this.entityTypes.objectForKey(aCharacterType); // Retrieve class from sorted table
-				var projectile = new Projectile(anObjectID, aClientID, aProjectileModel, aFieldController);
+				var projectile = new Projectile(anObjectID, aClientID, aProjectileModel, aFieldController, this.config);
 
 				// Should snowballs collide with one another?
 				projectile.collisionGroup = this.collisionGroups.PROJECTILE;
@@ -49,7 +49,7 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/entities
 
 			createCharacter: function(anObjectID, aClientID, aCharacterModel, aFieldController)
 			{
-				var aNewCharacter = new Character(anObjectID, aClientID, aCharacterModel, aFieldController);
+				var aNewCharacter = new Character(anObjectID, aClientID, aCharacterModel, aFieldController, this.config);
 
 				// Collide against other characters, projectiles, and level objects
 				aNewCharacter.collisionGroup = this.collisionGroups.CHARACTER;
@@ -60,7 +60,7 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/entities
 
 			createFieldEntity: function(anObjectID, aClientID, aFieldEntityModel, aFieldController )
 			{
-				var aNewFieldEntity = new FieldEntity(anObjectID, aClientID, aFieldEntityModel, aFieldController);
+				var aNewFieldEntity = new FieldEntity(anObjectID, aClientID, aFieldEntityModel, aFieldController, this.config);
 				aNewFieldEntity.position = new Vector(aFieldEntityModel.initialPosition.x, aFieldEntityModel.initialPosition.y);
 
 				// Collide against characters and projectiles
@@ -82,7 +82,7 @@ define(['lib/jsclass-core', 'lib/Vector', 'lib/Rectangle', 'controllers/entities
 						console.log("Ooops? Character created");
 					break;
 					case entityMap.PROJECTILE:
-						model = GAMECONFIG.PROJECTILE_MODEL.defaultSnowball;
+						model = this.config.PROJECTILE_MODEL.defaultSnowball;
 						creationFunction = this.createProjectile;
 					break;
 					case entityMap.FIELD_ENTITY:

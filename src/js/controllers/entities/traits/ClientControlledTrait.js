@@ -27,7 +27,7 @@ define(['lib/jsclass-core', 'lib/Joystick', 'controllers/entities/traits/BaseTra
 			this.callSuper();
 			this.intercept(['constructEntityDescription', 'handleInput']);
 
-			this.attachedEntity.setInput( new Joystick() );
+			this.attachedEntity.setInput( new Joystick( this.config ) );
 			this.attachedEntity.input.attachEvents();
 		},
 
