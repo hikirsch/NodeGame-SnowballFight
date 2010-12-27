@@ -67,4 +67,6 @@ textarea.error, input.error { border: 1px solid red; background-color: #ffe0e1; 
 #sound-toggle { float: right; width: 90px; height: 19px; background: url("../img/global/btn-sound.png") 0 0 no-repeat; margin-top: 8px; overflow:hidden; cursor:pointer; }
 #game-status .playing { background-position: left bottom; }
 
-#logger { display: none; font-family: monospace; padding: 20px; position: absolute; left: 0; top: 0; height: 50px; width: 200px; background-color: #000; color: #fff; }
+div#at15s { background-image: url( ../img/global/bg-addthis-border-override.png ); }
+div#at15s_head { background-color: #0093a1; color: #fff; }
+div#at15s_head a#at15sptx { color: #fff; text-decoration: none; }

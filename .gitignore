@@ -6,7 +6,7 @@
 .idea
 
 #src folder from requirejs optimization tool
-src-built/
+deploy/
 
 # OS X
 .DS_Store?

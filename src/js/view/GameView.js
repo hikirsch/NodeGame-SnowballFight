@@ -24,9 +24,10 @@ define([
 		'view/BaseView',
 		'factories/HTMLFactory',
 		'lib/Stats',
+		'jquery',
 		'plugins/jquery.konami' /** this should be last **/
 	],
-	function(JS, Rectangle, OverlayManager, CookieManager, CarouselManager, EmailServiceManager, BaseView, HTMLFactory, Stats )
+	function(JS, Rectangle, OverlayManager, CookieManager, CarouselManager, EmailServiceManager, BaseView, HTMLFactory, Stats, $ )
 	{
 		return new JS.Class( BaseView,
 		{

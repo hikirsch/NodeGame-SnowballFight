@@ -58,8 +58,8 @@ define(['lib/jsclass-core', 'network/ws', 'lib/bison', 'lib/SortedLookupTable', 
 		    this.nextClientID = 1;						// UUID for next client - ZERO IS RESERVED FOR THE SERVER
 
 		    // Recording
-		    this.record = config.record || false;
-		    this.recordFile = config.recordFile || './record[date].js';
+		    this.record = this.config.SERVER_SETTING.record;
+		    this.recordFile = this.config.SERVER_SETTING.recordFile;
 		    this.recordData = [];
 
 

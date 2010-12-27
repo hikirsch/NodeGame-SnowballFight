@@ -26,13 +26,12 @@ define([ 'lib/jsclass-core', 'sys', 'network/ws', 'lib/SortedLookupTable', 'lib/
 
 	return new JS.Class(
 	{
-		initialize: function( config, serverConfig )
+		initialize: function( config )
 		{
 			var that = this;
 
 			this.gameID = 1;
 			this.config = config;
-			this.serverConfig = serverConfig;
 
 			// Make our rolling log globally accessible
 			console.gameLog = function () {

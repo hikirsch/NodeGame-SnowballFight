@@ -53,7 +53,11 @@ define(['model/EntityModel', 'model/ProjectileModel', 'model/CharacterModel'], f
 			MAX_PORTS: 995,
 
 			DEBUG_MODE			: false,
-			VERBOSE_DEALLOC		: false
+			VERBOSE_DEALLOC		: false,
+
+			showStatus: false,
+			recordFile: '../../recordings/record[date].js',
+			record: false
 		},
 
 

@@ -10,6 +10,35 @@ Basic Usage:
 
 define(['controllers/AbstractClientGame', 'config', 'lib/caat'], function (AbstractClientGame, config, CAAT) {
 	// we do a lot of logging, some browsers don't have a console, so i create this fake one so it swallows any calls
+
+	function addthis()
+	{
+		window.addthis_options = 'facebook, twitter, myspace, print, google, favorites, digg, delicious, stumble upon, live, email, more';
+		window.addthis_config = { username: 'oglivycom', ui_offset_top: 0, ui_offset_left: 0 };
+		var addthisScriptTag = document.createElement('script'),
+			s = document.getElementsByTagName('script')[0]
+
+		addthisScriptTag.async = true;
+		addthisScriptTag.src = 'http://s7.addthis.com/js/250/addthis_widget.js';
+
+		s.parentNode.insertBefore(addthisScriptTag, s);
+	}
+
+	function googleAnalytics()
+	{
+		window._gaq = [],
+			ga = document.createElement('script'),
+			s = document.getElementsByTagName('script')[0];
+
+		_gaq.push(['_setAccount', 'UA-18583864-6']);
+		_gaq.push(['_trackPageview']);
+
+		ga.async = true;
+		ga.src = 'http://www.google-analytics.com/ga.js';
+
+		s.parentNode.insertBefore(ga, s);
+	}
+
 	function ignoreConsoleIfUndefined()
 	{
 		var Void = function(){};
@@ -35,6 +64,9 @@ define(['controllers/AbstractClientGame', 'config', 'lib/caat'], function (Abstr
 			mode: "overlay",
 			destination: location.href.toString()
 		});
+
+		addthis();
+		googleAnalytics();
 
 		ignoreConsoleIfUndefined();
 
