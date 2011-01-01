@@ -28,13 +28,11 @@ define(['lib/jsclass-core', 'controllers/entities/traits/BaseTrait'], function(J
 
 			// Set our theme, and hijack the characters
 			this.attachedEntity.themeMask |= this.themeMaskList.HAS_POWERUP;
-			this.attachedEntity.themeMask |= this.themeMaskList.ANIMATE_IN_ALPHA;
 		},
 
 		detach: function(force)
 		{
 			this.attachedEntity.themeMask &= ~this.themeMaskList.HAS_POWERUP;
-			this.attachedEntity.themeMask &= ~this.themeMaskList.ANIMATE_IN_ALPHA;
 			this.callSuper();
 		},
 
